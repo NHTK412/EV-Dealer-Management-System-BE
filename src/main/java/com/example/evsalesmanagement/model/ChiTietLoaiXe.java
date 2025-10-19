@@ -120,4 +120,5 @@ public class ChiTietLoaiXe extends GhiNhanThoiGian{
         this.hinhAnhXe = hinhAnhXe;
     }
 
+
 }
