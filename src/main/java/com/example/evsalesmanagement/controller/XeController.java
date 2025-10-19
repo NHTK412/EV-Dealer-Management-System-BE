@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.XeRequest;
+import com.example.evsalesmanagement.dto.XeDTO;
 import com.example.evsalesmanagement.model.Xe;
 import com.example.evsalesmanagement.service.XeService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,20 +24,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/cars")
+@RequestMapping("/xe")
 public class XeController {
     @Autowired
     private XeService xeService;
 
     @PostMapping
-    Xe createXe(@RequestBody XeRequest request) {
+    Xe createXe(@RequestBody XeDTO request) {
        return xeService.createXe(request);
     }
 
     @PostMapping("/batch")
-    public List<Xe> createXeBatch(@RequestBody List<XeRequest> requests) {
+    public List<Xe> createXeBatch(@RequestBody List<XeDTO> requests) {
         List<Xe> result = new ArrayList<>();
-        for (XeRequest req : requests) {
+        for (XeDTO req : requests) {
             result.add(xeService.createXe(req));
         }
         return result;
@@ -54,7 +54,7 @@ public class XeController {
     }
     
     @PutMapping("/{xeId}")
-    Xe updateXe(@PathVariable("xeId") Integer xeId, @RequestBody XeRequest request) {
+    Xe updateXe(@PathVariable("xeId") Integer xeId, @RequestBody XeDTO request) {
         return xeService.updateXe(xeId, request);
     }
     

@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.dto;
 
-public class XeRequest {
+public class XeDTO {
     private String soKhung;
     private String soMay;
     private String trangThai;
