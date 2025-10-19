@@ -1007,7 +1007,7 @@ VALUES (
         '2024-02-20 10:30:00'
     );
 
--- ========== INSERT PHAN_HOI ==========
+ 
 INSERT INTO
     phan_hoi (
         ma_khach_hang,

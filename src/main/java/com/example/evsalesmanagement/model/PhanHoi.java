@@ -1,9 +1,11 @@
 package com.example.evsalesmanagement.model;
 
-import java.time.LocalDateTime;
+import com.example.evsalesmanagement.enums.TrangThaiPhanHoi;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 @Entity
 @Table(name = "PhanHoi")
 public class PhanHoi extends GhiNhanThoiGian{
@@ -29,15 +30,16 @@ public class PhanHoi extends GhiNhanThoiGian{
     // @Column(name = "ThoiGian")
     // private LocalDateTime thoiGian;
 
-    @Column(name = "TrangThai")
-    private String trangThai;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TrangThai", nullable=false)
+    private TrangThaiPhanHoi trangThai;
 
     @ManyToOne
     @JoinColumn(name = "MaKhachHang")
     private KhachHang khachHang;
 
-    // @OneToOne(mappedBy = "phanHoi")
-    // private XuLyPhanHoi xuLyPhanHoi;
+    @OneToOne(mappedBy = "phanHoi")
+    private XuLyPhanHoi xuLyPhanHoi;
 
     public Integer getMaPhanHoi() {
         return maPhanHoi;
@@ -71,11 +73,13 @@ public class PhanHoi extends GhiNhanThoiGian{
     //     this.thoiGian = thoiGian;
     // }
 
-    public String getTrangThai() {
+   
+    
+    public TrangThaiPhanHoi getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(TrangThaiPhanHoi trangThai) {
         this.trangThai = trangThai;
     }
 
@@ -86,4 +90,12 @@ public class PhanHoi extends GhiNhanThoiGian{
     public void setKhachHang(KhachHang khachHang) {
         this.khachHang = khachHang;
     }
+
+    public XuLyPhanHoi getXuLyPhanHoi() {
+    return xuLyPhanHoi;
+}
+
+public void setXuLyPhanHoi(XuLyPhanHoi xuLyPhanHoi) {
+    this.xuLyPhanHoi = xuLyPhanHoi;
+}
 }
