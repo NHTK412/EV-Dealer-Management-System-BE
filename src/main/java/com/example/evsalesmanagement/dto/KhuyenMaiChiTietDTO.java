@@ -1,62 +1,70 @@
-package com.example.evsalesmanagement.model;
+package com.example.evsalesmanagement.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.example.evsalesmanagement.model.KhuyenMai;
 
-@Entity
-@Table(name = "KhuyenMai")
-public class KhuyenMai extends GhiNhanThoiGian {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaKhuyenMai")
+public class KhuyenMaiChiTietDTO {
+
     private Integer maKhuyenMai;
 
-    @Column(name = "TenKhuyenMai", nullable = false)
     private String tenKhuyenMai;
 
-    @Column(name = "LoaiKhuyenMai")
     private String loaiKhuyenMai;
 
-    @Column(name = "GiaTriKhuyenMai")
     private BigDecimal giaTriKhuyenMai;
 
-    @Column(name = "TieuChi")
     private String tieuChi;
 
-    @Column(name = "SoTienGiam")
     private BigDecimal soTienGiam;
 
-    @Column(name = "PhanTramGiam")
     private BigDecimal phanTramGiam;
 
-    @Column(name = "NgayBatDau")
     private LocalDateTime ngayBatDau;
 
-    @Column(name = "NgayHetHan")
     private LocalDateTime ngayHetHan;
 
-    @Column(name = "TrangThai")
     private String trangThai;
 
-    @ManyToMany
-    @JoinTable(name = "KhuyenMai_ChiTietLoaiXe", joinColumns = @JoinColumn(name = "MaKhuyenMai"), inverseJoinColumns = @JoinColumn(name = "MaChiTietLoaiXe"))
-    private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
+    private List<ChiTietLoaiXeDTO> chiTietLoaiXes;
 
-    @ManyToMany
-    @JoinTable(name = "KhuyenMai_DaiLy", joinColumns = @JoinColumn(name = "MaKhuyenMai"), inverseJoinColumns = @JoinColumn(name = "MaDaiLy"))
-    private List<DaiLy> daiLys = new ArrayList<>();
+    private List<DaiLyDTO> daiLys;
+
+    public KhuyenMaiChiTietDTO(KhuyenMai khuyenMai) {
+        this.maKhuyenMai = khuyenMai.getMaKhuyenMai();
+        this.tenKhuyenMai = khuyenMai.getTenKhuyenMai();
+        this.loaiKhuyenMai = khuyenMai.getLoaiKhuyenMai();
+        this.giaTriKhuyenMai = khuyenMai.getGiaTriKhuyenMai();
+        this.tieuChi = khuyenMai.getTieuChi();
+        this.soTienGiam = khuyenMai.getSoTienGiam();
+        this.phanTramGiam = khuyenMai.getPhanTramGiam();
+        this.ngayBatDau = khuyenMai.getNgayBatDau();
+        this.ngayHetHan = khuyenMai.getNgayHetHan();
+        this.trangThai = khuyenMai.getTrangThai();
+    }
+
+    public KhuyenMaiChiTietDTO(Integer maKhuyenMai, String tenKhuyenMai, String loaiKhuyenMai,
+            BigDecimal giaTriKhuyenMai, String tieuChi, BigDecimal soTienGiam, BigDecimal phanTramGiam,
+            LocalDateTime ngayBatDau, LocalDateTime ngayHetHan, String trangThai, List<ChiTietLoaiXeDTO> chiTietLoaiXes,
+            List<DaiLyDTO> daiLys) {
+        this.maKhuyenMai = maKhuyenMai;
+        this.tenKhuyenMai = tenKhuyenMai;
+        this.loaiKhuyenMai = loaiKhuyenMai;
+        this.giaTriKhuyenMai = giaTriKhuyenMai;
+        this.tieuChi = tieuChi;
+        this.soTienGiam = soTienGiam;
+        this.phanTramGiam = phanTramGiam;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayHetHan = ngayHetHan;
+        this.trangThai = trangThai;
+        this.chiTietLoaiXes = chiTietLoaiXes;
+        this.daiLys = daiLys;
+    }
+
+    public KhuyenMaiChiTietDTO() {
+    }
 
     public Integer getMaKhuyenMai() {
         return maKhuyenMai;
@@ -138,29 +146,20 @@ public class KhuyenMai extends GhiNhanThoiGian {
         this.trangThai = trangThai;
     }
 
-    public List<ChiTietLoaiXe> getChiTietLoaiXes() {
+    public List<ChiTietLoaiXeDTO> getChiTietLoaiXes() {
         return chiTietLoaiXes;
     }
 
-    public void setChiTietLoaiXes(List<ChiTietLoaiXe> chiTietLoaiXes) {
+    public void setChiTietLoaiXes(List<ChiTietLoaiXeDTO> chiTietLoaiXes) {
         this.chiTietLoaiXes = chiTietLoaiXes;
     }
 
-    public List<DaiLy> getDaiLys() {
+    public List<DaiLyDTO> getDaiLys() {
         return daiLys;
     }
 
-    public void setDaiLys(List<DaiLy> daiLys) {
+    public void setDaiLys(List<DaiLyDTO> daiLys) {
         this.daiLys = daiLys;
-    }
-
-    @Override
-    public String toString() {
-        return "KhuyenMai [maKhuyenMai=" + maKhuyenMai + ", tenKhuyenMai=" + tenKhuyenMai + ", loaiKhuyenMai="
-                + loaiKhuyenMai + ", giaTriKhuyenMai=" + giaTriKhuyenMai + ", tieuChi=" + tieuChi + ", soTienGiam="
-                + soTienGiam + ", phanTramGiam=" + phanTramGiam + ", ngayBatDau=" + ngayBatDau + ", ngayHetHan="
-                + ngayHetHan + ", trangThai=" + trangThai + ", chiTietLoaiXes=" + chiTietLoaiXes + ", daiLys=" + daiLys
-                + "]";
     }
 
 }
