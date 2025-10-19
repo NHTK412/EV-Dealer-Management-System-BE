@@ -1,8 +1,12 @@
 package com.example.evsalesmanagement.model;
 
+import com.example.evsalesmanagement.enums.HinhThucGiaiQuyet;
+import com.example.evsalesmanagement.enums.TrangThaiXuLy;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,14 +26,16 @@ public class XuLyPhanHoi extends GhiNhanThoiGian {
     @Column(name = "NoiDungXuLy")
     private String noiDungXuLy;
 
-    @Column(name = "HinhThucGiaiQuyet")
-    private String hinhThucGiaiQuyet;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "HinhThucGiaiQuyet", nullable = false)
+    private HinhThucGiaiQuyet hinhThucGiaiQuyet;
 
     // @Column(name = "ThoiGian")
     // private LocalDateTime thoiGian;
 
-    @Column(name = "TrangThai")
-    private String trangThai;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TrangThai", nullable = false)
+    private TrangThaiXuLy trangThai;
 
     @OneToOne
     @JoinColumn(name = "MaPhanHoi", unique = true)
@@ -55,11 +61,11 @@ public class XuLyPhanHoi extends GhiNhanThoiGian {
         this.noiDungXuLy = noiDungXuLy;
     }
 
-    public String getHinhThucGiaiQuyet() {
+    public HinhThucGiaiQuyet getHinhThucGiaiQuyet() {
         return hinhThucGiaiQuyet;
     }
 
-    public void setHinhThucGiaiQuyet(String hinhThucGiaiQuyet) {
+    public void setHinhThucGiaiQuyet(HinhThucGiaiQuyet hinhThucGiaiQuyet) {
         this.hinhThucGiaiQuyet = hinhThucGiaiQuyet;
     }
 
@@ -71,11 +77,11 @@ public class XuLyPhanHoi extends GhiNhanThoiGian {
     // this.thoiGian = thoiGian;
     // }
 
-    public String getTrangThai() {
+    public TrangThaiXuLy getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(TrangThaiXuLy trangThai) {
         this.trangThai = trangThai;
     }
 

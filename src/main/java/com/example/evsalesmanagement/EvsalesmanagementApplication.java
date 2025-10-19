@@ -12,6 +12,7 @@ public class EvsalesmanagementApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EvsalesmanagementApplication.class, args);
+		System.out.println("EV Sales Management Application is running...");
 	}
 
 }
