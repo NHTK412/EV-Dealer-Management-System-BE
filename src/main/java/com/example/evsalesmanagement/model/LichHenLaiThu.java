@@ -23,6 +23,9 @@ public class LichHenLaiThu extends GhiNhanThoiGian{
     @Column(name = "NgayHen")
     private LocalDate ngayHen;
 
+    @Column(name = "TrangThai")
+    private String trangThai;
+
     @Column(name = "GioHen")
     private LocalTime gioHen;
 
@@ -72,5 +75,11 @@ public class LichHenLaiThu extends GhiNhanThoiGian{
 
     public void setXe(Xe xe) {
         this.xe = xe;
+    }
+    public String getTrangThai() {
+        return trangThai;
+    }
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 }
