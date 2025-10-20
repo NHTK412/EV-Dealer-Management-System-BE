@@ -10,6 +10,7 @@ import com.example.evsalesmanagement.dto.ChiTietYeuCauDTO;
 import com.example.evsalesmanagement.dto.ChiTietYeuCauRequestDTO;
 import com.example.evsalesmanagement.dto.YeuCauNhapHangDTO;
 import com.example.evsalesmanagement.dto.YeuCauNhapHangRequestDTO;
+import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.model.ChiTietLoaiXe;
 import com.example.evsalesmanagement.model.ChiTietYeuCau;
 import com.example.evsalesmanagement.model.NhanVien;
@@ -128,4 +129,42 @@ public class YeuCauNhapHangService {
 
     }
 
+    @Transactional
+    public YeuCauNhapHangDTO chinhSuaYeuCauNhapHang(Integer maYeuCauNhapHang,
+            YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
+        YeuCauNhapHang yeuCauNhapHang = yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
+
+        if (!yeuCauNhapHang.getTrangThai().equals("Chờ duyệt")) {
+            throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
+        }
+
+        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHang);
+
+        yeuCauNhapHang.setGhiChu(yeuCauNhapHangRequestDTO.getGhiChu());
+
+        chiTietYeuCauRepository.deleteByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang);
+        List<ChiTietYeuCau> chiTietYeuCaus = new ArrayList<>();
+
+        for (ChiTietYeuCauRequestDTO chiTietYeuCauDTO : yeuCauNhapHangRequestDTO.getChiTietYeuCaus()) {
+            ChiTietLoaiXe chiTietLoaiXe = chiTietLoaiXeRepository.findById(chiTietYeuCauDTO.getMaChiTietLoaiXe())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết loại xe"));
+
+            ChiTietYeuCau ctyc = new ChiTietYeuCau();
+
+            ctyc.setMaChiTietLoaiXe(chiTietLoaiXe.getMaChiTietLoaiXe());
+            ctyc.setChiTietLoaiXe(chiTietLoaiXe);
+
+            ctyc.setSoLuong(chiTietYeuCauDTO.getSoLuong());
+            ctyc.setMaYeuCau(yeuCauNhapHang.getMaYeuCau());
+            ctyc.setYeuCauNhapHang(yeuCauNhapHang);
+
+            chiTietYeuCauRepository.save(ctyc);
+            chiTietYeuCaus.add(ctyc);
+
+            yeuCauNhapHangDTO.getChiTietYeuCaus().add(new ChiTietYeuCauDTO(ctyc));
+
+        }
+        return yeuCauNhapHangDTO;
+    }
 }

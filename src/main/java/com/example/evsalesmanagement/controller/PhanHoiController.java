@@ -31,131 +31,122 @@ import jakarta.validation.constraints.Positive;
  * Controller cho chức năng "Ghi nhận và xử lý phản hồi"
  */
 @RestController
-@RequestMapping("/dealer-manager/phan-hoi")
+@RequestMapping("/phanHoi")
 @Validated
 public class PhanHoiController {
-    
-    private static final Logger log = LoggerFactory.getLogger(PhanHoiController.class);
-    
-    private final PhanHoiService phanHoiService;
-    private final XuLyPhanHoiService xuLyPhanHoiService;
-    
-    public PhanHoiController(
-            PhanHoiService phanHoiService,
-            XuLyPhanHoiService xuLyPhanHoiService) {
-        this.phanHoiService = phanHoiService;
-        this.xuLyPhanHoiService = xuLyPhanHoiService;
-    }
-    
-    /**
-     * API 1: Xem danh sách phản hồi
-     * GET /api/dealer-manager/phan-hoi
-     * GET /api/dealer-manager/phan-hoi?trangThai=Chưa xử lý
-     * GET /api/dealer-manager/phan-hoi?trangThai=Đang xử lý
-     * GET /api/dealer-manager/phan-hoi?trangThai=Đã xử lý
-     */
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<PhanHoiResponse>>> layDanhSachPhanHoi(
-            @RequestParam(required = false) String trangThai) {
-        
-        log.info("API: Lấy danh sách phản hồi - Trạng thái: {}", trangThai);
-        
-        List<PhanHoiResponse> danhSach = trangThai != null
-                ? phanHoiService.layPhanHoiTheoTrangThai(trangThai)
-                : phanHoiService.layDanhSachPhanHoi();
-        
-        // return ResponseEntity.ok(
-        //     new ApiResponse<>(true, "Lấy danh sách phản hồi thành công", danhSach)
-        // );
 
-        return ResponseEntity.ok(
-            new ApiResponse<>(
-                true,
-                MessageFormat.PHAN_HOI_LIST_SUCCESS,
-                danhSach
-            )
-        );
-    }
-    
-    /**
-     * API 2: Xem chi tiết phản hồi
-     * GET /api/dealer-manager/phan-hoi/{id}
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ChiTietPhanHoiResponse>> layChiTietPhanHoi(
-            @PathVariable @Positive Integer id) {
-        
-        log.info("API: Lấy chi tiết phản hồi {}", id);
-        
-        ChiTietPhanHoiResponse response = phanHoiService.layChiTietPhanHoi(id);
-        
-        // return ResponseEntity.ok(
-        //     new ApiResponse<>(true, "Lấy chi tiết phản hồi thành công", response)
-        // );
+        private static final Logger log = LoggerFactory.getLogger(PhanHoiController.class);
 
-        return ResponseEntity.ok(
-            new ApiResponse<>(
-                true,
-                MessageFormat.PHAN_HOI_DETAIL_SUCCESS,
-                response
-            )
-        );
-    }
-    
-    /**
-     * API 3: Xử lý phản hồi
-     * POST /api/dealer-manager/phan-hoi/{id}/xu-ly
-     */
-    @PostMapping("/{id}/xu-ly")
-    public ResponseEntity<ApiResponse<XuLyPhanHoiResponse>> xuLyPhanHoi(
-            @PathVariable @Positive Integer id,
-            @Valid @RequestBody XuLyPhanHoiRequest request) {
-        
-        log.info("API: Xử lý phản hồi {}", id);
-        
-        //  Lấy maNhanVien từ JWT token
-        Integer maNhanVien = 3; // Hard-code tạm
-        
-        XuLyPhanHoiResponse response = xuLyPhanHoiService.xuLyPhanHoi(
-            id, request, maNhanVien
-        );
-        
-        // return ResponseEntity.status(HttpStatus.CREATED).body(
-        //     new ApiResponse<>(true, "Xử lý phản hồi thành công", response)
-        // );
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            new ApiResponse<>(
-                true,
-                MessageFormat.XU_LY_PHAN_HOI_SUCCESS,
-                response
-            )
-        );
-    }
+        private final PhanHoiService phanHoiService;
+        private final XuLyPhanHoiService xuLyPhanHoiService;
 
-    /**
- * API 4: Đếm phản hồi theo trạng thái
- * GET /dealer-manager/phan-hoi/count?trangThai=Đã xử lý
- * GET /dealer-manager/phan-hoi/count?trangThai=Đang xử lý
- * GET /dealer-manager/phan-hoi/count?trangThai=Chưa xử lý
- */
-@GetMapping("/count")
-public ResponseEntity<ApiResponse<Long>> demPhanHoiTheoTrangThai(
-        @RequestParam String trangThai) {
+        public PhanHoiController(
+                        PhanHoiService phanHoiService,
+                        XuLyPhanHoiService xuLyPhanHoiService) {
+                this.phanHoiService = phanHoiService;
+                this.xuLyPhanHoiService = xuLyPhanHoiService;
+        }
 
-    log.info("API: Đếm phản hồi theo trạng thái {}", trangThai);
+        /**
+         * API 1: Xem danh sách phản hồi
+         * GET /api/phan-hoi
+         * GET /api/phan-hoi?trangThai=Chưa xử lý
+         * GET /api/phan-hoi?trangThai=Đang xử lý
+         * GET /api/phan-hoi?trangThai=Đã xử lý
+         */
+        @GetMapping
+        public ResponseEntity<ApiResponse<List<PhanHoiResponse>>> layDanhSachPhanHoi(
+                        @RequestParam(required = false) String trangThai) {
 
-    Long soLuong = phanHoiService.demPhanHoiTheoTrangThai(trangThai);
+                log.info("API: Lấy danh sách phản hồi - Trạng thái: {}", trangThai);
 
-    // return ResponseEntity.ok(
-    //     new ApiResponse<>(true, "Đếm phản hồi thành công", soLuong)
-    // );
-    return ResponseEntity.ok(
-        new ApiResponse<>(
-            true,
-            MessageFormat.PHAN_HOI_COUNT_SUCCESS,
-            soLuong
-        )
-    );
-}
+                List<PhanHoiResponse> danhSach = trangThai != null
+                                ? phanHoiService.layPhanHoiTheoTrangThai(trangThai)
+                                : phanHoiService.layDanhSachPhanHoi();
+
+                // return ResponseEntity.ok(
+                // new ApiResponse<>(true, "Lấy danh sách phản hồi thành công", danhSach)
+                // );
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>(
+                                                true,
+                                                MessageFormat.PHAN_HOI_LIST_SUCCESS,
+                                                danhSach));
+        }
+
+        /**
+         * API 2: Xem chi tiết phản hồi
+         * GET /api/phan-hoi/{id}
+         */
+        @GetMapping("/{maPhanHoi}")
+        public ResponseEntity<ApiResponse<ChiTietPhanHoiResponse>> layChiTietPhanHoi(
+                        @PathVariable @Positive Integer maPhanHoi) {
+
+                log.info("API: Lấy chi tiết phản hồi {}", maPhanHoi);
+
+                ChiTietPhanHoiResponse response = phanHoiService.layChiTietPhanHoi(maPhanHoi);
+
+                // return ResponseEntity.ok(
+                // new ApiResponse<>(true, "Lấy chi tiết phản hồi thành công", response)
+                // );
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>(
+                                                true,
+                                                MessageFormat.PHAN_HOI_DETAIL_SUCCESS,
+                                                response));
+        }
+
+        /**
+         * API 3: Xử lý phản hồi
+         * POST /api/phan-hoi/{id}/xu-ly
+         */
+        @PostMapping("/{maPhanHoi}/xuLy")
+        public ResponseEntity<ApiResponse<XuLyPhanHoiResponse>> xuLyPhanHoi(
+                        @PathVariable @Positive Integer maPhanHoi,
+                        @Valid @RequestBody XuLyPhanHoiRequest request) {
+
+                log.info("API: Xử lý phản hồi {}", maPhanHoi);
+
+                // Lấy maNhanVien từ JWT token
+                Integer maNhanVien = 3; // Hard-code tạm
+
+                XuLyPhanHoiResponse response = xuLyPhanHoiService.xuLyPhanHoi(
+                                maPhanHoi, request, maNhanVien);
+
+                // return ResponseEntity.status(HttpStatus.CREATED).body(
+                // new ApiResponse<>(true, "Xử lý phản hồi thành công", response)
+                // );
+                return ResponseEntity.status(HttpStatus.CREATED).body(
+                                new ApiResponse<>(
+                                                true,
+                                                MessageFormat.XU_LY_PHAN_HOI_SUCCESS,
+                                                response));
+        }
+
+        /**
+         * API 4: Đếm phản hồi theo trạng thái
+         * GET /phan-hoi/thongKe?trangThai=Đã xử lý
+         * GET /phan-hoi/thongKe?trangThai=Đang xử lý
+         * GET /phan-hoi/thongKe?trangThai=Chưa xử lý
+         */
+        @GetMapping("/thongKe")
+        public ResponseEntity<ApiResponse<Long>> demPhanHoiTheoTrangThai(
+                        @RequestParam String trangThai) {
+
+                log.info("API: Đếm phản hồi theo trạng thái {}", trangThai);
+
+                Long soLuong = phanHoiService.demPhanHoiTheoTrangThai(trangThai);
+
+                // return ResponseEntity.ok(
+                // new ApiResponse<>(true, "Đếm phản hồi thành công", soLuong)
+                // );
+                return ResponseEntity.ok(
+                                new ApiResponse<>(
+                                                true,
+                                                MessageFormat.PHAN_HOI_COUNT_SUCCESS,
+                                                soLuong));
+        }
 
 }

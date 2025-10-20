@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
-
-
+import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
 @RequestMapping("/daiLy")
@@ -26,21 +24,21 @@ public class DaiLyController {
     private DaiLyService daiLyService;
 
     @GetMapping
-    List<DaiLy> getAllDaiLy() {
-        return daiLyService.getAllDaiLy();
+    ResponseEntity<ApiResponse<List<DaiLy>>> getAllDaiLy() {
+        return ResponseEntity.ok(new ApiResponse<List<DaiLy>>(
+                true, null, daiLyService.getAllDaiLy()));
     }
 
-    @GetMapping("/{DaiLyId}")
-    DaiLy getDaiLyById(@PathVariable Integer DaiLyId) {
-        return daiLyService.getDaiLyById(DaiLyId);
+    @GetMapping("/{maDaiLy}")
+    ResponseEntity<ApiResponse<DaiLy>> getDaiLyById(@PathVariable Integer maDaiLy) {
+        return ResponseEntity.ok(new ApiResponse<DaiLy>(
+                true, null, daiLyService.getDaiLyById(maDaiLy)));
     }
 
-    @PutMapping("/{DaiLyId}")
-    DaiLy updateDaiLy(@PathVariable Integer DaiLyId, @RequestBody DaiLyRequest request) {
-        return daiLyService.updateDaiLy(DaiLyId, request);
+    @PutMapping("/{maDaiLy}")
+    ResponseEntity<ApiResponse<DaiLy>> updateDaiLy(@PathVariable Integer maDaiLy, @RequestBody DaiLyRequest request) {
+        return ResponseEntity.ok(new ApiResponse<DaiLy>(
+                true, null, daiLyService.getDaiLyById(maDaiLy)));
     }
-    
-    
-    
-    
+
 }

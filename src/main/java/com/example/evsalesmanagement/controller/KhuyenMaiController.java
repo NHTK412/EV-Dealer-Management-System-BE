@@ -22,93 +22,109 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import com.example.evsalesmanagement.utils.ApiResponse;
+
 @RestController
 @RequestMapping("/khuyenMai")
 public class KhuyenMaiController {
 
-    @Autowired
-    private KhuyenMaiService khuyenMaiService;
+        @Autowired
+        private KhuyenMaiService khuyenMaiService;
 
-    @GetMapping()
-    public ResponseEntity<List<KhuyenMaiDTO>> layTatCaKhuyenMai() {
-        List<KhuyenMaiDTO> khuyenMaiDTOs = khuyenMaiService.layTatCaKhuyenMai().stream().map(km -> new KhuyenMaiDTO(km))
-                .toList();
-        return ResponseEntity.ok(khuyenMaiDTOs);
-    }
+        @GetMapping()
+        public ResponseEntity<ApiResponse<List<KhuyenMaiDTO>>> layTatCaKhuyenMai() {
+                List<KhuyenMaiDTO> khuyenMaiDTOs = khuyenMaiService.layTatCaKhuyenMai().stream()
+                                .map(km -> new KhuyenMaiDTO(km))
+                                .toList();
+                // return ResponseEntity.ok(khuyenMaiDTOs);
 
-    @GetMapping("/{maKhuyenMai}")
-    public ResponseEntity<KhuyenMaiChiTietDTO> layKhuyenMaiTheoMa(@PathVariable String maKhuyenMai) {
-        // return new String();
+                return ResponseEntity.ok(new ApiResponse<List<KhuyenMaiDTO>>(true, null, khuyenMaiDTOs));
+        }
 
-        KhuyenMai khuyenMai = khuyenMaiService.layKhuyenMaiTheoMa(Integer.parseInt(maKhuyenMai));
+        @GetMapping("/{maKhuyenMai}")
+        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> layKhuyenMaiTheoMa(@PathVariable String maKhuyenMai) {
+                // return new String();
 
-        KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
-        khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                khuyenMai.getChiTietLoaiXes()
-                        .stream()
-                        .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
-                        .toList());
-        khuyenMaiChiTietDTO.setDaiLys(
-                khuyenMai.getDaiLys()
-                        .stream()
-                        .map(daiLy -> new DaiLyDTO(daiLy))
-                        .toList());
-        return ResponseEntity.ok(khuyenMaiChiTietDTO);
-    }
+                KhuyenMai khuyenMai = khuyenMaiService.layKhuyenMaiTheoMa(Integer.parseInt(maKhuyenMai));
 
-    @PostMapping()
-    public ResponseEntity<KhuyenMaiChiTietDTO> taoKhuyenmai(@RequestBody KhuyenMaiRequestDTO khuyenMai) {
+                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
+                khuyenMaiChiTietDTO.setChiTietLoaiXes(
+                                khuyenMai.getChiTietLoaiXes()
+                                                .stream()
+                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .toList());
+                khuyenMaiChiTietDTO.setDaiLys(
+                                khuyenMai.getDaiLys()
+                                                .stream()
+                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .toList());
+                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
-        KhuyenMai khuyenMaiMoi = khuyenMaiService.taoKhuyenMai(khuyenMai);
+                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
 
-        KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiMoi);
-        khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                khuyenMaiMoi.getChiTietLoaiXes()
-                        .stream()
-                        .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
-                        .toList());
-        khuyenMaiChiTietDTO.setDaiLys(
-                khuyenMaiMoi.getDaiLys()
-                        .stream()
-                        .map(daiLy -> new DaiLyDTO(daiLy))
-                        .toList());
-        return ResponseEntity.ok(khuyenMaiChiTietDTO);
-    }
+        }
 
-    @DeleteMapping("/{maKhuyenMai}")
-    public ResponseEntity<KhuyenMaiChiTietDTO> xoaKhuyenMai(@PathVariable String maKhuyenMai) {
-        KhuyenMai khuyenMai = khuyenMaiService.xoaKhuyenMai(Integer.parseInt(maKhuyenMai));
+        @PostMapping()
+        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> taoKhuyenmai(
+                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
 
-        KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
-        khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                khuyenMai.getChiTietLoaiXes()
-                        .stream()
-                        .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
-                        .toList());
-        khuyenMaiChiTietDTO.setDaiLys(
-                khuyenMai.getDaiLys()
-                        .stream()
-                        .map(daiLy -> new DaiLyDTO(daiLy))
-                        .toList());
-        return ResponseEntity.ok(khuyenMaiChiTietDTO);
-    }
+                KhuyenMai khuyenMaiMoi = khuyenMaiService.taoKhuyenMai(khuyenMai);
 
-    @PutMapping("/{maKhuyenMai}")
-    public ResponseEntity<KhuyenMaiChiTietDTO> putMethodName(@PathVariable String maKhuyenMai,
-            @RequestBody KhuyenMaiRequestDTO khuyenMai) {
-        KhuyenMai khuyenMaiCapNhat = khuyenMaiService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
-        KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiCapNhat);
-        khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                khuyenMaiCapNhat.getChiTietLoaiXes()
-                        .stream()
-                        .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
-                        .toList());
-        khuyenMaiChiTietDTO.setDaiLys(
-                khuyenMaiCapNhat.getDaiLys()
-                        .stream()
-                        .map(daiLy -> new DaiLyDTO(daiLy))
-                        .toList());
+                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiMoi);
+                khuyenMaiChiTietDTO.setChiTietLoaiXes(
+                                khuyenMaiMoi.getChiTietLoaiXes()
+                                                .stream()
+                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .toList());
+                khuyenMaiChiTietDTO.setDaiLys(
+                                khuyenMaiMoi.getDaiLys()
+                                                .stream()
+                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .toList());
+                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
-        return ResponseEntity.ok(khuyenMaiChiTietDTO);
-    }
+                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+
+        }
+
+        @DeleteMapping("/{maKhuyenMai}")
+        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> xoaKhuyenMai(@PathVariable String maKhuyenMai) {
+                KhuyenMai khuyenMai = khuyenMaiService.xoaKhuyenMai(Integer.parseInt(maKhuyenMai));
+
+                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
+                khuyenMaiChiTietDTO.setChiTietLoaiXes(
+                                khuyenMai.getChiTietLoaiXes()
+                                                .stream()
+                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .toList());
+                khuyenMaiChiTietDTO.setDaiLys(
+                                khuyenMai.getDaiLys()
+                                                .stream()
+                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .toList());
+                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
+                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+
+        }
+
+        @PutMapping("/{maKhuyenMai}")
+        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> putMethodName(@PathVariable String maKhuyenMai,
+                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
+                KhuyenMai khuyenMaiCapNhat = khuyenMaiService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
+                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiCapNhat);
+                khuyenMaiChiTietDTO.setChiTietLoaiXes(
+                                khuyenMaiCapNhat.getChiTietLoaiXes()
+                                                .stream()
+                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .toList());
+                khuyenMaiChiTietDTO.setDaiLys(
+                                khuyenMaiCapNhat.getDaiLys()
+                                                .stream()
+                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .toList());
+
+                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
+                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+
+        }
 }

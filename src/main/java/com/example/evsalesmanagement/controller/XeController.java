@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.XeDTO;
@@ -17,11 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
-
-
+import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
 @RequestMapping("/xe")
@@ -30,38 +27,50 @@ public class XeController {
     private XeService xeService;
 
     @PostMapping
-    Xe createXe(@RequestBody XeDTO request) {
-       return xeService.createXe(request);
+    ResponseEntity<ApiResponse<Xe>> createXe(@RequestBody XeDTO request) {
+        // return xeService.createXe(request);
+
+        return ResponseEntity.ok(new ApiResponse<Xe>(true, null, xeService.createXe(request)));
+
     }
 
-    @PostMapping("/batch")
-    public List<Xe> createXeBatch(@RequestBody List<XeDTO> requests) {
+    @PostMapping("/themNhieu")
+    public ResponseEntity<ApiResponse<List<Xe>>> createXeBatch(@RequestBody List<XeDTO> requests) {
         List<Xe> result = new ArrayList<>();
         for (XeDTO req : requests) {
             result.add(xeService.createXe(req));
         }
-        return result;
+        // return result;
+
+        return ResponseEntity.ok(new ApiResponse<List<Xe>>(true, null, result));
+
     }
 
     @GetMapping
-    List<Xe> getAllXe() {
-        return xeService.getAllXe();
+    ResponseEntity<ApiResponse<List<Xe>>> getAllXe() {
+        // return xeService.getAllXe();
+        return ResponseEntity.ok(new ApiResponse<List<Xe>>(true, null, xeService.getAllXe()));
+
     }
 
-    @GetMapping("/{xeId}")
-    Xe getXeById(@PathVariable Integer xeId) {
-        return xeService.getXeById(xeId); 
+    @GetMapping("/{maXe}")
+    ResponseEntity<ApiResponse<Xe>> getXeById(@PathVariable Integer maXe) {
+        // return xeService.getXeById(maXe);
+        return ResponseEntity.ok(new ApiResponse<Xe>(true, null, xeService.getXeById(maXe)));
+
     }
-    
-    @PutMapping("/{xeId}")
-    Xe updateXe(@PathVariable("xeId") Integer xeId, @RequestBody XeDTO request) {
-        return xeService.updateXe(xeId, request);
+
+    @PutMapping("/{maXe}")
+    ResponseEntity<ApiResponse<Xe>> updateXe(@PathVariable Integer maXe, @RequestBody XeDTO request) {
+        // return xeService.updateXe(maXe, request);
+        return ResponseEntity.ok(new ApiResponse<Xe>(true, null, xeService.updateXe(maXe, request)));
+
     }
-    
-    @DeleteMapping("/{xeId}")
-    String deleteXe(@PathVariable Integer xeId) {
-        xeService.deleteXe(xeId);
+
+    @DeleteMapping("/{maXe}")
+    String deleteXe(@PathVariable Integer maXe) {
+        xeService.deleteXe(maXe);
         return "Deleted Successfully";
     }
-    
+
 }
