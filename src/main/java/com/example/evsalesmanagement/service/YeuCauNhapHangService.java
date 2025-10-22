@@ -175,14 +175,14 @@ public class YeuCauNhapHangService {
     }
 
     @Transactional
-    public List<YeuCauNhapHangDTO> layTatCaKhuyenMai(Pageable pageable) {
+    public List<YeuCauNhapHangDTO> layTatCaYeuCauNhapHang(Pageable pageable) {
         Page<YeuCauNhapHang> yeuCauNhapHangs = yeuCauNhapHangReponsitory.findAll(pageable);
         System.err.println("----> " + yeuCauNhapHangs.toString());
         return yeuCauNhapHangs.map(yeuCauNhapHang -> new YeuCauNhapHangDTO(yeuCauNhapHang)).toList();
     }
 
     @Transactional
-    public YeuCauNhapHangDTO layChiTietKhuyenMai(Integer maYeuCauNhapHang) {
+    public YeuCauNhapHangDTO layChiTietYeuCauNhapHang(Integer maYeuCauNhapHang) {
         YeuCauNhapHang yeuCauNhapHang = yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
                 .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
 

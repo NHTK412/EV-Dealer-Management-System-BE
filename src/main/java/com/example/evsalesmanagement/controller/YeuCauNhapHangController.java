@@ -69,15 +69,21 @@ public class YeuCauNhapHangController {
     }
 
     @GetMapping
-    public ResponseEntity<List<YeuCauNhapHangDTO>> layTatCaKhuyenMai(@RequestParam Integer page,
+    public ResponseEntity<List<YeuCauNhapHangDTO>> layTatCaYeuCauNhapHang(@RequestParam Integer page,
             @RequestParam @Positive Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaKhuyenMai(pageable));
+        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaYeuCauNhapHang(pageable));
     }
 
     @GetMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<YeuCauNhapHangDTO> layChiTietKhuyenMai(@PathVariable Integer maYeuCauNhapHang) {
-        return ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
+    public ResponseEntity<YeuCauNhapHangDTO> layChiTietYeuCauNhapHang(@PathVariable Integer maYeuCauNhapHang) {
+        return ResponseEntity.ok(yeuCauNhapHangService.layChiTietYeuCauNhapHang(maYeuCauNhapHang));
     }
+
+    //  @GetMapping("/{maNhanVien}")
+    // public ResponseEntity<List<YeuCauNhapHangDTO>> layTat(@PathVariable Integer maYeuCauNhapHang) {
+    //     return ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
+    // }
+
 
 }
