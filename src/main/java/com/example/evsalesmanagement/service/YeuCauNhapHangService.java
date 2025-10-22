@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.evsalesmanagement.dto.ChiTietYeuCauDTO;
 import com.example.evsalesmanagement.dto.ChiTietYeuCauRequestDTO;
 import com.example.evsalesmanagement.dto.YeuCauNhapHangDTO;
 import com.example.evsalesmanagement.dto.YeuCauNhapHangRequestDTO;
 import com.example.evsalesmanagement.exception.ConflictException;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.ChiTietLoaiXe;
 import com.example.evsalesmanagement.model.ChiTietYeuCau;
 import com.example.evsalesmanagement.model.NhanVien;
@@ -21,6 +26,7 @@ import com.example.evsalesmanagement.repository.NhanVienRepository;
 import com.example.evsalesmanagement.repository.YeuCauNhapHangReponsitory;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Positive;
 
 @Service
 public class YeuCauNhapHangService {
@@ -167,4 +173,30 @@ public class YeuCauNhapHangService {
         }
         return yeuCauNhapHangDTO;
     }
+
+    @Transactional
+    public List<YeuCauNhapHangDTO> layTatCaKhuyenMai(Pageable pageable) {
+        Page<YeuCauNhapHang> yeuCauNhapHangs = yeuCauNhapHangReponsitory.findAll(pageable);
+        System.err.println("----> " + yeuCauNhapHangs.toString());
+        return yeuCauNhapHangs.map(yeuCauNhapHang -> new YeuCauNhapHangDTO(yeuCauNhapHang)).toList();
+    }
+
+    @Transactional
+    public YeuCauNhapHangDTO layChiTietKhuyenMai(Integer maYeuCauNhapHang) {
+        YeuCauNhapHang yeuCauNhapHang = yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
+                .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+
+        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHang);
+
+        List<ChiTietYeuCau> chiTietYeuCaus = chiTietYeuCauRepository.findByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang);
+
+        List<ChiTietYeuCauDTO> chiTietYeuCauDTOs = chiTietYeuCaus.stream().map((chiTietYeuCau) -> {
+            return new ChiTietYeuCauDTO(chiTietYeuCau);
+        }).toList();
+
+        yeuCauNhapHangDTO.setChiTietYeuCaus(chiTietYeuCauDTOs);
+
+        return yeuCauNhapHangDTO;
+    }
+
 }

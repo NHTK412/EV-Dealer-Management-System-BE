@@ -7,13 +7,21 @@ import com.example.evsalesmanagement.dto.YeuCauNhapHangDTO;
 import com.example.evsalesmanagement.dto.YeuCauNhapHangRequestDTO;
 import com.example.evsalesmanagement.service.YeuCauNhapHangService;
 
+import jakarta.validation.constraints.Positive;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/yeuCauNhapHang")
@@ -59,4 +67,17 @@ public class YeuCauNhapHangController {
         return ResponseEntity.ok(yeuCauNhapHangService.chinhSuaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang),
                 yeuCauNhapHangRequestDTO));
     }
+
+    @GetMapping
+    public ResponseEntity<List<YeuCauNhapHangDTO>> layTatCaKhuyenMai(@RequestParam Integer page,
+            @RequestParam @Positive Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaKhuyenMai(pageable));
+    }
+
+    @GetMapping("/{maYeuCauNhapHang}")
+    public ResponseEntity<YeuCauNhapHangDTO> layChiTietKhuyenMai(@PathVariable Integer maYeuCauNhapHang) {
+        return ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
+    }
+
 }
