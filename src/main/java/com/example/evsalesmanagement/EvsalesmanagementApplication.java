@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing 
-
 public class EvsalesmanagementApplication {
 
 	public static void main(String[] args) {

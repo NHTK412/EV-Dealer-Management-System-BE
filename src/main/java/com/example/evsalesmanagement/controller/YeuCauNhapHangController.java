@@ -70,20 +70,24 @@ public class YeuCauNhapHangController {
 
     @GetMapping
     public ResponseEntity<List<YeuCauNhapHangDTO>> layTatCaYeuCauNhapHang(@RequestParam Integer page,
-            @RequestParam @Positive Integer size) {
+            @RequestParam @Positive Integer size,
+            @RequestParam(required = false) Integer maNhanVien) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaYeuCauNhapHang(pageable));
+        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaYeuCauNhapHang(pageable, maNhanVien));
     }
+
 
     @GetMapping("/{maYeuCauNhapHang}")
     public ResponseEntity<YeuCauNhapHangDTO> layChiTietYeuCauNhapHang(@PathVariable Integer maYeuCauNhapHang) {
         return ResponseEntity.ok(yeuCauNhapHangService.layChiTietYeuCauNhapHang(maYeuCauNhapHang));
     }
 
-    //  @GetMapping("/{maNhanVien}")
-    // public ResponseEntity<List<YeuCauNhapHangDTO>> layTat(@PathVariable Integer maYeuCauNhapHang) {
-    //     return ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
+    // @GetMapping("/nhanVien/{maNhanVien}")
+    // public ResponseEntity<List<YeuCauNhapHangDTO>>
+    // layTatCaYeuCauNhapHangTheoNhanVien(
+    // @PathVariable Integer maYeuCauNhapHang) {
+    // return
+    // ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
     // }
-
 
 }

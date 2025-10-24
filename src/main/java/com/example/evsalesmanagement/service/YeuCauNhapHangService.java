@@ -5,10 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.evsalesmanagement.dto.ChiTietYeuCauDTO;
 import com.example.evsalesmanagement.dto.ChiTietYeuCauRequestDTO;
@@ -26,7 +24,6 @@ import com.example.evsalesmanagement.repository.NhanVienRepository;
 import com.example.evsalesmanagement.repository.YeuCauNhapHangReponsitory;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Positive;
 
 @Service
 public class YeuCauNhapHangService {
@@ -175,9 +172,11 @@ public class YeuCauNhapHangService {
     }
 
     @Transactional
-    public List<YeuCauNhapHangDTO> layTatCaYeuCauNhapHang(Pageable pageable) {
-        Page<YeuCauNhapHang> yeuCauNhapHangs = yeuCauNhapHangReponsitory.findAll(pageable);
-        System.err.println("----> " + yeuCauNhapHangs.toString());
+    public List<YeuCauNhapHangDTO> layTatCaYeuCauNhapHang(Pageable pageable, Integer maNhanVien) {
+
+        Page<YeuCauNhapHang> yeuCauNhapHangs = maNhanVien == null ? yeuCauNhapHangReponsitory.findAll(pageable)
+                : yeuCauNhapHangReponsitory.findByNhanVien_MaNhanVien(maNhanVien, pageable);
+        // System.err.println("----> " + yeuCauNhapHangs.toString());
         return yeuCauNhapHangs.map(yeuCauNhapHang -> new YeuCauNhapHangDTO(yeuCauNhapHang)).toList();
     }
 
