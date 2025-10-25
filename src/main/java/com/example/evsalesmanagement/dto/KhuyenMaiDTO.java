@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.example.evsalesmanagement.model.KhuyenMai;
+import com.example.evsalesmanagement.model.Promotion;
 
 public class KhuyenMaiDTO {
 
@@ -30,7 +30,7 @@ public class KhuyenMaiDTO {
     public KhuyenMaiDTO() {
     }
 
-    public KhuyenMaiDTO(KhuyenMai khuyenMai) {
+    public KhuyenMaiDTO(Promotion khuyenMai) {
         this.maKhuyenMai = khuyenMai.getMaKhuyenMai();
         this.tenKhuyenMai = khuyenMai.getTenKhuyenMai();
         this.loaiKhuyenMai = khuyenMai.getLoaiKhuyenMai();

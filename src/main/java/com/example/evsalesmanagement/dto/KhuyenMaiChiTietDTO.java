@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.evsalesmanagement.model.KhuyenMai;
+import com.example.evsalesmanagement.model.Promotion;
 
 public class KhuyenMaiChiTietDTO {
 
@@ -32,7 +32,7 @@ public class KhuyenMaiChiTietDTO {
 
     private List<DaiLyDTO> daiLys;
 
-    public KhuyenMaiChiTietDTO(KhuyenMai khuyenMai) {
+    public KhuyenMaiChiTietDTO(Promotion khuyenMai) {
         this.maKhuyenMai = khuyenMai.getMaKhuyenMai();
         this.tenKhuyenMai = khuyenMai.getTenKhuyenMai();
         this.loaiKhuyenMai = khuyenMai.getLoaiKhuyenMai();

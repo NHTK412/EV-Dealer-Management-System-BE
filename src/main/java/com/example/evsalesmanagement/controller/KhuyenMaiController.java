@@ -8,8 +8,8 @@ import com.example.evsalesmanagement.dto.DaiLyDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiChiTietDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
-import com.example.evsalesmanagement.model.KhuyenMai;
-import com.example.evsalesmanagement.service.KhuyenMaiService;
+import com.example.evsalesmanagement.model.Promotion;
+import com.example.evsalesmanagement.service.PromotionService;
 
 import java.util.List;
 
@@ -29,11 +29,11 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 public class KhuyenMaiController {
 
         @Autowired
-        private KhuyenMaiService khuyenMaiService;
+        private PromotionService promotionService;
 
         @GetMapping()
         public ResponseEntity<ApiResponse<List<KhuyenMaiDTO>>> layTatCaKhuyenMai() {
-                List<KhuyenMaiDTO> khuyenMaiDTOs = khuyenMaiService.layTatCaKhuyenMai().stream()
+                List<KhuyenMaiDTO> khuyenMaiDTOs = promotionService.layTatCaKhuyenMai().stream()
                                 .map(km -> new KhuyenMaiDTO(km))
                                 .toList();
                 // return ResponseEntity.ok(khuyenMaiDTOs);
@@ -45,7 +45,7 @@ public class KhuyenMaiController {
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> layKhuyenMaiTheoMa(@PathVariable String maKhuyenMai) {
                 // return new String();
 
-                KhuyenMai khuyenMai = khuyenMaiService.layKhuyenMaiTheoMa(Integer.parseInt(maKhuyenMai));
+                Promotion khuyenMai = promotionService.layKhuyenMaiTheoMa(Integer.parseInt(maKhuyenMai));
 
                 KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
                 khuyenMaiChiTietDTO.setChiTietLoaiXes(
@@ -68,7 +68,7 @@ public class KhuyenMaiController {
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> taoKhuyenmai(
                         @RequestBody KhuyenMaiRequestDTO khuyenMai) {
 
-                KhuyenMai khuyenMaiMoi = khuyenMaiService.taoKhuyenMai(khuyenMai);
+                Promotion khuyenMaiMoi = promotionService.taoKhuyenMai(khuyenMai);
 
                 KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiMoi);
                 khuyenMaiChiTietDTO.setChiTietLoaiXes(
@@ -89,7 +89,7 @@ public class KhuyenMaiController {
 
         @DeleteMapping("/{maKhuyenMai}")
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> xoaKhuyenMai(@PathVariable String maKhuyenMai) {
-                KhuyenMai khuyenMai = khuyenMaiService.xoaKhuyenMai(Integer.parseInt(maKhuyenMai));
+                Promotion khuyenMai = promotionService.xoaKhuyenMai(Integer.parseInt(maKhuyenMai));
 
                 KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
                 khuyenMaiChiTietDTO.setChiTietLoaiXes(
@@ -110,7 +110,7 @@ public class KhuyenMaiController {
         @PutMapping("/{maKhuyenMai}")
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> putMethodName(@PathVariable String maKhuyenMai,
                         @RequestBody KhuyenMaiRequestDTO khuyenMai) {
-                KhuyenMai khuyenMaiCapNhat = khuyenMaiService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
+                Promotion khuyenMaiCapNhat = promotionService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
                 KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiCapNhat);
                 khuyenMaiChiTietDTO.setChiTietLoaiXes(
                                 khuyenMaiCapNhat.getChiTietLoaiXes()
