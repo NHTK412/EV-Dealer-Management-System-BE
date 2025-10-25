@@ -2,7 +2,7 @@ package com.example.evsalesmanagement.dto;
 
 import java.time.LocalDate;
 
-import com.example.evsalesmanagement.model.DaiLy;
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.NhanVien;
 
 
@@ -32,7 +32,7 @@ public class NhanVienDTO {
     }
 
     public NhanVienDTO(Integer maNhanVien, String tenNhanVien, String gioiTinh, LocalDate ngaySinh, String soDienThoai,
-            String email, String diaChi, String chucVu, DaiLy daiLy) {
+            String email, String diaChi, String chucVu, Agency daiLy) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.soDienThoai = soDienThoai;

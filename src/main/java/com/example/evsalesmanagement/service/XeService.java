@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
-import com.example.evsalesmanagement.repository.DaiLyRepository;
+import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.XeRepository;
 import com.example.evsalesmanagement.dto.XeDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.ChiTietLoaiXe;
-import com.example.evsalesmanagement.model.DaiLy;
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Xe;
 
 @Service
@@ -20,7 +20,7 @@ public class XeService {
     private XeRepository xeRepository;
 
     @Autowired
-    private DaiLyRepository daiLyRepository;
+    private AgencyRepository daiLyRepository;
 
     @Autowired
     private ChiTietLoaiXeRepository chiTietLoaiRepository;
@@ -39,7 +39,7 @@ public class XeService {
         xe.setChiTietLoaiXe(chiTietLoaiXe);
 
         // Lấy đối tượng DaiLy theo ID
-        DaiLy daiLy = daiLyRepository.findById(request.getMaDaiLy())
+        Agency daiLy = daiLyRepository.findById(request.getMaDaiLy())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy DaiLy với ID: " + request.getMaDaiLy()));
         xe.setDaiLy(daiLy);
 

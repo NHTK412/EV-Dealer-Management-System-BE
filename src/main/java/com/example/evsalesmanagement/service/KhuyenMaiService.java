@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
 import com.example.evsalesmanagement.model.KhuyenMai;
 import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
-import com.example.evsalesmanagement.repository.DaiLyRepository;
+import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.KhuyenMaiRepository;
 
 @Service
@@ -18,7 +18,7 @@ public class KhuyenMaiService {
     KhuyenMaiRepository khuyenMaiRepository;
 
     @Autowired
-    DaiLyRepository daiLyRepository;
+    AgencyRepository daiLyRepository;
 
     @Autowired
     ChiTietLoaiXeRepository chiTietLoaiXeRepository;

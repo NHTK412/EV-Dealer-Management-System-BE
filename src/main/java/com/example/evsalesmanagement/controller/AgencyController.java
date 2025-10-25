@@ -7,38 +7,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.DaiLyRequest;
-import com.example.evsalesmanagement.model.DaiLy;
-import com.example.evsalesmanagement.service.DaiLyService;
+import com.example.evsalesmanagement.dto.AgencyRequest;
+import com.example.evsalesmanagement.model.Agency;
+import com.example.evsalesmanagement.service.AgencyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.evsalesmanagement.utils.ApiResponse;
-
+//daily=agency
 @RestController
-@RequestMapping("/daiLy")
+@RequestMapping("/agency")
 public class AgencyController {
     @Autowired
-    private DaiLyService daiLyService;
+    private AgencyService agencyService;
 
     @GetMapping
-    ResponseEntity<ApiResponse<List<DaiLy>>> getAllDaiLy() {
-        return ResponseEntity.ok(new ApiResponse<List<DaiLy>>(
-                true, null, daiLyService.getAllDaiLy()));
+    ResponseEntity<ApiResponse<List<Agency>>> getAllAgency() {
+        return ResponseEntity.ok(new ApiResponse<List<Agency>>(
+                true, null, agencyService.getAllAgency()));
     }
 
     @GetMapping("/{maDaiLy}")
-    ResponseEntity<ApiResponse<DaiLy>> getDaiLyById(@PathVariable Integer maDaiLy) {
-        return ResponseEntity.ok(new ApiResponse<DaiLy>(
-                true, null, daiLyService.getDaiLyById(maDaiLy)));
+    ResponseEntity<ApiResponse<Agency>> getAgencyById(@PathVariable Integer agencyId) {
+        return ResponseEntity.ok(new ApiResponse<Agency>(
+                true, null, agencyService.getAgencyById(agencyId)));
     }
 
     @PutMapping("/{maDaiLy}")
-    ResponseEntity<ApiResponse<DaiLy>> updateDaiLy(@PathVariable Integer maDaiLy, @RequestBody DaiLyRequest request) {
-        return ResponseEntity.ok(new ApiResponse<DaiLy>(
-                true, null, daiLyService.getDaiLyById(maDaiLy)));
+    ResponseEntity<ApiResponse<Agency>> updateAgency(@PathVariable Integer agencyId, @RequestBody AgencyRequest request) {
+        return ResponseEntity.ok(new ApiResponse<Agency>(
+                true, null, agencyService.getAgencyById(agencyId)));
     }
 
 }
