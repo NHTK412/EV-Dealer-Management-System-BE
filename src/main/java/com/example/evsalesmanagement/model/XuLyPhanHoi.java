@@ -43,7 +43,7 @@ public class XuLyPhanHoi extends GhiNhanThoiGian {
 
     @ManyToOne
     @JoinColumn(name = "MaNhanVien")
-    private NhanVien nhanVien;
+    private Employee nhanVien;
 
     public Integer getMaXuLy() {
         return maXuLy;
@@ -93,11 +93,11 @@ public class XuLyPhanHoi extends GhiNhanThoiGian {
         this.phanHoi = phanHoi;
     }
 
-    public NhanVien getNhanVien() {
+    public Employee getNhanVien() {
         return nhanVien;
     }
 
-    public void setNhanVien(NhanVien nhanVien) {
+    public void setNhanVien(Employee nhanVien) {
         this.nhanVien = nhanVien;
     }
 }

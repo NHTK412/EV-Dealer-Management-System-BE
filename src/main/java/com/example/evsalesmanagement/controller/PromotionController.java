@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
-@RequestMapping("/khuyenMai")
-public class KhuyenMaiController {
+@RequestMapping("/promotion")
+public class PromotionController {
 
         @Autowired
         private PromotionService promotionService;

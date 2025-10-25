@@ -2,100 +2,95 @@ package com.example.evsalesmanagement.dto;
 
 import java.math.BigDecimal;
 
-import com.example.evsalesmanagement.model.ChiTietLoaiXe;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
-public class ChiTietLoaiXeDTO {
-    private Integer maChiTietLoaiXe;
+public class VehicleTypeDetailSummaryDTO {
 
-    private String hinhAnhXe;
+    private Integer vehicleTypeDetailId;
+    private String vehicleImage;
+    private String configuration;
+    private String color;
+    private String version;
+    private String feature;
+    private BigDecimal price;
 
-    private String cauHinh;
-
-    private String mauSac;
-
-    private String phienBan;
-
-    private String tinhNang;
-
-    private BigDecimal giaBan;
-
-    public ChiTietLoaiXeDTO(ChiTietLoaiXe chiTietLoaiXe) {
-        this.maChiTietLoaiXe = chiTietLoaiXe.getMaChiTietLoaiXe();
-        this.hinhAnhXe = chiTietLoaiXe.getHinhAnhXe();
-        this.cauHinh = chiTietLoaiXe.getCauHinh();
-        this.mauSac = chiTietLoaiXe.getMauSac();
-        this.phienBan = chiTietLoaiXe.getPhienBan();
-        this.tinhNang = chiTietLoaiXe.getTinhNang();
-        this.giaBan = chiTietLoaiXe.getGiaBan();
+    public VehicleTypeDetailSummaryDTO(VehicleTypeDetail vehicleTypeDetail) {
+        this.vehicleTypeDetailId = vehicleTypeDetail.getVehicleTypeDetailId();
+        this.vehicleImage = vehicleTypeDetail.getVehicleImage();
+        this.configuration = vehicleTypeDetail.getConfiguration();
+        this.color = vehicleTypeDetail.getColor();
+        this.version = vehicleTypeDetail.getVersion();
+        this.feature = vehicleTypeDetail.getFeature();
+        this.price = vehicleTypeDetail.getPrice();
     }
 
-    public ChiTietLoaiXeDTO(Integer maChiTietLoaiXe, String hinhAnhXe, String cauHinh, String mauSac, String phienBan,
-            String tinhNang, BigDecimal giaBan) {
-        this.maChiTietLoaiXe = maChiTietLoaiXe;
-        this.hinhAnhXe = hinhAnhXe;
-        this.cauHinh = cauHinh;
-        this.mauSac = mauSac;
-        this.phienBan = phienBan;
-        this.tinhNang = tinhNang;
-        this.giaBan = giaBan;
+    public VehicleTypeDetailSummaryDTO(Integer vehicleTypeDetailId, String vehicleImage, String configuration,
+            String color, String version, String feature, BigDecimal price) {
+        this.vehicleTypeDetailId = vehicleTypeDetailId;
+        this.vehicleImage = vehicleImage;
+        this.configuration = configuration;
+        this.color = color;
+        this.version = version;
+        this.feature = feature;
+        this.price = price;
     }
 
-    public ChiTietLoaiXeDTO() {
+    public VehicleTypeDetailSummaryDTO() {
     }
 
-    public Integer getMaChiTietLoaiXe() {
-        return maChiTietLoaiXe;
+    public Integer getVehicleTypeDetailId() {
+        return vehicleTypeDetailId;
     }
 
-    public void setMaChiTietLoaiXe(Integer maChiTietLoaiXe) {
-        this.maChiTietLoaiXe = maChiTietLoaiXe;
+    public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
+        this.vehicleTypeDetailId = vehicleTypeDetailId;
     }
 
-    public String getHinhAnhXe() {
-        return hinhAnhXe;
+    public String getVehicleImage() {
+        return vehicleImage;
     }
 
-    public void setHinhAnhXe(String hinhAnhXe) {
-        this.hinhAnhXe = hinhAnhXe;
+    public void setVehicleImage(String vehicleImage) {
+        this.vehicleImage = vehicleImage;
     }
 
-    public String getCauHinh() {
-        return cauHinh;
+    public String getConfiguration() {
+        return configuration;
     }
 
-    public void setCauHinh(String cauHinh) {
-        this.cauHinh = cauHinh;
+    public void setConfiguration(String configuration) {
+        this.configuration = configuration;
     }
 
-    public String getMauSac() {
-        return mauSac;
+    public String getColor() {
+        return color;
     }
 
-    public void setMauSac(String mauSac) {
-        this.mauSac = mauSac;
+    public void setColor(String color) {
+        this.color = color;
     }
 
-    public String getPhienBan() {
-        return phienBan;
+    public String getVersion() {
+        return version;
     }
 
-    public void setPhienBan(String phienBan) {
-        this.phienBan = phienBan;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
-    public String getTinhNang() {
-        return tinhNang;
+    public String getFeature() {
+        return feature;
     }
 
-    public void setTinhNang(String tinhNang) {
-        this.tinhNang = tinhNang;
+    public void setFeature(String feature) {
+        this.feature = feature;
     }
 
-    public BigDecimal getGiaBan() {
-        return giaBan;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setGiaBan(BigDecimal giaBan) {
-        this.giaBan = giaBan;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

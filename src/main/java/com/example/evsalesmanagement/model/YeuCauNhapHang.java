@@ -25,7 +25,7 @@ public class YeuCauNhapHang extends GhiNhanThoiGian {
 
     @ManyToOne
     @JoinColumn(name = "MaNhanVien")
-    private NhanVien nhanVien;
+    private Employee nhanVien;
 
     // @OneToMany(mappedBy = "yeuCauNhapHang")
     // private List<ChiTietYeuCau> chiTietYeuCaus = new ArrayList<>();
@@ -54,11 +54,11 @@ public class YeuCauNhapHang extends GhiNhanThoiGian {
         this.ghiChu = ghiChu;
     }
 
-    public NhanVien getNhanVien() {
+    public Employee getNhanVien() {
         return nhanVien;
     }
 
-    public void setNhanVien(NhanVien nhanVien) {
+    public void setNhanVien(Employee nhanVien) {
         this.nhanVien = nhanVien;
     }
 }

@@ -2,7 +2,6 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,43 +12,43 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "BaoGia")
-public class BaoGia extends GhiNhanThoiGian {
+@Table(name = "Quotation")
+public class Quotation extends GhiNhanThoiGian {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaBaoGia")
-    private Integer maBaoGia;
+    @Column(name = "QuotationId")
+    private Integer quotationId;
 
-    @Column(name = "TongTien")
-    private BigDecimal tongTien;
+    @Column(name = "TotalAmount")
+    private BigDecimal totalAmount;
 
     // @Column(name = "NgayTaoPhieu")
     // private LocalDateTime ngayTaoPhieu;
 
-    @Column(name = "TrangThai")
-    private String trangThai;
+    @Column(name = "Status")
+    private String status;
 
     @OneToOne
-    @JoinColumn(name = "MaDonHang", unique = true)
-    private DonHang donHang;
+    @JoinColumn(name = "OrderId", unique = true)
+    private Order order;
 
     // @OneToMany(mappedBy = "baoGia")
     // private List<ChiTietBaoGia> chiTietBaoGias = new ArrayList<>();
 
-    public Integer getMaBaoGia() {
-        return maBaoGia;
+    public Integer getQuotationId() {
+        return quotationId;
     }
 
-    public void setMaBaoGia(Integer maBaoGia) {
-        this.maBaoGia = maBaoGia;
+    public void setQuotationId(Integer quotationId) {
+        this.quotationId = quotationId;
     }
 
-    public BigDecimal getTongTien() {
-        return tongTien;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTongTien(BigDecimal tongTien) {
-        this.tongTien = tongTien;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     // public LocalDateTime getNgayTaoPhieu() {
@@ -60,19 +59,19 @@ public class BaoGia extends GhiNhanThoiGian {
     //     this.ngayTaoPhieu = ngayTaoPhieu;
     // }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public DonHang getDonHang() {
-        return donHang;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setDonHang(DonHang donHang) {
-        this.donHang = donHang;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

@@ -16,151 +16,166 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "KhuyenMai")
+@Table(name = "Promotion")
 public class Promotion extends GhiNhanThoiGian {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaKhuyenMai")
-    private Integer maKhuyenMai;
+    @Column(name = "PromotionId")
+    private Integer promotionId;
 
-    @Column(name = "TenKhuyenMai", nullable = false)
-    private String tenKhuyenMai;
+    @Column(name = "PromotionName", nullable = false)
+    private String promotionName;
 
-    @Column(name = "LoaiKhuyenMai")
-    private String loaiKhuyenMai;
+    @Column(name = "PromotionType")
+    private String promotionType;
 
-    @Column(name = "GiaTriKhuyenMai")
-    private BigDecimal giaTriKhuyenMai;
+    @Column(name = "PromotionValue")
+    private BigDecimal promotionValue;
 
-    @Column(name = "TieuChi")
-    private String tieuChi;
+    @Column(name = "Criteria")
+    private String criteria;
 
-    @Column(name = "SoTienGiam")
-    private BigDecimal soTienGiam;
+    @Column(name = "DiscountAmount")
+    private BigDecimal discountAmount;
 
-    @Column(name = "PhanTramGiam")
-    private BigDecimal phanTramGiam;
+    @Column(name = "DiscountPercent")
+    private BigDecimal discountPercent;
 
-    @Column(name = "NgayBatDau")
-    private LocalDateTime ngayBatDau;
+    @Column(name = "StartDate")
+    private LocalDateTime startDate;
 
-    @Column(name = "NgayHetHan")
-    private LocalDateTime ngayHetHan;
+    @Column(name = "EndDate")
+    private LocalDateTime endDate;
 
-    @Column(name = "TrangThai")
-    private String trangThai;
-
-    @ManyToMany
-    @JoinTable(name = "KhuyenMai_ChiTietLoaiXe", joinColumns = @JoinColumn(name = "MaKhuyenMai"), inverseJoinColumns = @JoinColumn(name = "MaChiTietLoaiXe"))
-    private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
+    @Column(name = "Status")
+    private String status;
 
     @ManyToMany
-    @JoinTable(name = "KhuyenMai_DaiLy", joinColumns = @JoinColumn(name = "MaKhuyenMai"), inverseJoinColumns = @JoinColumn(name = "MaDaiLy"))
-    private List<Agency> daiLys = new ArrayList<>();
+    @JoinTable(
+        name = "Promotion_VehicleDetail",
+        joinColumns = @JoinColumn(name = "PromotionId"),
+        inverseJoinColumns = @JoinColumn(name = "VehicleDetailId")
+    )
+    private List<VehicleTypeDetail> vehicleDetails = new ArrayList<>();
 
-    public Integer getMaKhuyenMai() {
-        return maKhuyenMai;
+    @ManyToMany
+    @JoinTable(
+        name = "Promotion_Agency",
+        joinColumns = @JoinColumn(name = "PromotionId"),
+        inverseJoinColumns = @JoinColumn(name = "AgencyId")
+    )
+    private List<Agency> agencies = new ArrayList<>();
+
+    public Integer getPromotionId() {
+        return promotionId;
     }
 
-    public void setMaKhuyenMai(Integer maKhuyenMai) {
-        this.maKhuyenMai = maKhuyenMai;
+    public void setPromotionId(Integer promotionId) {
+        this.promotionId = promotionId;
     }
 
-    public String getTenKhuyenMai() {
-        return tenKhuyenMai;
+    public String getPromotionName() {
+        return promotionName;
     }
 
-    public void setTenKhuyenMai(String tenKhuyenMai) {
-        this.tenKhuyenMai = tenKhuyenMai;
+    public void setPromotionName(String promotionName) {
+        this.promotionName = promotionName;
     }
 
-    public String getLoaiKhuyenMai() {
-        return loaiKhuyenMai;
+    public String getPromotionType() {
+        return promotionType;
     }
 
-    public void setLoaiKhuyenMai(String loaiKhuyenMai) {
-        this.loaiKhuyenMai = loaiKhuyenMai;
+    public void setPromotionType(String promotionType) {
+        this.promotionType = promotionType;
     }
 
-    public BigDecimal getGiaTriKhuyenMai() {
-        return giaTriKhuyenMai;
+    public BigDecimal getPromotionValue() {
+        return promotionValue;
     }
 
-    public void setGiaTriKhuyenMai(BigDecimal giaTriKhuyenMai) {
-        this.giaTriKhuyenMai = giaTriKhuyenMai;
+    public void setPromotionValue(BigDecimal promotionValue) {
+        this.promotionValue = promotionValue;
     }
 
-    public String getTieuChi() {
-        return tieuChi;
+    public String getCriteria() {
+        return criteria;
     }
 
-    public void setTieuChi(String tieuChi) {
-        this.tieuChi = tieuChi;
+    public void setCriteria(String criteria) {
+        this.criteria = criteria;
     }
 
-    public BigDecimal getSoTienGiam() {
-        return soTienGiam;
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
     }
 
-    public void setSoTienGiam(BigDecimal soTienGiam) {
-        this.soTienGiam = soTienGiam;
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
-    public BigDecimal getPhanTramGiam() {
-        return phanTramGiam;
+    public BigDecimal getDiscountPercent() {
+        return discountPercent;
     }
 
-    public void setPhanTramGiam(BigDecimal phanTramGiam) {
-        this.phanTramGiam = phanTramGiam;
+    public void setDiscountPercent(BigDecimal discountPercent) {
+        this.discountPercent = discountPercent;
     }
 
-    public LocalDateTime getNgayBatDau() {
-        return ngayBatDau;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setNgayBatDau(LocalDateTime ngayBatDau) {
-        this.ngayBatDau = ngayBatDau;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDateTime getNgayHetHan() {
-        return ngayHetHan;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setNgayHetHan(LocalDateTime ngayHetHan) {
-        this.ngayHetHan = ngayHetHan;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public List<ChiTietLoaiXe> getChiTietLoaiXes() {
-        return chiTietLoaiXes;
+    public List<VehicleTypeDetail> getVehicleDetails() {
+        return vehicleDetails;
     }
 
-    public void setChiTietLoaiXes(List<ChiTietLoaiXe> chiTietLoaiXes) {
-        this.chiTietLoaiXes = chiTietLoaiXes;
+    public void setVehicleDetails(List<VehicleTypeDetail> vehicleDetails) {
+        this.vehicleDetails = vehicleDetails;
     }
 
-    public List<Agency> getDaiLys() {
-        return daiLys;
+    public List<Agency> getAgencies() {
+        return agencies;
     }
 
-    public void setDaiLys(List<Agency> daiLys) {
-        this.daiLys = daiLys;
+    public void setAgencies(List<Agency> agencies) {
+        this.agencies = agencies;
     }
 
     @Override
     public String toString() {
-        return "KhuyenMai [maKhuyenMai=" + maKhuyenMai + ", tenKhuyenMai=" + tenKhuyenMai + ", loaiKhuyenMai="
-                + loaiKhuyenMai + ", giaTriKhuyenMai=" + giaTriKhuyenMai + ", tieuChi=" + tieuChi + ", soTienGiam="
-                + soTienGiam + ", phanTramGiam=" + phanTramGiam + ", ngayBatDau=" + ngayBatDau + ", ngayHetHan="
-                + ngayHetHan + ", trangThai=" + trangThai + ", chiTietLoaiXes=" + chiTietLoaiXes + ", daiLys=" + daiLys
-                + "]";
+        return "Promotion [promotionId=" + promotionId +
+                ", promotionName=" + promotionName +
+                ", promotionType=" + promotionType +
+                ", promotionValue=" + promotionValue +
+                ", criteria=" + criteria +
+                ", discountAmount=" + discountAmount +
+                ", discountPercent=" + discountPercent +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", status=" + status +
+                ", vehicleDetails=" + vehicleDetails +
+                ", agencies=" + agencies + "]";
     }
-
 }
