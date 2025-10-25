@@ -29,13 +29,13 @@ public class AgencyController {
                 true, null, agencyService.getAllAgency()));
     }
 
-    @GetMapping("/{maDaiLy}")
+    @GetMapping("/{agencyId}")
     ResponseEntity<ApiResponse<Agency>> getAgencyById(@PathVariable Integer agencyId) {
         return ResponseEntity.ok(new ApiResponse<Agency>(
                 true, null, agencyService.getAgencyById(agencyId)));
     }
 
-    @PutMapping("/{maDaiLy}")
+    @PutMapping("/{agencyId}")
     ResponseEntity<ApiResponse<Agency>> updateAgency(@PathVariable Integer agencyId, @RequestBody AgencyRequest request) {
         return ResponseEntity.ok(new ApiResponse<Agency>(
                 true, null, agencyService.getAgencyById(agencyId)));

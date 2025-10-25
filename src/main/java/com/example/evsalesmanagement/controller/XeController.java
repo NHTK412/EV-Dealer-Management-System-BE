@@ -34,7 +34,7 @@ public class XeController {
 
     }
 
-    @PostMapping("/themNhieu")
+    @PostMapping("/batch")
     public ResponseEntity<ApiResponse<List<Xe>>> createXeBatch(@RequestBody List<XeDTO> requests) {
         List<Xe> result = new ArrayList<>();
         for (XeDTO req : requests) {
@@ -53,21 +53,21 @@ public class XeController {
 
     }
 
-    @GetMapping("/{maXe}")
+    @GetMapping("/{vehicleId}")
     ResponseEntity<ApiResponse<Xe>> getXeById(@PathVariable Integer maXe) {
         // return xeService.getXeById(maXe);
         return ResponseEntity.ok(new ApiResponse<Xe>(true, null, xeService.getXeById(maXe)));
 
     }
 
-    @PutMapping("/{maXe}")
+    @PutMapping("/{vehicleId}")
     ResponseEntity<ApiResponse<Xe>> updateXe(@PathVariable Integer maXe, @RequestBody XeDTO request) {
         // return xeService.updateXe(maXe, request);
         return ResponseEntity.ok(new ApiResponse<Xe>(true, null, xeService.updateXe(maXe, request)));
 
     }
 
-    @DeleteMapping("/{maXe}")
+    @DeleteMapping("/{vehicleId}")
     String deleteXe(@PathVariable Integer maXe) {
         xeService.deleteXe(maXe);
         return "Deleted Successfully";
