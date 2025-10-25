@@ -19,7 +19,7 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
 @RequestMapping("/daiLy")
-public class DaiLyController {
+public class AgencyController {
     @Autowired
     private DaiLyService daiLyService;
 
