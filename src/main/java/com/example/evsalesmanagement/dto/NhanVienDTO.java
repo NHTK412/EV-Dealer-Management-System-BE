@@ -2,7 +2,7 @@ package com.example.evsalesmanagement.dto;
 
 import java.time.LocalDate;
 
-import com.example.evsalesmanagement.model.DaiLy;
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.NhanVien;
 
 
@@ -27,12 +27,12 @@ public class NhanVienDTO {
         this.soDienThoai = nhanVien.getSoDienThoai();
         this.email = nhanVien.getEmail();
         this.chucVu = nhanVien.getChucVu();
-        this.maDaiLy = nhanVien.getDaiLy().getMaDaiLy();
-        this.tenDaiLy = nhanVien.getDaiLy().getTenDaiLy();
+        this.maDaiLy = nhanVien.getDaiLy().getAgencyId();
+        this.tenDaiLy = nhanVien.getDaiLy().getAgencyName();
     }
 
     public NhanVienDTO(Integer maNhanVien, String tenNhanVien, String gioiTinh, LocalDate ngaySinh, String soDienThoai,
-            String email, String diaChi, String chucVu, DaiLy daiLy) {
+            String email, String diaChi, String chucVu, Agency daiLy) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.soDienThoai = soDienThoai;

@@ -42,7 +42,7 @@ public class NhanVien extends GhiNhanThoiGian{
 
     @ManyToOne
     @JoinColumn(name = "MaDaiLy")
-    private DaiLy daiLy;
+    private Agency daiLy;
 
     // @OneToOne(mappedBy = "nhanVien")
     // private TaiKhoan taiKhoan;
@@ -129,11 +129,11 @@ public class NhanVien extends GhiNhanThoiGian{
         this.chucVu = chucVu;
     }
 
-    public DaiLy getDaiLy() {
+    public Agency getDaiLy() {
         return daiLy;
     }
 
-    public void setDaiLy(DaiLy daiLy) {
+    public void setDaiLy(Agency daiLy) {
         this.daiLy = daiLy;
     }
 }

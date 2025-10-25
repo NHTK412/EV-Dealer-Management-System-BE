@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
-import com.example.evsalesmanagement.repository.DaiLyRepository;
 import com.example.evsalesmanagement.repository.XeRepository;
 import com.example.evsalesmanagement.dto.XeDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.ChiTietLoaiXe;
-import com.example.evsalesmanagement.model.DaiLy;
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Xe;
 
 @Service
@@ -20,7 +20,7 @@ public class XeService {
     private XeRepository xeRepository;
 
     @Autowired
-    private DaiLyRepository daiLyRepository;
+    AgencyRepository daiLyRepository;
 
     @Autowired
     private ChiTietLoaiXeRepository chiTietLoaiRepository;
@@ -39,8 +39,9 @@ public class XeService {
         xe.setChiTietLoaiXe(chiTietLoaiXe);
 
         // Lấy đối tượng DaiLy theo ID
-        DaiLy daiLy = daiLyRepository.findById(request.getMaDaiLy())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy DaiLy với ID: " + request.getMaDaiLy()));
+        Agency daiLy = daiLyRepository.findById(request.getMaDaiLy())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Không tìm thấy DaiLy với ID: " + request.getMaDaiLy()));
         xe.setDaiLy(daiLy);
 
         return xeRepository.save(xe);
@@ -51,7 +52,8 @@ public class XeService {
     }
 
     public Xe getXeById(Integer maXe) {
-        return xeRepository.findById(maXe).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + maXe));
+        return xeRepository.findById(maXe)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + maXe));
     }
 
     public Xe updateXe(Integer maXe, XeDTO request) {

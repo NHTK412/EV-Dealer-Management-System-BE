@@ -30,7 +30,7 @@ public class KhuyenMaiChiTietDTO {
 
     private List<ChiTietLoaiXeDTO> chiTietLoaiXes;
 
-    private List<DaiLyDTO> daiLys;
+    private List<AgencyDTO> daiLys;
 
     public KhuyenMaiChiTietDTO(Promotion khuyenMai) {
         this.maKhuyenMai = khuyenMai.getMaKhuyenMai();
@@ -48,7 +48,7 @@ public class KhuyenMaiChiTietDTO {
     public KhuyenMaiChiTietDTO(Integer maKhuyenMai, String tenKhuyenMai, String loaiKhuyenMai,
             BigDecimal giaTriKhuyenMai, String tieuChi, BigDecimal soTienGiam, BigDecimal phanTramGiam,
             LocalDateTime ngayBatDau, LocalDateTime ngayHetHan, String trangThai, List<ChiTietLoaiXeDTO> chiTietLoaiXes,
-            List<DaiLyDTO> daiLys) {
+            List<AgencyDTO> daiLys) {
         this.maKhuyenMai = maKhuyenMai;
         this.tenKhuyenMai = tenKhuyenMai;
         this.loaiKhuyenMai = loaiKhuyenMai;
@@ -154,11 +154,11 @@ public class KhuyenMaiChiTietDTO {
         this.chiTietLoaiXes = chiTietLoaiXes;
     }
 
-    public List<DaiLyDTO> getDaiLys() {
+    public List<AgencyDTO> getDaiLys() {
         return daiLys;
     }
 
-    public void setDaiLys(List<DaiLyDTO> daiLys) {
+    public void setDaiLys(List<AgencyDTO> daiLys) {
         this.daiLys = daiLys;
     }
 

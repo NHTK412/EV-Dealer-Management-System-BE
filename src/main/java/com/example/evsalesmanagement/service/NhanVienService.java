@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.dto.NhanVienDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.NhanVien;
-import com.example.evsalesmanagement.repository.DaiLyRepository;
+import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.NhanVienRepository;
 
 @Service
@@ -20,7 +20,7 @@ public class NhanVienService {
     NhanVienRepository nhanVienRepository;
 
     @Autowired
-    DaiLyRepository daiLyRepository;
+    AgencyRepository daiLyRepository;
 
     public NhanVienDTO layNhanVienTheoMa(Integer maNhanVien) {
         NhanVien nhanVien = nhanVienRepository.findById(maNhanVien)

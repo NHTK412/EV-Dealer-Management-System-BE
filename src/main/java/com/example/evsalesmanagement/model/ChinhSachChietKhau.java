@@ -39,7 +39,7 @@ public class ChinhSachChietKhau extends GhiNhanThoiGian {
 
     @ManyToOne
     @JoinColumn(name = "MaDaiLy")
-    private DaiLy daiLy;
+    private Agency daiLy;
 
     // @OneToMany(mappedBy = "chinhSachChietKhau")
     // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
@@ -103,11 +103,11 @@ public class ChinhSachChietKhau extends GhiNhanThoiGian {
         this.trangThai = trangThai;
     }
 
-    public DaiLy getDaiLy() {
+    public Agency getDaiLy() {
         return daiLy;
     }
 
-    public void setDaiLy(DaiLy daiLy) {
+    public void setDaiLy(Agency daiLy) {
         this.daiLy = daiLy;
     }
 }

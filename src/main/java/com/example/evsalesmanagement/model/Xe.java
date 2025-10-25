@@ -36,7 +36,7 @@ public class Xe extends GhiNhanThoiGian{
 
     @ManyToOne
     @JoinColumn(name = "MaDaiLy")
-    private DaiLy daiLy;
+    private Agency daiLy;
 
     // @OneToMany(mappedBy = "xe")
     // private List<LichHenLaiThu> lichHenLaiThus = new ArrayList<>();
@@ -95,11 +95,11 @@ public class Xe extends GhiNhanThoiGian{
         this.chiTietLoaiXe = chiTietLoaiXe;
     }
 
-    public DaiLy getDaiLy() {
+    public Agency getDaiLy() {
         return daiLy;
     }
 
-    public void setDaiLy(DaiLy daiLy) {
+    public void setDaiLy(Agency daiLy) {
         this.daiLy = daiLy;
     }
 }

@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,27 +8,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "DaiLy")
-public class DaiLy extends GhiNhanThoiGian {
+@Table(name = "Agency")
+public class Agency extends GhiNhanThoiGian {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaDaiLy")
-    private Integer maDaiLy;
+    @Column(name = "AgencyId")
+    private Integer agencyId;
 
-    @Column(name = "TenDaiLy", nullable = false)
-    private String tenDaiLy;
+    @Column(name = "AgencyName", nullable = false)
+    private String agencyName;
 
-    @Column(name = "DiaChi")
-    private String diaChi;
+    @Column(name = "Address")
+    private String address;
 
-    @Column(name = "SoDienThoai")
-    private String soDienThoai;
+    @Column(name = "PhoneNumber")
+    private String phoneNumber;
 
     @Column(name = "Email")
     private String email;
 
-    @Column(name = "TrangThai")
-    private String trangThai;
+    @Column(name = "Status")
+    private String status;
 
     // @OneToMany(mappedBy = "daiLy")
     // private List<NhanVien> nhanViens = new ArrayList<>();
@@ -52,36 +51,36 @@ public class DaiLy extends GhiNhanThoiGian {
     // @ManyToMany(mappedBy = "daiLys")
     // private List<KhuyenMai> khuyenMais = new ArrayList<>();
 
-    public Integer getMaDaiLy() {
-        return maDaiLy;
+    public Integer getAgencyId() {
+        return agencyId;
     }
 
-    public void setMaDaiLy(Integer maDaiLy) {
-        this.maDaiLy = maDaiLy;
+    public void setAgencyId(Integer agencyId) {
+        this.agencyId = agencyId;
     }
 
-    public String getTenDaiLy() {
-        return tenDaiLy;
+    public String getAgencyName() {
+        return agencyName;
     }
 
-    public void setTenDaiLy(String tenDaiLy) {
-        this.tenDaiLy = tenDaiLy;
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getSoDienThoai() {
-        return soDienThoai;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -92,11 +91,11 @@ public class DaiLy extends GhiNhanThoiGian {
         this.email = email;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

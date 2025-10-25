@@ -37,7 +37,7 @@ public class GiaSiDaiLy extends GhiNhanThoiGian{
 
     @ManyToOne
     @JoinColumn(name = "MaDaiLy")
-    private DaiLy daiLy;
+    private Agency daiLy;
 
     @ManyToOne
     @JoinColumn(name = "MaChiTietLoaiXe")
@@ -91,11 +91,11 @@ public class GiaSiDaiLy extends GhiNhanThoiGian{
         this.trangThai = trangThai;
     }
 
-    public DaiLy getDaiLy() {
+    public Agency getDaiLy() {
         return daiLy;
     }
 
-    public void setDaiLy(DaiLy daiLy) {
+    public void setDaiLy(Agency daiLy) {
         this.daiLy = daiLy;
     }
 

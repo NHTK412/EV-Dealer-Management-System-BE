@@ -1,8 +1,8 @@
 package com.example.evsalesmanagement.dto;
 
-import com.example.evsalesmanagement.model.DaiLy;
+import com.example.evsalesmanagement.model.Agency;
 
-public class DaiLyDTO {
+public class AgencyDTO {
     private Integer maDaiLy;
 
     private String tenDaiLy;
@@ -15,16 +15,16 @@ public class DaiLyDTO {
 
     private String trangThai;
 
-    public DaiLyDTO(DaiLy daiLy) {
-        this.maDaiLy = daiLy.getMaDaiLy();
-        this.tenDaiLy = daiLy.getTenDaiLy();
-        this.diaChi = daiLy.getDiaChi();
-        this.soDienThoai = daiLy.getSoDienThoai();
-        this.email = daiLy.getEmail();
-        this.trangThai = daiLy.getTrangThai();
+    public AgencyDTO(Agency agency) {
+        this.maDaiLy = agency.getAgencyId();
+        this.tenDaiLy = agency.getAgencyName();
+        this.diaChi = agency.getAddress();
+        this.soDienThoai = agency.getPhoneNumber();
+        this.email = agency.getEmail();
+        this.trangThai = agency.getStatus();
     }
 
-    public DaiLyDTO(Integer maDaiLy, String tenDaiLy, String diaChi, String soDienThoai, String email,
+    public AgencyDTO(Integer maDaiLy, String tenDaiLy, String diaChi, String soDienThoai, String email,
             String trangThai) {
         this.maDaiLy = maDaiLy;
         this.tenDaiLy = tenDaiLy;
@@ -34,7 +34,7 @@ public class DaiLyDTO {
         this.trangThai = trangThai;
     }
 
-    public DaiLyDTO() {
+    public AgencyDTO() {
     }
 
     public Integer getMaDaiLy() {

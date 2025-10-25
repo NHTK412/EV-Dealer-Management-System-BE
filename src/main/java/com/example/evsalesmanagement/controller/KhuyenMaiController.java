@@ -3,8 +3,8 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.ChiTietLoaiXeDTO;
-import com.example.evsalesmanagement.dto.DaiLyDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiChiTietDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
@@ -56,7 +56,7 @@ public class KhuyenMaiController {
                 khuyenMaiChiTietDTO.setDaiLys(
                                 khuyenMai.getDaiLys()
                                                 .stream()
-                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .map(daiLy -> new AgencyDTO(daiLy))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
@@ -79,7 +79,7 @@ public class KhuyenMaiController {
                 khuyenMaiChiTietDTO.setDaiLys(
                                 khuyenMaiMoi.getDaiLys()
                                                 .stream()
-                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .map(daiLy -> new AgencyDTO(daiLy))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
@@ -100,7 +100,7 @@ public class KhuyenMaiController {
                 khuyenMaiChiTietDTO.setDaiLys(
                                 khuyenMai.getDaiLys()
                                                 .stream()
-                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .map(daiLy -> new AgencyDTO(daiLy))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
                 return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
@@ -120,7 +120,7 @@ public class KhuyenMaiController {
                 khuyenMaiChiTietDTO.setDaiLys(
                                 khuyenMaiCapNhat.getDaiLys()
                                                 .stream()
-                                                .map(daiLy -> new DaiLyDTO(daiLy))
+                                                .map(daiLy -> new AgencyDTO(daiLy))
                                                 .toList());
 
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);

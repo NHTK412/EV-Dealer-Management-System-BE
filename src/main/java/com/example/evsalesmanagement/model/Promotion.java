@@ -56,7 +56,7 @@ public class Promotion extends GhiNhanThoiGian {
 
     @ManyToMany
     @JoinTable(name = "KhuyenMai_DaiLy", joinColumns = @JoinColumn(name = "MaKhuyenMai"), inverseJoinColumns = @JoinColumn(name = "MaDaiLy"))
-    private List<DaiLy> daiLys = new ArrayList<>();
+    private List<Agency> daiLys = new ArrayList<>();
 
     public Integer getMaKhuyenMai() {
         return maKhuyenMai;
@@ -146,11 +146,11 @@ public class Promotion extends GhiNhanThoiGian {
         this.chiTietLoaiXes = chiTietLoaiXes;
     }
 
-    public List<DaiLy> getDaiLys() {
+    public List<Agency> getDaiLys() {
         return daiLys;
     }
 
-    public void setDaiLys(List<DaiLy> daiLys) {
+    public void setDaiLys(List<Agency> daiLys) {
         this.daiLys = daiLys;
     }
 
