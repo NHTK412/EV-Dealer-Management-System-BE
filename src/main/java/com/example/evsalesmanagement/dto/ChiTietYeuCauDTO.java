@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.dto;
 
-import com.example.evsalesmanagement.model.ChiTietYeuCau;
+import com.example.evsalesmanagement.model.ImportRequestDetail;
 
 public class ChiTietYeuCauDTO {
     private Integer maChiTietLoaiXe;
@@ -15,7 +15,7 @@ public class ChiTietYeuCauDTO {
 
     private String tinhNang;
 
-    public ChiTietYeuCauDTO(ChiTietYeuCau chiTietYeuCau) {
+    public ChiTietYeuCauDTO(ImportRequestDetail chiTietYeuCau) {
         this.maChiTietLoaiXe = chiTietYeuCau.getMaChiTietLoaiXe();
         this.tenLoaiXe = chiTietYeuCau.getChiTietLoaiXe().getLoaiXe().getTenLoaiXe();
         this.cauHinh = chiTietYeuCau.getChiTietLoaiXe().getCauHinh();

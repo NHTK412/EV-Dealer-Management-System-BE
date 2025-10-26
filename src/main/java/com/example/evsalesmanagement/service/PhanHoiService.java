@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.ChiTietPhanHoiResponse;
 import com.example.evsalesmanagement.dto.PhanHoiResponse;
-import com.example.evsalesmanagement.enums.TrangThaiPhanHoi;
+import com.example.evsalesmanagement.enums.FeedbackStatus;
 import com.example.evsalesmanagement.exception.BadRequestException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-import com.example.evsalesmanagement.model.PhanHoi;
-import com.example.evsalesmanagement.model.XuLyPhanHoi;
+import com.example.evsalesmanagement.model.Feedback;
+import com.example.evsalesmanagement.model.FeedbackHandling;
 import com.example.evsalesmanagement.repository.PhanHoiRepository;
 import com.example.evsalesmanagement.utils.MessageFormat;
 
@@ -33,7 +33,7 @@ public class PhanHoiService {
     public List<PhanHoiResponse> layDanhSachPhanHoi() {
         log.info("Lấy danh sách tất cả phản hồi");
         
-        List<PhanHoi> danhSach = phanHoiRepository.findAllWithKhachHang();
+        List<Feedback> danhSach = phanHoiRepository.findAllWithKhachHang();
         log.debug("Tìm thấy {} phản hồi", danhSach.size());
         
         return danhSach.stream()
@@ -45,7 +45,7 @@ public class PhanHoiService {
     public ChiTietPhanHoiResponse layChiTietPhanHoi(Integer maPhanHoi) {
         log.info("Lấy chi tiết phản hồi: {}", maPhanHoi);
         
-        PhanHoi phanHoi = phanHoiRepository.findByIdWithDetails(maPhanHoi)
+        Feedback phanHoi = phanHoiRepository.findByIdWithDetails(maPhanHoi)
                 .orElseThrow(() -> new ResourceNotFoundException(
                     //"Không tìm thấy phản hồi với mã: " + maPhanHoi
                     String.format(MessageFormat.PHAN_HOI_NOT_FOUND, maPhanHoi)
@@ -60,14 +60,14 @@ public class PhanHoiService {
         log.info("Lấy phản hồi theo trạng thái: {}", trangThaiStr);
         
         // Validate và convert
-        if (!TrangThaiPhanHoi.enumIsValid(trangThaiStr)) {
+        if (!FeedbackStatus.enumIsValid(trangThaiStr)) {
             // throw new BadRequestException("Trạng thái không hợp lệ: " + trangThaiStr);
             throw new BadRequestException(String.format(MessageFormat.TRANG_THAI_INVALID, trangThaiStr));
         }
         
-        TrangThaiPhanHoi trangThai = TrangThaiPhanHoi.fromStringToEnum(trangThaiStr);
+        FeedbackStatus trangThai = FeedbackStatus.fromStringToEnum(trangThaiStr);
         
-        List<PhanHoi> danhSach = phanHoiRepository.findByTrangThai(trangThai);
+        List<Feedback> danhSach = phanHoiRepository.findByTrangThai(trangThai);
         log.debug("Tìm thấy {} phản hồi có trạng thái '{}'", danhSach.size(), trangThai);
         
         return danhSach.stream()
@@ -76,16 +76,16 @@ public class PhanHoiService {
     }
     
     @Transactional
-    public void capNhatTrangThai(Integer maPhanHoi, TrangThaiPhanHoi trangThaiMoi) {
+    public void capNhatTrangThai(Integer maPhanHoi, FeedbackStatus trangThaiMoi) {
         log.info("Cập nhật trạng thái phản hồi {} sang '{}'", maPhanHoi, trangThaiMoi);
         
-        PhanHoi phanHoi = phanHoiRepository.findById(maPhanHoi)
+        Feedback phanHoi = phanHoiRepository.findById(maPhanHoi)
                 .orElseThrow(() -> new ResourceNotFoundException(
                     // "Không tìm thấy phản hồi: " + maPhanHoi
                     String.format(MessageFormat.PHAN_HOI_NOT_FOUND, maPhanHoi)
                 ));
 
-        TrangThaiPhanHoi trangThaiHienTai = phanHoi.getTrangThai(); 
+        FeedbackStatus trangThaiHienTai = phanHoi.getTrangThai(); 
         
         if (!trangThaiHienTai.canTransitionToNewStatus(trangThaiMoi)) {
             throw new BadRequestException(
@@ -107,7 +107,7 @@ public class PhanHoiService {
 
     
     
-    private PhanHoiResponse chuyenSangPhanHoiResponse(PhanHoi phanHoi) {
+    private PhanHoiResponse chuyenSangPhanHoiResponse(Feedback phanHoi) {
         return PhanHoiResponse.builder()
                 .maPhanHoi(phanHoi.getMaPhanHoi())
                 .tieuDePhanHoi(phanHoi.getTieuDePhanHoi())
@@ -117,7 +117,7 @@ public class PhanHoiService {
                 .build();
     }
     
-    private ChiTietPhanHoiResponse chuyenSangChiTietResponse(PhanHoi phanHoi) {
+    private ChiTietPhanHoiResponse chuyenSangChiTietResponse(Feedback phanHoi) {
         ChiTietPhanHoiResponse.Builder builder = ChiTietPhanHoiResponse.builder()
                 .tieuDePhanHoi(phanHoi.getTieuDePhanHoi())
                 .noiDungPhanHoi(phanHoi.getNoiDungPhanHoi())
@@ -128,7 +128,7 @@ public class PhanHoiService {
                 .emailKhachHang(phanHoi.getKhachHang().getEmail())
                 .soDienThoaiKhachHang(phanHoi.getKhachHang().getSoDienThoai());
         
-        XuLyPhanHoi xuLy = phanHoi.getXuLyPhanHoi();
+        FeedbackHandling xuLy = phanHoi.getXuLyPhanHoi();
         if (xuLy != null) {
             ChiTietPhanHoiResponse.XuLyInfo xuLyInfo = new ChiTietPhanHoiResponse.XuLyInfo();
             xuLyInfo.setNoiDungXuLy(xuLy.getNoiDungXuLy());
@@ -151,12 +151,12 @@ public class PhanHoiService {
     public Long demPhanHoiTheoTrangThai(String trangThaiStr) {
         log.info("Đếm phản hồi theo trạng thái: {}", trangThaiStr);
 
-        if (!TrangThaiPhanHoi.enumIsValid(trangThaiStr)) {
+        if (!FeedbackStatus.enumIsValid(trangThaiStr)) {
             // throw new BadRequestException("Trạng thái không hợp lệ: " + trangThaiStr);
             throw new BadRequestException(String.format(MessageFormat.TRANG_THAI_INVALID, trangThaiStr));
         }
 
-        TrangThaiPhanHoi trangThai = TrangThaiPhanHoi.fromStringToEnum(trangThaiStr);
+        FeedbackStatus trangThai = FeedbackStatus.fromStringToEnum(trangThaiStr);
         return phanHoiRepository.countByTrangThai(trangThai);
     }
 }

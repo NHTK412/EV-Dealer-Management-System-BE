@@ -12,8 +12,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ChiTietLoaiXe")
-public class VehicleTypeDetail extends GhiNhanThoiGian{
+@Table(name = "VehicleTypeDetail")
+public class VehicleTypeDetail extends TimeStampRecord{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleTypeDetailId")
@@ -43,7 +43,7 @@ public class VehicleTypeDetail extends GhiNhanThoiGian{
     @JoinColumn(name = "VehicleTypeId")
     private VehicleType vehicleType;
 
-    
+
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
     }

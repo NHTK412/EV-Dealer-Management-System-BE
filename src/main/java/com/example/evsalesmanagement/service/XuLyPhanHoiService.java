@@ -9,13 +9,13 @@ import com.example.evsalesmanagement.dto.ChiTietPhanHoiResponse;
 import com.example.evsalesmanagement.dto.XuLyPhanHoiRequest;
 import com.example.evsalesmanagement.dto.XuLyPhanHoiResponse;
 import com.example.evsalesmanagement.enums.HinhThucGiaiQuyet;
-import com.example.evsalesmanagement.enums.TrangThaiPhanHoi;
-import com.example.evsalesmanagement.enums.TrangThaiXuLy;
+import com.example.evsalesmanagement.enums.FeedbackStatus;
+import com.example.evsalesmanagement.enums.FeedbackHandlingStatus;
 import com.example.evsalesmanagement.exception.BadRequestException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-import com.example.evsalesmanagement.model.NhanVien;
-import com.example.evsalesmanagement.model.PhanHoi;
-import com.example.evsalesmanagement.model.XuLyPhanHoi;
+import com.example.evsalesmanagement.model.Employee;
+import com.example.evsalesmanagement.model.Feedback;
+import com.example.evsalesmanagement.model.FeedbackHandling;
 import com.example.evsalesmanagement.repository.NhanVienRepository;
 import com.example.evsalesmanagement.repository.PhanHoiRepository;
 import com.example.evsalesmanagement.repository.XuLyPhanHoiRepository;
@@ -53,23 +53,23 @@ public class XuLyPhanHoiService {
         
         log.info("Bắt đầu xử lý phản hồi {} bởi nhân viên {}", maPhanHoi, maNhanVien);
         
-        PhanHoi phanHoi = validateVaLayPhanHoi(maPhanHoi);
-        NhanVien nhanVien = validateVaLayNhanVien(maNhanVien);
+        Feedback phanHoi = validateVaLayPhanHoi(maPhanHoi);
+        Employee nhanVien = validateVaLayNhanVien(maNhanVien);
         HinhThucGiaiQuyet hinhThucEnum = validateHinhThucGiaiQuyet(request.getHinhThucGiaiQuyet()); 
         
-        phanHoiService.capNhatTrangThai(maPhanHoi, TrangThaiPhanHoi.DANG_XU_LY);
+        phanHoiService.capNhatTrangThai(maPhanHoi, FeedbackStatus.DANG_XU_LY);
         
-        XuLyPhanHoi xuLyPhanHoi = new XuLyPhanHoi();
+        FeedbackHandling xuLyPhanHoi = new FeedbackHandling();
         xuLyPhanHoi.setPhanHoi(phanHoi);
         xuLyPhanHoi.setNhanVien(nhanVien);
         xuLyPhanHoi.setNoiDungXuLy(request.getNoiDungXuLy());
         xuLyPhanHoi.setHinhThucGiaiQuyet(hinhThucEnum); 
-        xuLyPhanHoi.setTrangThai(TrangThaiXuLy.HOAN_THANH); 
+        xuLyPhanHoi.setTrangThai(FeedbackHandlingStatus.HOAN_THANH); 
         
         xuLyPhanHoiRepository.save(xuLyPhanHoi);
         log.info("Đã lưu xử lý phản hồi");
         
-        phanHoiService.capNhatTrangThai(maPhanHoi, TrangThaiPhanHoi.DA_XU_LY);
+        phanHoiService.capNhatTrangThai(maPhanHoi, FeedbackStatus.DA_XU_LY);
         
         String mailtoLink = taoMailtoLinkNeuCanThiet(phanHoi, request, hinhThucEnum);
         
@@ -81,15 +81,15 @@ public class XuLyPhanHoiService {
     
     // ==================== VALIDATION ====================
     
-    private PhanHoi validateVaLayPhanHoi(Integer maPhanHoi) {
-        PhanHoi phanHoi = phanHoiRepository.findByIdWithKhachHang(maPhanHoi)
+    private Feedback validateVaLayPhanHoi(Integer maPhanHoi) {
+        Feedback phanHoi = phanHoiRepository.findByIdWithKhachHang(maPhanHoi)
                 .orElseThrow(() -> new ResourceNotFoundException(
                     // "Không tìm thấy phản hồi: " + maPhanHoi
                     String.format(MessageFormat.PHAN_HOI_NOT_FOUND, maPhanHoi)
                     ));
         
-        TrangThaiPhanHoi trangThai = phanHoi.getTrangThai();
-        if (trangThai == TrangThaiPhanHoi.DA_XU_LY) {
+        FeedbackStatus trangThai = phanHoi.getTrangThai();
+        if (trangThai == FeedbackStatus.DA_XU_LY) {
             // throw new BadRequestException("Phản hồi đã được xử lý");
             throw new BadRequestException(MessageFormat.PHAN_HOI_DA_XU_LY);
         }
@@ -97,7 +97,7 @@ public class XuLyPhanHoiService {
         return phanHoi;
     }
     
-    private NhanVien validateVaLayNhanVien(Integer maNhanVien) {
+    private Employee validateVaLayNhanVien(Integer maNhanVien) {
         return nhanVienRepository.findById(maNhanVien)
                 .orElseThrow(() -> new ResourceNotFoundException(
                     // "Không tìm thấy nhân viên: " + maNhanVien
@@ -115,7 +115,7 @@ public class XuLyPhanHoiService {
     
     // ==================== MAILTO LINK ====================
     private String taoMailtoLinkNeuCanThiet(
-            PhanHoi phanHoi, 
+            Feedback phanHoi, 
             XuLyPhanHoiRequest request,
             HinhThucGiaiQuyet hinhThuc) {
         

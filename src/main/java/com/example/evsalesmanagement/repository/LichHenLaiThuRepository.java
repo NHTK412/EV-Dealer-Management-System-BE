@@ -3,10 +3,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import com.example.evsalesmanagement.model.LichHenLaiThu;
+import com.example.evsalesmanagement.model.TestDriveAppointment;
 
 @Repository
-public interface LichHenLaiThuRepository extends JpaRepository<LichHenLaiThu, Integer> {
+public interface LichHenLaiThuRepository extends JpaRepository<TestDriveAppointment, Integer> {
     
     // Lấy tất cả lịch hẹn với thông tin khách hàng
     @Query(value = "SELECT " +

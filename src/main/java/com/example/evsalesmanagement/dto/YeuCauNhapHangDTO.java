@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.evsalesmanagement.model.YeuCauNhapHang;
+import com.example.evsalesmanagement.model.ImportRequest;
 
 public class YeuCauNhapHangDTO {
     private Integer maYeuCau;
@@ -15,7 +15,7 @@ public class YeuCauNhapHangDTO {
 
     private List<ChiTietYeuCauDTO> chiTietYeuCaus;
 
-    public YeuCauNhapHangDTO(YeuCauNhapHang yeuCauNhapHang) {
+    public YeuCauNhapHangDTO(ImportRequest yeuCauNhapHang) {
         this.maYeuCau = yeuCauNhapHang.getMaYeuCau();
         this.trangThai = yeuCauNhapHang.getTrangThai();
         this.ghiChu = yeuCauNhapHang.getGhiChu();

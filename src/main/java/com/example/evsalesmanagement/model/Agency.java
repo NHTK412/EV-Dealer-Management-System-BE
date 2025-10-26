@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Agency")
-public class Agency extends GhiNhanThoiGian {
+public class Agency extends TimeStampRecord {
     //ma dai ly = agencyId
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

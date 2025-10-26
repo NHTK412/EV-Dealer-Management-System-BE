@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.model.KhachHang;
-import com.example.evsalesmanagement.model.PhanHoi;
+import com.example.evsalesmanagement.model.Customer;
+import com.example.evsalesmanagement.model.Feedback;
 import com.example.evsalesmanagement.utils.MessageFormat;
 
 /**
@@ -24,9 +24,9 @@ public class EmailService {
     /**
      * Tạo mailto link với nội dung đã điền sẵn
      */
-    public String taoMailtoLink(PhanHoi phanHoi, String noiDungXuLy) {
+    public String taoMailtoLink(Feedback phanHoi, String noiDungXuLy) {
         try {
-            KhachHang kh = phanHoi.getKhachHang();
+            Customer kh = phanHoi.getKhachHang();
             
             String to = kh.getEmail();
             String subject = "Phản hồi: " + phanHoi.getTieuDePhanHoi();
@@ -52,7 +52,7 @@ public class EmailService {
     /**
      * Tạo nội dung email dạng text 
      */
-    private String taoNoiDungEmail(KhachHang kh, PhanHoi ph, String noiDungXuLy) {
+    private String taoNoiDungEmail(Customer kh, Feedback ph, String noiDungXuLy) {
         return String.format("""
             Kính gửi %s,
             

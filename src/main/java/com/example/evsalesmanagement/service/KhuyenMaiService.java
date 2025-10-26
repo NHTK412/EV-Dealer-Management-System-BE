@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
-import com.example.evsalesmanagement.model.KhuyenMai;
+import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.KhuyenMaiRepository;
@@ -23,12 +23,12 @@ public class KhuyenMaiService {
     @Autowired
     ChiTietLoaiXeRepository chiTietLoaiXeRepository;
 
-    public List<KhuyenMai> layTatCaKhuyenMai() {
+    public List<Promotion> layTatCaKhuyenMai() {
         return khuyenMaiRepository.findAll();
     }
 
-    public KhuyenMai layKhuyenMaiTheoMa(Integer maKhuyenMai) {
-        KhuyenMai khuyenMai = khuyenMaiRepository.findById(maKhuyenMai)
+    public Promotion layKhuyenMaiTheoMa(Integer maKhuyenMai) {
+        Promotion khuyenMai = khuyenMaiRepository.findById(maKhuyenMai)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
@@ -46,9 +46,9 @@ public class KhuyenMaiService {
         return khuyenMai;
     }
 
-    public KhuyenMai taoKhuyenMai(KhuyenMaiRequestDTO khuyenMai) {
+    public Promotion taoKhuyenMai(KhuyenMaiRequestDTO khuyenMai) {
 
-        KhuyenMai khuyenMaiMoi = new KhuyenMai();
+        Promotion khuyenMaiMoi = new Promotion();
 
         khuyenMaiMoi.setTenKhuyenMai(khuyenMai.getTenKhuyenMai());
         khuyenMaiMoi.setLoaiKhuyenMai(khuyenMai.getLoaiKhuyenMai());
@@ -70,8 +70,8 @@ public class KhuyenMaiService {
         // return
     }
 
-    public KhuyenMai xoaKhuyenMai(Integer maKhuyenMai) {
-        KhuyenMai khuyenMai = khuyenMaiRepository.findById(maKhuyenMai)
+    public Promotion xoaKhuyenMai(Integer maKhuyenMai) {
+        Promotion khuyenMai = khuyenMaiRepository.findById(maKhuyenMai)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         khuyenMai.getChiTietLoaiXes().size();
@@ -81,8 +81,8 @@ public class KhuyenMaiService {
 
     }
 
-    public KhuyenMai capKhuyenMai(Integer maKhuyenMai, KhuyenMaiRequestDTO khuyenMai) {
-        KhuyenMai khuyenMaiCapNhat = khuyenMaiRepository.findById(maKhuyenMai)
+    public Promotion capKhuyenMai(Integer maKhuyenMai, KhuyenMaiRequestDTO khuyenMai) {
+        Promotion khuyenMaiCapNhat = khuyenMaiRepository.findById(maKhuyenMai)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         khuyenMaiCapNhat.setTenKhuyenMai(khuyenMai.getTenKhuyenMai());

@@ -5,14 +5,14 @@ package com.example.evsalesmanagement.enums;
  * CHUA_XU_LY -> DANG_XU_LY -> DA_XU_LY
  */
 
-public enum TrangThaiPhanHoi {
-    CHUA_XU_LY("Chưa xử lý"),
-    DANG_XU_LY("Đang xử lý"),
-    DA_XU_LY("Đã xử lý");
+public enum FeedbackStatus {
+    NOT_YET_PROCESSED("Not yet processed"),
+    IN_PROCESSED("In processed"),
+    PROCESSED("Processed");
 
     private final String displayName;
 
-    TrangThaiPhanHoi(String displayName) {
+    FeedbackStatus(String displayName) {
         this.displayName = displayName;
     }
 
@@ -24,14 +24,14 @@ public enum TrangThaiPhanHoi {
     /*
      * Chuyển từ String qua Enum
      */
-    public static TrangThaiPhanHoi fromStringToEnum(String text) {
-        for (TrangThaiPhanHoi status : TrangThaiPhanHoi.values()) {
+    public static FeedbackStatus fromStringToEnum(String text) {
+        for (FeedbackStatus status : FeedbackStatus.values()) {
             if (status.displayName.equalsIgnoreCase(text)) {
                 return status;
             }
         }
         throw new IllegalArgumentException(
-            "Trạng thái không hợp lệ: " + text);
+            "invalid status: " + text);
     }
 
 
@@ -43,7 +43,7 @@ public enum TrangThaiPhanHoi {
             return false;
         }
         
-        for (TrangThaiPhanHoi status : TrangThaiPhanHoi.values()) {
+        for (FeedbackStatus status : FeedbackStatus.values()) {
             if (status.displayName.equalsIgnoreCase(text.trim())) {
                 return true;
             }
@@ -55,11 +55,11 @@ public enum TrangThaiPhanHoi {
     /**
      * Kiểm tra chuyển trạng thái hợp lệ hay không
      */
-    public boolean canTransitionToNewStatus(TrangThaiPhanHoi newStatus) {
+    public boolean canTransitionToNewStatus(FeedbackStatus newStatus) {
         return switch (this) {
-            case CHUA_XU_LY -> newStatus == DANG_XU_LY;
-            case DANG_XU_LY -> newStatus == DA_XU_LY;
-            case DA_XU_LY -> false;
+            case NOT_YET_PROCESSED-> newStatus == IN_PROCESSED;
+            case IN_PROCESSED-> newStatus == PROCESSED;
+            case PROCESSED -> false;
         };
     }
 
@@ -67,11 +67,11 @@ public enum TrangThaiPhanHoi {
     /**
      * Lấy trạng thái tiếp theo
      */
-  public TrangThaiPhanHoi getNext() {
+  public FeedbackStatus getNext() {
         return switch (this) {
-            case CHUA_XU_LY -> DANG_XU_LY;
-            case DANG_XU_LY -> DA_XU_LY;
-            case DA_XU_LY -> null;
+            case NOT_YET_PROCESSED -> IN_PROCESSED;
+            case IN_PROCESSED -> PROCESSED;
+            case PROCESSED -> null;
         };
     }
 
@@ -79,8 +79,8 @@ public enum TrangThaiPhanHoi {
     /**
      * Trạng thái mặc định khi tạo phản hồi mới
      */
-     public static TrangThaiPhanHoi getDefaultStatus() {
-        return CHUA_XU_LY;
+     public static FeedbackStatus getDefaultStatus() {
+        return NOT_YET_PROCESSED;
     }
 
 
@@ -88,7 +88,7 @@ public enum TrangThaiPhanHoi {
      * Kiểm tra xem trạng thái có phải là trạng thái cuối cùng không
      */
     public boolean isFinalStatus() {
-        return this == DA_XU_LY;
+        return this == PROCESSED;
     }
 
     @Override 

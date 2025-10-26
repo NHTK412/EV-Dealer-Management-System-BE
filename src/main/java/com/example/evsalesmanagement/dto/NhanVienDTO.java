@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.dto;
 import java.time.LocalDate;
 
 import com.example.evsalesmanagement.model.Agency;
-import com.example.evsalesmanagement.model.NhanVien;
+import com.example.evsalesmanagement.model.Employee;
 
 
 public class NhanVienDTO {
@@ -21,7 +21,7 @@ public class NhanVienDTO {
 
     private String tenDaiLy;
 
-    public NhanVienDTO(NhanVien nhanVien) {
+    public NhanVienDTO(Employee nhanVien) {
         this.maNhanVien = nhanVien.getMaNhanVien();
         this.tenNhanVien = nhanVien.getTenNhanVien();
         this.soDienThoai = nhanVien.getSoDienThoai();

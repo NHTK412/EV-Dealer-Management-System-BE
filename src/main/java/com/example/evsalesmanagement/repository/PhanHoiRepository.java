@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.evsalesmanagement.enums.TrangThaiPhanHoi;
-import com.example.evsalesmanagement.model.PhanHoi;
+import com.example.evsalesmanagement.enums.FeedbackStatus;
+import com.example.evsalesmanagement.model.Feedback;
 
 /**
  * Repository cho PhanHoi
  */
 @Repository
-public interface PhanHoiRepository extends JpaRepository<PhanHoi, Integer> {
+public interface PhanHoiRepository extends JpaRepository<Feedback, Integer> {
 
     /**
      * Lấy tất cả phản hồi - sắp xếp theo ngày tạo DESC
      */
     @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang ORDER BY p.ngayTao DESC")
-    List<PhanHoi> findAllWithKhachHang();
+    List<Feedback> findAllWithKhachHang();
 
 // @Query(value = "SELECT p FROM PhanHoi p JOIN FETCH p.khachHang ORDER BY p.ngayTao DESC",
 //        countQuery = "SELECT COUNT(p) FROM PhanHoi p")
@@ -41,7 +41,7 @@ public interface PhanHoiRepository extends JpaRepository<PhanHoi, Integer> {
      * Lấy phản hồi theo ID 
      */
     @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang WHERE p.maPhanHoi = :id")
-    Optional<PhanHoi> findByIdWithKhachHang(@Param("id") Integer id);
+    Optional<Feedback> findByIdWithKhachHang(@Param("id") Integer id);
 
     
 // SELECT 
@@ -68,7 +68,7 @@ public interface PhanHoiRepository extends JpaRepository<PhanHoi, Integer> {
            "LEFT JOIN FETCH p.xuLyPhanHoi xlph " +
            "LEFT JOIN FETCH xlph.nhanVien " +
            "WHERE p.maPhanHoi = :id")
-    Optional<PhanHoi> findByIdWithDetails(@Param("id") Integer id);
+    Optional<Feedback> findByIdWithDetails(@Param("id") Integer id);
 
     
 // SELECT 
@@ -90,7 +90,7 @@ public interface PhanHoiRepository extends JpaRepository<PhanHoi, Integer> {
      */
     @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang " +
            "WHERE p.trangThai = :trangThai ORDER BY p.ngayTao DESC")
-    List<PhanHoi> findByTrangThai(@Param("trangThai") TrangThaiPhanHoi trangThai);
+    List<Feedback> findByTrangThai(@Param("trangThai") FeedbackStatus trangThai);
     
 // SELECT 
 //     p.ma_phan_hoi, p.tieu_de_phan_hoi, p.noi_dung_phan_hoi, 
@@ -106,7 +106,7 @@ public interface PhanHoiRepository extends JpaRepository<PhanHoi, Integer> {
     /**
      * Đếm phản hồi theo trạng thái: Đã xử lý: 1, Chưa xử lý: 0
      */
-   Long countByTrangThai(TrangThaiPhanHoi trangThai);
+   Long countByTrangThai(FeedbackStatus trangThai);
     
 // SELECT COUNT(p.ma_phan_hoi)
 // FROM phan_hoi p
