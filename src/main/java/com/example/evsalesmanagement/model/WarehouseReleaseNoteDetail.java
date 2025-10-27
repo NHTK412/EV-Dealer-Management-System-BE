@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "WarehouseReleaseNoteDetail")
 @IdClass(WarehouseReleaseNoteDetail.WarehouseReleaseNoteDetailId.class)
-public class WarehouseReleaseNoteDetail extends TimeStampRecord{
+public class WarehouseReleaseNoteDetail extends Base{
     @Id
     @Column(name = "WarehouseReleaseNoteId")
     private Integer warehouseReleaseNoteId;

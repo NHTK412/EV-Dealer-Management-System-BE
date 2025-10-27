@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 //KhachHang = Customer
 @Entity
 @Table(name = "Customer")
-public class Customer extends TimeStampRecord{
+public class Customer extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CustomerId")

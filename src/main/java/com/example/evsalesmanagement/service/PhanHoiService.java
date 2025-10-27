@@ -15,7 +15,7 @@ import com.example.evsalesmanagement.exception.BadRequestException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Feedback;
 import com.example.evsalesmanagement.model.FeedbackHandling;
-import com.example.evsalesmanagement.repository.PhanHoiRepository;
+import com.example.evsalesmanagement.repository.FeedbackRepository;
 import com.example.evsalesmanagement.utils.MessageFormat;
 
 @Service
@@ -23,9 +23,9 @@ public class PhanHoiService {
     
     private static final Logger log = LoggerFactory.getLogger(PhanHoiService.class);
     
-    private final PhanHoiRepository phanHoiRepository;
+    private final FeedbackRepository phanHoiRepository;
     
-    public PhanHoiService(PhanHoiRepository phanHoiRepository) {
+    public PhanHoiService(FeedbackRepository phanHoiRepository) {
         this.phanHoiRepository = phanHoiRepository;
     }
     

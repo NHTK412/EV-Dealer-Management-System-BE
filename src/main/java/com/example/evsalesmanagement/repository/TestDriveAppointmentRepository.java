@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.evsalesmanagement.model.TestDriveAppointment;
 
 @Repository
-public interface LichHenLaiThuRepository extends JpaRepository<TestDriveAppointment, Integer> {
+public interface TestDriveAppointmentRepository extends JpaRepository<TestDriveAppointment, Integer> {
     
     // Lấy tất cả lịch hẹn với thông tin khách hàng
     @Query(value = "SELECT " +

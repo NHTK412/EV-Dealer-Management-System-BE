@@ -10,10 +10,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 
-//time stamp record = GhiNhanThoiGian
+//base = GhiNhanThoiGian
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class TimeStampRecord {
+public abstract class Base {
 
     // NgayTao = CreatedAt 
     @CreatedDate

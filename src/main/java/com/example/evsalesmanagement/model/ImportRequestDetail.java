@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ImportRequestDetail")
 @IdClass(ImportRequestDetail.ImportRequestDetailId.class)
-public class ImportRequestDetail extends TimeStampRecord{
+public class ImportRequestDetail extends Base{
     @Id
     @Column(name = "ImportRequestId")
     private Integer importRequestId;

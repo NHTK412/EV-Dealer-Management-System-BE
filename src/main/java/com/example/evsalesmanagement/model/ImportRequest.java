@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 //YeuCauNhapHang = ImportRequest
 @Entity
 @Table(name = "ImportRequest")
-public class ImportRequest extends TimeStampRecord {
+public class ImportRequest extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ImportRequestId")

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.example.evsalesmanagement.model.ImportRequest;
 
 @Repository
-public interface YeuCauNhapHangReponsitory extends JpaRepository<ImportRequest, Integer> {
-    Page<ImportRequest> findByNhanVien_MaNhanVien(Integer maNhaNVien, Pageable pageable);
+public interface ImportRequestRepository extends JpaRepository<ImportRequest, Integer> {
+    Page<ImportRequest> findByEmpployee_EmployeeId(Integer employeeId, Pageable pageable);
 
     // List<YeuCauNhapHang> findByNhanVien_DaiLy_MaDaiLy(Integer maDaiLy);
 

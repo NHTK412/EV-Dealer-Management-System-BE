@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 //XuLyPhanHoi = FeedbackHandling
 @Entity
 @Table(name = "FeedbackHandling")
-public class FeedbackHandling extends TimeStampRecord {
+public class FeedbackHandling extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FeedbackHandlingId")

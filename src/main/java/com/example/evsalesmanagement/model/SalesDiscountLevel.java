@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 //BacChietKhauDoanhSo = SalesDiscountLevel
 @Entity
 @Table(name = "SaleDiscountLevel")
-public class SalesDiscountLevel extends TimeStampRecord {
+public class SalesDiscountLevel extends Base {
     //ma bac chiet khau doanh so = salesDiscountLevelId
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

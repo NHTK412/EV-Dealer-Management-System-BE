@@ -14,7 +14,7 @@ import jakarta.persistence.OneToOne;
 //TaiKhoan = Account
 @Entity
 @Table(name = "Account")
-public class Account extends TimeStampRecord {
+public class Account extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AccountId")

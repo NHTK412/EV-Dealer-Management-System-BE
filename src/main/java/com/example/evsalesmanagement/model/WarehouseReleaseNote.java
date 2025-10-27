@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 //PhieuXuatKho = WarehouseReleaseNote
 @Entity
 @Table(name = "WarehouseReleaseNote")
-public class WarehouseReleaseNote extends TimeStampRecord{
+public class WarehouseReleaseNote extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "WarehouseReleaseNoteId")

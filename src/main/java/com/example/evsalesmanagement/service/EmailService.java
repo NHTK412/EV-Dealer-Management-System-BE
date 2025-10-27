@@ -24,13 +24,13 @@ public class EmailService {
     /**
      * Tạo mailto link với nội dung đã điền sẵn
      */
-    public String taoMailtoLink(Feedback phanHoi, String noiDungXuLy) {
+    public String CreateMailtoLink(Feedback feedback, String feedbackHandlingContent) {
         try {
-            Customer kh = phanHoi.getKhachHang();
+            Customer customer = feedback.getCustomer();
             
-            String to = kh.getEmail();
-            String subject = "Phản hồi: " + phanHoi.getTieuDePhanHoi();
-            String body = taoNoiDungEmail(kh, phanHoi, noiDungXuLy);
+            String to = customer.getEmail();
+            String subject = "Phản hồi: " + feedback.getFeedbackTitle();
+            String body = CreateEmailContent(customer, feedback, feedbackHandlingContent);
             
             // Encode URL
             String mailtoLink = String.format("mailto:%s?subject=%s&body=%s",
@@ -39,7 +39,7 @@ public class EmailService {
                 encodeValue(body)
             );
             
-            log.info("Đã tạo mailto link cho khách hàng: {}", kh.getEmail());
+            log.info("Đã tạo mailto link cho khách hàng: {}", customer.getEmail());
             return mailtoLink;
             
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class EmailService {
     /**
      * Tạo nội dung email dạng text 
      */
-    private String taoNoiDungEmail(Customer kh, Feedback ph, String noiDungXuLy) {
+    private String CreateEmailContent(Customer customer, Feedback feedback, String feedbackHandlingContent) {
         return String.format("""
             Kính gửi %s,
             
@@ -79,10 +79,10 @@ public class EmailService {
             ---
             Email này được soạn từ hệ thống EV Sales Management
             """,
-            kh.getTenKhachHang(),
-            ph.getTieuDePhanHoi(),
-            ph.getNoiDungPhanHoi(),
-            noiDungXuLy
+            customer.getCustomerId(),
+            feedback.getFeedbackTitle(),
+            feedback.getFeedbackContent(),
+            feedbackHandlingContent
         );
     }
     

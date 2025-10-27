@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 //NhanVien = Employee
 @Entity
 @Table(name = "Employee")
-public class Employee extends TimeStampRecord{
+public class Employee extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EmployeeId")

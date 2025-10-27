@@ -16,9 +16,9 @@ import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Feedback;
 import com.example.evsalesmanagement.model.FeedbackHandling;
-import com.example.evsalesmanagement.repository.NhanVienRepository;
-import com.example.evsalesmanagement.repository.PhanHoiRepository;
-import com.example.evsalesmanagement.repository.XuLyPhanHoiRepository;
+import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.repository.FeedbackRepository;
+import com.example.evsalesmanagement.repository.FeedbackHanglingRepository;
 import com.example.evsalesmanagement.utils.MessageFormat;
 
 @Service
@@ -26,16 +26,16 @@ public class XuLyPhanHoiService {
     
     private static final Logger log = LoggerFactory.getLogger(XuLyPhanHoiService.class);
     
-    private final XuLyPhanHoiRepository xuLyPhanHoiRepository;
-    private final PhanHoiRepository phanHoiRepository;
-    private final NhanVienRepository nhanVienRepository;
+    private final FeedbackHanglingRepository xuLyPhanHoiRepository;
+    private final FeedbackRepository phanHoiRepository;
+    private final EmployeeRepository nhanVienRepository;
     private final PhanHoiService phanHoiService;
     private final EmailService emailService;
     
     public XuLyPhanHoiService(
-            XuLyPhanHoiRepository xuLyPhanHoiRepository,
-            PhanHoiRepository phanHoiRepository,
-            NhanVienRepository nhanVienRepository,
+            FeedbackHanglingRepository xuLyPhanHoiRepository,
+            FeedbackRepository phanHoiRepository,
+            EmployeeRepository nhanVienRepository,
             PhanHoiService phanHoiService,
             EmailService emailService) {
         this.xuLyPhanHoiRepository = xuLyPhanHoiRepository;

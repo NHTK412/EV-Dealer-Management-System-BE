@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 
 //PhanHoi = Feedback
 @Table(name = "Feedback")
-public class Feedback extends TimeStampRecord{
+public class Feedback extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FeedbackId")

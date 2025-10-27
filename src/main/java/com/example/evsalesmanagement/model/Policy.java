@@ -15,18 +15,19 @@ import jakarta.persistence.Table;
 //ChinhSachChietKhau = Policy
 @Entity
 @Table(name = "DiscountPolicy")
-public class Policy extends TimeStampRecord {
+public class Policy extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PolicyId")
     private Integer policyId;
 
-    @Column(name = "DiscountType")
-    private String discountType;
+    @Column(name = "PolicyType")
+    private String PolicyType;
 
-    @Column(name = "DiscountRate")
-    private BigDecimal discountRate;
+    @Column(name = "PolicyValue")
+    private BigDecimal policyValue;
 
+    //condition = dieu kien ap dung
     @Column(name = "Condition")
     private String condition;
 
@@ -43,12 +44,6 @@ public class Policy extends TimeStampRecord {
     @JoinColumn(name = "AgencyId")
     private Agency agency;
 
-    // @OneToMany(mappedBy = "chinhSachChietKhau")
-    // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "chinhSachChietKhau")
-    // private List<BacChietKhauDoanhSo> bacChietKhauDoanhSos = new ArrayList<>();
-
     public Integer getPolicyId() {
         return policyId;
     }
@@ -57,20 +52,20 @@ public class Policy extends TimeStampRecord {
         this.policyId = policyId;
     }
 
-    public String getDiscountType() {
-        return discountType;
+    public String getPolicyType() {
+        return PolicyType;
     }
 
-    public void setDiscountType(String discountType) {
-        this.discountType = discountType;
+    public void setPolicyType(String policyType) {
+        PolicyType = policyType;
     }
 
-    public BigDecimal getDiscountRate() {
-        return discountRate;
+    public BigDecimal getPolicyValue() {
+        return policyValue;
     }
 
-    public void setDiscountRate(BigDecimal discountRate) {
-        this.discountRate = discountRate;
+    public void setPolicyValue(BigDecimal policyValue) {
+        this.policyValue = policyValue;
     }
 
     public String getCondition() {
@@ -112,4 +107,14 @@ public class Policy extends TimeStampRecord {
     public void setAgency(Agency agency) {
         this.agency = agency;
     }
+
+    
+
+    // @OneToMany(mappedBy = "chinhSachChietKhau")
+    // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "chinhSachChietKhau")
+    // private List<BacChietKhauDoanhSo> bacChietKhauDoanhSos = new ArrayList<>();
+
+   
 }

@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evsalesmanagement.dto.ChiTietLoaiXeDTO;
 import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.KhuyenMaiChiTietDTO;
-import com.example.evsalesmanagement.dto.KhuyenMaiDTO;
-import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
+import com.example.evsalesmanagement.dto.PromotionDTO;
+import com.example.evsalesmanagement.dto.PromotionRequestDTO;
 import com.example.evsalesmanagement.model.Promotion;
-import com.example.evsalesmanagement.service.KhuyenMaiService;
+import com.example.evsalesmanagement.service.PolicyService;
 
 import java.util.List;
 
@@ -29,16 +29,16 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 public class KhuyenMaiController {
 
         @Autowired
-        private KhuyenMaiService khuyenMaiService;
+        private PolicyService khuyenMaiService;
 
         @GetMapping()
-        public ResponseEntity<ApiResponse<List<KhuyenMaiDTO>>> layTatCaKhuyenMai() {
-                List<KhuyenMaiDTO> khuyenMaiDTOs = khuyenMaiService.layTatCaKhuyenMai().stream()
-                                .map(km -> new KhuyenMaiDTO(km))
+        public ResponseEntity<ApiResponse<List<PromotionDTO>>> layTatCaKhuyenMai() {
+                List<PromotionDTO> khuyenMaiDTOs = khuyenMaiService.layTatCaKhuyenMai().stream()
+                                .map(km -> new PromotionDTO(km))
                                 .toList();
                 // return ResponseEntity.ok(khuyenMaiDTOs);
 
-                return ResponseEntity.ok(new ApiResponse<List<KhuyenMaiDTO>>(true, null, khuyenMaiDTOs));
+                return ResponseEntity.ok(new ApiResponse<List<PromotionDTO>>(true, null, khuyenMaiDTOs));
         }
 
         @GetMapping("/{maKhuyenMai}")
@@ -66,7 +66,7 @@ public class KhuyenMaiController {
 
         @PostMapping()
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> taoKhuyenmai(
-                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
+                        @RequestBody PromotionRequestDTO khuyenMai) {
 
                 Promotion khuyenMaiMoi = khuyenMaiService.taoKhuyenMai(khuyenMai);
 
@@ -109,7 +109,7 @@ public class KhuyenMaiController {
 
         @PutMapping("/{maKhuyenMai}")
         public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> putMethodName(@PathVariable String maKhuyenMai,
-                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
+                        @RequestBody PromotionRequestDTO khuyenMai) {
                 Promotion khuyenMaiCapNhat = khuyenMaiService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
                 KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiCapNhat);
                 khuyenMaiChiTietDTO.setChiTietLoaiXes(

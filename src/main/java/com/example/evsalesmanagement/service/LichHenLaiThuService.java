@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-import com.example.evsalesmanagement.repository.LichHenLaiThuRepository;
+import com.example.evsalesmanagement.repository.TestDriveAppointmentRepository;
 
 @Service
 public class LichHenLaiThuService {
 
     @Autowired
-    private LichHenLaiThuRepository lichHenRepository;
+    private TestDriveAppointmentRepository lichHenRepository;
 
     /**
      * Lấy tất cả lịch hẹn lái thử với thông tin khách hàng

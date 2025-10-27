@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 //lichHenlaiThu = TestDriveAppointment
 @Entity
 @Table(name = "TestDriveAppointment")
-public class TestDriveAppointment extends TimeStampRecord{
+public class TestDriveAppointment extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TestDriveAppointmentId")

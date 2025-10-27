@@ -15,7 +15,7 @@ import com.example.evsalesmanagement.model.Feedback;
  * Repository cho PhanHoi
  */
 @Repository
-public interface PhanHoiRepository extends JpaRepository<Feedback, Integer> {
+public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 
     /**
      * Lấy tất cả phản hồi - sắp xếp theo ngày tạo DESC

@@ -2,33 +2,59 @@ package com.example.evsalesmanagement.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class KhuyenMaiRequestDTO {
+import com.example.evsalesmanagement.model.Promotion;
 
-    private String tenKhuyenMai;
+public class PromotionDTO {
+    private Integer policyId;
 
-    private String loaiKhuyenMai;
+    private String policyName;
 
-    private BigDecimal giaTriKhuyenMai;
+    private String policyType;
 
-    private String tieuChi;
+    private BigDecimal policyValue;
 
-    private BigDecimal soTienGiam;
+    private String criteria;
 
-    private BigDecimal phanTramGiam;
+    private BigDecimal discountamount;
 
-    private LocalDateTime ngayBatDau;
+    private BigDecimal discountPercent;
 
-    private LocalDateTime ngayHetHan;
+    private LocalDateTime startDate;
 
-    private String trangThai;
+    private LocalDateTime endDate;
 
-    private List<Integer> maChiTietLoaiXes;
+    private String status;
 
-    private List<Integer> maDaiLys;
+    public PromotionDTO() {
+    }
 
-    public KhuyenMaiRequestDTO() {
+    public PromotionDTO(Promotion policy) {
+        this.policyId = policy.getId();
+    }
+
+    public PromotionDTO(Integer maKhuyenMai, String tenKhuyenMai, String loaiKhuyenMai, BigDecimal giaTriKhuyenMai,
+            String tieuChi, BigDecimal soTienGiam, BigDecimal phanTramGiam, LocalDateTime ngayBatDau,
+            LocalDateTime ngayHetHan, String trangThai) {
+        this.maKhuyenMai = maKhuyenMai;
+        this.tenKhuyenMai = tenKhuyenMai;
+        this.loaiKhuyenMai = loaiKhuyenMai;
+        this.giaTriKhuyenMai = giaTriKhuyenMai;
+        this.tieuChi = tieuChi;
+        this.soTienGiam = soTienGiam;
+        this.phanTramGiam = phanTramGiam;
+        this.ngayBatDau = ngayBatDau;
+        this.ngayHetHan = ngayHetHan;
+        this.trangThai = trangThai;
+
+    }
+
+    public Integer getMaKhuyenMai() {
+        return maKhuyenMai;
+    }
+
+    public void setMaKhuyenMai(Integer maKhuyenMai) {
+        this.maKhuyenMai = maKhuyenMai;
     }
 
     public String getTenKhuyenMai() {
@@ -101,22 +127,6 @@ public class KhuyenMaiRequestDTO {
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
-    }
-
-    public List<Integer> getMaChiTietLoaiXes() {
-        return maChiTietLoaiXes;
-    }
-
-    public void setMaChiTietLoaiXes(List<Integer> maChiTietLoaiXes) {
-        this.maChiTietLoaiXes = maChiTietLoaiXes;
-    }
-
-    public List<Integer> getMaDaiLys() {
-        return maDaiLys;
-    }
-
-    public void setMaDaiLys(List<Integer> maDaiLys) {
-        this.maDaiLys = maDaiLys;
     }
 
 }

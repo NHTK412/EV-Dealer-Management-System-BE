@@ -5,30 +5,31 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
+import com.example.evsalesmanagement.dto.PromotionRequestDTO;
 import com.example.evsalesmanagement.model.Promotion;
-import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
+import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
-import com.example.evsalesmanagement.repository.KhuyenMaiRepository;
+import com.example.evsalesmanagement.repository.PolicyRepository;
+
 
 @Service
-public class KhuyenMaiService {
+public class PolicyService {
 
     @Autowired
-    KhuyenMaiRepository khuyenMaiRepository;
+    PolicyRepository policyRepository;
 
     @Autowired
-    AgencyRepository daiLyRepository;
+    AgencyRepository agencyRepository;
 
     @Autowired
-    ChiTietLoaiXeRepository chiTietLoaiXeRepository;
+    VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-    public List<Promotion> layTatCaKhuyenMai() {
-        return khuyenMaiRepository.findAll();
+    public List<Promotion> layTatCaPolicy() {
+        return policyRepository.findAll();
     }
 
-    public Promotion layKhuyenMaiTheoMa(Integer maKhuyenMai) {
-        Promotion khuyenMai = khuyenMaiRepository.findById(maKhuyenMai)
+    public Promotion getPolicyId(Integer policyId) {
+        Promotion policy = policyRepository.findById(policyId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
@@ -43,10 +44,10 @@ public class KhuyenMaiService {
         // .map(daiLy -> new DaiLyDTO(daiLy))
         // .toList());
 
-        return khuyenMai;
+        return policy;
     }
 
-    public Promotion taoKhuyenMai(KhuyenMaiRequestDTO khuyenMai) {
+    public Promotion createPolicy(PromotionRequestDTO khuyenMai) {
 
         Promotion khuyenMaiMoi = new Promotion();
 
@@ -81,7 +82,7 @@ public class KhuyenMaiService {
 
     }
 
-    public Promotion capKhuyenMai(Integer maKhuyenMai, KhuyenMaiRequestDTO khuyenMai) {
+    public Promotion capKhuyenMai(Integer maKhuyenMai, PromotionRequestDTO khuyenMai) {
         Promotion khuyenMaiCapNhat = khuyenMaiRepository.findById(maKhuyenMai)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 

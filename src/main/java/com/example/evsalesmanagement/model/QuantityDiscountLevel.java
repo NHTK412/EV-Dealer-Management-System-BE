@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 //BacChietKhauSoLuong = QuantityDiscountLevel
 @Entity
 @Table(name = "QuantityDiscountLevel")
-public class QuantityDiscountLevel extends TimeStampRecord{
+public class QuantityDiscountLevel extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "QuantityDiscountLevelId")

@@ -19,8 +19,8 @@ import com.example.evsalesmanagement.model.ImportRequestDetail;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.ImportRequest;
 import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
-import com.example.evsalesmanagement.repository.ChiTietYeuCauRepository;
-import com.example.evsalesmanagement.repository.NhanVienRepository;
+import com.example.evsalesmanagement.repository.ImportRequestDetailRepository;
+import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.YeuCauNhapHangReponsitory;
 
 import jakarta.transaction.Transactional;
@@ -32,10 +32,10 @@ public class YeuCauNhapHangService {
     YeuCauNhapHangReponsitory yeuCauNhapHangReponsitory;
 
     @Autowired
-    ChiTietYeuCauRepository chiTietYeuCauRepository;
+    ImportRequestDetailRepository chiTietYeuCauRepository;
 
     @Autowired
-    NhanVienRepository nhanVienRepository;
+    EmployeeRepository nhanVienRepository;
 
     @Autowired
     ChiTietLoaiXeRepository chiTietLoaiXeRepository;

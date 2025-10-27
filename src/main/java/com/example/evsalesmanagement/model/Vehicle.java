@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Xe")
-public class Vehicle extends TimeStampRecord{
+public class Vehicle extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleId")

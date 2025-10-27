@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 //DonHang = Oder
 @Entity
 @Table(name = "Oder")
-public class Oder extends TimeStampRecord{
+public class Oder extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OderId")

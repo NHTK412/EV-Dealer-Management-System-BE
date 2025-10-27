@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 //Promotion = khuyen mai
 @Entity
 @Table(name = "Promotion")
-public class Promotion extends TimeStampRecord {
+public class Promotion extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PromotionId")

@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 //ThanhToan = Payment
 @Entity
 @Table(name = "Payment")
-public class Payment extends TimeStampRecord{
+public class Payment extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PaymentId")

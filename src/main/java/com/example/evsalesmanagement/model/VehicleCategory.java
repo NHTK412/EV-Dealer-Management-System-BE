@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 //DanhMucXe = VehicleCategory
 @Entity
 @Table(name = "VehicleCategory")
-public class VehicleCategory extends TimeStampRecord{
+public class VehicleCategory extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleCategoryId")

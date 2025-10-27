@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 //BaoGia = Quote
 @Entity
 @Table(name = "Quote")
-public class Quote extends TimeStampRecord {
+public class Quote extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "QuoteId")

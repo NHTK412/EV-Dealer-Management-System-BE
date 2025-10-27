@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 //GiaSiDaiLy = AgencyWholesalePrice
 @Entity
 @Table(name = "AgencyWholesalePrice")
-public class AgencyWholesalePrice extends TimeStampRecord{
+public class AgencyWholesalePrice extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyWholesalePriceId")
