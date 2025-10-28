@@ -11,32 +11,43 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+//ThanhToan = Payment
 @Entity
 @Table(name = "Payment")
-public class Payment extends GhiNhanThoiGian {
+public class Payment extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PaymentId")
     private Integer paymentId;
 
+    //PhuongThucThanhToan = PaymentMethod
     @Column(name = "PaymentMethod")
     private String paymentMethod;
 
-    @Column(name = "Form")
-    private String form;
+    @Column(name = "PaymentForm")
+    private String paymentForm;
 
+    //SoTien = Amount
     @Column(name = "Amount")
     private BigDecimal amount;
 
-    @Column(name = "InstallmentNumber")
-    private Integer installmentNumber;
+    //chukyso = CycleNumber
+    @Column(name = "NumberCycle")
+    private Integer numberCycle;
 
+
+    //NgayDenHan = DueDate
     @Column(name = "DueDate")
     private LocalDateTime dueDate;
 
+
+    //NgayThanhToan = PaymentDate
     @Column(name = "PaymentDate")
     private LocalDateTime paymentDate;
+
+
+    //TienPhat = PenaltyAmount
 
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;
@@ -44,12 +55,13 @@ public class Payment extends GhiNhanThoiGian {
     @Column(name = "Status")
     private String status;
 
-    @Column(name = "VnpayCode")
+    @Column(name = "VNPAYCode")
     private String vnpayCode;
 
     @ManyToOne
-    @JoinColumn(name = "OrderId")
-    private Order order;
+    @JoinColumn(name = "OderId")
+    private Oder oder;
+
 
     public Integer getPaymentId() {
         return paymentId;
@@ -67,12 +79,13 @@ public class Payment extends GhiNhanThoiGian {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getForm() {
-        return form;
+    public String getPaymentForm() {
+        return paymentForm;
     }
 
-    public void setForm(String form) {
-        this.form = form;
+    public void setPaymentForm(String paymentForm) {
+        this.paymentForm = paymentForm;
+
     }
 
     public BigDecimal getAmount() {
@@ -83,12 +96,13 @@ public class Payment extends GhiNhanThoiGian {
         this.amount = amount;
     }
 
-    public Integer getInstallmentNumber() {
-        return installmentNumber;
+    public Integer getNumberCycle() {
+        return numberCycle;
     }
 
-    public void setInstallmentNumber(Integer installmentNumber) {
-        this.installmentNumber = installmentNumber;
+    public void setNumberCycle(Integer numberCycle) {
+        this.numberCycle = numberCycle;
+
     }
 
     public LocalDateTime getDueDate() {
@@ -131,11 +145,13 @@ public class Payment extends GhiNhanThoiGian {
         this.vnpayCode = vnpayCode;
     }
 
-    public Order getOrder() {
-        return order;
+    public Oder getOder() {
+        return oder;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOder(Oder oder) {
+        this.oder = oder;
     }
+
 }
+

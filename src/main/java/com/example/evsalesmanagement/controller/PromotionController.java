@@ -3,11 +3,12 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.ChiTietLoaiXeDTO;
-import com.example.evsalesmanagement.dto.KhuyenMaiChiTietDTO;
-import com.example.evsalesmanagement.dto.KhuyenMaiDTO;
-import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
+import com.example.evsalesmanagement.dto.PromotionDetailDTO;
+import com.example.evsalesmanagement.dto.PromotionSummaryDTO;
+import com.example.evsalesmanagement.dto.PromotionRequestDTO;
+
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.service.PromotionService;
 
@@ -25,106 +26,106 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
-@RequestMapping("/promotion")
+@RequestMapping("/Promotion")
 public class PromotionController {
 
         @Autowired
         private PromotionService promotionService;
 
         @GetMapping()
-        public ResponseEntity<ApiResponse<List<KhuyenMaiDTO>>> layTatCaKhuyenMai() {
-                List<KhuyenMaiDTO> khuyenMaiDTOs = promotionService.layTatCaKhuyenMai().stream()
-                                .map(km -> new KhuyenMaiDTO(km))
+        public ResponseEntity<ApiResponse<List<PromotionSummaryDTO>>> getAllPromotions() {
+                List<PromotionSummaryDTO> PromotionDTOs = promotionService.getAllPromotions().stream()
+                                .map(km -> new PromotionSummaryDTO(km))
                                 .toList();
                 // return ResponseEntity.ok(khuyenMaiDTOs);
 
-                return ResponseEntity.ok(new ApiResponse<List<KhuyenMaiDTO>>(true, null, khuyenMaiDTOs));
+                return ResponseEntity.ok(new ApiResponse<List<PromotionSummaryDTO>>(true, null, PromotionDTOs));
         }
 
-        @GetMapping("/{maKhuyenMai}")
-        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> layKhuyenMaiTheoMa(@PathVariable String maKhuyenMai) {
+        @GetMapping("/{promotionId}")
+        public ResponseEntity<ApiResponse<PromotionDetailDTO>> getByIdPromotion(@PathVariable String promotionId) {
                 // return new String();
 
-                Promotion khuyenMai = promotionService.layKhuyenMaiTheoMa(Integer.parseInt(maKhuyenMai));
+                Promotion promotion = promotionService.getByIdPromotion(Integer.parseInt(promotionId));
 
-                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
-                khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                                khuyenMai.getChiTietLoaiXes()
+                PromotionDetailDTO promotionDetailDTO = new PromotionDetailDTO(promotion);
+                promotionDetailDTO.setVehicleTypeDetails(
+                                promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
                                                 .toList());
-                khuyenMaiChiTietDTO.setDaiLys(
-                                khuyenMai.getDaiLys()
+                promotionDetailDTO.setAgencies(
+                                promotion.getAgencies()
                                                 .stream()
-                                                .map(daiLy -> new AgencyDTO(daiLy))
+                                                .map(agency -> new AgencyDTO(agency))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
-                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+                return ResponseEntity.ok(new ApiResponse<PromotionDetailDTO>(true, null, promotionDetailDTO));
 
         }
 
         @PostMapping()
-        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> taoKhuyenmai(
-                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
+        public ResponseEntity<ApiResponse<PromotionDetailDTO>> createPromotion(
+                        @RequestBody PromotionRequestDTO promotion) {
 
-                Promotion khuyenMaiMoi = promotionService.taoKhuyenMai(khuyenMai);
+                Promotion newPromotion = promotionService.createPromotion(promotion);
 
-                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiMoi);
-                khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                                khuyenMaiMoi.getChiTietLoaiXes()
+                PromotionDetailDTO promotionDetailDTO = new PromotionDetailDTO(newPromotion);
+                promotionDetailDTO.setVehicleTypeDetails(
+                                newPromotion.getVehicleDetails()
                                                 .stream()
-                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
                                                 .toList());
-                khuyenMaiChiTietDTO.setDaiLys(
-                                khuyenMaiMoi.getDaiLys()
+                promotionDetailDTO.setAgencies(
+                                newPromotion.getAgencies()
                                                 .stream()
-                                                .map(daiLy -> new AgencyDTO(daiLy))
+                                                .map(agency -> new AgencyDTO(agency))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
 
-                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+                return ResponseEntity.ok(new ApiResponse<PromotionDetailDTO>(true, null, promotionDetailDTO));
 
         }
 
-        @DeleteMapping("/{maKhuyenMai}")
-        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> xoaKhuyenMai(@PathVariable String maKhuyenMai) {
-                Promotion khuyenMai = promotionService.xoaKhuyenMai(Integer.parseInt(maKhuyenMai));
+        @DeleteMapping("/{promotionId}")
+        public ResponseEntity<ApiResponse<PromotionDetailDTO>> DeletePromotion(@PathVariable String promotionId) {
+                Promotion promotion = promotionService.DeletePromotion(Integer.parseInt(promotionId));
 
-                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMai);
-                khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                                khuyenMai.getChiTietLoaiXes()
+                PromotionDetailDTO promotionDetailDTO = new PromotionDetailDTO(promotion);
+                promotionDetailDTO.setVehicleTypeDetails(
+                                promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
                                                 .toList());
-                khuyenMaiChiTietDTO.setDaiLys(
-                                khuyenMai.getDaiLys()
+                promotionDetailDTO.setAgencies(
+                                promotion.getAgencies()
                                                 .stream()
-                                                .map(daiLy -> new AgencyDTO(daiLy))
+                                                .map(agency -> new AgencyDTO(agency))
                                                 .toList());
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+                return ResponseEntity.ok(new ApiResponse<PromotionDetailDTO>(true, null,promotionDetailDTO));
 
         }
 
-        @PutMapping("/{maKhuyenMai}")
-        public ResponseEntity<ApiResponse<KhuyenMaiChiTietDTO>> putMethodName(@PathVariable String maKhuyenMai,
-                        @RequestBody KhuyenMaiRequestDTO khuyenMai) {
-                Promotion khuyenMaiCapNhat = promotionService.capKhuyenMai(Integer.parseInt(maKhuyenMai), khuyenMai);
-                KhuyenMaiChiTietDTO khuyenMaiChiTietDTO = new KhuyenMaiChiTietDTO(khuyenMaiCapNhat);
-                khuyenMaiChiTietDTO.setChiTietLoaiXes(
-                                khuyenMaiCapNhat.getChiTietLoaiXes()
+        @PutMapping("/{promotionId}")
+        public ResponseEntity<ApiResponse<PromotionDetailDTO>> putPromotion(@PathVariable String promotionId,
+                        @RequestBody PromotionRequestDTO promotion) {
+                Promotion promotionUpdate = promotionService.UpdatePromotion(Integer.parseInt(promotionId), promotion);
+                PromotionDetailDTO promotionDetailDTO = new PromotionDetailDTO(promotionUpdate);
+                promotionDetailDTO.setVehicleTypeDetails(
+                                promotionUpdate.getVehicleDetails()
                                                 .stream()
-                                                .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
+                                                .map(vehicleTypeDetails-> new VehicleTypeDetailDTO(vehicleTypeDetails))
                                                 .toList());
-                khuyenMaiChiTietDTO.setDaiLys(
-                                khuyenMaiCapNhat.getDaiLys()
+                promotionDetailDTO.setAgencies(
+                                promotionUpdate.getAgencies()
                                                 .stream()
-                                                .map(daiLy -> new AgencyDTO(daiLy))
+                                                .map(agency -> new AgencyDTO(agency))
                                                 .toList());
 
                 // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-                return ResponseEntity.ok(new ApiResponse<KhuyenMaiChiTietDTO>(true, null, khuyenMaiChiTietDTO));
+                return ResponseEntity.ok(new ApiResponse<PromotionDetailDTO>(true, null, promotionDetailDTO));
 
         }
 }

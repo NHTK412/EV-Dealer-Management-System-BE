@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,57 +13,72 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+//ChiTietBaoGia = QuotationDetail
 @Entity
 @Table(name = "QuotationDetail")
-public class QuotationDetail extends GhiNhanThoiGian {
+public class QuotationDetail extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "QuotationDetailId")
     private Integer quotationDetailId;
+    //so luong = quantity
 
     @Column(name = "Quantity")
     private Integer quantity;
 
     @Column(name = "Discount")
     private BigDecimal discount;
-
+    
+    //Registration tax = phi truoc ba
     @Column(name = "RegistrationTax")
     private BigDecimal registrationTax;
-
-    @Column(name = "LicensePlateFee")
+    
+    //LicensePlate fee = phi bien so 
+    @Column(name = "LicensePlateFee ")
     private BigDecimal licensePlateFee;
 
-    @Column(name = "InspectionFee")
-    private BigDecimal inspectionFee;
+    //Registration fee = phi dang kiem
+    @Column(name = "Registration Fee")
+    private BigDecimal registrartionFee;
 
+    //CompulsoryInsurance = bao hiem bat buoc
     @Column(name = "CompulsoryInsurance")
     private BigDecimal compulsoryInsurance;
 
-    @Column(name = "VehiclePhysicalInsurance")
-    private BigDecimal vehiclePhysicalInsurance;
+    //MaterialInsurance = bao hiem vat chat
+    @Column(name = "MaterialInsurance")
+    private BigDecimal materialInsurance;
 
-    @Column(name = "RoadMaintenanceFee")
-    private BigDecimal roadMaintenanceFee;
+    //RoadMaintenanceMees = phi bao tri duong bo
+    @Column(name = "RoadMaintenanceMees")
+    private BigDecimal roadMaintenanceMees;
 
+    //VehicleRegistrationServiceFee = phi dich vu dang ky xe
     @Column(name = "VehicleRegistrationServiceFee")
     private BigDecimal vehicleRegistrationServiceFee;
 
+    //DiscountPercentage = phan tram chiet khau
     @Column(name = "DiscountPercentage")
     private BigDecimal discountPercentage;
 
+    //WhoblesalePrice = gia si
     @Column(name = "WholesalePrice")
     private BigDecimal wholesalePrice;
 
+    //total amount = tong tien 
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
+    //quote = bao gia
     @ManyToOne
-    @JoinColumn(name = "QuotationId")
-    private Quotation quotation;
+    @JoinColumn(name = "QuoteId")
+    private Quote quote;
 
     @ManyToOne
-    @JoinColumn(name = "VehicleDetail")
-    private VehicleDetail vehicleTypeDetail;
+    @JoinColumn(name = "VehicleTypeDetailId")
+    private VehicleTypeDetail vehicleTypeDetail;
+
 
     public Integer getQuotationDetailId() {
         return quotationDetailId;
@@ -103,12 +120,13 @@ public class QuotationDetail extends GhiNhanThoiGian {
         this.licensePlateFee = licensePlateFee;
     }
 
-    public BigDecimal getInspectionFee() {
-        return inspectionFee;
+    public BigDecimal getRegistrartionFee() {
+        return registrartionFee;
     }
 
-    public void setInspectionFee(BigDecimal inspectionFee) {
-        this.inspectionFee = inspectionFee;
+    public void setRegistrartionFee(BigDecimal registrartionFee) {
+        this.registrartionFee = registrartionFee;
+
     }
 
     public BigDecimal getCompulsoryInsurance() {
@@ -119,20 +137,21 @@ public class QuotationDetail extends GhiNhanThoiGian {
         this.compulsoryInsurance = compulsoryInsurance;
     }
 
-    public BigDecimal getVehiclePhysicalInsurance() {
-        return vehiclePhysicalInsurance;
+    public BigDecimal getMaterialInsurance() {
+        return materialInsurance;
     }
 
-    public void setVehiclePhysicalInsurance(BigDecimal vehiclePhysicalInsurance) {
-        this.vehiclePhysicalInsurance = vehiclePhysicalInsurance;
+    public void setMaterialInsurance(BigDecimal materialInsurance) {
+        this.materialInsurance = materialInsurance;
     }
 
-    public BigDecimal getRoadMaintenanceFee() {
-        return roadMaintenanceFee;
+    public BigDecimal getRoadMaintenanceMees() {
+        return roadMaintenanceMees;
     }
 
-    public void setRoadMaintenanceFee(BigDecimal roadMaintenanceFee) {
-        this.roadMaintenanceFee = roadMaintenanceFee;
+    public void setRoadMaintenanceMees(BigDecimal roadMaintenanceMees) {
+        this.roadMaintenanceMees = roadMaintenanceMees;
+
     }
 
     public BigDecimal getVehicleRegistrationServiceFee() {
@@ -167,19 +186,22 @@ public class QuotationDetail extends GhiNhanThoiGian {
         this.totalAmount = totalAmount;
     }
 
-    public Quotation getQuotation() {
-        return quotation;
+    public Quote getQuote() {
+        return quote;
     }
 
-    public void setQuotation(Quotation quotation) {
-        this.quotation = quotation;
+    public void setQuote(Quote quote) {
+        this.quote = quote;
     }
 
-    public VehicleDetail getVehicleTypeDetail() {
+    public VehicleTypeDetail getVehicleTypeDetail() {
         return vehicleTypeDetail;
     }
 
-    public void setVehicleTypeDetail(VehicleDetail vehicleTypeDetail) {
+    public void setVehicleTypeDetail(VehicleTypeDetail vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
     }
+
+
 }
+

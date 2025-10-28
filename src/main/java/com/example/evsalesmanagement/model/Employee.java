@@ -11,9 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
+//NhanVien = Employee
 @Entity
 @Table(name = "Employee")
-public class Employee extends GhiNhanThoiGian { 
+public class Employee extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EmployeeId")
@@ -25,11 +28,12 @@ public class Employee extends GhiNhanThoiGian {
     @Column(name = "Gender")
     private String gender;
 
-    @Column(name = "DateOfBirth")
-    private LocalDate dateOfBirth;
+    @Column(name = "BirthDate")
+    private LocalDate birthDate;
 
     @Column(name = "PhoneNumber")
-    private String phoneNumber;
+    private String  phoneNumber;
+
 
     @Column(name = "Email")
     private String email;
@@ -37,33 +41,15 @@ public class Employee extends GhiNhanThoiGian {
     @Column(name = "Address")
     private String address;
 
+    //chuc vu = position
+
     @Column(name = "Position")
     private String position;
 
     @ManyToOne
-    @JoinColumn(name = "AgencyId")
+    @JoinColumn(name = "Agency")
     private Agency agency;
 
-    // @OneToOne(mappedBy = "nhanVien")
-    // private TaiKhoan taiKhoan;
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<DonHang> donHangs = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<GiaoXe> giaoXes = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<PhieuXuatKho> phieuXuatKhos = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<XuLyPhanHoi> xuLyPhanHois = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<YeuCauNhapHang> yeuCauNhapHangs = new ArrayList<>();
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -89,12 +75,13 @@ public class Employee extends GhiNhanThoiGian {
         this.gender = gender;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+
     }
 
     public String getPhoneNumber() {
@@ -136,4 +123,28 @@ public class Employee extends GhiNhanThoiGian {
     public void setAgency(Agency agency) {
         this.agency = agency;
     }
+
+    // @OneToOne(mappedBy = "nhanVien")
+    // private TaiKhoan taiKhoan;
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<DonHang> donHangs = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<GiaoXe> giaoXes = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<PhieuXuatKho> phieuXuatKhos = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<XuLyPhanHoi> xuLyPhanHois = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "nhanVien")
+    // private List<YeuCauNhapHang> yeuCauNhapHangs = new ArrayList<>();
+
+   
 }
+

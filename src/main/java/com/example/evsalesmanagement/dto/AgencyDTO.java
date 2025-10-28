@@ -3,70 +3,73 @@ package com.example.evsalesmanagement.dto;
 import com.example.evsalesmanagement.model.Agency;
 
 public class AgencyDTO {
-    private Integer maDaiLy;
 
-    private String tenDaiLy;
+    private Integer agencyId;
 
-    private String diaChi;
+    private String agencyName;
 
-    private String soDienThoai;
+    private String address;
+
+    private String phoneNumber;
 
     private String email;
 
-    private String trangThai;
+    private String status;
 
     public AgencyDTO(Agency agency) {
-        this.maDaiLy = agency.getAgencyId();
-        this.tenDaiLy = agency.getAgencyName();
-        this.diaChi = agency.getAddress();
-        this.soDienThoai = agency.getPhoneNumber();
+        this.agencyId = agency.getAgencyId();
+        this.agencyName = agency.getAgencyName();
+        this.address = agency.getAddress();
+        this.phoneNumber = agency.getPhoneNumber();
         this.email = agency.getEmail();
-        this.trangThai = agency.getStatus();
+        this.status = agency.getStatus();
     }
 
-    public AgencyDTO(Integer maDaiLy, String tenDaiLy, String diaChi, String soDienThoai, String email,
-            String trangThai) {
-        this.maDaiLy = maDaiLy;
-        this.tenDaiLy = tenDaiLy;
-        this.diaChi = diaChi;
-        this.soDienThoai = soDienThoai;
+    public AgencyDTO(Integer angencyId, String agencyName, String address, String phoneNumber, String email,
+            String status) {
+        this.agencyId = angencyId;
+        this.agencyName = agencyName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
         this.email = email;
-        this.trangThai = trangThai;
+        this.status = status;
+
     }
 
     public AgencyDTO() {
     }
 
-    public Integer getMaDaiLy() {
-        return maDaiLy;
+    public Integer getAgencyId() {
+        return agencyId;
     }
 
-    public void setMaDaiLy(Integer maDaiLy) {
-        this.maDaiLy = maDaiLy;
+    public void setAgencyId(Integer agencyId) {
+        this.agencyId = agencyId;
     }
 
-    public String getTenDaiLy() {
-        return tenDaiLy;
+    public String getAgencyName() {
+        return agencyName;
     }
 
-    public void setTenDaiLy(String tenDaiLy) {
-        this.tenDaiLy = tenDaiLy;
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getSoDienThoai() {
-        return soDienThoai;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+
     }
 
     public String getEmail() {
@@ -77,12 +80,13 @@ public class AgencyDTO {
         this.email = email;
     }
 
-    public String getTrangThai() {
-        return trangThai;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setStatus(String status) {
+        this.status = status;
+
     }
 
 }

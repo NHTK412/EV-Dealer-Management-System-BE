@@ -4,10 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import com.example.evsalesmanagement.model.ChiTietLoaiXe;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
 @Repository
-public interface TruyVanThongTinXeRepository extends JpaRepository<ChiTietLoaiXe, Integer> {
+public interface TruyVanThongTinXeRepository extends JpaRepository<VehicleTypeDetail, Integer> {
     // lấy thông tin toàn bộ xe
     @Query(value = "SELECT " +
                    "lx.ma_loai_xe, " +

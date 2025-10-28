@@ -15,9 +15,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+//Promotion = khuyen mai
 @Entity
 @Table(name = "Promotion")
-public class Promotion extends GhiNhanThoiGian {
+public class Promotion extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,18 +27,23 @@ public class Promotion extends GhiNhanThoiGian {
 
     @Column(name = "PromotionName", nullable = false)
     private String promotionName;
-
+    
     @Column(name = "PromotionType")
     private String promotionType;
-
+    
+    //promotion value = gia tri khuyen mai
     @Column(name = "PromotionValue")
     private BigDecimal promotionValue;
 
+    // criteria = tieu chi
     @Column(name = "Criteria")
     private String criteria;
 
+    // discount amount = so tien giam gia
     @Column(name = "DiscountAmount")
     private BigDecimal discountAmount;
+
+    // discount percent = phan tram giam gia
 
     @Column(name = "DiscountPercent")
     private BigDecimal discountPercent;
@@ -50,6 +56,9 @@ public class Promotion extends GhiNhanThoiGian {
 
     @Column(name = "Status")
     private String status;
+
+
+
 
     @ManyToMany
     @JoinTable(
@@ -178,4 +187,9 @@ public class Promotion extends GhiNhanThoiGian {
                 ", vehicleDetails=" + vehicleDetails +
                 ", agencies=" + agencies + "]";
     }
+
+
 }
+
+    
+

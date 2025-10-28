@@ -8,12 +8,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToOne;
 
+//TaiKhoan = Account
 @Entity
 @Table(name = "Account")
-public class Account extends GhiNhanThoiGian {
+public class Account extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AccountId")
@@ -31,11 +33,12 @@ public class Account extends GhiNhanThoiGian {
     @Column(name = "Status")
     private String status;
 
-    // @Column(name = "CreatedDate")
-    // private LocalDateTime createdDate;
+    // @Column(name = "NgayTao")
+    // private LocalDateTime ngayTao;
 
-    @Column(name = "LastLogin")
-    private LocalDateTime lastLogin;
+    @Column(name = "LastLoginTime")
+    private LocalDateTime lastLoginTime;
+
 
     @OneToOne
     @JoinColumn(name = "EmployeeId", unique = true)
@@ -81,20 +84,13 @@ public class Account extends GhiNhanThoiGian {
         this.status = status;
     }
 
-    // public LocalDateTime getCreatedDate() {
-    //     return createdDate;
-    // }
-
-    // public void setCreatedDate(LocalDateTime createdDate) {
-    //     this.createdDate = createdDate;
-    // }
-
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
+    public LocalDateTime getLastLoginTime() {
+        return lastLoginTime;
     }
 
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+
     }
 
     public Employee getEmployee() {
@@ -104,4 +100,17 @@ public class Account extends GhiNhanThoiGian {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
+
+    
+
+    // public LocalDateTime getNgayTao() {
+    // return ngayTao;
+    // }
+
+    // public void setNgayTao(LocalDateTime ngayTao) {
+    // this.ngayTao = ngayTao;
+    // }
+
+
 }

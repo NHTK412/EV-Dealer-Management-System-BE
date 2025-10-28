@@ -9,47 +9,34 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Agency")
-public class Agency extends GhiNhanThoiGian {
+public class Agency extends Base {
+    //ma dai ly = agencyId
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyId")
     private Integer agencyId;
-
-    @Column(name = "AgencyName", nullable = false)
+    
+    //ten dai ly = agencyName
+    @Column(name = "Agencyname", nullable = false)
     private String agencyName;
 
+    //dia chi = address
     @Column(name = "Address")
     private String address;
 
+    //so dien thoai = phoneNumber
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
+    //trang thai = status
     @Column(name = "Email")
     private String email;
 
+    // trang thai = status
     @Column(name = "Status")
     private String status;
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<NhanVien> nhanViens = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<Xe> xes = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<DonHang> donHangs = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<GiaSiDaiLy> giaSiDaiLys = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<ChinhSachChietKhau> chinhSachChietKhaus = new ArrayList<>();
-
-    // @ManyToMany(mappedBy = "daiLys")
-    // private List<KhuyenMai> khuyenMais = new ArrayList<>();
 
     public Integer getAgencyId() {
         return agencyId;
@@ -98,4 +85,29 @@ public class Agency extends GhiNhanThoiGian {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<NhanVien> nhanViens = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<Xe> xes = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<DonHang> donHangs = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<GiaSiDaiLy> giaSiDaiLys = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "daiLy")
+    // private List<ChinhSachChietKhau> chinhSachChietKhaus = new ArrayList<>();
+
+    // @ManyToMany(mappedBy = "daiLys")
+    // private List<KhuyenMai> khuyenMais = new ArrayList<>();
+
+    
 }
+
