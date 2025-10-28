@@ -59,8 +59,8 @@ public class Payment extends Base{
     private String vnpayCode;
 
     @ManyToOne
-    @JoinColumn(name = "OderId")
-    private Oder oder;
+    @JoinColumn(name = "OrderId")
+    private Order order;
 
 
     public Integer getPaymentId() {
@@ -145,12 +145,12 @@ public class Payment extends Base{
         this.vnpayCode = vnpayCode;
     }
 
-    public Oder getOder() {
-        return oder;
+    public Order getOder() {
+        return order;
     }
 
-    public void setOder(Oder oder) {
-        this.oder = oder;
+    public void setOder(Order oder) {
+        this.order = oder;
     }
 
 }

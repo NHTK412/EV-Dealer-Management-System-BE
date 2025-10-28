@@ -33,8 +33,8 @@ public class Quote extends Base {
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "OderId", unique = true)
-    private Oder oder;
+    @JoinColumn(name = "OrderId", unique = true)
+    private Order order;
 
     public Integer getQuoteId() {
         return quoteId;
@@ -60,12 +60,12 @@ public class Quote extends Base {
         this.status = status;
     }
 
-    public Oder getOder() {
-        return oder;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOder(Oder oder) {
-        this.oder = oder;
+    public void setOder(Order order) {
+        this.order = order;
     }
 
     // @OneToMany(mappedBy = "baoGia")

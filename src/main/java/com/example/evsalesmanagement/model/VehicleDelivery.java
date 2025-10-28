@@ -37,8 +37,8 @@ public class VehicleDelivery extends Base{
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "OderId", unique = true)
-    private Oder oderId;
+    @JoinColumn(name = "OrderId", unique = true)
+    private Order orderId;
 
 
     @ManyToOne
@@ -78,12 +78,12 @@ public class VehicleDelivery extends Base{
         this.status = status;
     }
 
-    public Oder getOderId() {
-        return oderId;
+    public Order getOderId() {
+        return orderId;
     }
 
-    public void setOderId(Oder oderId) {
-        this.oderId = oderId;
+    public void setOderId(Order orderId) {
+        this.orderId = orderId;
 
     }
 

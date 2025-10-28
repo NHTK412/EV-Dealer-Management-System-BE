@@ -36,8 +36,8 @@ public class WarehouseReleaseNote extends Base{
     private Employee employeeId;
 
     @OneToOne
-    @JoinColumn(name = "OderId", unique = true)
-    private Oder oder;
+    @JoinColumn(name = "OrderId", unique = true)
+    private Order order;
 
     public Integer getWarehouseReleaseNoteId() {
         return warehouseReleaseNoteId;
@@ -79,12 +79,12 @@ public class WarehouseReleaseNote extends Base{
         this.employeeId = employeeId;
     }
 
-    public Oder getOder() {
-        return oder;
+    public Order getOder() {
+        return order;
     }
 
-    public void setOder(Oder oder) {
-        this.oder = oder;
+    public void setOder(Order order) {
+        this.order = order;
     }
 
     // @OneToMany(mappedBy = "phieuXuatKho")

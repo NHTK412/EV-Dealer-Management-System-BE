@@ -14,12 +14,12 @@ import jakarta.persistence.Table;
 
 //DonHang = Oder
 @Entity
-@Table(name = "Oder")
-public class Oder extends Base{
+@Table(name = "Order")
+public class Order extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "OderId")
-    private Integer oderId;
+    @Column(name = "OrderId")
+    private Integer orderId;
     // 
     @Column(name = "ContractNumber")
     private String contractNumber;
@@ -48,12 +48,12 @@ public class Oder extends Base{
     @JoinColumn(name = "Agency")
     private Agency agency;
 
-    public Integer getOderId() {
-        return oderId;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOderId(Integer oderId) {
-        this.oderId = oderId;
+    public void setOrderId(Integer oderId) {
+        this.orderId = oderId;
     }
 
     public String getContractNumber() {
