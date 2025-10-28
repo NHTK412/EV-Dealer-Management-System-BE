@@ -30,7 +30,7 @@ public class PromotionDetailDTO {
 
     private List<VehicleTypeDetailDTO> vehicleTypeDetails;
 
-    private List<AgencyDTO> agencys;
+    private List<AgencyDTO> agencies;
 
     public PromotionDetailDTO(Promotion promotion) {
         this.promotionId = promotion.getPromotionId();
@@ -48,7 +48,7 @@ public class PromotionDetailDTO {
     public PromotionDetailDTO(Integer promotionId, String promotionName, String promotionType,
             BigDecimal promotionValue, String criteria, BigDecimal discountAmount, BigDecimal discountPercent,
             LocalDateTime startDate, LocalDateTime endDate, String status, List<VehicleTypeDetailDTO> vehicleTypeDetails,
-            List<AgencyDTO> agencys) {
+            List<AgencyDTO> agencies) {
         this.promotionId = promotionId;
         this.promotionName = promotionName;
         this.promotionType = promotionType;
@@ -60,7 +60,7 @@ public class PromotionDetailDTO {
         this.endDate = endDate;
         this.status = status;
         this.vehicleTypeDetails = vehicleTypeDetails;
-        this.agencys = agencys;
+        this.agencies = agencies;
     }
 
     public PromotionDetailDTO() {
@@ -154,12 +154,12 @@ public class PromotionDetailDTO {
         this.vehicleTypeDetails = vehicleTypeDetails;
     }
 
-    public List<AgencyDTO> getAgencys() {
-        return agencys;
+    public List<AgencyDTO> getAgencies() {
+        return agencies;
     }
 
-    public void setAgencys(List<AgencyDTO> agencys) {
-        this.agencys = agencys;
+    public void setAgencies(List<AgencyDTO> agencies) {
+        this.agencies = agencies;
     }
 
     

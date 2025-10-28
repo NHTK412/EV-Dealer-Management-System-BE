@@ -28,7 +28,7 @@ public class PromotionService {
         return promotionRepository.findAll();
     }
 
-    public Promotion getPromotionId(Integer promotionId) {
+    public Promotion getByIdPromotion(Integer promotionId) {
         Promotion promotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
@@ -81,7 +81,7 @@ public class PromotionService {
         return promotion;
     }
 
-    public Promotion updatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
+    public Promotion UpdatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
         Promotion updatePromotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
