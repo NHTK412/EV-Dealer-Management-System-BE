@@ -1,6 +1,8 @@
 package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //DonHang = Oder
@@ -36,16 +39,19 @@ public class Order extends Base {
     private BigDecimal totalAmount;
 
     @ManyToOne
-    @JoinColumn(name = "Customer")
+    @JoinColumn(name = "CustomerId")
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "Employee")
+    @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "Agency")
+    @JoinColumn(name = "AgencyId")
     private Agency agency;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> OrderDetails = new ArrayList<>();
 
     public Integer getOrderId() {
         return orderId;
@@ -109,6 +115,14 @@ public class Order extends Base {
 
     public void setAgency(Agency agency) {
         this.agency = agency;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
     }
 
     // @OneToOne(mappedBy = "donHang")

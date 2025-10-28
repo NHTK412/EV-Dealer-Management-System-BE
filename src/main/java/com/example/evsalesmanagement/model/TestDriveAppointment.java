@@ -15,20 +15,20 @@ import jakarta.persistence.Table;
 //lichHenlaiThu = TestDriveAppointment
 @Entity
 @Table(name = "TestDriveAppointment")
-public class TestDriveAppointment extends Base{
+public class TestDriveAppointment extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TestDriveAppointmentId")
     private Integer testDriveAppointmentId;
 
-    //ngay hen = DateOfAppointment
+    // ngay hen = DateOfAppointment
     @Column(name = "DateOfAppointment")
     private LocalDate dateOfAppointment;
 
     @Column(name = "Status")
     private String status;
 
-    //gio hen = TimeOfAppointment
+    // gio hen = TimeOfAppointment
     @Column(name = "TimeOfAppointment")
     private LocalTime timeOfAppointment;
 
@@ -88,5 +88,4 @@ public class TestDriveAppointment extends Base{
         this.vehicle = vehicle;
     }
 
-   
 }

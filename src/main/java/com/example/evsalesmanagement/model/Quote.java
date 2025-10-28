@@ -1,7 +1,8 @@
 package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,9 +10,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 
 //BaoGia = Quote
 @Entity
@@ -22,7 +25,7 @@ public class Quote extends Base {
     @Column(name = "QuoteId")
     private Integer quoteId;
 
-    //TongTien = totalAmount
+    // TongTien = totalAmount
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
@@ -32,9 +35,17 @@ public class Quote extends Base {
     @Column(name = "Status")
     private String status;
 
-    @OneToOne
-    @JoinColumn(name = "OrderId", unique = true)
-    private Order order;
+    // @OneToOne
+    // @JoinColumn(name = "OrderId", unique = true)
+    // private Order order;
+
+    // Mới thêm quan hệ để biết ai tạo báo giá này
+    @ManyToOne
+    @JoinColumn(name = "EmployeeId")
+    private Employee employee;
+
+    @OneToMany(mappedBy = "quote")
+    private List<QuotationDetail> quotationDetails = new ArrayList<>();
 
     public Integer getQuoteId() {
         return quoteId;
@@ -60,25 +71,39 @@ public class Quote extends Base {
         this.status = status;
     }
 
-    public Order getOrder() {
-        return order;
-    }
+    // public Order getOrder() {
+    // return order;
+    // }
 
-    public void setOder(Order order) {
-        this.order = order;
-    }
+    // public void setOder(Order order) {
+    // this.order = order;
+    // }
 
     // @OneToMany(mappedBy = "baoGia")
     // private List<ChiTietBaoGia> chiTietBaoGias = new ArrayList<>();
 
-    
-
     // public LocalDateTime getNgayTaoPhieu() {
-    //     return ngayTaoPhieu;
+    // return ngayTaoPhieu;
     // }
 
     // public void setNgayTaoPhieu(LocalDateTime ngayTaoPhieu) {
-    //     this.ngayTaoPhieu = ngayTaoPhieu;
+    // this.ngayTaoPhieu = ngayTaoPhieu;
     // }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public List<QuotationDetail> getQuotationDetails() {
+        return quotationDetails;
+    }
+
+    public void setQuotationDetails(List<QuotationDetail> quotationDetails) {
+        this.quotationDetails = quotationDetails;
+    }
 
 }

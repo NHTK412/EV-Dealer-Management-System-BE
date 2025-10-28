@@ -13,11 +13,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-
 //DanhMucXe = VehicleCategory
 @Entity
 @Table(name = "VehicleCategory")
-public class VehicleCategory extends Base{
+public class VehicleCategory extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,6 @@ public class VehicleCategory extends Base{
 
     @Column(name = "VehicleCategoryName", nullable = false)
     private String vehicleCategoryName;
-
 
     @Column(name = "Description")
     private String description;
@@ -62,4 +60,3 @@ public class VehicleCategory extends Base{
     }
 
 }
-

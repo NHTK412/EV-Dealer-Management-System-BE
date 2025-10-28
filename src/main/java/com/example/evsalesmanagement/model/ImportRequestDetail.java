@@ -23,7 +23,7 @@ public class ImportRequestDetail extends Base {
     private Integer vehicleTypeDetailId;
 
     @Column(name = "Quantity")
-    private Integer quantity;
+    private Integer quantity; // quantity = Số lượng
 
     @ManyToOne
     @JoinColumn(name = "ImportRequestId", insertable = false, updatable = false)

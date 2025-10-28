@@ -1,5 +1,8 @@
 package com.example.evsalesmanagement.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //YeuCauNhapHang = ImportRequest
@@ -27,6 +31,9 @@ public class ImportRequest extends Base {
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
+
+    @OneToMany(mappedBy = "importRequest")
+    private List<ImportRequestDetail> importRequestDetails = new ArrayList<>();
 
     public Integer getImportRequestId() {
         return importRequestId;
@@ -60,9 +67,12 @@ public class ImportRequest extends Base {
         this.employee = employee;
     }
 
-    // @OneToMany(mappedBy = "yeuCauNhapHang")
-    // private List<ChiTietYeuCau> chiTietYeuCaus = new ArrayList<>();
+    public List<ImportRequestDetail> getImportRequestDetails() {
+        return importRequestDetails;
+    }
 
-    
-    
+    public void setImportRequestDetails(List<ImportRequestDetail> importRequestDetails) {
+        this.importRequestDetails = importRequestDetails;
+    }
+
 }

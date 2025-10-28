@@ -2,6 +2,7 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -16,7 +19,7 @@ import jakarta.persistence.Table;
 //PhieuXuatKho = WarehouseReleaseNote
 @Entity
 @Table(name = "WarehouseReleaseNote")
-public class WarehouseReleaseNote extends Base{
+public class WarehouseReleaseNote extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "WarehouseReleaseNoteId")
@@ -90,6 +93,8 @@ public class WarehouseReleaseNote extends Base{
     // @OneToMany(mappedBy = "phieuXuatKho")
     // private List<ChiTietPhieuXuat> chiTietPhieuXuats = new ArrayList<>();
 
-    
-    
+    @ManyToMany
+    @JoinTable(name = "WarehouseReleaseNoteDetail", joinColumns = @JoinColumn(name = "WarehouseReleaseNoteId"), inverseJoinColumns = @JoinColumn(name = "VehicleId"))
+    private List<Vehicle> vehicles;
+
 }

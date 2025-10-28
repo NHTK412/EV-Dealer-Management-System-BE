@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
 //XuLyPhanHoi = FeedbackHandling
 @Entity
 @Table(name = "FeedbackHandling")
@@ -26,7 +25,7 @@ public class FeedbackHandling extends Base {
     private Integer feedbackHandlingId;
 
     @Column(name = "FeedbackHandlingContent")
-    private String feedbackHandlingContent; ;
+    private String feedbackHandlingContent;;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "FeedbackHandlingMethod", nullable = false)
@@ -76,7 +75,7 @@ public class FeedbackHandling extends Base {
     }
 
     public void setStatus(FeedbackHandlingStatus status) {
-        status = status;
+        this.status = status;
     }
 
     public Feedback getFeedback() {
@@ -95,8 +94,6 @@ public class FeedbackHandling extends Base {
         this.employee = employee;
     }
 
-    
-
     // public LocalDateTime getThoiGian() {
     // return thoiGian;
     // }
@@ -104,8 +101,5 @@ public class FeedbackHandling extends Base {
     // public void setThoiGian(LocalDateTime thoiGian) {
     // this.thoiGian = thoiGian;
     // }
-
- 
-   
 
 }

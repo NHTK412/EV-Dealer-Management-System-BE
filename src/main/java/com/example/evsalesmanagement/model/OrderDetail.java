@@ -11,16 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//ChiTietBaoGia = QuotationDetail
 @Entity
-@Table(name = "QuotationDetail")
-public class QuotationDetail extends Base {
+@Table(name = "OrderDetail")
+public class OrderDetail extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "QuotationDetailId")
-    private Integer quotationDetailId;
-    // so luong = quantity
+    @Column(name = "OrderDetailId")
+    private Integer orderDetailId;
 
     @Column(name = "Quantity")
     private Integer quantity;
@@ -68,21 +66,21 @@ public class QuotationDetail extends Base {
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
-    // quote = bao gia
+    // order = don hang
     @ManyToOne
-    @JoinColumn(name = "QuoteId")
-    private Quote quote;
+    @JoinColumn(name = "OrderId")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "VehicleTypeDetailId")
     private VehicleTypeDetail vehicleTypeDetail;
 
-    public Integer getQuotationDetailId() {
-        return quotationDetailId;
+    public Integer getOrderDetailId() {
+        return orderDetailId;
     }
 
-    public void setQuotationDetailId(Integer quotationDetailId) {
-        this.quotationDetailId = quotationDetailId;
+    public void setOrderDetailId(Integer orderDetailId) {
+        this.orderDetailId = orderDetailId;
     }
 
     public Integer getQuantity() {
@@ -123,7 +121,6 @@ public class QuotationDetail extends Base {
 
     public void setRegistrartionFee(BigDecimal registrartionFee) {
         this.registrartionFee = registrartionFee;
-
     }
 
     public BigDecimal getCompulsoryInsurance() {
@@ -148,7 +145,6 @@ public class QuotationDetail extends Base {
 
     public void setRoadMaintenanceMees(BigDecimal roadMaintenanceMees) {
         this.roadMaintenanceMees = roadMaintenanceMees;
-
     }
 
     public BigDecimal getVehicleRegistrationServiceFee() {
@@ -183,12 +179,12 @@ public class QuotationDetail extends Base {
         this.totalAmount = totalAmount;
     }
 
-    public Quote getQuote() {
-        return quote;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setQuote(Quote quote) {
-        this.quote = quote;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public VehicleTypeDetail getVehicleTypeDetail() {

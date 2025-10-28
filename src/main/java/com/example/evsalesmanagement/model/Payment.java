@@ -11,43 +11,41 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 //ThanhToan = Payment
 @Entity
 @Table(name = "Payment")
-public class Payment extends Base{
+public class Payment extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PaymentId")
     private Integer paymentId;
 
-    //PhuongThucThanhToan = PaymentMethod
+    // PhuongThucThanhToan = PaymentMethod
     @Column(name = "PaymentMethod")
     private String paymentMethod;
 
     @Column(name = "PaymentForm")
     private String paymentForm;
 
-    //SoTien = Amount
+    // SoTien = Amount
     @Column(name = "Amount")
     private BigDecimal amount;
 
-    //chukyso = CycleNumber
+    // chukyso = CycleNumber
     @Column(name = "NumberCycle")
     private Integer numberCycle;
 
-
-    //NgayDenHan = DueDate
+    // NgayDenHan = DueDate
     @Column(name = "DueDate")
     private LocalDateTime dueDate;
 
-
-    //NgayThanhToan = PaymentDate
+    // NgayThanhToan = PaymentDate
     @Column(name = "PaymentDate")
     private LocalDateTime paymentDate;
 
-
-    //TienPhat = PenaltyAmount
+    // TienPhat = PenaltyAmount
 
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;
@@ -61,7 +59,6 @@ public class Payment extends Base{
     @ManyToOne
     @JoinColumn(name = "OrderId")
     private Order order;
-
 
     public Integer getPaymentId() {
         return paymentId;
@@ -154,4 +151,3 @@ public class Payment extends Base{
     }
 
 }
-

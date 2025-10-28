@@ -10,33 +10,32 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Agency")
 public class Agency extends Base {
-    //ma dai ly = agencyId
+    // ma dai ly = agencyId
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyId")
     private Integer agencyId;
-    
-    //ten dai ly = agencyName
+
+    // ten dai ly = agencyName
     @Column(name = "Agencyname", nullable = false)
     private String agencyName;
 
-    //dia chi = address
+    // dia chi = address
     @Column(name = "Address")
     private String address;
 
-    //so dien thoai = phoneNumber
+    // so dien thoai = phoneNumber
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
-    //trang thai = status
+    // trang thai = status
     @Column(name = "Email")
     private String email;
 
     // trang thai = status
     @Column(name = "Status")
     private String status;
-
 
     public Integer getAgencyId() {
         return agencyId;
@@ -86,7 +85,6 @@ public class Agency extends Base {
         this.status = status;
     }
 
-
     // @OneToMany(mappedBy = "daiLy")
     // private List<NhanVien> nhanViens = new ArrayList<>();
 
@@ -108,6 +106,4 @@ public class Agency extends Base {
     // @ManyToMany(mappedBy = "daiLys")
     // private List<KhuyenMai> khuyenMais = new ArrayList<>();
 
-    
 }
-

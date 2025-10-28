@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "VehicleTypeDetail")
-public class VehicleTypeDetail extends Base{
+public class VehicleTypeDetail extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleTypeDetailId")
@@ -22,7 +22,7 @@ public class VehicleTypeDetail extends Base{
     @Column(name = "VehicleImage")
     private String vehicleImage;
 
-    //cau hinh = configuration
+    // cau hinh = configuration
     @Column(name = "Configuration")
     private String configuration;
 
@@ -32,7 +32,7 @@ public class VehicleTypeDetail extends Base{
     @Column(name = "Version")
     private String version;
 
-    //tinh nang = features
+    // tinh nang = features
     @Column(name = "Features")
     private String features;
 
@@ -42,7 +42,6 @@ public class VehicleTypeDetail extends Base{
     @ManyToOne
     @JoinColumn(name = "VehicleTypeId")
     private VehicleType vehicleType;
-
 
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
@@ -122,8 +121,5 @@ public class VehicleTypeDetail extends Base{
 
     // @OneToMany(mappedBy = "chiTietLoaiXe")
     // private List<ChiTietYeuCau> chiTietYeuCaus = new ArrayList<>();
-
-    
-
 
 }

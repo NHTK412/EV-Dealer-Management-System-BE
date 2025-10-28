@@ -15,25 +15,25 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "SaleDiscountLevel")
 public class SalesDiscountLevel extends Base {
-    //ma bac chiet khau doanh so = salesDiscountLevelId
+    // ma bac chiet khau doanh so = salesDiscountLevelId
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SalesDiscountLevelId")
     private Integer salesDiscountLevelId;
 
-    //doanh so tu = salesFrom
+    // doanh so tu = salesFrom
     @Column(name = "SalesFrom")
     private Integer salesFrom;
 
-    //doanh so den = salesTo
+    // doanh so den = salesTo
     @Column(name = "SalesTo")
     private Integer salesTo;
 
-    //phan tram chiet khau = discountPercentage
+    // phan tram chiet khau = discountPercentage
     @Column(name = "DiscountPercentage")
     private BigDecimal discountPercentage;
 
-    //ma chinh sach = policyId
+    // ma chinh sach = policyId
     @ManyToOne
     @JoinColumn(name = "PolicyId")
     private Policy policy;
@@ -78,5 +78,4 @@ public class SalesDiscountLevel extends Base {
         this.policy = policy;
     }
 
-    
 }

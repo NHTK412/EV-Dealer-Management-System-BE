@@ -27,11 +27,11 @@ public class Promotion extends Base {
 
     @Column(name = "PromotionName", nullable = false)
     private String promotionName;
-    
+
     @Column(name = "PromotionType")
     private String promotionType;
-    
-    //promotion value = gia tri khuyen mai
+
+    // promotion value = gia tri khuyen mai
     @Column(name = "PromotionValue")
     private BigDecimal promotionValue;
 
@@ -57,23 +57,12 @@ public class Promotion extends Base {
     @Column(name = "Status")
     private String status;
 
-
-
-
     @ManyToMany
-    @JoinTable(
-        name = "Promotion_VehicleDetail",
-        joinColumns = @JoinColumn(name = "PromotionId"),
-        inverseJoinColumns = @JoinColumn(name = "VehicleDetailId")
-    )
+    @JoinTable(name = "Promotion_VehicleDetail", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "VehicleDetailId"))
     private List<VehicleTypeDetail> vehicleDetails = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(
-        name = "Promotion_Agency",
-        joinColumns = @JoinColumn(name = "PromotionId"),
-        inverseJoinColumns = @JoinColumn(name = "AgencyId")
-    )
+    @JoinTable(name = "Promotion_Agency", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "AgencyId"))
     private List<Agency> agencies = new ArrayList<>();
 
     public Integer getPromotionId() {
@@ -188,8 +177,4 @@ public class Promotion extends Base {
                 ", agencies=" + agencies + "]";
     }
 
-
 }
-
-    
-

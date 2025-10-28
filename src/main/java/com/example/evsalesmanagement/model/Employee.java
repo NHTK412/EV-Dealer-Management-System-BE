@@ -11,11 +11,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 //NhanVien = Employee
 @Entity
 @Table(name = "Employee")
-public class Employee extends Base{
+public class Employee extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +31,7 @@ public class Employee extends Base{
     private LocalDate birthDate;
 
     @Column(name = "PhoneNumber")
-    private String  phoneNumber;
-
+    private String phoneNumber;
 
     @Column(name = "Email")
     private String email;
@@ -41,15 +39,14 @@ public class Employee extends Base{
     @Column(name = "Address")
     private String address;
 
-    //chuc vu = position
+    // chuc vu = position
 
     @Column(name = "Position")
     private String position;
 
     @ManyToOne
-    @JoinColumn(name = "Agency")
+    @JoinColumn(name = "AgencyId")
     private Agency agency;
-
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -145,6 +142,4 @@ public class Employee extends Base{
     // @OneToMany(mappedBy = "nhanVien")
     // private List<YeuCauNhapHang> yeuCauNhapHangs = new ArrayList<>();
 
-   
 }
-

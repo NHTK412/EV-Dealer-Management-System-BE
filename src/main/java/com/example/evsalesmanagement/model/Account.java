@@ -39,7 +39,6 @@ public class Account extends Base {
     @Column(name = "LastLoginTime")
     private LocalDateTime lastLoginTime;
 
-
     @OneToOne
     @JoinColumn(name = "EmployeeId", unique = true)
     private Employee employee;
@@ -101,9 +100,6 @@ public class Account extends Base {
         this.employee = employee;
     }
 
-
-    
-
     // public LocalDateTime getNgayTao() {
     // return ngayTao;
     // }
@@ -111,6 +107,5 @@ public class Account extends Base {
     // public void setNgayTao(LocalDateTime ngayTao) {
     // this.ngayTao = ngayTao;
     // }
-
 
 }

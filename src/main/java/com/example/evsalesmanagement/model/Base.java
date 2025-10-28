@@ -15,7 +15,7 @@ import jakarta.persistence.MappedSuperclass;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Base {
 
-    // NgayTao = CreatedAt 
+    // NgayTao = CreatedAt
     @CreatedDate
     @Column(name = "CreateAt", nullable = false, updatable = false)
     private LocalDateTime createAt;
@@ -41,5 +41,4 @@ public abstract class Base {
         this.updateAt = updateAt;
     }
 
-    
 }

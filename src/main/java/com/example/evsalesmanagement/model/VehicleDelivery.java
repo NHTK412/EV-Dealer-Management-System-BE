@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "VehicleDelivery")
-public class VehicleDelivery extends Base{
+public class VehicleDelivery extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,13 @@ public class VehicleDelivery extends Base{
     // @Column(name = "NgayTaoDon")
     // private LocalDateTime ngayTaoDon;
 
-    //ngayDuKienGiaoXe = ExpectedDeliveryDate
+    // ngayDuKienGiaoXe = ExpectedDeliveryDate
     @Column(name = "ExpectedDeliveryDate")
     private LocalDateTime ExpectedDeliveryDate;
 
-    //ngayGiaoXe = DeliveryDate
+    // ngayGiaoXe = DeliveryDate
     @Column(name = "DeliveryDate")
     private LocalDateTime deliveryDate;
-
 
     @Column(name = "Status")
     private String status;
@@ -39,7 +38,6 @@ public class VehicleDelivery extends Base{
     @OneToOne
     @JoinColumn(name = "OrderId", unique = true)
     private Order orderId;
-
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
@@ -95,15 +93,12 @@ public class VehicleDelivery extends Base{
         this.employee = employee;
     }
 
-    
-
     // public LocalDateTime getNgayTaoDon() {
-    //     return ngayTaoDon;
+    // return ngayTaoDon;
     // }
 
     // public void setNgayTaoDon(LocalDateTime ngayTaoDon) {
-    //     this.ngayTaoDon = ngayTaoDon;
+    // this.ngayTaoDon = ngayTaoDon;
     // }
 
 }
-

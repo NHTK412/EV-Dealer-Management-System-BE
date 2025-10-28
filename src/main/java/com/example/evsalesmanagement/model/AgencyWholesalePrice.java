@@ -11,29 +11,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 //GiaSiDaiLy = AgencyWholesalePrice
 @Entity
 @Table(name = "AgencyWholesalePrice")
-public class AgencyWholesalePrice extends Base{
+public class AgencyWholesalePrice extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyWholesalePriceId")
     private Integer agencyWholesalePriceId;
 
-    //GiaSi = WholesalePrice
+    // GiaSi = WholesalePrice
     @Column(name = "WholesalePrice")
     private BigDecimal wholesalePrice;
 
-    //SoLuongToiThieu = MinimumQuantity
+    // SoLuongToiThieu = MinimumQuantity
     @Column(name = "MinimumQuantity")
     private Integer minimumQuantity;
 
-    //ngaybatdau = StartDate
+    // ngaybatdau = StartDate
     @Column(name = "StartDate")
     private LocalDateTime startDate;
 
-    //ngayketthuc = EndDate
+    // ngayketthuc = EndDate
 
     @Column(name = "EndDate")
     private LocalDateTime endDate;

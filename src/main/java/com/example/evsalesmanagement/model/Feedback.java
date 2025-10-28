@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.model;
 
-
 import com.example.evsalesmanagement.enums.FeedbackStatus;
 
 import jakarta.persistence.Column;
@@ -14,21 +13,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 @Entity
 
-//PhanHoi = Feedback
+// PhanHoi = Feedback
 @Table(name = "Feedback")
-public class Feedback extends Base{
+public class Feedback extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FeedbackId")
     private Integer feedbackId;
 
-    //TieuDePhanHoi = feedbackTitle
+    // TieuDePhanHoi = feedbackTitle
     @Column(name = "FeedbackTitle")
     private String feedbackTitle;
 
-    //NoiDungPhanHoi = feedbackContent
+    // NoiDungPhanHoi = feedbackContent
     @Column(name = "FeedbackContent")
     private String feedbackContent;
 
@@ -36,7 +36,7 @@ public class Feedback extends Base{
     // private LocalDateTime thoiGian;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status", nullable=false)
+    @Column(name = "Status", nullable = false)
     private FeedbackStatus feedbackStatus;
 
     @ManyToOne
@@ -65,23 +65,19 @@ public class Feedback extends Base{
     public String getFeedbackContent() {
         return feedbackContent;
     }
-    
+
     public void setFeedbackContent(String feedbackContent) {
         this.feedbackContent = feedbackContent;
     }
 
-
-
     // public LocalDateTime getThoiGian() {
-    //     return thoiGian;
+    // return thoiGian;
     // }
 
     // public void setThoiGian(LocalDateTime thoiGian) {
-    //     this.thoiGian = thoiGian;
+    // this.thoiGian = thoiGian;
     // }
 
-   
-    
     public FeedbackStatus getFeedbackStatus() {
         return feedbackStatus;
     }
@@ -99,7 +95,7 @@ public class Feedback extends Base{
     }
 
     public FeedbackHandling getFeedbackHandling() {
-    return feedbackHandling;
+        return feedbackHandling;
     }
 
     public void setFeedbackHandling(FeedbackHandling feedbackHandling) {

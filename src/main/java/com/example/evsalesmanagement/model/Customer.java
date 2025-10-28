@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 //KhachHang = Customer
 @Entity
 @Table(name = "Customer")
-public class Customer extends Base{
+public class Customer extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CustomerId")
@@ -115,10 +115,10 @@ public class Customer extends Base{
     // private List<LichHenLaiThu> lichHenLaiThus = new ArrayList<>();
 
     // public LocalDateTime getNgayTao() {
-    //     return ngayTao;
+    // return ngayTao;
     // }
 
     // public void setNgayTao(LocalDateTime ngayTao) {
-    //     this.ngayTao = ngayTao;
+    // this.ngayTao = ngayTao;
     // }
 }
