@@ -24,23 +24,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/yeuCauNhapHang")
-public class YeuCauNhapHangController {
+@RequestMapping("/importRequest")
+public class ImportRequestController {
 
     @Autowired
-    ImportRequestService yeuCauNhapHangService;
+    ImportRequestService importRequestService;
 
     // Chưa tạo logic gửi thông báo đến đại lý
     @PostMapping()
-    public ResponseEntity<ImportRequestDTO> taoYeuCauNhapHang(
-            @RequestBody ImportRequestRequestDTO yeuCauNhapHangRequestDTO) {
-        return ResponseEntity.ok(yeuCauNhapHangService.taoYeuCauNhapHang(yeuCauNhapHangRequestDTO));
+    public ResponseEntity<ImportRequestDTO> createImportRequest(
+            @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
+        return ResponseEntity.ok(importRequestService.createImportRequest(importRequestRequestDTO));
     }
 
-    @DeleteMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<ImportRequestDTO> xoaYeuCauNhapHang(@PathVariable String maYeuCauNhapHang) {
+    @DeleteMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestDTO> deleteImportRequest(@PathVariable String importRequestId) {
 
-        return ResponseEntity.ok(yeuCauNhapHangService.xoaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang)));
+        return ResponseEntity.ok(importRequestService.deleteImportRequest(Integer.parseInt(importRequestId)));
     }
 
     // @PutMapping("/{maYeuCauNhapHang}")
@@ -60,26 +60,26 @@ public class YeuCauNhapHangController {
     // yeuCauNhapHangRequestDTO));
     // }
 
-    @PutMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<ImportRequestDTO> chinhSuaYeuCauNhapHang(
-            @PathVariable String maYeuCauNhapHang,
-            @RequestBody ImportRequestRequestDTO yeuCauNhapHangRequestDTO) {
-        return ResponseEntity.ok(yeuCauNhapHangService.chinhSuaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang),
-                yeuCauNhapHangRequestDTO));
+    @PutMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestDTO> updateImportRequest(
+            @PathVariable String importRequest,
+            @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
+        return ResponseEntity.ok(importRequestService.updateImportRequest(Integer.parseInt(importRequest),
+                importRequestRequestDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<ImportRequestDTO>> layTatCaYeuCauNhapHang(@RequestParam Integer page,
+    public ResponseEntity<List<ImportRequestDTO>> getAllImportRequests(@RequestParam Integer page,
             @RequestParam @Positive Integer size,
-            @RequestParam(required = false) Integer maNhanVien) {
+            @RequestParam(required = false) Integer employeeId) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(yeuCauNhapHangService.layTatCaYeuCauNhapHang(pageable, maNhanVien));
+        return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,employeeId));
     }
 
 
     @GetMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<ImportRequestDTO> layChiTietYeuCauNhapHang(@PathVariable Integer maYeuCauNhapHang) {
-        return ResponseEntity.ok(yeuCauNhapHangService.layChiTietYeuCauNhapHang(maYeuCauNhapHang));
+    public ResponseEntity<ImportRequestDTO>getImportRequestDetail(@PathVariable Integer importRequestId) {
+        return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
     }
 
     // @GetMapping("/nhanVien/{maNhanVien}")

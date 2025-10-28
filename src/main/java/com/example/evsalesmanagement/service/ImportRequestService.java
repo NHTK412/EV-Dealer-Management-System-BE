@@ -114,7 +114,7 @@ public class ImportRequestService {
     }
 
     @Transactional
-    public ImportRequestDTO DeleteImportRequest(Integer importRequestId) {
+    public ImportRequestDTO deleteImportRequest(Integer importRequestId) {
 
         ImportRequestDTO importRequestDTO = new ImportRequestDTO(importRequestRepository.findById(importRequestId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên")));
@@ -133,7 +133,7 @@ public class ImportRequestService {
     }
 
     @Transactional
-    public ImportRequestDTO UpdateImportRequest(Integer importRequestId,
+    public ImportRequestDTO updateImportRequest(Integer importRequestId,
             ImportRequestRequestDTO importRequestRequestDTO) {
         ImportRequest importRequest = importRequestRepository.findById(importRequestId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
@@ -172,7 +172,7 @@ public class ImportRequestService {
     }
 
     @Transactional
-    public List<ImportRequestDTO> GetALlImportRequest(Pageable pageable, Integer employeeId) {
+    public List<ImportRequestDTO> getAllImportRequests(Pageable pageable, Integer employeeId) {
 
         Page<ImportRequest> importRequests = employeeId == null ? importRequestRepository.findAll(pageable)
                 : importRequestRepository.findByEmployee_EmployeeId(employeeId, pageable);
