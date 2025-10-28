@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/importRequest")
+@RequestMapping("/import-request")
 public class ImportRequestController {
 
     @Autowired

@@ -10,7 +10,7 @@ import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
-@RequestMapping("/testDriveAppointment")
+@RequestMapping("/test-drive-appointment")
 @CrossOrigin(origins = "*")
 public class TestDriveAppointmentController {
 
