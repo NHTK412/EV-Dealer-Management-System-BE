@@ -41,13 +41,11 @@ public class FeedbackHandling extends Base {
 
     @OneToOne
     @JoinColumn(name = "FeedbackId", unique = true)
-    private Feedback Feedback;
+    private Feedback feedback;
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
-
-    
 
     public Integer getFeedbackHandlingId() {
         return feedbackHandlingId;
@@ -65,6 +63,14 @@ public class FeedbackHandling extends Base {
         this.feedbackHandlingContent = feedbackHandlingContent;
     }
 
+    public FeedbackHandlingMethod getFeedbackHandlingMethod() {
+        return feedbackHandlingMethod;
+    }
+
+    public void setFeedbackHandlingMethod(FeedbackHandlingMethod feedbackHandlingMethod) {
+        this.feedbackHandlingMethod = feedbackHandlingMethod;
+    }
+
     public FeedbackHandlingStatus getStatus() {
         return Status;
     }
@@ -74,11 +80,11 @@ public class FeedbackHandling extends Base {
     }
 
     public Feedback getFeedback() {
-        return Feedback;
+        return feedback;
     }
 
     public void setFeedback(Feedback feedback) {
-        Feedback = feedback;
+        this.feedback = feedback;
     }
 
     public Employee getEmployee() {
@@ -89,13 +95,7 @@ public class FeedbackHandling extends Base {
         this.employee = employee;
     }
 
-    public FeedbackHandlingMethod getFeedbackHandlingMethod() {
-        return feedbackHandlingMethod;
-    }
-
-    public void setFeedbackHandlingMethod(FeedbackHandlingMethod feedbackHandlingMethod) {
-        this.feedbackHandlingMethod = feedbackHandlingMethod;
-    }
+    
 
     // public LocalDateTime getThoiGian() {
     // return thoiGian;
