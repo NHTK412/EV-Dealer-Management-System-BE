@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import com.example.evsalesmanagement.service.LichHenLaiThuService;
+import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
@@ -15,7 +15,7 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 public class LichHenLaiThuController {
 
     @Autowired
-    private LichHenLaiThuService lichHenService;
+    private TestDriveAppointmentService lichHenService;
 
     // Lấy tất cả lịch hẹn lái thử với thông tin khách hàng
     @GetMapping

@@ -7,17 +7,17 @@ import java.util.List;
 import com.example.evsalesmanagement.repository.TestDriveAppointmentRepository;
 
 @Service
-public class LichHenLaiThuService {
+public class TestDriveAppointmentService {
 
     @Autowired
-    private TestDriveAppointmentRepository lichHenRepository;
+    private TestDriveAppointmentRepository testDriveAppointmentRepository;
 
     /**
      * Lấy tất cả lịch hẹn lái thử với thông tin khách hàng
      * @return Danh sách tất cả lịch hẹn
      */
-    public List<Object[]> layTatCaLichHen() {
-        return lichHenRepository.layTatCaLichHen();
+    public List<Object[]>getAllTestDriveAppointment() {
+        return testDriveAppointmentRepository.getAllTestDriveAppointment();
     }
 
     /**
@@ -25,7 +25,7 @@ public class LichHenLaiThuService {
      * @return Danh sách lịch hẹn chờ xác nhận
      */
     public List<Object[]> layLichHenChoXacNhan() {
-        return lichHenRepository.layLichHenChoXacNhan();
+        return testDriveAppointmentRepository.layLichHenChoXacNhan();
     }
 
     /**

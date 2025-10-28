@@ -20,7 +20,7 @@ public interface TestDriveAppointmentRepository extends JpaRepository<TestDriveA
                    "JOIN khach_hang kh ON kh.ma_khach_hang = lh.ma_khach_hang " +
                    "ORDER BY lh.ngay_hen DESC",
            nativeQuery = true)
-    List<Object[]> layTatCaLichHen();
+    List<Object[]> getAllTestDriveAppointment();
     
     // Lấy danh sách lịch hẹn theo trạng thái chờ xác nhận
     @Query(value = "SELECT " +
@@ -34,7 +34,7 @@ public interface TestDriveAppointmentRepository extends JpaRepository<TestDriveA
                    "WHERE lh.trang_thai = 'Chờ xác nhận' " +
                    "ORDER BY lh.ngay_hen DESC",
            nativeQuery = true)
-    List<Object[]> layLichHenChoXacNhan();
+    List<Object[]> getTestDriveAppointmentPendingConfirmation();
     
     // Lấy danh sách lịch hẹn theo trạng thái đã xác nhận
     @Query(value = "SELECT " +
@@ -48,5 +48,5 @@ public interface TestDriveAppointmentRepository extends JpaRepository<TestDriveA
                    "WHERE lh.trang_thai = 'Đã xác nhận' " +
                    "ORDER BY lh.ngay_hen DESC",
            nativeQuery = true)
-    List<Object[]> layLichHenDaXacNhan();
+    List<Object[]> getTestDriveAppointmentConfirmed();
 }
