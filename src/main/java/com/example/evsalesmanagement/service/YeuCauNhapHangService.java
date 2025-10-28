@@ -8,20 +8,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.ChiTietYeuCauDTO;
-import com.example.evsalesmanagement.dto.ChiTietYeuCauRequestDTO;
-import com.example.evsalesmanagement.dto.YeuCauNhapHangDTO;
-import com.example.evsalesmanagement.dto.YeuCauNhapHangRequestDTO;
+import com.example.evsalesmanagement.dto.ImportRequestDetailDTO;
+import com.example.evsalesmanagement.dto.ImportRequestDetailRequestDTO;
+import com.example.evsalesmanagement.dto.ImportRequestDTO;
+import com.example.evsalesmanagement.dto.ImportRequestRequestDTO;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-import com.example.evsalesmanagement.model.ChiTietLoaiXe;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 import com.example.evsalesmanagement.model.ImportRequestDetail;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.ImportRequest;
-import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
+import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.ImportRequestDetailRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
-import com.example.evsalesmanagement.repository.YeuCauNhapHangReponsitory;
+import com.example.evsalesmanagement.repository.ImportRequestRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -29,51 +29,51 @@ import jakarta.transaction.Transactional;
 public class YeuCauNhapHangService {
 
     @Autowired
-    YeuCauNhapHangReponsitory yeuCauNhapHangReponsitory;
+    ImportRequestRepository importRequestRepository;
 
     @Autowired
-    ImportRequestDetailRepository chiTietYeuCauRepository;
+    ImportRequestDetailRepository importRequestDetailRepository;
 
     @Autowired
-    EmployeeRepository nhanVienRepository;
+    EmployeeRepository employeeRepository;
 
     @Autowired
-    ChiTietLoaiXeRepository chiTietLoaiXeRepository;
+    VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
     @Transactional
-    public YeuCauNhapHangDTO taoYeuCauNhapHang(YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
+    public ImportRequestDTO taoYeuCauNhapHang(ImportRequestRequestDTO importRequestRequestDTO) {
 
-        ImportRequest yeuCauNhapHang = new ImportRequest();
-        yeuCauNhapHang.setTrangThai("Đã Yêu Cầu");
-        yeuCauNhapHang.setGhiChu(yeuCauNhapHangRequestDTO.getGhiChu());
+        ImportRequest importRequest = new ImportRequest();
+        importRequest.setStatus("Đã Yêu Cầu");
+        importRequest.setNote(importRequestRequestDTO.getNote());
 
-        Employee nhanVien = nhanVienRepository.findById(yeuCauNhapHangRequestDTO.getMaNhanVien())
+        Employee employee = employeeRepository.findById(importRequestRequestDTO.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
 
-        yeuCauNhapHang.setNhanVien(nhanVien);
-        yeuCauNhapHang = yeuCauNhapHangReponsitory.save(yeuCauNhapHang);
+        importRequest.setEmployee(employee);
+        importRequest = importRequest.save(importRequest);
 
-        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHang);
+        ImportRequestDTO importRequestDTO = new ImportRequestDTO(importRequest);
 
-        List<ImportRequestDetail> chiTietYeuCau = new ArrayList<>();
+        List<ImportRequestDetail> importRequestDetails = new ArrayList<>();
 
-        for (ChiTietYeuCauRequestDTO chiTietYeuCauDTO : yeuCauNhapHangRequestDTO.getChiTietYeuCaus()) {
-            ChiTietLoaiXe chiTietLoaiXe = chiTietLoaiXeRepository.findById(chiTietYeuCauDTO.getMaChiTietLoaiXe())
+        for (ImportRequestDetailRequestDTO importRequestDetailRequestDTO: importRequestRequestDTO.getImportRequestDetails()) {
+            VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository.findById(importRequestDetailRequestDTO.getVehicleTypeDetailId())
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết loại xe"));
 
-            ImportRequestDetail ctyc = new ImportRequestDetail();
+            ImportRequestDetail importRequestDetail = new ImportRequestDetail();
 
-            ctyc.setMaChiTietLoaiXe(chiTietLoaiXe.getMaChiTietLoaiXe());
-            ctyc.setChiTietLoaiXe(chiTietLoaiXe);
+            importRequestDetail.setMaChiTietLoaiXe(vehicleTypeDetail.getMaChiTietLoaiXe());
+            importRequestDetail.setChiTietLoaiXe(vehicleTypeDetail);
 
-            ctyc.setSoLuong(chiTietYeuCauDTO.getSoLuong());
-            ctyc.setMaYeuCau(yeuCauNhapHang.getMaYeuCau());
-            ctyc.setYeuCauNhapHang(yeuCauNhapHang);
+            importRequestDetail.setSoLuong(importRequestDetailRequestDTO.getSoLuong());
+            importRequestDetail.setMaYeuCau(importRequest.getMaYeuCau());
+            importRequestDetail.setYeuCauNhapHang(importRequest);
 
-            chiTietYeuCauRepository.save(ctyc);
-            chiTietYeuCau.add(ctyc);
+            importRequestDetailRepository.save(importRequestDetail);
+            importRequestDetails.add(importRequestDetail);
 
-            yeuCauNhapHangDTO.getChiTietYeuCaus().add(new ChiTietYeuCauDTO(ctyc));
+            yeuCauNhapHangDTO.getChiTietYeuCaus().add(new ImportRequestDetailDTO(ctyc));
 
         }
 
@@ -81,7 +81,7 @@ public class YeuCauNhapHangService {
 
         // YeuCauNhapHang yeuCauNhapHang = new YeuCauNhapHang();
         // yeuCauNhapHang.setTrangThai("Đã Yêu Cầu");
-        // yeuCauNhapHang.setGhiChu(yeuCauNhapHangRequestDTO.getGhiChu());
+        // yeuCauNhapHang.setGhiChu(importRequestRequestDTO.getGhiChu());
 
         // NhanVien nhanVien =
         // nhanVienRepository.findById(yeuCauNhapHangRequestDTO.getMaNhanVien())
@@ -114,14 +114,14 @@ public class YeuCauNhapHangService {
     }
 
     @Transactional
-    public YeuCauNhapHangDTO xoaYeuCauNhapHang(Integer maYeuCauNhapHang) {
+    public ImportRequestDTO xoaYeuCauNhapHang(Integer maYeuCauNhapHang) {
 
-        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
+        ImportRequestDTO yeuCauNhapHangDTO = new ImportRequestDTO(yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên")));
 
         yeuCauNhapHangDTO.setChiTietYeuCaus(
                 chiTietYeuCauRepository.findByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang).stream().map((ctyc) -> {
-                    return new ChiTietYeuCauDTO(ctyc);
+                    return new ImportRequestDetailDTO(ctyc);
                 }).toList());
 
         chiTietYeuCauRepository.deleteByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang);
@@ -133,8 +133,8 @@ public class YeuCauNhapHangService {
     }
 
     @Transactional
-    public YeuCauNhapHangDTO chinhSuaYeuCauNhapHang(Integer maYeuCauNhapHang,
-            YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
+    public ImportRequestDTO chinhSuaYeuCauNhapHang(Integer maYeuCauNhapHang,
+            ImportRequestRequestDTO yeuCauNhapHangRequestDTO) {
         ImportRequest yeuCauNhapHang = yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
 
@@ -142,14 +142,14 @@ public class YeuCauNhapHangService {
             throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
         }
 
-        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHang);
+        ImportRequestDTO yeuCauNhapHangDTO = new ImportRequestDTO(yeuCauNhapHang);
 
         yeuCauNhapHang.setGhiChu(yeuCauNhapHangRequestDTO.getGhiChu());
 
         chiTietYeuCauRepository.deleteByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang);
         List<ImportRequestDetail> chiTietYeuCaus = new ArrayList<>();
 
-        for (ChiTietYeuCauRequestDTO chiTietYeuCauDTO : yeuCauNhapHangRequestDTO.getChiTietYeuCaus()) {
+        for (ImportRequestDetailRequestDTO chiTietYeuCauDTO : yeuCauNhapHangRequestDTO.getChiTietYeuCaus()) {
             ChiTietLoaiXe chiTietLoaiXe = chiTietLoaiXeRepository.findById(chiTietYeuCauDTO.getMaChiTietLoaiXe())
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết loại xe"));
 
@@ -165,32 +165,32 @@ public class YeuCauNhapHangService {
             chiTietYeuCauRepository.save(ctyc);
             chiTietYeuCaus.add(ctyc);
 
-            yeuCauNhapHangDTO.getChiTietYeuCaus().add(new ChiTietYeuCauDTO(ctyc));
+            yeuCauNhapHangDTO.getChiTietYeuCaus().add(new ImportRequestDetailDTO(ctyc));
 
         }
         return yeuCauNhapHangDTO;
     }
 
     @Transactional
-    public List<YeuCauNhapHangDTO> layTatCaYeuCauNhapHang(Pageable pageable, Integer maNhanVien) {
+    public List<ImportRequestDTO> layTatCaYeuCauNhapHang(Pageable pageable, Integer maNhanVien) {
 
         Page<ImportRequest> yeuCauNhapHangs = maNhanVien == null ? yeuCauNhapHangReponsitory.findAll(pageable)
                 : yeuCauNhapHangReponsitory.findByNhanVien_MaNhanVien(maNhanVien, pageable);
         // System.err.println("----> " + yeuCauNhapHangs.toString());
-        return yeuCauNhapHangs.map(yeuCauNhapHang -> new YeuCauNhapHangDTO(yeuCauNhapHang)).toList();
+        return yeuCauNhapHangs.map(yeuCauNhapHang -> new ImportRequestDTO(yeuCauNhapHang)).toList();
     }
 
     @Transactional
-    public YeuCauNhapHangDTO layChiTietYeuCauNhapHang(Integer maYeuCauNhapHang) {
+    public ImportRequestDTO layChiTietYeuCauNhapHang(Integer maYeuCauNhapHang) {
         ImportRequest yeuCauNhapHang = yeuCauNhapHangReponsitory.findById(maYeuCauNhapHang)
                 .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
 
-        YeuCauNhapHangDTO yeuCauNhapHangDTO = new YeuCauNhapHangDTO(yeuCauNhapHang);
+        ImportRequestDTO yeuCauNhapHangDTO = new ImportRequestDTO(yeuCauNhapHang);
 
         List<ImportRequestDetail> chiTietYeuCaus = chiTietYeuCauRepository.findByYeuCauNhapHang_MaYeuCau(maYeuCauNhapHang);
 
-        List<ChiTietYeuCauDTO> chiTietYeuCauDTOs = chiTietYeuCaus.stream().map((chiTietYeuCau) -> {
-            return new ChiTietYeuCauDTO(chiTietYeuCau);
+        List<ImportRequestDetailDTO> chiTietYeuCauDTOs = chiTietYeuCaus.stream().map((chiTietYeuCau) -> {
+            return new ImportRequestDetailDTO(chiTietYeuCau);
         }).toList();
 
         yeuCauNhapHangDTO.setChiTietYeuCaus(chiTietYeuCauDTOs);

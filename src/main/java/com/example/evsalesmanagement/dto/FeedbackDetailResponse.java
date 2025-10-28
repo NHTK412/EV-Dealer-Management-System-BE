@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * DTO response chi tiết phản hồi 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChiTietPhanHoiResponse {
+public class FeedbackDetailResponse {
 
     // Thông tin phản hồi
     // private Integer maPhanHoi;
@@ -61,14 +61,14 @@ public class ChiTietPhanHoiResponse {
         public void setEmailNhanVien(String emailNhanVien) { this.emailNhanVien = emailNhanVien; }
     }
 
-    public ChiTietPhanHoiResponse() {}
+    public FeedbackDetailResponse() {}
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private ChiTietPhanHoiResponse response = new ChiTietPhanHoiResponse();
+        private FeedbackDetailResponse response = new FeedbackDetailResponse();
 
         // public Builder maPhanHoi(Integer maPhanHoi) {
         //     response.maPhanHoi = maPhanHoi;
@@ -125,7 +125,7 @@ public class ChiTietPhanHoiResponse {
             return this;
         }
 
-        public ChiTietPhanHoiResponse build() {
+        public FeedbackDetailResponse build() {
             return response;
         }
     }

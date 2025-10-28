@@ -3,8 +3,8 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.YeuCauNhapHangDTO;
-import com.example.evsalesmanagement.dto.YeuCauNhapHangRequestDTO;
+import com.example.evsalesmanagement.dto.ImportRequestDTO;
+import com.example.evsalesmanagement.dto.ImportRequestRequestDTO;
 import com.example.evsalesmanagement.service.YeuCauNhapHangService;
 
 import jakarta.validation.constraints.Positive;
@@ -32,13 +32,13 @@ public class YeuCauNhapHangController {
 
     // Chưa tạo logic gửi thông báo đến đại lý
     @PostMapping()
-    public ResponseEntity<YeuCauNhapHangDTO> taoYeuCauNhapHang(
-            @RequestBody YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
+    public ResponseEntity<ImportRequestDTO> taoYeuCauNhapHang(
+            @RequestBody ImportRequestRequestDTO yeuCauNhapHangRequestDTO) {
         return ResponseEntity.ok(yeuCauNhapHangService.taoYeuCauNhapHang(yeuCauNhapHangRequestDTO));
     }
 
     @DeleteMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<YeuCauNhapHangDTO> xoaYeuCauNhapHang(@PathVariable String maYeuCauNhapHang) {
+    public ResponseEntity<ImportRequestDTO> xoaYeuCauNhapHang(@PathVariable String maYeuCauNhapHang) {
 
         return ResponseEntity.ok(yeuCauNhapHangService.xoaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang)));
     }
@@ -61,15 +61,15 @@ public class YeuCauNhapHangController {
     // }
 
     @PutMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<YeuCauNhapHangDTO> chinhSuaYeuCauNhapHang(
+    public ResponseEntity<ImportRequestDTO> chinhSuaYeuCauNhapHang(
             @PathVariable String maYeuCauNhapHang,
-            @RequestBody YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
+            @RequestBody ImportRequestRequestDTO yeuCauNhapHangRequestDTO) {
         return ResponseEntity.ok(yeuCauNhapHangService.chinhSuaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang),
                 yeuCauNhapHangRequestDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<YeuCauNhapHangDTO>> layTatCaYeuCauNhapHang(@RequestParam Integer page,
+    public ResponseEntity<List<ImportRequestDTO>> layTatCaYeuCauNhapHang(@RequestParam Integer page,
             @RequestParam @Positive Integer size,
             @RequestParam(required = false) Integer maNhanVien) {
         Pageable pageable = PageRequest.of(page, size);
@@ -78,7 +78,7 @@ public class YeuCauNhapHangController {
 
 
     @GetMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<YeuCauNhapHangDTO> layChiTietYeuCauNhapHang(@PathVariable Integer maYeuCauNhapHang) {
+    public ResponseEntity<ImportRequestDTO> layChiTietYeuCauNhapHang(@PathVariable Integer maYeuCauNhapHang) {
         return ResponseEntity.ok(yeuCauNhapHangService.layChiTietYeuCauNhapHang(maYeuCauNhapHang));
     }
 

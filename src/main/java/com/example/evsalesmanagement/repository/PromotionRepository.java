@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.example.evsalesmanagement.model.Promotion;
 
 @Repository
-public interface PolicyRepository extends JpaRepository<Promotion, Integer> {
+public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
 
 }

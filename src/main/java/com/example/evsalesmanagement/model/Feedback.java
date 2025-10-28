@@ -82,7 +82,7 @@ public class Feedback extends Base{
 
    
     
-    public FeedbackStatus geFeedbackStatus() {
+    public FeedbackStatus getFeedbackStatus() {
         return feedbackStatus;
     }
 

@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * DTO response danh sách phản hồi (1 bảng to chứa toàn bộ các phản hồi con)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PhanHoiResponse {
+public class FeedbackResponseDTO {
 
-    private Integer maPhanHoi;
-    private String tieuDePhanHoi;
-    private String noiDungPhanHoi;
-    private String trangThai;
+    private Integer feedbackId;
+    private String feedbackTitle;
+    private String feedbackContent;
+    private String status;
     
     // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     // private LocalDateTime ngayTao;
@@ -21,36 +21,36 @@ public class PhanHoiResponse {
     
     // Thông tin khách hàng
     // private Integer maKhachHang;
-    private String tenKhachHang;
+    private String customerName;
     // private String emailKhachHang;
     // private String soDienThoaiKhachHang;
 
-    public PhanHoiResponse() {}
+    public FeedbackResponseDTO() {}
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private PhanHoiResponse response = new PhanHoiResponse();
+        private FeedbackResponseDTO response = new FeedbackResponseDTO();
 
-        public Builder maPhanHoi(Integer maPhanHoi) {
-            response.maPhanHoi = maPhanHoi;
+        public Builder FeedbackId(Integer feedbackId) {
+            response.feedbackId = feedbackId;
             return this;
         }
 
-        public Builder tieuDePhanHoi(String tieuDePhanHoi) {
-            response.tieuDePhanHoi = tieuDePhanHoi;
+        public Builder FeedbackTitle(String feedbackTitle) {
+            response.feedbackTitle = feedbackTitle;
             return this;
         }
 
-        public Builder noiDungPhanHoi(String noiDungPhanHoi) {
-            response.noiDungPhanHoi = noiDungPhanHoi;
+        public Builder FeedbackContent(String feedbackContent) {
+            response.feedbackContent = feedbackContent;
             return this;
         }
 
-        public Builder trangThai(String trangThai) {
-            response.trangThai = trangThai;
+        public Builder Status(String status) {
+            response.status = status;
             return this;
         }
 
@@ -69,8 +69,8 @@ public class PhanHoiResponse {
         //     return this;
         // }
 
-        public Builder tenKhachHang(String tenKhachHang) {
-            response.tenKhachHang = tenKhachHang;
+        public Builder tenKhachHang(String customerName) {
+            response.customerName = customerName;
             return this;
         }
 
@@ -84,20 +84,20 @@ public class PhanHoiResponse {
         //     return this;
         // }
 
-        public PhanHoiResponse build() {
+        public FeedbackResponseDTO build() {
             return response;
         }
     }
 
     // Getters
-    public Integer getMaPhanHoi() { return maPhanHoi; }
-    public String getTieuDePhanHoi() { return tieuDePhanHoi; }
-    public String getNoiDungPhanHoi() { return noiDungPhanHoi; }
-    public String getTrangThai() { return trangThai; }
+    public Integer getFeedbackId() { return feedbackId; }
+    public String getFeedbackTitle() { return feedbackTitle; }
+    public String getfeedbackContent() { return feedbackContent; }
+    public String getStatus() { return status; }
     // public LocalDateTime getNgayTao() { return ngayTao; }
     // public LocalDateTime getNgayCapNhat() { return ngayCapNhat; }
     // public Integer getMaKhachHang() { return maKhachHang; }
-    public String getTenKhachHang() { return tenKhachHang; }
+    public String getCustomerName() { return customerName; }
     // public String getEmailKhachHang() { return emailKhachHang; }
     // public String getSoDienThoaiKhachHang() { return soDienThoaiKhachHang; }
 }

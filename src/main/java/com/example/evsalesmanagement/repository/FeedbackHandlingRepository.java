@@ -13,7 +13,7 @@ import com.example.evsalesmanagement.model.FeedbackHandling;
  * Repository cho XuLyPhanHoi
  */
 @Repository
-public interface FeedbackHanglingRepository extends JpaRepository<FeedbackHandling, Integer> {
+public interface FeedbackHandlingRepository extends JpaRepository<FeedbackHandling, Integer> {
     
     /**
      * Tìm xử lý theo mã phản hồi
