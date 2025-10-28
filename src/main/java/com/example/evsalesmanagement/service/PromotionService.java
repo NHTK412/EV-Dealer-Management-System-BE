@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.KhuyenMaiRequestDTO;
+import com.example.evsalesmanagement.dto.PromotionRequestDTO;
 import com.example.evsalesmanagement.model.Promotion;
+import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
-import com.example.evsalesmanagement.repository.ChiTietLoaiXeRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
 
 @Service
@@ -18,17 +18,18 @@ public class PromotionService {
     PromotionRepository promotionRepository;
 
     @Autowired
-    AgencyRepository daiLyRepository;
+    AgencyRepository agencyRepository;
 
     @Autowired
-    ChiTietLoaiXeRepository chiTietLoaiXeRepository;
+    VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-    public List<Promotion> layTatCaKhuyenMai() {
+    public List<Promotion> getAllPromotions() {
         return promotionRepository.findAll();
     }
 
-    public Promotion layKhuyenMaiTheoMa(Integer maKhuyenMai) {
-        Promotion khuyenMai = promotionRepository.findById(maKhuyenMai)
+    public Promotion getByIdPromotion(Integer promotionId) {
+        Promotion promotion = promotionRepository.findById(promotionId)
+
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
@@ -43,64 +44,61 @@ public class PromotionService {
         // .map(daiLy -> new DaiLyDTO(daiLy))
         // .toList());
 
-        return khuyenMai;
+        return promotion;
     }
 
-    public Promotion taoKhuyenMai(KhuyenMaiRequestDTO khuyenMai) {
+    public Promotion createPromotion(PromotionRequestDTO promotion) {
 
-        Promotion khuyenMaiMoi = new Promotion();
-
-        khuyenMaiMoi.setTenKhuyenMai(khuyenMai.getTenKhuyenMai());
-        khuyenMaiMoi.setLoaiKhuyenMai(khuyenMai.getLoaiKhuyenMai());
-        khuyenMaiMoi.setGiaTriKhuyenMai(khuyenMai.getGiaTriKhuyenMai());
-        khuyenMaiMoi.setTieuChi(khuyenMai.getTieuChi());
-        khuyenMaiMoi.setSoTienGiam(khuyenMai.getSoTienGiam());
-        khuyenMaiMoi.setPhanTramGiam(khuyenMai.getPhanTramGiam());
-        khuyenMaiMoi.setNgayBatDau(khuyenMai.getNgayBatDau());
-        khuyenMaiMoi.setNgayHetHan(khuyenMai.getNgayHetHan());
+        Promotion newPromotion = new Promotion();
+        newPromotion.setPromotionName(promotion.getPromotionName());
+        newPromotion.setPromotionType(promotion.getPromotionType());
+        newPromotion.setPromotionValue(promotion.getPromotionValue());
+        newPromotion.setCriteria(promotion.getCriteria());
+        newPromotion.setDiscountAmount(promotion.getDiscountAmount());
+        newPromotion.setDiscountPercent(promotion.getDiscountPercent());
+        newPromotion.setStartDate(promotion.getStartDate());
+        newPromotion.setEndDate(promotion.getEndDate());
 
         // Mặc định là đang hoạt động
-        khuyenMaiMoi.setTrangThai("Hoạt động");
+        newPromotion.setStatus("Hoạt động");
 
-        khuyenMaiMoi.setChiTietLoaiXes(chiTietLoaiXeRepository.findAllById(khuyenMai.getMaChiTietLoaiXes()));
-        khuyenMaiMoi.setDaiLys(daiLyRepository.findAllById(khuyenMai.getMaDaiLys()));
+        newPromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
+        newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
 
-        return promotionRepository.save(khuyenMaiMoi);
+        return promotionRepository.save(newPromotion);
 
         // return
     }
 
-    public Promotion xoaKhuyenMai(Integer maKhuyenMai) {
-        Promotion khuyenMai = promotionRepository.findById(maKhuyenMai)
+    public Promotion DeletePromotion(Integer promotionId) {
+        Promotion promotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
-        khuyenMai.getChiTietLoaiXes().size();
-        khuyenMai.getDaiLys().size();
-        promotionRepository.deleteById(maKhuyenMai);
-        return khuyenMai;
-
+        promotion.getVehicleDetails().size();
+        promotion.getAgencies().size();
+        promotionRepository.deleteById(promotionId);
+        return promotion;
     }
 
-    public Promotion capKhuyenMai(Integer maKhuyenMai, KhuyenMaiRequestDTO khuyenMai) {
-        Promotion khuyenMaiCapNhat = promotionRepository.findById(maKhuyenMai)
+    public Promotion UpdatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
+        Promotion updatePromotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
-        khuyenMaiCapNhat.setTenKhuyenMai(khuyenMai.getTenKhuyenMai());
-        khuyenMaiCapNhat.setLoaiKhuyenMai(khuyenMai.getLoaiKhuyenMai());
-        khuyenMaiCapNhat.setGiaTriKhuyenMai(khuyenMai.getGiaTriKhuyenMai());
-        khuyenMaiCapNhat.setTieuChi(khuyenMai.getTieuChi());
-        khuyenMaiCapNhat.setSoTienGiam(khuyenMai.getSoTienGiam());
-        khuyenMaiCapNhat.setPhanTramGiam(khuyenMai.getPhanTramGiam());
-        khuyenMaiCapNhat.setNgayBatDau(khuyenMai.getNgayBatDau());
-        khuyenMaiCapNhat.setNgayHetHan(khuyenMai.getNgayHetHan());
+        updatePromotion.setPromotionName(promotion.getPromotionName());
+        updatePromotion.setPromotionType(promotion.getPromotionType());
+        updatePromotion.setPromotionValue(promotion.getPromotionValue());
+        updatePromotion.setCriteria(promotion.getCriteria());
+        updatePromotion.setDiscountAmount(promotion.getDiscountAmount());
+        updatePromotion.setDiscountPercent(promotion.getDiscountPercent());
+        updatePromotion.setStartDate(promotion.getStartDate());
+        updatePromotion.setEndDate(promotion.getEndDate());
 
         // Mặc định là đang hoạt động
-        khuyenMaiCapNhat.setTrangThai(khuyenMai.getTrangThai());
+        updatePromotion.setStatus(promotion.getStatus());
+        updatePromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
+        updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
 
-        khuyenMaiCapNhat.setChiTietLoaiXes(chiTietLoaiXeRepository.findAllById(khuyenMai.getMaChiTietLoaiXes()));
-        khuyenMaiCapNhat.setDaiLys(daiLyRepository.findAllById(khuyenMai.getMaDaiLys()));
-
-        return promotionRepository.save(khuyenMaiCapNhat);
+        return promotionRepository.save(updatePromotion);
     }
 
 }

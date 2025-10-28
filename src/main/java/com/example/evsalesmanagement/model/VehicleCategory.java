@@ -13,26 +13,25 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+//DanhMucXe = VehicleCategory
 @Entity
 @Table(name = "VehicleCategory")
-public class VehicleCategory extends GhiNhanThoiGian {
+public class VehicleCategory extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleCategoryId")
     private Integer vehicleCategoryId;
 
-    @Column(name = "CategoryName", nullable = false)
-    private String categoryName;
+    @Column(name = "VehicleCategoryName", nullable = false)
+    private String vehicleCategoryName;
 
     @Column(name = "Description")
     private String description;
 
     @ManyToMany
-    @JoinTable(
-        name = "VehicleType_VehicleCategory",
-        joinColumns = @JoinColumn(name = "VehicleCategoryId"),
-        inverseJoinColumns = @JoinColumn(name = "VehicleTypeId")
-    )
+    @JoinTable(name = "VehicleType_VehicleCategory", joinColumns = @JoinColumn(name = "VehicleCategoryId"), inverseJoinColumns = @JoinColumn(name = "VehicleTypeId"))
+
     private List<VehicleType> vehicleTypes = new ArrayList<>();
 
     public Integer getVehicleCategoryId() {
@@ -43,12 +42,13 @@ public class VehicleCategory extends GhiNhanThoiGian {
         this.vehicleCategoryId = vehicleCategoryId;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getVehicleCategoryName() {
+        return vehicleCategoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setVehicleCategoryName(String vehicleCategoryName) {
+        this.vehicleCategoryName = vehicleCategoryName;
+
     }
 
     public String getDescription() {
@@ -58,4 +58,5 @@ public class VehicleCategory extends GhiNhanThoiGian {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

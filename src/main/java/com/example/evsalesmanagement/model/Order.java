@@ -1,6 +1,8 @@
 package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,16 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+//DonHang = Oder
 @Entity
-@Table(name = "Order")
-public class Order extends GhiNhanThoiGian {
+@Table(name = "Orders")
+public class Order extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OrderId")
     private Integer orderId;
-
+    //
     @Column(name = "ContractNumber")
     private String contractNumber;
 
@@ -28,11 +32,11 @@ public class Order extends GhiNhanThoiGian {
     @Column(name = "Status")
     private String status;
 
-    @Column(name = "Note")
-    private String note;
+    @Column(name = "Notes")
+    private String notes;
 
-    @Column(name = "TotalOrderAmount")
-    private BigDecimal totalOrderAmount;
+    @Column(name = "TotalAmount")
+    private BigDecimal totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "CustomerId")
@@ -46,24 +50,15 @@ public class Order extends GhiNhanThoiGian {
     @JoinColumn(name = "AgencyId")
     private Agency agency;
 
-    // @OneToOne(mappedBy = "donHang")
-    // private BaoGia baoGia;
-
-    // @OneToMany(mappedBy = "donHang")
-    // private List<ThanhToan> thanhToans = new ArrayList<>();
-
-    // @OneToOne(mappedBy = "donHang")
-    // private GiaoXe giaoXe;
-
-    // @OneToOne(mappedBy = "donHang")
-    // private PhieuXuatKho phieuXuatKho;
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> OrderDetails = new ArrayList<>();
 
     public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setOrderId(Integer oderId) {
+        this.orderId = oderId;
     }
 
     public String getContractNumber() {
@@ -74,14 +69,6 @@ public class Order extends GhiNhanThoiGian {
         this.contractNumber = contractNumber;
     }
 
-    // public LocalDateTime getNgayTao() {
-    //     return ngayTao;
-    // }
-
-    // public void setNgayTao(LocalDateTime ngayTao) {
-    //     this.ngayTao = ngayTao;
-    // }
-
     public String getStatus() {
         return status;
     }
@@ -90,20 +77,20 @@ public class Order extends GhiNhanThoiGian {
         this.status = status;
     }
 
-    public String getNote() {
-        return note;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
-    public BigDecimal getTotalOrderAmount() {
-        return totalOrderAmount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotalOrderAmount(BigDecimal totalOrderAmount) {
-        this.totalOrderAmount = totalOrderAmount;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public Customer getCustomer() {
@@ -130,35 +117,55 @@ public class Order extends GhiNhanThoiGian {
         this.agency = agency;
     }
 
+    public List<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
+    }
+
+    // @OneToOne(mappedBy = "donHang")
+    // private BaoGia baoGia;
+
+    // @OneToMany(mappedBy = "donHang")
+    // private List<ThanhToan> thanhToans = new ArrayList<>();
+
+    // @OneToOne(mappedBy = "donHang")
+    // private GiaoXe giaoXe;
+
+    // @OneToOne(mappedBy = "donHang")
+    // private PhieuXuatKho phieuXuatKho;
+
     // public BaoGia getBaoGia() {
-    //     return baoGia;
+    // return baoGia;
     // }
 
     // public void setBaoGia(BaoGia baoGia) {
-    //     this.baoGia = baoGia;
+    // this.baoGia = baoGia;
     // }
 
     // public List<ThanhToan> getThanhToans() {
-    //     return thanhToans;
+    // return thanhToans;
     // }
 
     // public void setThanhToans(List<ThanhToan> thanhToans) {
-    //     this.thanhToans = thanhToans;
+    // this.thanhToans = thanhToans;
     // }
 
     // public GiaoXe getGiaoXe() {
-    //     return giaoXe;
+    // return giaoXe;
     // }
 
     // public void setGiaoXe(GiaoXe giaoXe) {
-    //     this.giaoXe = giaoXe;
+    // this.giaoXe = giaoXe;
     // }
 
     // public PhieuXuatKho getPhieuXuatKho() {
-    //     return phieuXuatKho;
+    // return phieuXuatKho;
     // }
 
     // public void setPhieuXuatKho(PhieuXuatKho phieuXuatKho) {
-    //     this.phieuXuatKho = phieuXuatKho;
+    // this.phieuXuatKho = phieuXuatKho;
     // }
 }

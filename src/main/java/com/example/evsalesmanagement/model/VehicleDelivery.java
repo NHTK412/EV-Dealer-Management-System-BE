@@ -14,27 +14,30 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "VehicleDelivery")
-public class VehicleDelivery extends GhiNhanThoiGian {
+public class VehicleDelivery extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleDeliveryId")
     private Integer vehicleDeliveryId;
 
-    // @Column(name = "CreatedDate")
-    // private LocalDateTime createdDate;
+    // @Column(name = "NgayTaoDon")
+    // private LocalDateTime ngayTaoDon;
 
+    // ngayDuKienGiaoXe = ExpectedDeliveryDate
     @Column(name = "ExpectedDeliveryDate")
-    private LocalDateTime expectedDeliveryDate;
+    private LocalDateTime ExpectedDeliveryDate;
 
-    @Column(name = "ActualDeliveryDate")
-    private LocalDateTime actualDeliveryDate;
+    // ngayGiaoXe = DeliveryDate
+    @Column(name = "DeliveryDate")
+    private LocalDateTime deliveryDate;
 
     @Column(name = "Status")
     private String status;
 
     @OneToOne
     @JoinColumn(name = "OrderId", unique = true)
-    private Order order;
+    private Order orderId;
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
@@ -48,28 +51,21 @@ public class VehicleDelivery extends GhiNhanThoiGian {
         this.vehicleDeliveryId = vehicleDeliveryId;
     }
 
-    // public LocalDateTime getCreatedDate() {
-    //     return createdDate;
-    // }
-
-    // public void setCreatedDate(LocalDateTime createdDate) {
-    //     this.createdDate = createdDate;
-    // }
-
     public LocalDateTime getExpectedDeliveryDate() {
-        return expectedDeliveryDate;
+        return ExpectedDeliveryDate;
     }
 
     public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
-        this.expectedDeliveryDate = expectedDeliveryDate;
+        ExpectedDeliveryDate = expectedDeliveryDate;
     }
 
-    public LocalDateTime getActualDeliveryDate() {
-        return actualDeliveryDate;
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
     }
 
-    public void setActualDeliveryDate(LocalDateTime actualDeliveryDate) {
-        this.actualDeliveryDate = actualDeliveryDate;
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
+
     }
 
     public String getStatus() {
@@ -80,12 +76,13 @@ public class VehicleDelivery extends GhiNhanThoiGian {
         this.status = status;
     }
 
-    public Order getOrder() {
-        return order;
+    public Order getOderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOderId(Order orderId) {
+        this.orderId = orderId;
+
     }
 
     public Employee getEmployee() {
@@ -95,4 +92,13 @@ public class VehicleDelivery extends GhiNhanThoiGian {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
+    // public LocalDateTime getNgayTaoDon() {
+    // return ngayTaoDon;
+    // }
+
+    // public void setNgayTaoDon(LocalDateTime ngayTaoDon) {
+    // this.ngayTaoDon = ngayTaoDon;
+    // }
+
 }

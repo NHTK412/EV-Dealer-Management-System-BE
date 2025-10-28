@@ -9,7 +9,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "VehicleType")
-public class VehicleType extends GhiNhanThoiGian {
+public class VehicleType extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleTypeId")
@@ -18,17 +19,13 @@ public class VehicleType extends GhiNhanThoiGian {
     @Column(name = "VehicleTypeName", nullable = false)
     private String vehicleTypeName;
 
+    // nam san xuat = manufactureYear
     @Column(name = "ManufactureYear")
     private Integer manufactureYear;
 
+    // mo ta = description
     @Column(name = "Description")
     private String description;
-
-    // @ManyToMany(mappedBy = "loaiXes")
-    // private List<DanhMucXe> danhMucXes = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "loaiXe")
-    // private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
 
     public Integer getVehicleTypeId() {
         return vehicleTypeId;
@@ -61,4 +58,11 @@ public class VehicleType extends GhiNhanThoiGian {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    // @ManyToMany(mappedBy = "loaiXes")
+    // private List<DanhMucXe> danhMucXes = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "loaiXe")
+    // private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
+
 }

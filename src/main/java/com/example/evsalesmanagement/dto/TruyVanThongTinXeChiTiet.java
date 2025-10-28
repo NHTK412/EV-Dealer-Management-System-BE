@@ -17,9 +17,9 @@ public class TruyVanThongTinXeChiTiet {
     }
 
     // Constructor đầy đủ tham số
-    public TruyVanThongTinXeChiTiet(Integer maChiTietLoaiXe, String hinhAnhXe, String cauHinh, 
-                                     String mauSac, String phienBan, double giaBan, 
-                                     String tenLoaiXe, String moTa, String namSanXuat, String moTaChiTiet) {
+    public TruyVanThongTinXeChiTiet(Integer maChiTietLoaiXe, String hinhAnhXe, String cauHinh,
+            String mauSac, String phienBan, double giaBan,
+            String tenLoaiXe, String moTa, String namSanXuat, String moTaChiTiet) {
         this.maChiTietLoaiXe = maChiTietLoaiXe;
         this.hinhAnhXe = hinhAnhXe;
         this.cauHinh = cauHinh;

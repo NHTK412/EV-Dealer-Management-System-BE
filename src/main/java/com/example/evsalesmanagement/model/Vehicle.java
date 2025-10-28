@@ -11,40 +11,36 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Vehicle")
-public class Vehicle extends GhiNhanThoiGian {
+public class Vehicle extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleId")
     private Integer vehicleId;
 
+    // so khung = chassisNumber
     @Column(name = "ChassisNumber", unique = true)
-    private String chassisNumber;
+    private String chassicNumber;
 
-    @Column(name = "EngineNumber", unique = true)
-    private String engineNumber;
+    // so may = machineNumber
+    @Column(name = "MachineNumber", unique = true)
+    private String machineNumber;
 
+    // trang thai = status
     @Column(name = "Status")
     private String status;
 
+    // tinh trang xe = vehicleCondition
     @Column(name = "VehicleCondition")
     private String vehicleCondition;
 
+    // chi tiet loai xe = vehicleTypeDetail
     @ManyToOne
-    @JoinColumn(name = "VehicleDetailId")
-    private VehicleTypeDetail vehicleDetail;
+    @JoinColumn(name = "VehicleTypeDetailId")
+    private VehicleTypeDetail vehicleTypeDetail;
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agency;
-
-    // @OneToMany(mappedBy = "vehicle")
-    // private List<TestDriveSchedule> testDriveSchedules = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "vehicle")
-    // private List<DeliveryDetail> deliveryDetails = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "vehicle")
-    // private List<ImportDetail> importDetails = new ArrayList<>();
 
     public Integer getVehicleId() {
         return vehicleId;
@@ -54,20 +50,21 @@ public class Vehicle extends GhiNhanThoiGian {
         this.vehicleId = vehicleId;
     }
 
-    public String getChassisNumber() {
-        return chassisNumber;
+    public String getChassicNumber() {
+        return chassicNumber;
     }
 
-    public void setChassisNumber(String chassisNumber) {
-        this.chassisNumber = chassisNumber;
+    public void setChassicNumber(String chassicNumber) {
+        this.chassicNumber = chassicNumber;
     }
 
-    public String getEngineNumber() {
-        return engineNumber;
+    public String getMachineNumber() {
+        return machineNumber;
     }
 
-    public void setEngineNumber(String engineNumber) {
-        this.engineNumber = engineNumber;
+    public void setMachineNumber(String machineNumber) {
+        this.machineNumber = machineNumber;
+
     }
 
     public String getStatus() {
@@ -86,12 +83,13 @@ public class Vehicle extends GhiNhanThoiGian {
         this.vehicleCondition = vehicleCondition;
     }
 
-    public VehicleTypeDetail getVehicleDetail() {
-        return vehicleDetail;
+    public VehicleTypeDetail getVehicleTypeDetail() {
+        return vehicleTypeDetail;
     }
 
-    public void setVehicleDetail(VehicleTypeDetail vehicleDetail) {
-        this.vehicleDetail = vehicleDetail;
+    public void setVehicleTypeDetail(VehicleTypeDetail vehicleTypeDetail) {
+        this.vehicleTypeDetail = vehicleTypeDetail;
+
     }
 
     public Agency getAgency() {
@@ -101,4 +99,14 @@ public class Vehicle extends GhiNhanThoiGian {
     public void setAgency(Agency agency) {
         this.agency = agency;
     }
+
+    // @OneToMany(mappedBy = "xe")
+    // private List<LichHenLaiThu> lichHenLaiThus = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "xe")
+    // private List<ChiTietPhieuXuat> chiTietPhieuXuats = new ArrayList<>();
+
+    // @OneToMany(mappedBy = "xe")
+    // private List<ChiTietPhieuNhap> chiTietPhieuNhaps = new ArrayList<>();
+
 }
