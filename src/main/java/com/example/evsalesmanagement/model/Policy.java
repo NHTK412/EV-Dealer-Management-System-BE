@@ -22,14 +22,14 @@ public class Policy extends Base {
     private Integer policyId;
 
     @Column(name = "PolicyType")
-    private String PolicyType;
+    private String policyType;
 
     @Column(name = "PolicyValue")
     private BigDecimal policyValue;
 
-    //condition = dieu kien ap dung
-    @Column(name = "Condition")
-    private String condition;
+    // condition = dieu kien ap dung
+    @Column(name = "PolicyCondition")
+    private String policyCondition;
 
     @Column(name = "StartDate")
     private LocalDateTime startDate;
@@ -53,11 +53,11 @@ public class Policy extends Base {
     }
 
     public String getPolicyType() {
-        return PolicyType;
+        return policyType;
     }
 
     public void setPolicyType(String policyType) {
-        PolicyType = policyType;
+        this.policyType = policyType;
     }
 
     public BigDecimal getPolicyValue() {
@@ -69,11 +69,11 @@ public class Policy extends Base {
     }
 
     public String getCondition() {
-        return condition;
+        return policyCondition;
     }
 
     public void setCondition(String condition) {
-        this.condition = condition;
+        this.policyCondition = condition;
     }
 
     public LocalDateTime getStartDate() {
@@ -108,13 +108,10 @@ public class Policy extends Base {
         this.agency = agency;
     }
 
-    
-
     // @OneToMany(mappedBy = "chinhSachChietKhau")
     // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
 
     // @OneToMany(mappedBy = "chinhSachChietKhau")
     // private List<BacChietKhauDoanhSo> bacChietKhauDoanhSos = new ArrayList<>();
 
-   
 }

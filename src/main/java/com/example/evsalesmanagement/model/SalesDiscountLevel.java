@@ -19,7 +19,7 @@ public class SalesDiscountLevel extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SalesDiscountLevelId")
-    private Integer SalesDiscountLevelId;
+    private Integer salesDiscountLevelId;
 
     //doanh so tu = salesFrom
     @Column(name = "SalesFrom")
@@ -31,7 +31,7 @@ public class SalesDiscountLevel extends Base {
 
     //phan tram chiet khau = discountPercentage
     @Column(name = "DiscountPercentage")
-    private BigDecimal  discountPercentage;
+    private BigDecimal discountPercentage;
 
     //ma chinh sach = policyId
     @ManyToOne
@@ -39,11 +39,11 @@ public class SalesDiscountLevel extends Base {
     private Policy policy;
 
     public Integer getSalesDiscountLevelId() {
-        return SalesDiscountLevelId;
+        return salesDiscountLevelId;
     }
 
     public void setSalesDiscountLevelId(Integer salesDiscountLevelId) {
-        SalesDiscountLevelId = salesDiscountLevelId;
+        this.salesDiscountLevelId = salesDiscountLevelId;
     }
 
     public Integer getSalesFrom() {

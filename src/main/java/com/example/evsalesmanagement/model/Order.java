@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 //DonHang = Oder
 @Entity
-@Table(name = "Order")
+@Table(name = "Orders")
 public class Order extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
