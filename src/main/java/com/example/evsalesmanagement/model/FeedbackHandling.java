@@ -37,7 +37,7 @@ public class FeedbackHandling extends Base {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
-    private FeedbackHandlingStatus Status;
+    private FeedbackHandlingStatus status;
 
     @OneToOne
     @JoinColumn(name = "FeedbackId", unique = true)
@@ -72,11 +72,11 @@ public class FeedbackHandling extends Base {
     }
 
     public FeedbackHandlingStatus getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(FeedbackHandlingStatus status) {
-        Status = status;
+        status = status;
     }
 
     public Feedback getFeedback() {

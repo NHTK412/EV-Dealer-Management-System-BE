@@ -11,16 +11,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 //DonHang = Oder
 @Entity
 @Table(name = "Orders")
-public class Order extends Base{
+public class Order extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OrderId")
     private Integer orderId;
-    // 
+    //
     @Column(name = "ContractNumber")
     private String contractNumber;
 
@@ -112,8 +111,6 @@ public class Order extends Base{
         this.agency = agency;
     }
 
-    
-
     // @OneToOne(mappedBy = "donHang")
     // private BaoGia baoGia;
 
@@ -125,7 +122,6 @@ public class Order extends Base{
 
     // @OneToOne(mappedBy = "donHang")
     // private PhieuXuatKho phieuXuatKho;
-
 
     // public BaoGia getBaoGia() {
     // return baoGia;

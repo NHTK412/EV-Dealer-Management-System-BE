@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 //PhieuNhapKho = WarehouseReceipt
 @Entity
 @Table(name = "WarehouseReceipt")
-public class WarehouseReceipt extends Base{
+public class WarehouseReceipt extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "WarehouseReceiptId")
@@ -23,7 +23,7 @@ public class WarehouseReceipt extends Base{
 
     @Column(name = "WarehouseReceiptDate")
     private LocalDateTime warehouseReceiptDate;
- 
+
     // Season -ly do
     @Column(name = "Reason")
     private String lyDo;
@@ -42,7 +42,6 @@ public class WarehouseReceipt extends Base{
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
 
-    
     public Integer getWarehouseReceiptId() {
         return warehouseReceiptId;
     }
@@ -102,5 +101,4 @@ public class WarehouseReceipt extends Base{
     // @OneToMany(mappedBy = "phieuNhapKho")
     // private List<ChiTietPhieuNhap> chiTietPhieuNhaps = new ArrayList<>();
 
-   
 }

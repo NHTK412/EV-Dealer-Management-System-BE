@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ImportRequestDetail")
 @IdClass(ImportRequestDetail.ImportRequestDetailId.class)
-public class ImportRequestDetail extends Base{
+public class ImportRequestDetail extends Base {
     @Id
     @Column(name = "ImportRequestId")
     private Integer importRequestId;
@@ -33,67 +33,45 @@ public class ImportRequestDetail extends Base{
     @JoinColumn(name = "VehicleTypeDetailId", insertable = false, updatable = false)
     private VehicleTypeDetail vehicleTypeDetail;
 
-   
-
     public Integer getImportRequestId() {
         return importRequestId;
     }
-
-
 
     public void setImportRequestId(Integer importRequestId) {
         this.importRequestId = importRequestId;
     }
 
-
-
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
     }
-
-
 
     public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
         this.vehicleTypeDetailId = vehicleTypeDetailId;
     }
 
-
-
     public Integer getQuantity() {
         return quantity;
     }
-
-
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-
-
     public ImportRequest getImportRequest() {
         return importRequest;
     }
-
-
 
     public void setImportRequest(ImportRequest importRequest) {
         this.importRequest = importRequest;
     }
 
-
-
     public VehicleTypeDetail getVehicleTypeDetail() {
         return vehicleTypeDetail;
     }
 
-
-
     public void setVehicleTypeDetail(VehicleTypeDetail vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
     }
-
-
 
     @Embeddable
     public static class ImportRequestDetailId {
@@ -123,7 +101,6 @@ public class ImportRequestDetail extends Base{
         public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
             this.vehicleTypeDetailId = vehicleTypeDetailId;
         }
-
 
         @Override
         public boolean equals(Object o) {

@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "WarehouseReleaseNoteDetail")
 @IdClass(WarehouseReleaseNoteDetail.WarehouseReleaseNoteDetailId.class)
-public class WarehouseReleaseNoteDetail extends Base{
+public class WarehouseReleaseNoteDetail extends Base {
     @Id
     @Column(name = "WarehouseReleaseNoteId")
     private Integer warehouseReleaseNoteId;
@@ -30,54 +30,37 @@ public class WarehouseReleaseNoteDetail extends Base{
     @JoinColumn(name = "vehicleId", insertable = false, updatable = false)
     private Vehicle vehicle;
 
-
     public Integer getWarehouseReleaseNoteId() {
         return warehouseReleaseNoteId;
     }
-
-
 
     public void setWarehouseReleaseNoteId(Integer warehouseReleaseNoteId) {
         this.warehouseReleaseNoteId = warehouseReleaseNoteId;
     }
 
-
-
     public Integer getVehicleId() {
         return vehicleId;
     }
-
-
 
     public void setVehicleId(Integer vehicleId) {
         this.vehicleId = vehicleId;
     }
 
-
-
     public WarehouseReleaseNote getWarehouseReleaseNote() {
         return warehouseReleaseNote;
     }
-
-
 
     public void setWarehouseReleaseNote(WarehouseReleaseNote warehouseReleaseNote) {
         this.warehouseReleaseNote = warehouseReleaseNote;
     }
 
-
-
     public Vehicle getVehicle() {
         return vehicle;
     }
 
-
-
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
-
-
 
     @Embeddable
     public static class WarehouseReleaseNoteDetailId {
@@ -98,10 +81,11 @@ public class WarehouseReleaseNoteDetail extends Base{
         public Integer getVehicleId() {
             return vehicleId;
         }
-        
+
         public void setVehicleId(Integer vehicleId) {
             this.vehicleId = vehicleId;
         }
+
         @Override
         public boolean equals(Object o) {
             if (this == o)
