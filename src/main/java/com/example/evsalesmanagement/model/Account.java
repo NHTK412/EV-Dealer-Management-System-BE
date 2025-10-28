@@ -15,6 +15,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 @Table(name = "Account")
 public class Account extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AccountId")
@@ -37,6 +38,7 @@ public class Account extends Base {
 
     @Column(name = "LastLoginTime")
     private LocalDateTime lastLoginTime;
+
 
     @OneToOne
     @JoinColumn(name = "EmployeeId", unique = true)
@@ -88,6 +90,7 @@ public class Account extends Base {
 
     public void setLastLoginTime(LocalDateTime lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+
     }
 
     public Employee getEmployee() {
@@ -97,6 +100,7 @@ public class Account extends Base {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
 
     
 
@@ -108,5 +112,5 @@ public class Account extends Base {
     // this.ngayTao = ngayTao;
     // }
 
-   
+
 }

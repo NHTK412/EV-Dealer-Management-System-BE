@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.dto.AgencyRequest;
+
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service
@@ -39,6 +40,7 @@ public class AgencyService {
         agency.setPhoneNumber(request.getPhoneNumber());
         agency.setEmail(request.getEmail());
         agency.setStatus(request.getStatus());
+
         return agencyRepository.save(agency);
     }
 }

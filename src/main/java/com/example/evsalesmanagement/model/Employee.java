@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Employee")
 public class Employee extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EmployeeId")
@@ -33,6 +34,7 @@ public class Employee extends Base{
     @Column(name = "PhoneNumber")
     private String  phoneNumber;
 
+
     @Column(name = "Email")
     private String email;
 
@@ -40,12 +42,14 @@ public class Employee extends Base{
     private String address;
 
     //chuc vu = position
+
     @Column(name = "Position")
     private String position;
 
     @ManyToOne
     @JoinColumn(name = "Agency")
     private Agency agency;
+
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -77,6 +81,7 @@ public class Employee extends Base{
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+
     }
 
     public String getPhoneNumber() {
@@ -142,3 +147,4 @@ public class Employee extends Base{
 
    
 }
+

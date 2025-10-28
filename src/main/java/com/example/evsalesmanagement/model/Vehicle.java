@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,29 +11,29 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Xe")
-public class Vehicle extends Base{
+public class Vehicle extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleId")
     private Integer vehicleId;
 
-    //so khung = chassisNumber
+    // so khung = chassisNumber
     @Column(name = "ChassisNumber", unique = true)
     private String chassicNumber;
 
-    //so may = machineNumber
+    // so may = machineNumber
     @Column(name = "MachineNumber", unique = true)
     private String machineNumber;
 
-    //trang thai = status
+    // trang thai = status
     @Column(name = "Status")
     private String status;
 
-    //tinh trang xe = vehicleCondition
+    // tinh trang xe = vehicleCondition
     @Column(name = "VehicleCondition")
     private String vehicleCondition;
 
-    //chi tiet loai xe = vehicleTypeDetail
+    // chi tiet loai xe = vehicleTypeDetail
     @ManyToOne
     @JoinColumn(name = "VehicleTypeDetailId")
     private VehicleTypeDetail vehicleTypeDetail;
@@ -65,6 +64,7 @@ public class Vehicle extends Base{
 
     public void setMachineNumber(String machineNumber) {
         this.machineNumber = machineNumber;
+
     }
 
     public String getStatus() {
@@ -89,6 +89,7 @@ public class Vehicle extends Base{
 
     public void setVehicleTypeDetail(VehicleTypeDetail vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
+
     }
 
     public Agency getAgency() {
@@ -108,5 +109,4 @@ public class Vehicle extends Base{
     // @OneToMany(mappedBy = "xe")
     // private List<ChiTietPhieuNhap> chiTietPhieuNhaps = new ArrayList<>();
 
-    
 }

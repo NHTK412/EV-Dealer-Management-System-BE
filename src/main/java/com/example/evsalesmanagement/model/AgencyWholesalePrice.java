@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "AgencyWholesalePrice")
 public class AgencyWholesalePrice extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyWholesalePriceId")
@@ -33,6 +34,7 @@ public class AgencyWholesalePrice extends Base{
     private LocalDateTime startDate;
 
     //ngayketthuc = EndDate
+
     @Column(name = "EndDate")
     private LocalDateTime endDate;
 

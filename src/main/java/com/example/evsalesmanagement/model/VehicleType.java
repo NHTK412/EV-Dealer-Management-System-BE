@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +9,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "VehicleType")
-public class VehicleType extends Base{
+public class VehicleType extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleTypeId")
@@ -19,11 +19,11 @@ public class VehicleType extends Base{
     @Column(name = "VehicleTypeName", nullable = false)
     private String vehicleTypeName;
 
-    //nam san xuat = manufactureYear
+    // nam san xuat = manufactureYear
     @Column(name = "ManufactureYear")
     private Integer manufactureYear;
 
-    //mo ta = description
+    // mo ta = description
     @Column(name = "Description")
     private String description;
 
@@ -65,6 +65,4 @@ public class VehicleType extends Base{
     // @OneToMany(mappedBy = "loaiXe")
     // private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
 
-    
-    
 }

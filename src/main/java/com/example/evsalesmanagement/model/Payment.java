@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Payment")
 public class Payment extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PaymentId")
@@ -47,6 +48,7 @@ public class Payment extends Base{
 
 
     //TienPhat = PenaltyAmount
+
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;
 
@@ -59,6 +61,7 @@ public class Payment extends Base{
     @ManyToOne
     @JoinColumn(name = "OderId")
     private Oder oder;
+
 
     public Integer getPaymentId() {
         return paymentId;
@@ -82,6 +85,7 @@ public class Payment extends Base{
 
     public void setPaymentForm(String paymentForm) {
         this.paymentForm = paymentForm;
+
     }
 
     public BigDecimal getAmount() {
@@ -98,6 +102,7 @@ public class Payment extends Base{
 
     public void setNumberCycle(Integer numberCycle) {
         this.numberCycle = numberCycle;
+
     }
 
     public LocalDateTime getDueDate() {
@@ -148,5 +153,5 @@ public class Payment extends Base{
         this.oder = oder;
     }
 
-   
 }
+

@@ -11,7 +11,6 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
 
-
 @Service
 public class PromotionService {
 
@@ -30,6 +29,7 @@ public class PromotionService {
 
     public Promotion getByIdPromotion(Integer promotionId) {
         Promotion promotion = promotionRepository.findById(promotionId)
+
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
         // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
@@ -59,12 +59,11 @@ public class PromotionService {
         newPromotion.setStartDate(promotion.getStartDate());
         newPromotion.setEndDate(promotion.getEndDate());
 
-
         // Mặc định là đang hoạt động
         newPromotion.setStatus("Hoạt động");
 
-       newPromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
-       newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
+        newPromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
+        newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
 
         return promotionRepository.save(newPromotion);
 
@@ -98,9 +97,8 @@ public class PromotionService {
         updatePromotion.setStatus(promotion.getStatus());
         updatePromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
         updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
-        
 
-        return promotionRepository.save(updatePromotion);   
-        }
+        return promotionRepository.save(updatePromotion);
+    }
 
 }

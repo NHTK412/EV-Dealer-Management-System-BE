@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "VehicleCategory")
 public class VehicleCategory extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VehicleCategoryId")
@@ -26,11 +27,13 @@ public class VehicleCategory extends Base{
     @Column(name = "VehicleCategoryName", nullable = false)
     private String vehicleCategoryName;
 
+
     @Column(name = "Description")
     private String description;
 
     @ManyToMany
     @JoinTable(name = "VehicleType_VehicleCategory", joinColumns = @JoinColumn(name = "VehicleCategoryId"), inverseJoinColumns = @JoinColumn(name = "VehicleTypeId"))
+
     private List<VehicleType> vehicleTypes = new ArrayList<>();
 
     public Integer getVehicleCategoryId() {
@@ -47,6 +50,7 @@ public class VehicleCategory extends Base{
 
     public void setVehicleCategoryName(String vehicleCategoryName) {
         this.vehicleCategoryName = vehicleCategoryName;
+
     }
 
     public String getDescription() {
@@ -57,5 +61,5 @@ public class VehicleCategory extends Base{
         this.description = description;
     }
 
-   
 }
+

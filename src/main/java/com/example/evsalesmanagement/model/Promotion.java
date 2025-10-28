@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Promotion")
 public class Promotion extends Base {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PromotionId")
@@ -43,6 +44,7 @@ public class Promotion extends Base {
     private BigDecimal discountAmount;
 
     // discount percent = phan tram giam gia
+
     @Column(name = "DiscountPercent")
     private BigDecimal discountPercent;
 
@@ -54,6 +56,8 @@ public class Promotion extends Base {
 
     @Column(name = "Status")
     private String status;
+
+
 
 
     @ManyToMany
@@ -188,3 +192,4 @@ public class Promotion extends Base {
 }
 
     
+

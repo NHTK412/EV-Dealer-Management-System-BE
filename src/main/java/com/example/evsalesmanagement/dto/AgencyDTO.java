@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.dto;
 import com.example.evsalesmanagement.model.Agency;
 
 public class AgencyDTO {
+
     private Integer agencyId;
 
     private String agencyName;
@@ -24,13 +25,15 @@ public class AgencyDTO {
         this.status = agency.getStatus();
     }
 
-    public AgencyDTO(Integer angencyId, String agencyName, String address, String phoneNumber, String email, String status) {
+    public AgencyDTO(Integer angencyId, String agencyName, String address, String phoneNumber, String email,
+            String status) {
         this.agencyId = angencyId;
         this.agencyName = agencyName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.status = status;  
+        this.status = status;
+
     }
 
     public AgencyDTO() {
@@ -66,6 +69,7 @@ public class AgencyDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+
     }
 
     public String getEmail() {
@@ -82,6 +86,7 @@ public class AgencyDTO {
 
     public void setStatus(String status) {
         this.status = status;
+
     }
 
 }

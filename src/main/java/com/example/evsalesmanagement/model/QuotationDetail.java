@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +17,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "QuotationDetail")
 public class QuotationDetail extends Base{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "QuotationDetailId")
     private Integer quotationDetailId;
     //so luong = quantity
+
     @Column(name = "Quantity")
     private Integer quantity;
 
@@ -76,6 +79,7 @@ public class QuotationDetail extends Base{
     @JoinColumn(name = "VehicleTypeDetailId")
     private VehicleTypeDetail vehicleTypeDetail;
 
+
     public Integer getQuotationDetailId() {
         return quotationDetailId;
     }
@@ -122,6 +126,7 @@ public class QuotationDetail extends Base{
 
     public void setRegistrartionFee(BigDecimal registrartionFee) {
         this.registrartionFee = registrartionFee;
+
     }
 
     public BigDecimal getCompulsoryInsurance() {
@@ -146,6 +151,7 @@ public class QuotationDetail extends Base{
 
     public void setRoadMaintenanceMees(BigDecimal roadMaintenanceMees) {
         this.roadMaintenanceMees = roadMaintenanceMees;
+
     }
 
     public BigDecimal getVehicleRegistrationServiceFee() {
@@ -198,3 +204,4 @@ public class QuotationDetail extends Base{
 
 
 }
+

@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "Agency")
 public class Agency extends Base {
     //ma dai ly = agencyId
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AgencyId")
@@ -36,6 +36,7 @@ public class Agency extends Base {
     // trang thai = status
     @Column(name = "Status")
     private String status;
+
 
     public Integer getAgencyId() {
         return agencyId;
@@ -85,6 +86,7 @@ public class Agency extends Base {
         this.status = status;
     }
 
+
     // @OneToMany(mappedBy = "daiLy")
     // private List<NhanVien> nhanViens = new ArrayList<>();
 
@@ -108,3 +110,4 @@ public class Agency extends Base {
 
     
 }
+
