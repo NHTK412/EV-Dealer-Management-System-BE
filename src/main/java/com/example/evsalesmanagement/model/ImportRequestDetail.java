@@ -27,7 +27,7 @@ public class ImportRequestDetail extends Base{
 
     @ManyToOne
     @JoinColumn(name = "ImportRequestId", insertable = false, updatable = false)
-    private ImportRequest ImportRequest;
+    private ImportRequest importRequest;
 
     @ManyToOne
     @JoinColumn(name = "VehicleTypeDetailId", insertable = false, updatable = false)
@@ -72,13 +72,13 @@ public class ImportRequestDetail extends Base{
 
 
     public ImportRequest getImportRequest() {
-        return ImportRequest;
+        return importRequest;
     }
 
 
 
     public void setImportRequest(ImportRequest importRequest) {
-        ImportRequest = importRequest;
+        this.importRequest = importRequest;
     }
 
 

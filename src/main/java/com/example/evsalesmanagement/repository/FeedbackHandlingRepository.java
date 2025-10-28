@@ -15,18 +15,18 @@ import com.example.evsalesmanagement.model.FeedbackHandling;
 @Repository
 public interface FeedbackHandlingRepository extends JpaRepository<FeedbackHandling, Integer> {
     
-    /**
-     * Tìm xử lý theo mã phản hồi
-     */
-    @Query("SELECT x FROM XuLyPhanHoi x " +
-           "JOIN FETCH x.phanHoi ph " +
-           "JOIN FETCH ph.khachHang " +
-           "JOIN FETCH x.nhanVien " +
-           "WHERE ph.maPhanHoi = :maPhanHoi")
-    Optional<FeedbackHandling> findByMaPhanHoiWithDetails(@Param("maPhanHoi") Integer maPhanHoi);
+    // /**
+    //  * Tìm xử lý theo mã phản hồi
+    //  */
+    // @Query("SELECT x FROM XuLyPhanHoi x " +
+    //        "JOIN FETCH x.phanHoi ph " +
+    //        "JOIN FETCH ph.khachHang " +
+    //        "JOIN FETCH x.nhanVien " +
+    //        "WHERE ph.maPhanHoi = :maPhanHoi")
+    // Optional<FeedbackHandling> findByMaPhanHoiWithDetails(@Param("maPhanHoi") Integer maPhanHoi);
     
-    /**
-     * Kiểm tra phản hồi đã được xử lý chưa
-     */
-    boolean existsByPhanHoi_MaPhanHoi(Integer maPhanHoi);
+    // /**
+    //  * Kiểm tra phản hồi đã được xử lý chưa
+    //  */
+    // boolean existsByPhanHoi_MaPhanHoi(Integer maPhanHoi);
 }

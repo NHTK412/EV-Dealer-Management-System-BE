@@ -16,7 +16,7 @@ public class ImportRequest extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ImportRequestId")
-    private Integer ImportRequestId;
+    private Integer importRequestId;
 
     @Column(name = "Status")
     private String status;
@@ -29,11 +29,11 @@ public class ImportRequest extends Base {
     private Employee employee;
 
     public Integer getImportRequestId() {
-        return ImportRequestId;
+        return importRequestId;
     }
 
     public void setImportRequestId(Integer importRequestId) {
-        ImportRequestId = importRequestId;
+        this.importRequestId = importRequestId;
     }
 
     public String getStatus() {

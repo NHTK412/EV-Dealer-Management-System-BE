@@ -20,8 +20,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     /**
      * Lấy tất cả phản hồi - sắp xếp theo ngày tạo DESC
      */
-    @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang ORDER BY p.ngayTao DESC")
-    List<Feedback> findAllWithKhachHang();
+    // @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang ORDER BY p.ngayTao DESC")
+    // List<Feedback> findAllWithKhachHang();
 
 // @Query(value = "SELECT p FROM PhanHoi p JOIN FETCH p.khachHang ORDER BY p.ngayTao DESC",
 //        countQuery = "SELECT COUNT(p) FROM PhanHoi p")
@@ -40,8 +40,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     /**
      * Lấy phản hồi theo ID 
      */
-    @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang WHERE p.maPhanHoi = :id")
-    Optional<Feedback> findByIdWithKhachHang(@Param("id") Integer id);
+    // @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang WHERE p.maPhanHoi = :id")
+    // Optional<Feedback> findByIdWithKhachHang(@Param("id") Integer id);
 
     
 // SELECT 
@@ -62,13 +62,13 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     
     /**
      * Lấy phản hồi kèm thông tin xử lý  - Chi tiết phản hồi
-     */
-    @Query("SELECT p FROM PhanHoi p " +
-           "JOIN FETCH p.khachHang " +
-           "LEFT JOIN FETCH p.xuLyPhanHoi xlph " +
-           "LEFT JOIN FETCH xlph.nhanVien " +
-           "WHERE p.maPhanHoi = :id")
-    Optional<Feedback> findByIdWithDetails(@Param("id") Integer id);
+    //  */
+    // @Query("SELECT p FROM PhanHoi p " +
+    //        "JOIN FETCH p.khachHang " +
+    //        "LEFT JOIN FETCH p.xuLyPhanHoi xlph " +
+    //        "LEFT JOIN FETCH xlph.nhanVien " +
+    //        "WHERE p.maPhanHoi = :id")
+    // Optional<Feedback> findByIdWithDetails(@Param("id") Integer id);
 
     
 // SELECT 
@@ -88,11 +88,11 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     /**
      * Lấy phản hồi theo trạng thái
      */
-    @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang " +
-           "WHERE p.trangThai = :trangThai ORDER BY p.ngayTao DESC")
-    List<Feedback> findByTrangThai(@Param("trangThai") FeedbackStatus trangThai);
+//     @Query("SELECT p FROM PhanHoi p JOIN FETCH p.khachHang " +
+//            "WHERE p.trangThai = :trangThai ORDER BY p.ngayTao DESC")
+//     List<Feedback> findByTrangThai(@Param("trangThai") FeedbackStatus trangThai);
     
-// SELECT 
+// // SELECT 
 //     p.ma_phan_hoi, p.tieu_de_phan_hoi, p.noi_dung_phan_hoi, 
 //     p.trang_thai, p.ngay_tao, p.ngay_cap_nhat,
 //     k.ma_khach_hang, k.ten_khach_hang, k.email, k.so_dien_thoai
@@ -106,7 +106,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     /**
      * Đếm phản hồi theo trạng thái: Đã xử lý: 1, Chưa xử lý: 0
      */
-   Long countByTrangThai(FeedbackStatus trangThai);
+//    Long countByTrangThai(FeedbackStatus trangThai);
     
 // SELECT COUNT(p.ma_phan_hoi)
 // FROM phan_hoi p
