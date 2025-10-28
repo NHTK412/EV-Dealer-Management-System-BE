@@ -24,15 +24,15 @@ public class TestDriveAppointmentService {
      * Lấy danh sách lịch hẹn có trạng thái "Chờ xác nhận"
      * @return Danh sách lịch hẹn chờ xác nhận
      */
-    public List<Object[]> layLichHenChoXacNhan() {
-        return testDriveAppointmentRepository.layLichHenChoXacNhan();
+    public List<Object[]> getTestDriveAppointmentPendingConfirmation() {
+        return testDriveAppointmentRepository.getTestDriveAppointmentPendingConfirmation();
     }
 
     /**
      * Lấy danh sách lịch hẹn có trạng thái "Đã xác nhận"
      * @return Danh sách lịch hẹn đã xác nhận
      */
-    public List<Object[]> layLichHenDaXacNhan() {
-        return lichHenRepository.layLichHenDaXacNhan();
+    public List<Object[]> getTestDriveAppointmentConfirmed() {
+        return testDriveAppointmentRepository.getTestDriveAppointmentConfirmed();
     }
 }
