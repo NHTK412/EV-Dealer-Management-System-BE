@@ -10,7 +10,7 @@ import com.example.evsalesmanagement.model.ImportRequest;
 
 @Repository
 public interface ImportRequestRepository extends JpaRepository<ImportRequest, Integer> {
-    Page<ImportRequest> findByEmpployee_EmployeeId(Integer employeeId, Pageable pageable);
+    Page<ImportRequest> findByEmployee_EmployeeId(Integer employeeId, Pageable pageable);
 
     // List<YeuCauNhapHang> findByNhanVien_DaiLy_MaDaiLy(Integer maDaiLy);
 

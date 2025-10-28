@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.ImportRequestDTO;
 import com.example.evsalesmanagement.dto.ImportRequestRequestDTO;
-import com.example.evsalesmanagement.service.YeuCauNhapHangService;
+import com.example.evsalesmanagement.service.ImportRequestService;
 
 import jakarta.validation.constraints.Positive;
 
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class YeuCauNhapHangController {
 
     @Autowired
-    YeuCauNhapHangService yeuCauNhapHangService;
+    ImportRequestService yeuCauNhapHangService;
 
     // Chưa tạo logic gửi thông báo đến đại lý
     @PostMapping()
