@@ -10,20 +10,20 @@ import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 @RestController
-@RequestMapping("/lichHenLaiThu")
+@RequestMapping("/testDriveAppointment")
 @CrossOrigin(origins = "*")
-public class LichHenLaiThuController {
+public class TestDriveAppointmentController {
 
     @Autowired
-    private TestDriveAppointmentService lichHenService;
+    private TestDriveAppointmentService testDriveAppointmentService;
 
     // Lấy tất cả lịch hẹn lái thử với thông tin khách hàng
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Object[]>>> layTatCaLichHen() {
+    public ResponseEntity<ApiResponse<List<Object[]>>> getAllTestDriveAppointment() {
         try {
-            List<Object[]> danhSach = lichHenService.layTatCaLichHen();
+            List<Object[]> objects = testDriveAppointmentService.getAllTestDriveAppointment();
 
-            if (danhSach.isEmpty()) {
+            if (objects.isEmpty()) {
                 ApiResponse<List<Object[]>> response = new ApiResponse<>(
                         false,
                         "Không tìm thấy lịch hẹn nào",
@@ -34,7 +34,7 @@ public class LichHenLaiThuController {
             ApiResponse<List<Object[]>> response = new ApiResponse<>(
                     true,
                     "Lấy danh sách lịch hẹn thành công",
-                    danhSach);
+                    objects);
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (Exception e) {
@@ -49,12 +49,11 @@ public class LichHenLaiThuController {
     // FIX LỖI :
 
     // Lấy danh sách lịch hẹn có trạng thái "Chờ xác nhận"
-    @GetMapping("/choXacNhan")
-    public ResponseEntity<ApiResponse<List<Object[]>>> layLichHenChoXacNhan() {
+    @GetMapping("/testDriveAppointmentPendingConfirmation")
+    public ResponseEntity<ApiResponse<List<Object[]>>> getTestDriveAppointmentPendingConfirmation() {
         try {
-            List<Object[]> danhSach = lichHenService.layLichHenChoXacNhan();
-
-            if (danhSach.isEmpty()) {
+            List<Object[]> objects= testDriveAppointmentService.getTestDriveAppointmentPendingConfirmation();
+            if (objects.isEmpty()) {
                 ApiResponse<List<Object[]>> response = new ApiResponse<>(
                         false,
                         "Không có lịch hẹn chờ xác nhận",
@@ -65,7 +64,7 @@ public class LichHenLaiThuController {
             ApiResponse<List<Object[]>> response = new ApiResponse<>(
                     true,
                     "Lấy danh sách lịch hẹn chờ xác nhận thành công",
-                    danhSach);
+                    objects);
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
         } catch (Exception e) {
@@ -78,12 +77,12 @@ public class LichHenLaiThuController {
     }
 
     // Lấy danh sách lịch hẹn có trạng thái "Đã xác nhận"
-    @GetMapping("/daXacNhan")
-    public ResponseEntity<ApiResponse<List<Object[]>>> layLichHenDaXacNhan() {
+    @GetMapping("/testDriveAppointmentConfirmed")
+    public ResponseEntity<ApiResponse<List<Object[]>>> getTestDriveAppointmentConfirmed() {
         try {
-            List<Object[]> danhSach = lichHenService.layLichHenDaXacNhan();
+            List<Object[]> object = testDriveAppointmentService.getTestDriveAppointmentConfirmed();
 
-            if (danhSach.isEmpty()) {
+            if (object.isEmpty()) {
                 ApiResponse<List<Object[]>> response = new ApiResponse<>(
                         false,
                         "Không có lịch hẹn đã xác nhận",
@@ -94,7 +93,7 @@ public class LichHenLaiThuController {
             ApiResponse<List<Object[]>> response = new ApiResponse<>(
                     true,
                     "Lấy danh sách lịch hẹn đã xác nhận thành công",
-                    danhSach);
+                    object);
             return ResponseEntity.status(HttpStatus.OK).body(response); // 200
 
         } catch (Exception e) {
