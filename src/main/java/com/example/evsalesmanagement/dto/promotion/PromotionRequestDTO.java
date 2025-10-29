@@ -1,12 +1,10 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.promotion;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-import com.example.evsalesmanagement.model.Promotion;
-
-public class PromotionSummaryDTO {
-    private Integer promotionId;
+public class PromotionRequestDTO {
 
     private String promotionName;
 
@@ -26,44 +24,11 @@ public class PromotionSummaryDTO {
 
     private String status;
 
-    public PromotionSummaryDTO() {
-    }
+    private List<Integer> vehicleTypeDetailsId;
 
-    public PromotionSummaryDTO(Promotion promotion) {
-        this.promotionId = promotion.getPromotionId();
-        this.promotionName = promotion.getPromotionName();
-        this.promotionType = promotion.getPromotionType();
-        this.promotionValue = promotion.getPromotionValue();
-        this.criteria = promotion.getCriteria();
-        this.discountAmount = promotion.getDiscountAmount();
-        this.discountPercent = promotion.getDiscountPercent();
-        this.startDate = promotion.getStartDate();
-        this.endDate =  promotion.getEndDate();
-        this.status = promotion.getStatus();
-    }
-        
+    private List<Integer> agencysId;
 
-    public PromotionSummaryDTO(Integer promotionId, String promotionName, String promotionType, BigDecimal promotionValue,
-            String criteria, BigDecimal discountAmount, BigDecimal discountPercent, LocalDateTime startDate,
-            LocalDateTime endDate, String status) {
-        this.promotionId = promotionId;
-        this.promotionName = promotionName;
-        this.promotionType = promotionType;
-        this.promotionValue = promotionValue;
-        this.criteria = criteria;
-        this.discountAmount = discountAmount;
-        this.discountPercent = discountPercent;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-    }
-
-    public Integer getPromotionId() {
-        return promotionId;
-    }
-
-    public void setPromotionId(Integer promotionId) {
-        this.promotionId = promotionId;
+    public PromotionRequestDTO() {
     }
 
     public String getPromotionName() {
@@ -138,6 +103,21 @@ public class PromotionSummaryDTO {
         this.status = status;
     }
 
-    
+    public List<Integer> getVehicleTypeDetailsId() {
+        return vehicleTypeDetailsId;
+    }
+
+    public void setVehicleTypeDetailsId(List<Integer> vehicleTypeDetailsId) {
+        this.vehicleTypeDetailsId = vehicleTypeDetailsId;
+    }
+
+    public List<Integer> getAgencysId() {
+        return agencysId;
+    }
+
+    public void setAgencysId(List<Integer> agencysId) {
+        this.agencysId = agencysId;
+    }
+
 
 }
