@@ -5,9 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.PromotionRequestDTO;
+import com.example.evsalesmanagement.dto.AgencyDTO;
+import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
+import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
+import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
 
@@ -23,15 +30,31 @@ public class PromotionService {
     @Autowired
     VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-    public List<Promotion> getAllPromotions() {
-        return promotionRepository.findAll();
+    public List<PromotionSummaryDTO> getAllPromotions() {
+        return promotionRepository.findAll().stream()
+                .map(km -> new PromotionSummaryDTO(km))
+                .toList();
     }
 
-    public Promotion getByIdPromotion(Integer promotionId) {
-        Promotion promotion = promotionRepository.findById(promotionId)
+    // sử dụng trasactional để duy trình session đến hết hàm
+    @Transactional
+    public PromotionResponseDTO getByIdPromotion(Integer promotionId) {
 
+        Promotion promotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
+        PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(promotion);
+
+        promotionDetailDTO.setVehicleTypeDetails(
+                promotion.getVehicleDetails()
+                        .stream()
+                        .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                        .toList());
+        promotionDetailDTO.setAgencies(
+                promotion.getAgencies()
+                        .stream()
+                        .map(agency -> new AgencyDTO(agency))
+                        .toList());
         // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
         // khuyenMaiChiTiet.setChiTietLoaiXes(
         // khuyenMai.getChiTietLoaiXes()
@@ -44,10 +67,10 @@ public class PromotionService {
         // .map(daiLy -> new DaiLyDTO(daiLy))
         // .toList());
 
-        return promotion;
+        return promotionDetailDTO;
     }
 
-    public Promotion createPromotion(PromotionRequestDTO promotion) {
+    public PromotionResponseDTO createPromotion(PromotionRequestDTO promotion) {
 
         Promotion newPromotion = new Promotion();
         newPromotion.setPromotionName(promotion.getPromotionName());
@@ -64,8 +87,21 @@ public class PromotionService {
 
         newPromotion.setVehicleDetails(vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
         newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
+        promotionRepository.save(newPromotion);
+        PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(newPromotion);
 
-        return promotionRepository.save(newPromotion);
+        promotionDetailDTO.setVehicleTypeDetails(
+                newPromotion.getVehicleDetails()
+                        .stream()
+                        .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                        .toList());
+        promotionDetailDTO.setAgencies(
+                newPromotion.getAgencies()
+                        .stream()
+                        .map(agency -> new AgencyDTO(agency))
+                        .toList());
+
+        return promotionDetailDTO;
 
         // return
     }
