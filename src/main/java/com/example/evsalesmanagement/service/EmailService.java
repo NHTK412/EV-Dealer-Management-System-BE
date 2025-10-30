@@ -1,100 +1,52 @@
 package com.example.evsalesmanagement.service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.model.Customer;
-import com.example.evsalesmanagement.model.Feedback;
-import com.example.evsalesmanagement.utils.MessageFormat;
-
-/**
- * Service tạo mailto link để mở ứng dụng email trên thiết bị
- * Dealer sẽ gửi email thủ công từ ứng dụng email của mình
- */
 @Service
 public class EmailService {
     
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     
-    /**
-     * Tạo mailto link với nội dung đã điền sẵn
-     */
-    public String CreateMailtoLink(Feedback feedback, String feedbackHandlingContent) {
+    private final JavaMailSender mailSender;
+    
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+    
+    public void sendFeedbackResponseEmail(String toEmail, String customerName, 
+                                          String feedbackTitle, String feedbackContent,
+                                          String responseContent) {
         try {
-            Customer customer = feedback.getCustomer();
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(toEmail);
+            message.setSubject("Feedback from EV Sales Management: " + feedbackTitle);
             
-            String to = customer.getEmail();
-            String subject = "Phản hồi: " + feedback.getFeedbackTitle();
-            String body = CreateEmailContent(customer, feedback, feedbackHandlingContent);
-            
-            // Encode URL
-            String mailtoLink = String.format("mailto:%s?subject=%s&body=%s",
-                to,
-                encodeValue(subject),
-                encodeValue(body)
+            String emailBody = String.format(
+                "Dear %s,\n\n" +
+                "We have received your feedback:\n" +
+                "Title: %s\n" +
+                "Content: %s\n\n" +
+                "Feedback from us:\n%s\n\n" +
+                "Best regards,\n" +
+                "EV Sales Management Team",
+                customerName,
+                feedbackTitle,
+                feedbackContent,
+                responseContent
             );
             
-            log.info("Đã tạo mailto link cho khách hàng: {}", customer.getEmail());
-            return mailtoLink;
+            message.setText(emailBody);
+            mailSender.send(message);
+            
+            // log.info("Email sent successfully to: {}", toEmail);
             
         } catch (Exception e) {
-            log.error("Lỗi tạo mailto link: {}", e.getMessage());
-            // throw new RuntimeException("Không thể tạo mailto link");
-            throw new RuntimeException(MessageFormat.EMAIL_LINK_ERROR);
-        }
-    }
-    
-    /**
-     * Tạo nội dung email dạng text 
-     */
-    private String CreateEmailContent(Customer customer, Feedback feedback, String feedbackHandlingContent) {
-        return String.format("""
-            Kính gửi %s,
-            
-            Cảm ơn bạn đã liên hệ với EV Sales Management. Chúng tôi đã xem xét phản hồi của bạn và xin gửi lại thông tin như sau:
-            
-            ───────────────────────────────────
-            ===== PHẢN HỒI CỦA BẠN =====
-            ───────────────────────────────────
-            Tiêu đề: %s
-            Nội dung: %s
-            
-            ───────────────────────────────────
-            ===== PHẢN HỒI TỪ CHÚNG TÔI =====
-            ───────────────────────────────────
-            %s
-
-            ───────────────────────────────────
-            
-            Nếu bạn có bất kỳ câu hỏi nào khác, vui lòng liên hệ lại với chúng tôi.
-            
-            Trân trọng,
-            EV Sales Management Team
-            
-            ---
-            Email này được soạn từ hệ thống EV Sales Management
-            """,
-            customer.getCustomerId(),
-            feedback.getFeedbackTitle(),
-            feedback.getFeedbackContent(),
-            feedbackHandlingContent
-        );
-    }
-    
-    /**
-     * Encode giá trị cho URL
-     */
-    private String encodeValue(String value) {
-        try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
-                    .replace("+", "%20"); 
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Encoding error", e);
+            // log.error("Failed to send email to {}: {}", toEmail, e.getMessage());
+            throw new RuntimeException("Cannot send email: " + e.getMessage());
         }
     }
 }

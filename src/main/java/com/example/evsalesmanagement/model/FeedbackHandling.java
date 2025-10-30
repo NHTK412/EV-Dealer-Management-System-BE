@@ -1,7 +1,7 @@
 package com.example.evsalesmanagement.model;
 
-import com.example.evsalesmanagement.enums.FeedbackHandlingMethod;
-import com.example.evsalesmanagement.enums.FeedbackHandlingStatus;
+import com.example.evsalesmanagement.enums.FeedbackHandlingMethodEnum;
+import com.example.evsalesmanagement.enums.FeedbackHandlingStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,14 +29,14 @@ public class FeedbackHandling extends Base {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "FeedbackHandlingMethod", nullable = false)
-    private FeedbackHandlingMethod feedbackHandlingMethod;
+    private FeedbackHandlingMethodEnum feedbackHandlingMethod;
 
     // @Column(name = "ThoiGian")
     // private LocalDateTime thoiGian;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
-    private FeedbackHandlingStatus status;
+    private FeedbackHandlingStatusEnum status;
 
     @OneToOne
     @JoinColumn(name = "FeedbackId", unique = true)
@@ -62,19 +62,19 @@ public class FeedbackHandling extends Base {
         this.feedbackHandlingContent = feedbackHandlingContent;
     }
 
-    public FeedbackHandlingMethod getFeedbackHandlingMethod() {
+    public FeedbackHandlingMethodEnum getFeedbackHandlingMethod() {
         return feedbackHandlingMethod;
     }
 
-    public void setFeedbackHandlingMethod(FeedbackHandlingMethod feedbackHandlingMethod) {
+    public void setFeedbackHandlingMethod(FeedbackHandlingMethodEnum feedbackHandlingMethod) {
         this.feedbackHandlingMethod = feedbackHandlingMethod;
     }
 
-    public FeedbackHandlingStatus getStatus() {
+    public FeedbackHandlingStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(FeedbackHandlingStatus status) {
+    public void setStatus(FeedbackHandlingStatusEnum status) {
         this.status = status;
     }
 
