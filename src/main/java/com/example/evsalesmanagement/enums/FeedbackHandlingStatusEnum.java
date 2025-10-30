@@ -1,14 +1,11 @@
 package com.example.evsalesmanagement.enums;
-/**
- * Enum trạng thái xử lý phản hồi, vì sau khi xử lý xong chỉ có 1 trạng thái là "Hoàn thành"
- */
-public enum FeedbackHandlingStatus {
-    //HOAN_THANH = COMPLETE
+
+public enum FeedbackHandlingStatusEnum {
     COMPLETE ("Complete");
 
     private final String displayName;
 
-    FeedbackHandlingStatus(String displayName) {
+    FeedbackHandlingStatusEnum(String displayName) {
         this.displayName = displayName;
     }
 
@@ -16,7 +13,7 @@ public enum FeedbackHandlingStatus {
         return displayName;
     }
 
-    public static FeedbackHandlingStatus getDefault() {
+    public static FeedbackHandlingStatusEnum getDefault() {
         return COMPLETE;
     }
 
