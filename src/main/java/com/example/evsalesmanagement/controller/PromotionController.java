@@ -33,27 +33,18 @@ public class PromotionController {
 
         @GetMapping()
         public ResponseEntity<ApiResponse<List<PromotionSummaryDTO>>> getAllPromotions() {
-                // List<PromotionSummaryDTO> PromotionDTOs =
-                // promotionService.getAllPromotions().stream()
-                // .map(km -> new PromotionSummaryDTO(km))
-                // .toList();
-                // return ResponseEntity.ok(khuyenMaiDTOs);
-                List<PromotionSummaryDTO> PromotionDTOs = promotionService.getAllPromotions();
-                return ResponseEntity.ok(new ApiResponse<List<PromotionSummaryDTO>>(true, null, PromotionDTOs));
+
+                List<PromotionSummaryDTO> promotionSummaryDTOs = promotionService.getAllPromotions();
+
+                return ResponseEntity.ok(new ApiResponse<List<PromotionSummaryDTO>>(true, null, promotionSummaryDTOs));
         }
 
         @GetMapping("/{promotionId}")
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> getByIdPromotion(@PathVariable Integer promotionId) {
-                // return new String();
 
-                PromotionResponseDTO promotionDetailDTO = promotionService.getByIdPromotion(promotionId);
+                PromotionResponseDTO promotionResponseDTO = promotionService.getByIdPromotion(promotionId);
 
-                // PromotionResponseDTO promotionDetailDTO = new
-                // PromotionResponseDTO(promotion);
-
-                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-
-                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionDetailDTO));
+                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
 
@@ -61,64 +52,26 @@ public class PromotionController {
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> createPromotion(
                         @RequestBody PromotionRequestDTO promotion) {
 
-                // Promotion newPromotion = promotionService.createPromotion(promotion);
-
-                // PromotionResponseDTO promotionDetailDTO = new
-                // PromotionResponseDTO(newPromotion);
-                // promotionDetailDTO.setVehicleTypeDetails(
-                // newPromotion.getVehicleDetails()
-                // .stream()
-                // .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
-                // .toList());
-                // promotionDetailDTO.setAgencies(
-                // newPromotion.getAgencies()
-                // .stream()
-                // .map(agency -> new AgencyDTO(agency))
-                // .toList());
-                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-                PromotionResponseDTO promotionDetailDTO = promotionService.createPromotion(promotion);
-                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionDetailDTO));
+                PromotionResponseDTO promotionResponseDTO = promotionService.createPromotion(promotion);
+                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
 
         @DeleteMapping("/{promotionId}")
-        public ResponseEntity<ApiResponse<PromotionResponseDTO>> DeletePromotion(@PathVariable String promotionId) {
-                Promotion promotion = promotionService.DeletePromotion(Integer.parseInt(promotionId));
+        public ResponseEntity<ApiResponse<PromotionResponseDTO>> DeletePromotion(@PathVariable Integer promotionId) {
 
-                PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(promotion);
-                promotionDetailDTO.setVehicleTypeDetails(
-                                promotion.getVehicleDetails()
-                                                .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
-                                                .toList());
-                promotionDetailDTO.setAgencies(
-                                promotion.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyDTO(agency))
-                                                .toList());
-                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionDetailDTO));
+                PromotionResponseDTO promotionResponseDTO = promotionService.deletePromotion(promotionId);
+
+                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
 
         @PutMapping("/{promotionId}")
-        public ResponseEntity<ApiResponse<PromotionResponseDTO>> putPromotion(@PathVariable String promotionId,
+        public ResponseEntity<ApiResponse<PromotionResponseDTO>> putPromotion(@PathVariable Integer promotionId,
                         @RequestBody PromotionRequestDTO promotion) {
-                Promotion promotionUpdate = promotionService.UpdatePromotion(Integer.parseInt(promotionId), promotion);
-                PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(promotionUpdate);
-                promotionDetailDTO.setVehicleTypeDetails(
-                                promotionUpdate.getVehicleDetails()
-                                                .stream()
-                                                .map(vehicleTypeDetails -> new VehicleTypeDetailDTO(vehicleTypeDetails))
-                                                .toList());
-                promotionDetailDTO.setAgencies(
-                                promotionUpdate.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyDTO(agency))
-                                                .toList());
 
-                // return ResponseEntity.ok(khuyenMaiChiTietDTO);
-                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionDetailDTO));
+                PromotionResponseDTO promotionResponseDTO = promotionService.updatePromotion(promotionId, promotion);
+                return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
 }

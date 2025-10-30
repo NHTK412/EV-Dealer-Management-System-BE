@@ -21,8 +21,7 @@ public enum FeedbackHandlingMethodEnum {
             }
         }
         throw new IllegalArgumentException(
-            "Feedback handling method unavailable " + text 
-        );
+                "Feedback handling method unavailable " + text);
     }
 
     public static boolean enumIsValid(String text) {
@@ -38,8 +37,7 @@ public enum FeedbackHandlingMethodEnum {
         return false;
     }
 
-
- @Override
+    @Override
     public String toString() {
         return displayName;
     }
