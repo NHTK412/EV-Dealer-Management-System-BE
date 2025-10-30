@@ -1,18 +1,12 @@
 package com.example.evsalesmanagement.enums;
 
-/**
- * Enum định nghĩa các hình thức giải quyết 
- * EMAIL, DIEN_THOAI
- */
-
- //HinhThucGiaiQuyet = FeedbackHandlingMethod
-public enum FeedbackHandlingMethod {
+public enum FeedbackHandlingMethodEnum {
     PHONE_NUMBER("Phone Number"),
     EMAIL("Email");
 
     private final String displayName;
 
-    FeedbackHandlingMethod(String displayName) {
+    FeedbackHandlingMethodEnum(String displayName) {
         this.displayName = displayName;
     }
 
@@ -20,29 +14,22 @@ public enum FeedbackHandlingMethod {
         return displayName;
     }
 
-    /**
-     * Chuyển từ String qua Enum
-     */
-    public static FeedbackHandlingMethod fromStringToEnum(String text) {
-        for (FeedbackHandlingMethod type : FeedbackHandlingMethod.values()) {
+    public static FeedbackHandlingMethodEnum fromStringToEnum(String text) {
+        for (FeedbackHandlingMethodEnum type : FeedbackHandlingMethodEnum.values()) {
             if (type.displayName.equalsIgnoreCase(text)) {
                 return type;
             }
         }
         throw new IllegalArgumentException(
-            "Feedback handling method unavailable " + text 
-        );
+                "Feedback handling method unavailable " + text);
     }
 
-    /**
-     * Kiểm tra xem text có phải enum hợp lệ hay không
-     */
     public static boolean enumIsValid(String text) {
         if (text == null || text.trim().isEmpty()) {
             return false;
         }
 
-        for (FeedbackHandlingMethod type : FeedbackHandlingMethod.values()) {
+        for (FeedbackHandlingMethodEnum type : FeedbackHandlingMethodEnum.values()) {
             if (type.displayName.equalsIgnoreCase(text.trim())) {
                 return true;
             }
@@ -50,8 +37,7 @@ public enum FeedbackHandlingMethod {
         return false;
     }
 
-
- @Override
+    @Override
     public String toString() {
         return displayName;
     }

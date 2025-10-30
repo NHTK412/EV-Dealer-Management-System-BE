@@ -43,14 +43,14 @@ public class PromotionService {
                 Promotion promotion = promotionRepository.findById(promotionId)
                                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
-                PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(promotion);
+                PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(promotion);
 
-                promotionDetailDTO.setVehicleTypeDetails(
+                promotionResponseDTO.setVehicleTypeDetails(
                                 promotion.getVehicleDetails()
                                                 .stream()
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
                                                 .toList());
-                promotionDetailDTO.setAgencies(
+                promotionResponseDTO.setAgencies(
                                 promotion.getAgencies()
                                                 .stream()
                                                 .map(agency -> new AgencyDTO(agency))
@@ -67,9 +67,10 @@ public class PromotionService {
                 // .map(daiLy -> new DaiLyDTO(daiLy))
                 // .toList());
 
-                return promotionDetailDTO;
+                return promotionResponseDTO;
         }
 
+        @Transactional
         public PromotionResponseDTO createPromotion(PromotionRequestDTO promotion) {
 
                 Promotion newPromotion = new Promotion();
@@ -89,54 +90,93 @@ public class PromotionService {
                                 vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
                 newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
                 promotionRepository.save(newPromotion);
-                PromotionResponseDTO promotionDetailDTO = new PromotionResponseDTO(newPromotion);
+                PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(newPromotion);
 
-                promotionDetailDTO.setVehicleTypeDetails(
+                promotionResponseDTO.setVehicleTypeDetails(
                                 newPromotion.getVehicleDetails()
                                                 .stream()
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
                                                 .toList());
-                promotionDetailDTO.setAgencies(
+                promotionResponseDTO.setAgencies(
                                 newPromotion.getAgencies()
                                                 .stream()
                                                 .map(agency -> new AgencyDTO(agency))
                                                 .toList());
 
-                return promotionDetailDTO;
+                return promotionResponseDTO;
 
                 // return
         }
 
-        public Promotion DeletePromotion(Integer promotionId) {
+        @Transactional
+        public PromotionResponseDTO deletePromotion(Integer promotionId) {
+
                 Promotion promotion = promotionRepository.findById(promotionId)
                                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
-                promotion.getVehicleDetails().size();
-                promotion.getAgencies().size();
+                PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(promotion);
+
+                promotionResponseDTO.setVehicleTypeDetails(
+                                promotion.getVehicleDetails()
+                                                .stream()
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                                                .toList());
+
+                promotionResponseDTO.setAgencies(
+                                promotion.getAgencies()
+                                                .stream()
+                                                .map(agency -> new AgencyDTO(agency))
+                                                .toList());
+
                 promotionRepository.deleteById(promotionId);
-                return promotion;
+
+                return promotionResponseDTO;
         }
 
-        public Promotion UpdatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
+        @Transactional
+        public PromotionResponseDTO updatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
+
                 Promotion updatePromotion = promotionRepository.findById(promotionId)
                                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
 
                 updatePromotion.setPromotionName(promotion.getPromotionName());
+
                 updatePromotion.setPromotionType(promotion.getPromotionType());
+
                 updatePromotion.setPromotionValue(promotion.getPromotionValue());
+
                 updatePromotion.setCriteria(promotion.getCriteria());
+
                 updatePromotion.setDiscountAmount(promotion.getDiscountAmount());
+
                 updatePromotion.setDiscountPercent(promotion.getDiscountPercent());
+
                 updatePromotion.setStartDate(promotion.getStartDate());
+
                 updatePromotion.setEndDate(promotion.getEndDate());
 
                 // Mặc định là đang hoạt động
                 updatePromotion.setStatus(promotion.getStatus());
+
                 updatePromotion.setVehicleDetails(
                                 vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
                 updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
 
-                return promotionRepository.save(updatePromotion);
+                PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(updatePromotion);
+                promotionResponseDTO.setVehicleTypeDetails(
+                                updatePromotion.getVehicleDetails()
+                                                .stream()
+                                                .map(vehicleTypeDetails -> new VehicleTypeDetailDTO(vehicleTypeDetails))
+                                                .toList());
+
+                promotionResponseDTO.setAgencies(
+                                updatePromotion.getAgencies()
+                                                .stream()
+                                                .map(agency -> new AgencyDTO(agency))
+                                                .toList());
+
+                // return promotionRepository.save(updatePromotion);
+                return promotionResponseDTO;
         }
 
 }

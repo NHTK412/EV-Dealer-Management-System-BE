@@ -1,18 +1,13 @@
 package com.example.evsalesmanagement.enums;
 
-/*
- * Enum định nghĩa trạng thái phản hồi 
- * CHUA_XU_LY -> DANG_XU_LY -> DA_XU_LY
- */
-
-public enum FeedbackStatus {
+public enum FeedbackStatusEnum {
     NOT_YET_PROCESSED("Not yet processed"),
     IN_PROCESSED("In processed"),
     PROCESSED("Processed");
 
     private final String displayName;
 
-    FeedbackStatus(String displayName) {
+    FeedbackStatusEnum(String displayName) {
         this.displayName = displayName;
     }
 
@@ -21,11 +16,8 @@ public enum FeedbackStatus {
     }
 
 
-    /*
-     * Chuyển từ String qua Enum
-     */
-    public static FeedbackStatus fromStringToEnum(String text) {
-        for (FeedbackStatus status : FeedbackStatus.values()) {
+    public static FeedbackStatusEnum fromStringToEnum(String text) {
+        for (FeedbackStatusEnum status : FeedbackStatusEnum.values()) {
             if (status.displayName.equalsIgnoreCase(text)) {
                 return status;
             }
@@ -35,15 +27,12 @@ public enum FeedbackStatus {
     }
 
 
-    /*
-     * Kiểm tra xem text có phải enum hợp lệ hay không
-     */
     public static boolean enumIsValid(String text) {
         if (text == null || text.trim().isEmpty()) {
             return false;
         }
         
-        for (FeedbackStatus status : FeedbackStatus.values()) {
+        for (FeedbackStatusEnum status : FeedbackStatusEnum.values()) {
             if (status.displayName.equalsIgnoreCase(text.trim())) {
                 return true;
             }
@@ -51,11 +40,7 @@ public enum FeedbackStatus {
         return false;
     }
 
-
-    /**
-     * Kiểm tra chuyển trạng thái hợp lệ hay không
-     */
-    public boolean canTransitionToNewStatus(FeedbackStatus newStatus) {
+    public boolean canTransitionToNewStatus(FeedbackStatusEnum newStatus) {
         return switch (this) {
             case NOT_YET_PROCESSED-> newStatus == IN_PROCESSED;
             case IN_PROCESSED-> newStatus == PROCESSED;
@@ -64,10 +49,7 @@ public enum FeedbackStatus {
     }
 
 
-    /**
-     * Lấy trạng thái tiếp theo
-     */
-  public FeedbackStatus getNext() {
+  public FeedbackStatusEnum getNext() {
         return switch (this) {
             case NOT_YET_PROCESSED -> IN_PROCESSED;
             case IN_PROCESSED -> PROCESSED;
@@ -76,17 +58,11 @@ public enum FeedbackStatus {
     }
 
 
-    /**
-     * Trạng thái mặc định khi tạo phản hồi mới
-     */
-     public static FeedbackStatus getDefaultStatus() {
+     public static FeedbackStatusEnum getDefaultStatus() {
         return NOT_YET_PROCESSED;
     }
 
 
-    /**
-     * Kiểm tra xem trạng thái có phải là trạng thái cuối cùng không
-     */
     public boolean isFinalStatus() {
         return this == PROCESSED;
     }

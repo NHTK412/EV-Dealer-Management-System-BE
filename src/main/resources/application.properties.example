@@ -8,3 +8,10 @@ spring.datasource.driver-class-name=
 spring.jpa.hibernate.ddl-auto=
 spring.jpa.show-sql=
 spring.jpa.open-in-view=
+
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.properties.mail.smtp.auth=
+spring.mail.properties.mail.smtp.starttls.enable=

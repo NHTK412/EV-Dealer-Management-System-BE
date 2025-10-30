@@ -2,131 +2,112 @@ package com.example.evsalesmanagement.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.evsalesmanagement.dto.FeedbackDetailResponse;
-import com.example.evsalesmanagement.dto.FeedbackHandlingRequest;
-import com.example.evsalesmanagement.dto.FeedbackHandlingResponse;
-import com.example.evsalesmanagement.enums.FeedbackHandlingMethod;
-import com.example.evsalesmanagement.enums.FeedbackStatus;
-import com.example.evsalesmanagement.enums.FeedbackHandlingStatus;
+import com.example.evsalesmanagement.dto.FeedbackDetailDTO;
+import com.example.evsalesmanagement.dto.HandleFeedbackRequestDTO;
+import com.example.evsalesmanagement.enums.FeedbackHandlingMethodEnum;
+import com.example.evsalesmanagement.enums.FeedbackHandlingStatusEnum;
+import com.example.evsalesmanagement.enums.FeedbackStatusEnum;
 import com.example.evsalesmanagement.exception.BadRequestException;
+import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
+import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Feedback;
 import com.example.evsalesmanagement.model.FeedbackHandling;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
-import com.example.evsalesmanagement.repository.FeedbackRepository;
 import com.example.evsalesmanagement.repository.FeedbackHandlingRepository;
-import com.example.evsalesmanagement.utils.MessageFormat;
+import com.example.evsalesmanagement.repository.FeedbackRepository;
 
 @Service
 public class FeedbackHandlingService {
     
     private static final Logger log = LoggerFactory.getLogger(FeedbackHandlingService.class);
     
-    private final FeedbackHandlingRepository feedbackHandlingRepository;
     private final FeedbackRepository feedbackRepository;
+    private final FeedbackHandlingRepository feedbackHandlingRepository;
     private final EmployeeRepository employeeRepository;
-    private final FeedbackService feedbackService;
     private final EmailService emailService;
+    private final FeedbackService feedbackService;
+    
     
     public FeedbackHandlingService(
-            FeedbackHandlingRepository feedbackHandlingRepository,
             FeedbackRepository feedbackRepository,
+            FeedbackHandlingRepository feedbackHandlingRepository,
             EmployeeRepository employeeRepository,
-            FeedbackService feedbackService,
-            EmailService emailService) {
-        this.feedbackHandlingRepository = feedbackHandlingRepository;
+            EmailService emailService,
+            FeedbackService feedbackService) {
         this.feedbackRepository = feedbackRepository;
+        this.feedbackHandlingRepository = feedbackHandlingRepository;
         this.employeeRepository = employeeRepository;
-        this.feedbackService = feedbackService;
         this.emailService = emailService;
+        this.feedbackService = feedbackService;
     }
     
-    // @Transactional
-    // public FeedbackHandlingResponse feedbackHandling(
-    //         Integer feedbackId, 
-    //         FeedbackHandlingRequest request, 
-    //         Integer employeeId) {
+    @Transactional
+    public FeedbackDetailDTO handleFeedback(Integer feedbackId, HandleFeedbackRequestDTO request, Integer employeeId) {
+        // log.info("Handling feedback {} by employee {}", feedbackId, employeeId);
         
-    //     log.info("Bắt đầu xử lý phản hồi {} bởi nhân viên {}", feedbackId, employeeId);
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+            .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with ID: " + feedbackId));
         
-    //     Feedback feedback = validateVaLayPhanHoi(feedbackId);
-    //     Employee employee = validateVaLayNhanVien(employeeId);
-    //     FeedbackHandlingMethod feedbackHandlingMethod = validateHinhThucGiaiQuyet(request.getFeedbackHandlingMethod()); 
+        if (feedbackHandlingRepository.existsByFeedback_FeedbackId(feedbackId)) {
+            throw new ConflictException("Feedback has already been handled");
+        }
         
-    //    feedbackService.capNhatTrangThai(feedbackId, FeedbackStatus.IN_PROCESSED);
+        if (feedback.getFeedbackStatus() == FeedbackStatusEnum.PROCESSED) {
+            throw new BadRequestException("Feedback is already in processed status");
+        }
         
-    //     FeedbackHandling feedbackHandling = new FeedbackHandling();
-    //     feedbackHandling.setFeedback(feedback);
-    //     feedbackHandling.setEmployee(employee);
-    //     feedbackHandling.setHandlingContent(request.getHandlingContent());
-    //     feedbackHandling.setFeedbackHandlingMethod(feedbackHandlingMethod);
+        Employee employee = employeeRepository.findById(employeeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Not found employee with ID: " + employeeId));
+        
+        if (!FeedbackHandlingMethodEnum.enumIsValid(request.getFeedbackHandlingMethod())) {
+            throw new BadRequestException("Handling method is invalid: " + request.getFeedbackHandlingMethod());
+        }
+        FeedbackHandlingMethodEnum method = FeedbackHandlingMethodEnum.fromStringToEnum(request.getFeedbackHandlingMethod());
+        
+        feedback.setFeedbackStatus(FeedbackStatusEnum.IN_PROCESSED);
+        feedbackRepository.save(feedback);
+        log.info("Updated feedback {} status to IN_PROCESSED", feedbackId);
+        
+        FeedbackHandling handling = new FeedbackHandling();
+        handling.setFeedback(feedback);
+        handling.setEmployee(employee);
+        handling.setFeedbackHandlingContent(request.getFeedbackHandlingContent());
+        handling.setFeedbackHandlingMethod(method);
+        handling.setStatus(FeedbackHandlingStatusEnum.COMPLETE);
+        
+        feedbackHandlingRepository.save(handling);
+        // log.info("Created feedback handling record");
+        
+        feedback.setFeedbackStatus(FeedbackStatusEnum.PROCESSED);
+        feedbackRepository.save(feedback);
+        // log.info("Updated feedback {} status to PROCESSED", feedbackId);
+        
 
-    //     feedbackHandling.setTrangThai(FeedbackHandlingStatus.COMPLETED); 
+        // bug với database đang khó, tạm thời run tốt - hiện log
+        if (method == FeedbackHandlingMethodEnum.EMAIL) {
+            Customer customer = feedback.getCustomer();
+            if (customer != null && customer.getEmail() != null) {
+                try {
+                    emailService.sendFeedbackResponseEmail(
+                        customer.getEmail(),
+                        customer.getCustomerName(),
+                        feedback.getFeedbackTitle(),
+                        feedback.getFeedbackContent(),
+                        request.getFeedbackHandlingContent()
+                    );
+                    log.info("Email sent to customer: {}", customer.getEmail());
+                } catch (Exception e) {
+                    log.error("Failed to send email but handling completed: {}", e.getMessage());
+                }
+            }
+        }
         
-    //     xuLyPhanHoiRepository.save(xuLyPhanHoi);
-    //     log.info("Đã lưu xử lý phản hồi");
-        
-    //     phanHoiService.capNhatTrangThai(maPhanHoi, FeedbackStatus.DA_XU_LY);
-        
-    //     String mailtoLink = taoMailtoLinkNeuCanThiet(phanHoi, request, hinhThucEnum);
-        
-    //     FeedbackDetailResponse chiTiet = phanHoiService.layChiTietPhanHoi(maPhanHoi);
-        
-    //     log.info("Hoàn thành xử lý phản hồi {}", maPhanHoi);
-    //     return new FeedbackHandlingResponse(chiTiet, mailtoLink);
-    // }
-    
-    // // ==================== VALIDATION ====================
-    
-    // private Feedback validateVaLayPhanHoi(Integer maPhanHoi) {
-    //     Feedback phanHoi = phanHoiRepository.findByIdWithKhachHang(maPhanHoi)
-    //             .orElseThrow(() -> new ResourceNotFoundException(
-    //                 // "Không tìm thấy phản hồi: " + maPhanHoi
-    //                 String.format(MessageFormat.PHAN_HOI_NOT_FOUND, maPhanHoi)
-    //                 ));
-        
-    //     FeedbackStatus trangThai = phanHoi.getTrangThai();
-    //     if (trangThai == FeedbackStatus.DA_XU_LY) {
-    //         // throw new BadRequestException("Phản hồi đã được xử lý");
-    //         throw new BadRequestException(MessageFormat.PHAN_HOI_DA_XU_LY);
-    //     }
-        
-    //     return phanHoi;
-    // }
-    
-    // private Employee validateVaLayNhanVien(Integer maNhanVien) {
-    //     return nhanVienRepository.findById(maNhanVien)
-    //             .orElseThrow(() -> new ResourceNotFoundException(
-    //                 // "Không tìm thấy nhân viên: " + maNhanVien
-    //                 String.format(MessageFormat.NHAN_VIEN_NOT_FOUND, maNhanVien)
-    //                 ));
-    // }
-    
-    // private HinhThucGiaiQuyet validateHinhThucGiaiQuyet(String hinhThuc) {
-    //     if (!HinhThucGiaiQuyet.enumIsValid(hinhThuc)) {
-    //         // throw new BadRequestException("Hình thức giải quyết không hợp lệ: " + hinhThuc);
-    //         throw new BadRequestException(String.format(MessageFormat.HINH_THUC_INVALID, hinhThuc));
-    //     }
-    //     return HinhThucGiaiQuyet.fromStringToEnum(hinhThuc);
-    // }
-    
-    // // ==================== MAILTO LINK ====================
-    // private String taoMailtoLinkNeuCanThiet(
-    //         Feedback phanHoi, 
-    //         FeedbackHandlingRequest request,
-    //         HinhThucGiaiQuyet hinhThuc) {
-        
-    //     if (hinhThuc == HinhThucGiaiQuyet.EMAIL) {
-    //         log.info("Tạo mailto link cho khách hàng: {}", 
-    //             phanHoi.getKhachHang().getEmail());
-    //         return emailService.taoMailtoLink(phanHoi, request.getNoiDungXuLy());
-    //     } else {
-    //         log.info("Hình thức điện thoại - không cần mailto link");
-    //         return null;
-    //     }
-    // }
+        return feedbackService.getFeedbackDetail(feedbackId);
+    }
 }

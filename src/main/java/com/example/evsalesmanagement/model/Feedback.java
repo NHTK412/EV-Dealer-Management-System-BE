@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.model;
 
-import com.example.evsalesmanagement.enums.FeedbackStatus;
+import com.example.evsalesmanagement.enums.FeedbackStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +16,6 @@ import jakarta.persistence.Table;
 
 @Entity
 
-// PhanHoi = Feedback
 @Table(name = "Feedback")
 public class Feedback extends Base {
     @Id
@@ -24,11 +23,9 @@ public class Feedback extends Base {
     @Column(name = "FeedbackId")
     private Integer feedbackId;
 
-    // TieuDePhanHoi = feedbackTitle
     @Column(name = "FeedbackTitle")
     private String feedbackTitle;
 
-    // NoiDungPhanHoi = feedbackContent
     @Column(name = "FeedbackContent")
     private String feedbackContent;
 
@@ -37,7 +34,7 @@ public class Feedback extends Base {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
-    private FeedbackStatus feedbackStatus;
+    private FeedbackStatusEnum feedbackStatus;
 
     @ManyToOne
     @JoinColumn(name = "CustomerId")
@@ -78,11 +75,11 @@ public class Feedback extends Base {
     // this.thoiGian = thoiGian;
     // }
 
-    public FeedbackStatus getFeedbackStatus() {
+    public FeedbackStatusEnum getFeedbackStatus() {
         return feedbackStatus;
     }
 
-    public void setFeedbackStatus(FeedbackStatus feedbackStatus) {
+    public void setFeedbackStatus(FeedbackStatusEnum feedbackStatus) {
         this.feedbackStatus = feedbackStatus;
     }
 
