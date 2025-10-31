@@ -33,7 +33,7 @@ public class ImportRequest extends Base {
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
-    @OneToMany(mappedBy = "importRequest", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "importRequest", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImportRequestDetail> importRequestDetails = new ArrayList<>();
 
     public Integer getImportRequestId() {

@@ -117,105 +117,118 @@ public class ImportRequestService {
 
         }
 
-        // @Transactional
-        // public ImportRequestResponseDTO deleteImportRequest(Integer importRequestId)
-        // {
+        @Transactional
+        public ImportRequestResponseDTO deleteImportRequest(Integer importRequestId) {
 
-        // ImportRequestDTO importRequestDTO = new
-        // ImportRequestDTO(importRequestRepository.findById(importRequestId)
-        // .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên")));
+                ImportRequestResponseDTO importRequestResponseDTO = new ImportRequestResponseDTO(
+                                importRequestRepository.findById(importRequestId)
+                                                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên")));
 
-        // importRequestDTO.setImportRequestDetails(
-        // importRequestDetailRepository.findByImportRequest_ImportRequestId(importRequestId).stream()
-        // .map((ctyc) -> {
-        // return new ImportRequestDetailDTO(ctyc);
-        // }).toList());
+                importRequestResponseDTO.setImportRequestDetails(
+                                importRequestDetailRepository.findByImportRequest_ImportRequestId(importRequestId)
+                                                .stream()
+                                                .map((ctyc) -> {
+                                                        return new ImportRequestDetailResponseDTO(ctyc);
+                                                }).toList());
 
-        // importRequestDetailRepository.deleteByImportRequest_ImportRequestId(importRequestId);
+                importRequestDetailRepository.deleteByImportRequest_ImportRequestId(importRequestId);
 
-        // importRequestRepository.deleteById(importRequestId);
+                importRequestRepository.deleteById(importRequestId);
 
-        // return importRequestDTO;
+                return importRequestResponseDTO;
 
-        // }
+        }
 
-        // @Transactional
-        // public ImportRequestResponseDTO updateImportRequest(Integer importRequestId,
-        // ImportRequestRequestDTO importRequestRequestDTO) {
-        // ImportRequest importRequest =
-        // importRequestRepository.findById(importRequestId)
-        // .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
+        @Transactional
+        public ImportRequestResponseDTO updateImportRequest(Integer importRequestId,
+                        ImportRequestRequestDTO importRequestRequestDTO) {
 
-        // if (!importRequest.getStatus().equals("Chờ duyệt")) {
-        // throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
-        // }
+                ImportRequest importRequest = importRequestRepository.findById(importRequestId)
+                                .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
 
-        // ImportRequestDTO importRequestDTO = new ImportRequestDTO(importRequest);
+                if (!importRequest.getStatus().equals("Chờ duyệt")) {
+                        throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
+                }
 
-        // importRequest.setNote(importRequest.getNote());
+                ImportRequestResponseDTO importRequestResponseDTO = new ImportRequestResponseDTO(importRequest);
 
-        // importRequestDetailRepository.deleteByImportRequest_ImportRequestId(importRequestId);
-        // List<ImportRequestDetail> importRequestDetails = new ArrayList<>();
+                importRequest.setNote(importRequest.getNote());
 
-        // for (ImportRequestDetailRequestDTO importRequestDetailDTO :
-        // importRequestRequestDTO.getImportRequestDetails()) {
-        // VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository
-        // .findById(importRequestDetailDTO.getVehicleTypeDetailId())
-        // .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết loại xe"));
+                importRequest.getImportRequestDetails().clear();
 
-        // ImportRequestDetail importRequestDetail = new ImportRequestDetail();
+                List<Integer> vehicleTypeDetailIds = importRequestRequestDTO.getImportRequestDetails()
+                                .stream()
+                                .map((importRequestDetail) -> {
+                                        return importRequestDetail.getVehicleTypeDetailId();
+                                })
+                                .toList();
 
-        // importRequestDetail.setVehicleTypeDetailId(vehicleTypeDetail.getVehicleTypeDetailId());
-        // importRequestDetail.setVehicleTypeDetail(vehicleTypeDetail);
+                // Gắn chi tiết yêu cầu
+                List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
+                                .getAllByIdWithVehicleType(vehicleTypeDetailIds);
 
-        // importRequestDetail.setQuantity(importRequestDetailDTO.getQuantity());
-        // importRequestDetail.setImportRequestId(importRequest.getImportRequestId());
-        // importRequestDetail.setImportRequest(importRequest);
-        // importRequestDetailRepository.save(importRequestDetail);
-        // importRequestDetails.add(importRequestDetail);
+                if (vehicleTypeDetails.size() != vehicleTypeDetailIds.size()) {
+                        throw new ResourceNotFoundException("Danh sách loại xe không hợp lệ ");
+                }
 
-        // importRequestDTO.getImportRequestDetails().add(new
-        // ImportRequestDetailDTO(importRequestDetail));
+                Map<Integer, VehicleTypeDetail> vehicleTypeDetailMap = vehicleTypeDetails
+                                .stream()
+                                .collect(Collectors.toMap(
+                                                vehicleTypeDetail -> vehicleTypeDetail.getVehicleTypeDetailId(),
+                                                vehicleTypeDetail -> vehicleTypeDetail));
 
-        // }
-        // return importRequestDTO;
-        // }
+                for (ImportRequestDetailRequestDTO importRequestDetailRequestDTO : importRequestRequestDTO
+                                .getImportRequestDetails()) {
 
-        // @Transactional
-        // public List<ImportRequestSummaryDTO> getAllImportRequests(Pageable pageable,
-        // Integer employeeId) {
+                        ImportRequestDetail importRequestDetail = new ImportRequestDetail();
 
-        // Page<ImportRequest> importRequests = employeeId == null ?
-        // importRequestRepository.findAll(pageable)
-        // : importRequestRepository.findByEmployee_EmployeeId(employeeId, pageable);
+                        // Gắn quan hệ từ con --> cha
+                        importRequestDetail.setVehicleTypeDetail(
+                                        vehicleTypeDetailMap
+                                                        .get(importRequestDetailRequestDTO.getVehicleTypeDetailId()));
 
-        // // System.err.println("----> " + yeuCauNhapHangs.toString());
-        // return importRequests.map(importRequest -> new
-        // ImportRequestDTO(importRequest)).toList();
-        // }
+                        importRequestDetail.setImportRequest(importRequest);
 
-        // @Transactional
-        // public ImportRequestResponseDTO getImportRequestDetail(Integer
-        // importRequestId) {
-        // ImportRequest importRequest =
-        // importRequestRepository.findById(importRequestId)
-        // .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+                        importRequestDetail.setQuantity(importRequestDetailRequestDTO.getQuantity());
 
-        // ImportRequestDTO importRequestDTO = new ImportRequestDTO(importRequest);
+                        // Gắn quan hệ từ cha --> con
+                        importRequest.getImportRequestDetails().add(importRequestDetail);
 
-        // List<ImportRequestDetail> importRequestDetails =
-        // importRequestDetailRepository
-        // .findByImportRequest_ImportRequestId(importRequestId);
+                        importRequestResponseDTO.getImportRequestDetails()
+                                        .add(new ImportRequestDetailResponseDTO(importRequestDetail));
+                }
+                return importRequestResponseDTO;
+        }
 
-        // List<ImportRequestDetailDTO> importRequestDetailDTOs =
-        // importRequestDetails.stream()
-        // .map((importRequestDetail) -> {
-        // return new ImportRequestDetailDTO(importRequestDetail);
-        // }).toList();
+        @Transactional
+        public List<ImportRequestSummaryDTO> getAllImportRequests(Pageable pageable,
+                        Integer employeeId) {
 
-        // importRequestDTO.setImportRequestDetails(importRequestDetailDTOs);
+                Page<ImportRequest> importRequests = employeeId == null ? importRequestRepository.findAll(pageable)
+                                : importRequestRepository.findByEmployee_EmployeeId(employeeId, pageable);
 
-        // return importRequestDTO;
-        // }
+                // System.err.println("----> " + yeuCauNhapHangs.toString());
+                return importRequests.map(importRequest -> new ImportRequestSummaryDTO(importRequest)).toList();
+        }
+
+        @Transactional
+        public ImportRequestResponseDTO getImportRequestDetail(Integer importRequestId) {
+                ImportRequest importRequest = importRequestRepository.findById(importRequestId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+
+                ImportRequestResponseDTO importRequestDTO = new ImportRequestResponseDTO(importRequest);
+
+                List<ImportRequestDetail> importRequestDetails = importRequestDetailRepository
+                                .findByImportRequest_ImportRequestId(importRequestId);
+
+                List<ImportRequestDetailResponseDTO> importRequestDetailDTOs = importRequestDetails.stream()
+                                .map((importRequestDetail) -> {
+                                        return new ImportRequestDetailResponseDTO(importRequestDetail);
+                                }).toList();
+
+                importRequestDTO.setImportRequestDetails(importRequestDetailDTOs);
+
+                return importRequestDTO;
+        }
 
 }

@@ -38,36 +38,34 @@ public class ImportRequestController {
         return ResponseEntity.ok(importRequestService.createImportRequest(importRequestRequestDTO));
     }
 
-    // @DeleteMapping("/{importRequestId}")
-    // public ResponseEntity<ImportRequestResponseDTO> deleteImportRequest(@PathVariable String importRequestId) {
+    @DeleteMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestResponseDTO> deleteImportRequest(@PathVariable Integer importRequestId) {
 
-    //     return ResponseEntity.ok(importRequestService.deleteImportRequest(Integer.parseInt(importRequestId)));
-    // }
+        return ResponseEntity.ok(importRequestService.deleteImportRequest(importRequestId));
+    }
 
-    // @PutMapping("/{importRequestId}")
-    // public ResponseEntity<ImportRequestResponseDTO> updateImportRequest(
-    //         @PathVariable String importRequest,
-    //         @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
-    //     return ResponseEntity.ok(importRequestService.updateImportRequest(Integer.parseInt(importRequest),
-    //             importRequestRequestDTO));
-    // }
+    @PutMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestResponseDTO> updateImportRequest(
+            @PathVariable Integer importRequestId,
+            @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
+        return ResponseEntity.ok(importRequestService.updateImportRequest(importRequestId, importRequestRequestDTO));
+    }
 
-    // @GetMapping
-    // public ResponseEntity<List<ImportRequestSummaryDTO>> getAllImportRequests(@RequestParam Integer page,
-    //         @RequestParam @Positive Integer size,
-    //         @RequestParam(required = false) Integer employeeId) {
-    //     Pageable pageable = PageRequest.of(page, size);
-    //     return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
-    // }
+    @GetMapping
+    public ResponseEntity<List<ImportRequestSummaryDTO>> getAllImportRequests(@RequestParam Integer page,
+            @RequestParam @Positive Integer size,
+            @RequestParam(required = false) Integer employeeId) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
+    }
 
-    // @GetMapping("/{importRequestId}")
-    // public ResponseEntity<ImportRequestResponseDTO> getImportRequestDetail(@PathVariable Integer importRequestId) {
-    //     return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
-    // }
+    @GetMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestResponseDTO> getImportRequestDetail(@PathVariable Integer importRequestId) {
+        return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
+    }
 
     // @GetMapping("/nhanVien/{maNhanVien}")
-    // public ResponseEntity<List<YeuCauNhapHangDTO>>
-    // layTatCaYeuCauNhapHangTheoNhanVien(
+    // public ResponseEntity<List<>> layTatCaYeuCauNhapHangTheoNhanVien(
     // @PathVariable Integer maYeuCauNhapHang) {
     // return
     // ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
