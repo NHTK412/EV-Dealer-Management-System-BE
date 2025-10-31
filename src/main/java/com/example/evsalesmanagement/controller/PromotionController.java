@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
@@ -14,6 +15,8 @@ import com.example.evsalesmanagement.service.PromotionService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.evsalesmanagement.utils.ApiResponse;
 
+import jakarta.validation.constraints.Positive;
+
 @RestController
 @RequestMapping("/promotion")
 public class PromotionController {
@@ -32,9 +37,12 @@ public class PromotionController {
         private PromotionService promotionService;
 
         @GetMapping()
-        public ResponseEntity<ApiResponse<List<PromotionSummaryDTO>>> getAllPromotions() {
+        public ResponseEntity<ApiResponse<List<PromotionSummaryDTO>>> getAllPromotions(@RequestParam Integer page,
+                        @RequestParam @Positive Integer size) {
 
-                List<PromotionSummaryDTO> promotionSummaryDTOs = promotionService.getAllPromotions();
+                Pageable pageable = PageRequest.of(page - 1, size);
+
+                List<PromotionSummaryDTO> promotionSummaryDTOs = promotionService.getAllPromotions(pageable);
 
                 return ResponseEntity.ok(new ApiResponse<List<PromotionSummaryDTO>>(true, null, promotionSummaryDTOs));
         }
