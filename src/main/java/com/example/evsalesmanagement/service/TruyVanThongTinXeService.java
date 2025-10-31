@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.TruyVanThongTinXe;
+import com.example.evsalesmanagement.dto.VehicleTypeDTO;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class TruyVanThongTinXeService {
      * Lấy thông tin cơ bản của tất cả các loại xe
      * @return Danh sách thông tin xe
      */
-    public List<TruyVanThongTinXe> layThongTinXe() {
+    public List<VehicleTypeDTO> layThongTinXe() {
         List<Object[]> results = repository.layThongTinXe();
-        List<TruyVanThongTinXe> danhSachXe = new ArrayList<>();
+        List<VehicleTypeDTO> danhSachXe = new ArrayList<>();
 
         for (Object[] row : results) {
             try {
-                TruyVanThongTinXe dto = new TruyVanThongTinXe();
+                VehicleTypeDTO dto = new VehicleTypeDTO();
                 
                 // ma_loai_xe
                 if (row[0] != null) {

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
 public class VehicleTypeDetailDTO {
+    
     private Integer vehicleTypeDetailId;
 
     private String vehicleImage;
@@ -14,10 +15,12 @@ public class VehicleTypeDetailDTO {
     private String color;
 
     private String version;
-
+    // tinh nang = features)
     private String features;
 
     private BigDecimal price;
+
+    private Integer vehicleTypeId;
 
 
     public VehicleTypeDetailDTO(VehicleTypeDetail vehicleTypeDetail){
@@ -28,12 +31,13 @@ public class VehicleTypeDetailDTO {
         this.version = vehicleTypeDetail.getVersion();
         this.features = vehicleTypeDetail.getFeatures();
         this.price = vehicleTypeDetail.getPrice();
+         this.vehicleTypeId = vehicleTypeDetail.getVehicleType() != null ? vehicleTypeDetail.getVehicleType().getVehicleTypeId() : null;
     }
   
         
 
     public VehicleTypeDetailDTO(Integer vehicleTypeDetailId, String vehicleImage, String configuration, String color,
-            String version, String features, BigDecimal price) {
+            String version, String features, BigDecimal price, Integer vehicleTypeId) {
         this.vehicleTypeDetailId = vehicleTypeDetailId;
         this.vehicleImage = vehicleImage;
         this.configuration = configuration;
@@ -41,6 +45,7 @@ public class VehicleTypeDetailDTO {
         this.version = version;
         this.features = features;
         this.price = price;
+        this.vehicleTypeId = vehicleTypeId;
     }
 
     public VehicleTypeDetailDTO() {
@@ -130,4 +135,17 @@ public class VehicleTypeDetailDTO {
         this.price = price;
     }
 
+
+
+    public Integer getVehicleTypeId() {
+        return vehicleTypeId;
+    }
+
+
+
+    public void setVehicleTypeId(Integer vehicleTypeId) {
+        this.vehicleTypeId = vehicleTypeId;
+    }
+
+    
 }
