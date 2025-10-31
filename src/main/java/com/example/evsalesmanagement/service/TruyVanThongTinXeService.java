@@ -1,7 +1,7 @@
 package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.TruyVanThongTinXe;
-import com.example.evsalesmanagement.repository.TruyVanThongTinXeRepository;
+import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TruyVanThongTinXeService {
 
     @Autowired
-    private TruyVanThongTinXeRepository repository;
+    private VehicleTypeRepository repository;
 
     /**
      * Lấy thông tin cơ bản của tất cả các loại xe
