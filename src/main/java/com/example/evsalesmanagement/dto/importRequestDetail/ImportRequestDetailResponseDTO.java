@@ -1,8 +1,8 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.importRequestDetail;
 
 import com.example.evsalesmanagement.model.ImportRequestDetail;
 
-public class ImportRequestDetailDTO {
+public class ImportRequestDetailResponseDTO {
     private Integer vehicleTypeDetailId;
 
     private String VehicleTypeName;
@@ -15,26 +15,39 @@ public class ImportRequestDetailDTO {
 
     private String features;
 
-    public ImportRequestDetailDTO(ImportRequestDetail importRequestDetail) {
+    private Integer quantity;
+
+    public ImportRequestDetailResponseDTO(ImportRequestDetail importRequestDetail) {
+
         this.vehicleTypeDetailId = importRequestDetail.getVehicleTypeDetail().getVehicleTypeDetailId();
+
         this.VehicleTypeName = importRequestDetail.getVehicleTypeDetail().getVehicleType().getVehicleTypeName();
+
         this.configuration = importRequestDetail.getVehicleTypeDetail().getConfiguration();
+
         this.color = importRequestDetail.getVehicleTypeDetail().getColor();
+
         this.version = importRequestDetail.getVehicleTypeDetail().getVersion();
+
         this.features = importRequestDetail.getVehicleTypeDetail().getFeatures();
+
+        this.quantity = importRequestDetail.getQuantity();
+
     }
 
-    public ImportRequestDetailDTO(Integer vehicleTypeDetailId, String vehicleTypeName, String configuration, String color,
-            String version, String features) {
+    public ImportRequestDetailResponseDTO(Integer vehicleTypeDetailId, String vehicleTypeName, String configuration,
+            String color,
+            String version, String features, Integer quantity) {
         this.vehicleTypeDetailId = vehicleTypeDetailId;
         this.VehicleTypeName = vehicleTypeName;
         this.configuration = configuration;
         this.color = color;
         this.version = version;
         this.features = features;
+        this.quantity = quantity;
     }
 
-    public ImportRequestDetailDTO() {
+    public ImportRequestDetailResponseDTO() {
     }
 
     public Integer getVehicleTypeDetailId() {
@@ -85,5 +98,12 @@ public class ImportRequestDetailDTO {
         this.features = features;
     }
 
-    
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
 }

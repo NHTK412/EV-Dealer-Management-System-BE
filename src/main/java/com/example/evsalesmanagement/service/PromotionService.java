@@ -3,6 +3,8 @@ package com.example.evsalesmanagement.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.AgencyDTO;
@@ -30,10 +32,9 @@ public class PromotionService {
         @Autowired
         VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-        public List<PromotionSummaryDTO> getAllPromotions() {
-                return promotionRepository.findAll().stream()
-                                .map(km -> new PromotionSummaryDTO(km))
-                                .toList();
+        public List<PromotionSummaryDTO> getAllPromotions(Pageable pageable) {
+                Page<Promotion> promotions = promotionRepository.findAll(pageable);
+                return promotions.stream().map(km -> new PromotionSummaryDTO(km)).toList();
         }
 
         // sử dụng trasactional để duy trình session đến hết hàm

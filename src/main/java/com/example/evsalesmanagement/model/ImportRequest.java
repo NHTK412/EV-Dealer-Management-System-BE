@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class ImportRequest extends Base {
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
-    @OneToMany(mappedBy = "importRequest")
+    @OneToMany(mappedBy = "importRequest", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImportRequestDetail> importRequestDetails = new ArrayList<>();
 
     public Integer getImportRequestId() {

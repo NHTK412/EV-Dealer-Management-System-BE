@@ -1,6 +1,8 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.importRequest;
 
 import java.util.List;
+
+import com.example.evsalesmanagement.dto.importRequestDetail.ImportRequestDetailRequestDTO;
 
 public class ImportRequestRequestDTO {
 
@@ -46,7 +48,5 @@ public class ImportRequestRequestDTO {
     public void setImportRequestDetails(List<ImportRequestDetailRequestDTO> importRequestDetailRequestsDTO) {
         this.importRequestDetailRequests = importRequestDetailRequestsDTO;
     }
-
-    
 
 }

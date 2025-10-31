@@ -3,8 +3,9 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.ImportRequestDTO;
-import com.example.evsalesmanagement.dto.ImportRequestRequestDTO;
+import com.example.evsalesmanagement.dto.importRequest.ImportRequestRequestDTO;
+import com.example.evsalesmanagement.dto.importRequest.ImportRequestResponseDTO;
+import com.example.evsalesmanagement.dto.importRequest.ImportRequestSummaryDTO;
 import com.example.evsalesmanagement.service.ImportRequestService;
 
 import jakarta.validation.constraints.Positive;
@@ -32,59 +33,39 @@ public class ImportRequestController {
 
     // Chưa tạo logic gửi thông báo đến đại lý
     @PostMapping()
-    public ResponseEntity<ImportRequestDTO> createImportRequest(
+    public ResponseEntity<ImportRequestResponseDTO> createImportRequest(
             @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
         return ResponseEntity.ok(importRequestService.createImportRequest(importRequestRequestDTO));
     }
 
     @DeleteMapping("/{importRequestId}")
-    public ResponseEntity<ImportRequestDTO> deleteImportRequest(@PathVariable String importRequestId) {
+    public ResponseEntity<ImportRequestResponseDTO> deleteImportRequest(@PathVariable Integer importRequestId) {
 
-        return ResponseEntity.ok(importRequestService.deleteImportRequest(Integer.parseInt(importRequestId)));
+        return ResponseEntity.ok(importRequestService.deleteImportRequest(importRequestId));
     }
 
-    // @PutMapping("/{maYeuCauNhapHang}")
-    // @Operation(summary = "Cập nhật yêu cầu nhập hàng")
-    // @ApiResponses(value = {
-    // @ApiResponse(responseCode = "200", description = "Thành công"),
-    // @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-    // @ApiResponse(responseCode = "404", description = "Không tìm thấy yêu cầu nhập
-    // hàng"),
-    // @ApiResponse(responseCode = "409", description = "Xung đột dữ liệu")
-    // })
-    // public ResponseEntity<YeuCauNhapHangDTO> chinhSuaYeuCauNhapHang(@PathVariable
-    // String maYeuCauNhapHang,
-    // @RequestBody YeuCauNhapHangRequestDTO yeuCauNhapHangRequestDTO) {
-    // return
-    // ResponseEntity.ok(yeuCauNhapHangService.chinhSuaYeuCauNhapHang(Integer.parseInt(maYeuCauNhapHang),
-    // yeuCauNhapHangRequestDTO));
-    // }
-
     @PutMapping("/{importRequestId}")
-    public ResponseEntity<ImportRequestDTO> updateImportRequest(
-            @PathVariable String importRequest,
+    public ResponseEntity<ImportRequestResponseDTO> updateImportRequest(
+            @PathVariable Integer importRequestId,
             @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
-        return ResponseEntity.ok(importRequestService.updateImportRequest(Integer.parseInt(importRequest),
-                importRequestRequestDTO));
+        return ResponseEntity.ok(importRequestService.updateImportRequest(importRequestId, importRequestRequestDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<ImportRequestDTO>> getAllImportRequests(@RequestParam Integer page,
+    public ResponseEntity<List<ImportRequestSummaryDTO>> getAllImportRequests(@RequestParam Integer page,
             @RequestParam @Positive Integer size,
             @RequestParam(required = false) Integer employeeId) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,employeeId));
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
     }
 
-
-    @GetMapping("/{maYeuCauNhapHang}")
-    public ResponseEntity<ImportRequestDTO>getImportRequestDetail(@PathVariable Integer importRequestId) {
+    @GetMapping("/{importRequestId}")
+    public ResponseEntity<ImportRequestResponseDTO> getImportRequestDetail(@PathVariable Integer importRequestId) {
         return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
     }
 
     // @GetMapping("/nhanVien/{maNhanVien}")
-    // public ResponseEntity<List<YeuCauNhapHangDTO>>
-    // layTatCaYeuCauNhapHangTheoNhanVien(
+    // public ResponseEntity<List<>> layTatCaYeuCauNhapHangTheoNhanVien(
     // @PathVariable Integer maYeuCauNhapHang) {
     // return
     // ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
