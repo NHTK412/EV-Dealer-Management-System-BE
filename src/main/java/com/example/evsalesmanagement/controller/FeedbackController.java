@@ -1,7 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.evsalesmanagement.dto.CreateFeedbackRequestDTO;
 import com.example.evsalesmanagement.dto.FeedbackDetailDTO;
 import com.example.evsalesmanagement.dto.FeedbackListDTO;
 import com.example.evsalesmanagement.dto.HandleFeedbackRequestDTO;
@@ -24,6 +24,8 @@ import com.example.evsalesmanagement.service.FeedbackService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 @RestController
@@ -31,47 +33,54 @@ import jakarta.validation.constraints.Positive;
 @Validated
 public class FeedbackController {
 
-    private static final Logger log = LoggerFactory.getLogger(FeedbackController.class);
+    // private static final Logger log = LoggerFactory.getLogger(FeedbackController.class);
 
-    private final FeedbackService feedbackService;
-    private final FeedbackHandlingService feedbackHandlingService;
+    @Autowired
+    private FeedbackService feedbackService;
 
-    public FeedbackController(FeedbackService feedbackService, FeedbackHandlingService feedbackHandlingService) {
-        this.feedbackService = feedbackService;
-        this.feedbackHandlingService = feedbackHandlingService;
+    @Autowired
+    private FeedbackHandlingService feedbackHandlingService;
+
+
+ // tạo phản hồi mới từ customer
+    @PostMapping
+    public ResponseEntity<ApiResponse<FeedbackDetailDTO>> createFeedback(
+            @Valid @RequestBody CreateFeedbackRequestDTO request) {
+    
+        // log.info("POST /feedback - Create new feedback from customer {}", request.getCustomerId());
+    
+        FeedbackDetailDTO result = feedbackService.createFeedback(request);
+    
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            new ApiResponse<>(true, "Feedback created successfully", result)
+        );
     }
 
-
-    // lấy tất cả phản hồi hoặc theo trạng thái - phân trang
+   
+    // lấy tất cả phản hồi + phân trang + lọc 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<FeedbackListDTO>>> getAllFeedback(
             @RequestParam(required = false) String status,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size) {
 
-        // log.info("GET /api/feedback - status: {}, page: {}, size: {}", status, page, size);
+        // log.info("GET /feedback - status: {}, page: {}, size: {}", status, page, size);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<FeedbackListDTO> result;
-
-        if (status != null && !status.trim().isEmpty()) {
-            result = feedbackService.getFeedbackByStatus(status, pageable);
-        } else {
-            result = feedbackService.getAllFeedback(pageable);
-        }
+        Page<FeedbackListDTO> result = feedbackService.getFeedback(status, pageable);
 
         return ResponseEntity.ok(
             new ApiResponse<>(true, "Get feedback list successfully", result)
         );
     }
 
-
-    // lấy chi tiết phản hồi theo ID
+   
+    // lấy phản hồi theo id
     @GetMapping("/{feedbackId}")
     public ResponseEntity<ApiResponse<FeedbackDetailDTO>> getFeedbackDetail(
             @PathVariable @Positive(message = "Id feedback must be positive") Integer feedbackId) {
 
-        // log.info("GET /api/feedback/{}", feedbackId);
+        // log.info("GET /feedback/{}", feedbackId);
 
         FeedbackDetailDTO detail = feedbackService.getFeedbackDetail(feedbackId);
 
@@ -80,30 +89,34 @@ public class FeedbackController {
         );
     }
 
-
-    // xử lý phản hồi
+    
+    // xử lý phản hồi 
     @PostMapping("/{feedbackId}/handle")
     public ResponseEntity<ApiResponse<FeedbackDetailDTO>> handleFeedback(
             @PathVariable @Positive(message = "Id feedback must be positive") Integer feedbackId,
             @Valid @RequestBody HandleFeedbackRequestDTO request) {
 
-        // log.info("POST /api/feedback/{}/handle", feedbackId);
-        // hardcode pause        
+        // log.info("POST /feedback/{}/handle", feedbackId);
         Integer employeeId = 1; 
 
-        FeedbackDetailDTO result = feedbackHandlingService.handleFeedback(feedbackId, request, employeeId);
+        FeedbackDetailDTO result = feedbackHandlingService.handleFeedback(
+            feedbackId, 
+            request, 
+            employeeId
+        );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
             new ApiResponse<>(true, "Handle feedback successfully", result)
         );
     }
 
-    // đếm số lượng phản hồi theo trạng thái
+
+    // đếm phản hồi theo trạng thái
     @GetMapping("/count")
     public ResponseEntity<ApiResponse<Long>> countFeedbackByStatus(
             @RequestParam String status) {
 
-        // log.info("GET /api/feedback/count - status: {}", status);
+        // log.info("GET /feedback/count - status: {}", status);
 
         Long count = feedbackService.countByStatus(status);
 
