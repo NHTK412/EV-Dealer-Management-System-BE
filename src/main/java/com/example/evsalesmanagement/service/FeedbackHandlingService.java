@@ -27,32 +27,57 @@ public class FeedbackHandlingService {
     
     private static final Logger log = LoggerFactory.getLogger(FeedbackHandlingService.class);
     
-    private final FeedbackRepository feedbackRepository;
-    private final FeedbackHandlingRepository feedbackHandlingRepository;
-    private final EmployeeRepository employeeRepository;
-    private final EmailService emailService;
-    private final FeedbackService feedbackService;
+    @Autowired
+    private FeedbackRepository feedbackRepository;
     
+    @Autowired
+    private FeedbackHandlingRepository feedbackHandlingRepository;
     
-    public FeedbackHandlingService(
-            FeedbackRepository feedbackRepository,
-            FeedbackHandlingRepository feedbackHandlingRepository,
-            EmployeeRepository employeeRepository,
-            EmailService emailService,
-            FeedbackService feedbackService) {
-        this.feedbackRepository = feedbackRepository;
-        this.feedbackHandlingRepository = feedbackHandlingRepository;
-        this.employeeRepository = employeeRepository;
-        this.emailService = emailService;
-        this.feedbackService = feedbackService;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    
+    @Autowired
+    private EmailService emailService;
+    
+    @Autowired
+    private FeedbackService feedbackService;
+    
+    // xử lý phản hồi
+    @Transactional
+    public FeedbackDetailDTO handleFeedback(
+            Integer feedbackId, 
+            HandleFeedbackRequestDTO request, 
+            Integer employeeId) {
+        
+        // log.info("Processing feedback {} by employee {}", feedbackId, employeeId);
+    
+        Feedback feedback = validateFeedbackForHandling(feedbackId);
+        
+        Employee employee = findEmployeeById(employeeId);
+        
+        FeedbackHandlingMethodEnum method = validateHandlingMethod(request.getFeedbackHandlingMethod());
+        
+        updateFeedbackStatus(feedback, FeedbackStatusEnum.IN_PROCESSED);
+        // log.debug("Updated feedback {} status to IN_PROCESSED", feedbackId);
+        
+        FeedbackHandling handling = createHandlingRecord(feedback, employee, request, method);
+        // log.debug("Created feedback handling record: {}", handling.getFeedbackHandlingId());
+        
+        updateFeedbackStatus(feedback, FeedbackStatusEnum.PROCESSED);
+        // log.debug("Updated feedback {} status to PROCESSED", feedbackId);
+        
+        notifyCustomer(feedback, handling);
+        
+        // log.info("Successfully processed feedback {}", feedbackId);
+        
+        return feedbackService.getFeedbackDetail(feedbackId);
     }
     
-    @Transactional
-    public FeedbackDetailDTO handleFeedback(Integer feedbackId, HandleFeedbackRequestDTO request, Integer employeeId) {
-        // log.info("Handling feedback {} by employee {}", feedbackId, employeeId);
-        
+    // validate phản hồi có thể xử lý
+    private Feedback validateFeedbackForHandling(Integer feedbackId) {
         Feedback feedback = feedbackRepository.findById(feedbackId)
-            .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with ID: " + feedbackId));
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Feedback not found with ID: " + feedbackId));
         
         if (feedbackHandlingRepository.existsByFeedback_FeedbackId(feedbackId)) {
             throw new ConflictException("Feedback has already been handled");
@@ -62,17 +87,46 @@ public class FeedbackHandlingService {
             throw new BadRequestException("Feedback is already in processed status");
         }
         
-        Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Not found employee with ID: " + employeeId));
-        
-        if (!FeedbackHandlingMethodEnum.enumIsValid(request.getFeedbackHandlingMethod())) {
-            throw new BadRequestException("Handling method is invalid: " + request.getFeedbackHandlingMethod());
+        return feedback;
+    }
+    
+    // tìm nhân viên theo ID
+    private Employee findEmployeeById(Integer employeeId) {
+        return employeeRepository.findById(employeeId)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Employee not found with ID: " + employeeId));
+    }
+    
+    // validate phương thức phản hồi
+    private FeedbackHandlingMethodEnum validateHandlingMethod(String methodStr) {
+        if (!FeedbackHandlingMethodEnum.enumIsValid(methodStr)) {
+            throw new BadRequestException("Invalid handling method: " + methodStr);
         }
-        FeedbackHandlingMethodEnum method = FeedbackHandlingMethodEnum.fromStringToEnum(request.getFeedbackHandlingMethod());
         
-        feedback.setFeedbackStatus(FeedbackStatusEnum.IN_PROCESSED);
+        return FeedbackHandlingMethodEnum.fromStringToEnum(methodStr);
+    }
+    
+    // cập nhật trạng thái phản hồi
+    private void updateFeedbackStatus(Feedback feedback, FeedbackStatusEnum newStatus) {
+        FeedbackStatusEnum currentStatus = feedback.getFeedbackStatus();
+        
+        if (!currentStatus.canTransitionToNewStatus(newStatus)) {
+            throw new BadRequestException(
+                String.format("Cannot transition from %s to %s", 
+                    currentStatus.getDisplayName(), 
+                    newStatus.getDisplayName()));
+        }
+        
+        feedback.setFeedbackStatus(newStatus);
         feedbackRepository.save(feedback);
-        log.info("Updated feedback {} status to IN_PROCESSED", feedbackId);
+    }
+    
+    // tạo bản ghi xử lý phản hồi
+    private FeedbackHandling createHandlingRecord(
+            Feedback feedback, 
+            Employee employee, 
+            HandleFeedbackRequestDTO request,
+            FeedbackHandlingMethodEnum method) {
         
         FeedbackHandling handling = new FeedbackHandling();
         handling.setFeedback(feedback);
@@ -81,33 +135,59 @@ public class FeedbackHandlingService {
         handling.setFeedbackHandlingMethod(method);
         handling.setStatus(FeedbackHandlingStatusEnum.COMPLETE);
         
-        feedbackHandlingRepository.save(handling);
-        // log.info("Created feedback handling record");
-        
-        feedback.setFeedbackStatus(FeedbackStatusEnum.PROCESSED);
-        feedbackRepository.save(feedback);
-        // log.info("Updated feedback {} status to PROCESSED", feedbackId);
-        
-
-        // bug với database đang khó, tạm thời run tốt - hiện log
-        if (method == FeedbackHandlingMethodEnum.EMAIL) {
+        return feedbackHandlingRepository.save(handling);
+    }
+    
+    // gửi thông báo cho khách hàng 
+    private void notifyCustomer(Feedback feedback, FeedbackHandling handling) {
+        try {
+            FeedbackHandlingMethodEnum method = handling.getFeedbackHandlingMethod();
             Customer customer = feedback.getCustomer();
-            if (customer != null && customer.getEmail() != null) {
-                try {
-                    emailService.sendFeedbackResponseEmail(
-                        customer.getEmail(),
-                        customer.getCustomerName(),
-                        feedback.getFeedbackTitle(),
-                        feedback.getFeedbackContent(),
-                        request.getFeedbackHandlingContent()
-                    );
-                    log.info("Email sent to customer: {}", customer.getEmail());
-                } catch (Exception e) {
-                    log.error("Failed to send email but handling completed: {}", e.getMessage());
-                }
+            
+            if (customer == null) {
+                log.warn("Cannot send notification - customer is null for feedback {}", 
+                    feedback.getFeedbackId());
+                return;
             }
+            
+            if (method == FeedbackHandlingMethodEnum.EMAIL) {
+                sendEmailNotification(customer, feedback, handling);
+            } else if (method == FeedbackHandlingMethodEnum.PHONE_NUMBER) {
+                log.info("Phone notification scheduled for customer: {} (Not implemented yet)", 
+                    customer.getPhoneNumber());
+            }
+            
+        } catch (Exception e) {
+            log.error("Failed to send notification for feedback {}: {}", 
+                feedback.getFeedbackId(), e.getMessage());
+        }
+    }
+    
+    // gửi email thông báo
+    private void sendEmailNotification(
+            Customer customer, 
+            Feedback feedback, 
+            FeedbackHandling handling) {
+        
+        if (customer.getEmail() == null || customer.getEmail().trim().isEmpty()) {
+            log.warn("Customer {} has no email address", customer.getCustomerId());
+            return;
         }
         
-        return feedbackService.getFeedbackDetail(feedbackId);
+        try {
+            emailService.sendFeedbackResponseEmail(
+                customer.getEmail(),
+                customer.getCustomerName(),
+                feedback.getFeedbackTitle(),
+                feedback.getFeedbackContent(),
+                handling.getFeedbackHandlingContent()
+            );
+            
+            // log.info("Email notification sent to: {}", customer.getEmail());
+            
+        } catch (Exception e) {
+            log.error("Failed to send email to {}: {}", 
+                customer.getEmail(), e.getMessage());
+        }
     }
 }
