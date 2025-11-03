@@ -13,6 +13,9 @@ public class VehicleTypeDTO {
     // mo ta = description
     private String description;
 
+    public VehicleTypeDTO() {
+    }
+
     public VehicleTypeDTO(VehicleType vehicleType){
         this.vehicleTypeId = vehicleType.getVehicleTypeId();
         this.vehicleTypeName = vehicleType.getVehicleTypeName();
