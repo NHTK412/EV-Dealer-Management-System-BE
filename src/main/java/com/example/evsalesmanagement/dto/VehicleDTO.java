@@ -1,7 +1,9 @@
 package com.example.evsalesmanagement.dto;
 
 
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Vehicle;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
 
 public class VehicleDTO {
@@ -11,14 +13,24 @@ public class VehicleDTO {
     private String vehicleCondition;
     private Integer vehicleTypeDetailId;
     private Integer agencyId;
+    private VehicleTypeDetailDTO vehicleTypeDetail;
+    private AgencyDTO agency;
+
     
     public VehicleDTO(Vehicle vehicle) {
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
-        this.vehicleTypeDetailId = vehicle.getVehicleTypeDetail() != null ? vehicle.getVehicleTypeDetail().getVehicleTypeDetailId() : null;
-        this.agencyId = vehicle.getAgency() != null ? vehicle.getAgency().getAgencyId() : null;
+        VehicleTypeDetail detail = vehicle.getVehicleTypeDetail();
+        if (detail != null) {
+            this.vehicleTypeDetail = new VehicleTypeDetailDTO(detail);
+        }
+
+        Agency agency = vehicle.getAgency();
+        if (agency != null) {
+            this.agency = new AgencyDTO(agency);
+        }
     }
 
     public String getChassisNumber() {
@@ -69,4 +81,21 @@ public class VehicleDTO {
         this.agencyId = agencyId;
     }
 
+    public VehicleTypeDetailDTO getVehicleTypeDetail() {
+        return vehicleTypeDetail;
+    }
+
+    public void setVehicleTypeDetail(VehicleTypeDetailDTO vehicleTypeDetail) {
+        this.vehicleTypeDetail = vehicleTypeDetail;
+    }
+
+    public AgencyDTO getAgency() {
+        return agency;
+    }
+
+    public void setAgency(AgencyDTO agency) {
+        this.agency = agency;
+    }
+
+    
 }
