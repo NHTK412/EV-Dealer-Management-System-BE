@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 
+import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -106,6 +108,7 @@ public class VehicleTypeDetail extends Base {
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
+
 
     // @OneToMany(mappedBy = "chiTietLoaiXe")
     // private List<Xe> xes = new ArrayList<>();
