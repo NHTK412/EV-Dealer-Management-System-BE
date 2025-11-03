@@ -1,16 +1,33 @@
 package com.example.evsalesmanagement.dto;
-import java.time.LocalDate;
-import com.example.evsalesmanagement.model.Customer;
-import com.example.evsalesmanagement.model.Vehicle;
-public class TestDriveAppointmentDTO {
-    private LocalDate dateOfAppointment;
-    private LocalDate timeOfAppointment;
-    private Customer customer;
-    private Vehicle vehicle;
-    private String status;
 
-    public TestDriveAppointmentDTO() {}
- 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class TestDriveAppointmentDTO {
+    
+    private Integer testDriveAppointmentId;
+    
+    private LocalDate dateOfAppointment;
+    
+    private LocalTime timeOfAppointment;
+    
+    private String status;
+    
+    private String customerName; 
+    
+    private String vehicleName;
+
+    public TestDriveAppointmentDTO() {
+    }
+
+    public Integer getTestDriveAppointmentId() {
+        return testDriveAppointmentId;
+    }
+
+    public void setTestDriveAppointmentId(Integer testDriveAppointmentId) {
+        this.testDriveAppointmentId = testDriveAppointmentId;
+    }
+
     public LocalDate getDateOfAppointment() {
         return dateOfAppointment;
     }
@@ -19,28 +36,12 @@ public class TestDriveAppointmentDTO {
         this.dateOfAppointment = dateOfAppointment;
     }
 
-    public LocalDate getTimeOfAppointment() {
+    public LocalTime getTimeOfAppointment() {
         return timeOfAppointment;
     }
 
-    public void setTimeOfAppointment(LocalDate timeOfAppointment) {
+    public void setTimeOfAppointment(LocalTime timeOfAppointment) {
         this.timeOfAppointment = timeOfAppointment;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
     }
 
     public String getStatus() {
@@ -51,12 +52,19 @@ public class TestDriveAppointmentDTO {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "TestDriveAppointmentDTO [dateOfAppointment=" + dateOfAppointment + ", timeOfAppointment="
-                + timeOfAppointment + ", customer=" + customer + ", vehicle=" + vehicle + ", status=" + status + "]";
+    public String getCustomerName() {
+        return customerName;
     }
 
-    
-    
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getVehicleName() {
+        return vehicleName;
+    }
+
+    public void setVehicleName(String vehicleName) {
+        this.vehicleName = vehicleName;
+    }
 }
