@@ -1,5 +1,6 @@
 package com.example.evsalesmanagement.dto.account;
 
+import com.example.evsalesmanagement.model.Account;
 
 public class AccountResponseDTO {
 
@@ -10,6 +11,19 @@ public class AccountResponseDTO {
     private String role;
 
     private String status;
+
+    private Integer employeeId;
+
+    public AccountResponseDTO() {
+    }
+
+    public AccountResponseDTO(Account account) {
+        this.accountId = account.getAccountId();
+        this.username = account.getUsername();
+        this.role = account.getRole();
+        this.status = account.getStatus();
+        this.employeeId = account.getEmployee().getEmployeeId();
+    }
 
     public Integer getAccountId() {
         return accountId;
@@ -43,5 +57,12 @@ public class AccountResponseDTO {
         this.status = status;
     }
 
-    
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
 }

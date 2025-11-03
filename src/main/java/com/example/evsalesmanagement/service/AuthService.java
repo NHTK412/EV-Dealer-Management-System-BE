@@ -3,9 +3,7 @@ package com.example.evsalesmanagement.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.account.AccountResponseDTO;
 import com.example.evsalesmanagement.dto.auth.AuthResponseDTO;
-import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Account;
 import com.example.evsalesmanagement.repository.AccountRepository;
 import com.example.evsalesmanagement.utils.JwtUtil;
@@ -36,5 +34,6 @@ public class AuthService {
         authResponseDTO.setExpiresIn(expiration);
         return authResponseDTO;
     }
+
 
 }
