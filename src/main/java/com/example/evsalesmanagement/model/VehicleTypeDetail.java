@@ -2,7 +2,6 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

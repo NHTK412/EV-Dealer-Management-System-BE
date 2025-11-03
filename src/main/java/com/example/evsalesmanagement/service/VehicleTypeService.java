@@ -1,12 +1,14 @@
 package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.VehicleTypeDTO;
+
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 
 @Service
@@ -25,10 +27,10 @@ public class VehicleTypeService {
         return vehicleTypeDTO;
         }
     
-    public List<VehicleTypeDTO> getAllVehicleTypes() {
-        return vehicleTypeRepository.findAll().stream()
-                .map(vt -> new VehicleTypeDTO(vt))
-                .toList();
+     @Transactional
+    public Page<VehicleTypeDTO> getAllVehicleType(Pageable pageable) {
+        Page<VehicleType> vehicleTypePage = vehicleTypeRepository.findAll(pageable);
+        return vehicleTypePage.map(VehicleTypeDTO::new);
     }
 
     @Transactional

@@ -8,10 +8,10 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,10 +23,10 @@ public class VehicleTypeDetailService {
     @Autowired
     private VehicleTypeRepository vehicleTypeRepository;
 
-    public List<VehicleTypeDetailDTO> getAllVehicleTypeDetails(){
-        return vehicleTypeDetailRepository.findAll().stream()
-                .map(vtd -> new VehicleTypeDetailDTO(vtd))
-                .toList();
+    @Transactional
+    public Page<VehicleTypeDetailDTO> getAllVehicleTypeDetail(Pageable pageable) {
+        Page<VehicleTypeDetail> vehicleTypeDetailPage = vehicleTypeDetailRepository.findAll(pageable);
+        return vehicleTypeDetailPage.map(VehicleTypeDetailDTO::new);
     }
 
     @Transactional
