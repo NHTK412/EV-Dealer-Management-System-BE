@@ -15,7 +15,8 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    // private static final Logger log =
+    // LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleResourceNotFound(ResourceNotFoundException ex) {
