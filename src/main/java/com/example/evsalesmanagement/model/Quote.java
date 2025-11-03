@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +45,7 @@ public class Quote extends Base {
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
-    @OneToMany(mappedBy = "quote")
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL)
     private List<QuotationDetail> quotationDetails = new ArrayList<>();
 
     public Integer getQuoteId() {

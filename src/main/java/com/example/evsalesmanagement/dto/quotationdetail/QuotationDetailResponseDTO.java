@@ -48,25 +48,25 @@ public class QuotationDetailResponseDTO {
 
     public QuotationDetailResponseDTO(QuotationDetail quotationDetail) {
         this.quotationDetailId = quotationDetail.getQuotationDetailId();
-        // this.vehicleTypeDetailId = quotationDetail.getVehicleTypeDetail().getVehicleTypeDetailId();
-        // this.vehicleConfiguration = quotationDetail.getVehicleTypeDetail().getConfiguration();
-        // this.vehicleColor = quotationDetail.getVehicleTypeDetail().getColor();
-        // this.vehicleVersion = quotationDetail.getVehicleTypeDetail().getVersion();
-        // this.vehicleFeatures = quotationDetail.getVehicleTypeDetail().getFeatures();
-        // this.vehiclePrice = quotationDetail.getVehicleTypeDetail().getPrice();
-        // this.vehicleTypeName = quotationDetail.getVehicleTypeDetail().getVehicleType().getVehicleTypeName();
-        // this.quantity = quotationDetail.getQuantity();
-        // this.discount = quotationDetail.getDiscount();
-        // this.registrationTax = quotationDetail.getRegistrationTax();
-        // this.licensePlateFee = quotationDetail.getLicensePlateFee();
-        // this.registrartionFee = quotationDetail.getRegistrartionFee();
-        // this.compulsoryInsurance = quotationDetail.getCompulsoryInsurance();
-        // this.materialInsurance = quotationDetail.getMaterialInsurance();
-        // this.roadMaintenanceMees = quotationDetail.getRoadMaintenanceMees();
-        // this.vehicleRegistrationServiceFee = quotationDetail.getVehicleRegistrationServiceFee();
-        // this.discountPercentage = quotationDetail.getDiscountPercentage();
-        // this.wholesalePrice = quotationDetail.getWholesalePrice();
-        // this.totalAmount = quotationDetail.getTotalAmount();
+        this.vehicleTypeDetailId = quotationDetail.getVehicleTypeDetail().getVehicleTypeDetailId();
+        this.vehicleConfiguration = quotationDetail.getVehicleTypeDetail().getConfiguration();
+        this.vehicleColor = quotationDetail.getVehicleTypeDetail().getColor();
+        this.vehicleVersion = quotationDetail.getVehicleTypeDetail().getVersion();
+        this.vehicleFeatures = quotationDetail.getVehicleTypeDetail().getFeatures();
+        this.vehiclePrice = quotationDetail.getVehicleTypeDetail().getPrice();
+        this.vehicleTypeName = quotationDetail.getVehicleTypeDetail().getVehicleType().getVehicleTypeName();
+        this.quantity = quotationDetail.getQuantity();
+        this.discount = quotationDetail.getDiscount();
+        this.registrationTax = quotationDetail.getRegistrationTax();
+        this.licensePlateFee = quotationDetail.getLicensePlateFee();
+        this.registrartionFee = quotationDetail.getRegistrartionFee();
+        this.compulsoryInsurance = quotationDetail.getCompulsoryInsurance();
+        this.materialInsurance = quotationDetail.getMaterialInsurance();
+        this.roadMaintenanceMees = quotationDetail.getRoadMaintenanceMees();
+        this.vehicleRegistrationServiceFee = quotationDetail.getVehicleRegistrationServiceFee();
+        this.discountPercentage = quotationDetail.getDiscountPercentage();
+        this.wholesalePrice = quotationDetail.getWholesalePrice();
+        this.totalAmount = quotationDetail.getTotalAmount();
     }
 
     public QuotationDetailResponseDTO() {
