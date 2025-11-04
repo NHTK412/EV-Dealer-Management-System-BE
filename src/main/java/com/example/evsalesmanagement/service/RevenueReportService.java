@@ -25,10 +25,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import com.example.evsalesmanagement.exception.InternalServerException;
 
 import com.example.evsalesmanagement.dto.RevenueReportRequestDTO;
 import com.example.evsalesmanagement.dto.RevenueReportResponseDTO;
-import com.example.evsalesmanagement.enums.RevenueReportEnum;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
 import com.example.evsalesmanagement.repository.RevenueReportRepository;
@@ -43,13 +43,13 @@ public class RevenueReportService {
     @Cacheable(value = "revenueReport", key = "#request.hashCode()")
     public List<RevenueReportResponseDTO> getRevenueReport(RevenueReportRequestDTO request) {
 
-        if (request.getStatus() != null && !request.getStatus().isBlank()) {
-            try {
-                RevenueReportEnum.fromString(request.getStatus());
-            } catch (Exception e) {
-                throw new RuntimeException("Status is invalid: " + request.getStatus(), e);
-            }
-        }
+        // if (request.getStatus() != null && !request.getStatus().isBlank()) {
+        //     try {
+        //         RevenueReportEnum.fromString(request.getStatus());
+        //     } catch (Exception e) {
+        //         throw new RuntimeException("Status is invalid: " + request.getStatus(), e);
+        //     }
+        // }
 
 
         List<Order> orders = getFilteredOrders(request);
@@ -207,7 +207,7 @@ public class RevenueReportService {
                 return outputStream.toByteArray();
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error exporting revenue report to Excel", e);
+            throw new InternalServerException("Error exporting revenue report to Excel", e);
         }
     }
 
