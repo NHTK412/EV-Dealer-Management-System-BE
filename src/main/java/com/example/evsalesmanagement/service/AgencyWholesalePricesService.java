@@ -14,6 +14,7 @@ import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceRequestDTO;
 import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceResponseDTO;
 import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceSummaryDTO;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;
@@ -44,10 +45,10 @@ public class AgencyWholesalePricesService {
 
 
         Agency agency = agencyRepository.findById(agencyWholesalePriceDTO.getAgencyId())
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy Agency với ID: " + agencyWholesalePriceDTO.getAgencyId()));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency với ID: " + agencyWholesalePriceDTO.getAgencyId()));
         newPrice.setAgency(agency);    
         VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository.findById(agencyWholesalePriceDTO.getVehicleTypeDetailId())
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy VehicleTypeDetail với ID: " + agencyWholesalePriceDTO.getVehicleTypeDetailId()));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy VehicleTypeDetail với ID: " + agencyWholesalePriceDTO.getVehicleTypeDetailId()));
         newPrice.setVehicleTypeDetail(vehicleTypeDetail);
         
         agencyWholesalePriceRepository.save(newPrice);
@@ -66,7 +67,7 @@ public class AgencyWholesalePricesService {
 
     public AgencyWholesalePriceResponseDTO getByIdAgencyWholesalePrice(Integer agencyWholesalePriceId) {
         AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
         AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = new AgencyWholesalePriceResponseDTO(price);
         agencyWholesalePriceResponseDTO.setAgency(new AgencyDTO(price.getAgency()));
         agencyWholesalePriceResponseDTO.setVehicleTypeDetail(new VehicleTypeDetailDTO(price.getVehicleTypeDetail()));
@@ -76,8 +77,7 @@ public class AgencyWholesalePricesService {
     @Transactional
      public AgencyWholesalePriceResponseDTO updateAgencyWholesalePrice(Integer agencyWholesalePriceId, AgencyWholesalePriceRequestDTO agencyWholesalePrice) {
         AgencyWholesalePrice updatePrice = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
-        
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
         updatePrice.setWholesalePrice(agencyWholesalePrice.getWholesalePrice());
         updatePrice.setMinimumQuantity(agencyWholesalePrice.getMinimumQuantity());
         updatePrice.setStartDate(agencyWholesalePrice.getStartDate());
@@ -86,10 +86,10 @@ public class AgencyWholesalePricesService {
 
 
         Agency agency = agencyRepository.findById(agencyWholesalePrice.getAgencyId())
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy Agency với ID: " + agencyWholesalePrice.getAgencyId()));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency với ID: " + agencyWholesalePrice.getAgencyId()));
         updatePrice.setAgency(agency);    
         VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository.findById(agencyWholesalePrice.getVehicleTypeDetailId())
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy VehicleTypeDetail với ID: " + agencyWholesalePrice.getVehicleTypeDetailId()));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy VehicleTypeDetail với ID: " + agencyWholesalePrice.getVehicleTypeDetailId()));
         updatePrice.setVehicleTypeDetail(vehicleTypeDetail);
         
         agencyWholesalePriceRepository.save(updatePrice);
@@ -104,7 +104,7 @@ public class AgencyWholesalePricesService {
     @Transactional
     public AgencyWholesalePriceResponseDTO deleteAgencyWholesalePrice(Integer agencyWholesalePriceId) {
         AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy AgencyWholesalePrice với ID: " + agencyWholesalePriceId));
         
         AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = new AgencyWholesalePriceResponseDTO(price);
         agencyWholesalePriceResponseDTO.setAgency(new AgencyDTO(price.getAgency()));
