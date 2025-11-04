@@ -29,7 +29,7 @@ public class WarehouseReceipt extends Base {
 
     // Season -ly do
     @Column(name = "Reason")
-    private String lyDo;
+    private String reason;
 
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
@@ -60,13 +60,29 @@ public class WarehouseReceipt extends Base {
     public void setWareHouseReceiptDate(LocalDateTime wareHouseReceiptDate) {
         this.warehouseReceiptDate = wareHouseReceiptDate;
     }
-
-    public String getLyDo() {
-        return lyDo;
+    
+    public LocalDateTime getWarehouseReceiptDate() {
+        return warehouseReceiptDate;
     }
 
-    public void setLyDo(String lyDo) {
-        this.lyDo = lyDo;
+    public void setWarehouseReceiptDate(LocalDateTime warehouseReceiptDate) {
+        this.warehouseReceiptDate = warehouseReceiptDate;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public BigDecimal getTotalAmount() {
