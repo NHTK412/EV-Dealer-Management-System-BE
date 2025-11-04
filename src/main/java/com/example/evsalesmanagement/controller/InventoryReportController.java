@@ -21,93 +21,60 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
-// @CrossOrigin("*")
 @RequestMapping("/reports")
 public class InventoryReportController {
 
     @Autowired
     private InventoryReportService inventoryReportService;
 
-
-    // Lấy báo cáo tồn kho JSON
+    // GET - Lấy báo cáo tồn kho JSON
     @GetMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportDTO(
-           @Valid @ModelAttribute InventoryReportRequestDTO request) {
-        try {
-            List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
-            return ResponseEntity.ok(new ApiResponse<>(
-                    true,
-                    "Get inventory successfully",
-                    report
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(
-                    false,
-                    "Error when get inventory: " + e.getMessage(),
-                    null
-            ));
-        }
+            @Valid @ModelAttribute InventoryReportRequestDTO request) {
+
+        List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
 
-    // Xuất báo cáo tồn kho ra Excel
+    // GET - Xuất báo cáo tồn kho Excel
     @GetMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReport(
             @Valid @ModelAttribute InventoryReportRequestDTO request) {
-        try {
-            byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", 
+        byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment",
                 "BaoCaoTonKho_" + System.currentTimeMillis() + ".xlsx");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(excelData);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().headers(headers).body(excelData);
     }
 
 
-    // POST lấy báo cáo 
+    // POST - Lấy báo cáo tồn kho JSON
     @PostMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {
-        try {
-            List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
-            return ResponseEntity.ok(new ApiResponse<>(
-                    true,
-                    "Get inventory successfully",
-                    report
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(
-                    false,
-                    "Error when get inventory: " + e.getMessage(),
-                    null
-            ));
-        }
+
+        List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
-    // POST xuất Excel 
+    
+    // POST - Xuất báo cáo tồn kho Excel
     @PostMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {
-        try {
-            byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", 
+        byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment",
                 "BaoCaoTonKho_" + System.currentTimeMillis() + ".xlsx");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(excelData);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().headers(headers).body(excelData);
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.InventoryReportRequestDTO;
 import com.example.evsalesmanagement.dto.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.exception.InternalServerException;
 import com.example.evsalesmanagement.repository.InventoryReportRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class InventoryReportService {
     private InventoryReportRepository inventoryReportRepository;
 
     public List<InventoryReportResponseDTO> getInventoryReport(InventoryReportRequestDTO request) {
-        
+
         if (request.getToDate() != null) {
             request.setToDate(request.getToDate().withHour(23).withMinute(59).withSecond(59));
         }
@@ -41,103 +42,108 @@ public class InventoryReportService {
         return inventoryReportRepository.getInventoryReportGrouped(request);
     }
 
-    public byte[] exportInventoryReportToExcel(InventoryReportRequestDTO request) throws Exception {
-        List<InventoryReportResponseDTO> reportData = getInventoryReport(request);
+    public byte[] exportInventoryReportToExcel(InventoryReportRequestDTO request) {
+        try {
+            List<InventoryReportResponseDTO> reportData = getInventoryReport(request);
 
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            try (Workbook workbook = new XSSFWorkbook();
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-            Sheet sheet = workbook.createSheet("Inventory Report");
-            CellStyle headerStyle = createHeaderStyle(workbook);
-            CellStyle titleStyle = createTitleStyle(workbook);
-            CellStyle currencyStyle = createCurrencyStyle(workbook);
-            CellStyle numberStyle = createNumberStyle(workbook);
-            CellStyle totalStyle = createTotalStyle(workbook);
+                Sheet sheet = workbook.createSheet("Inventory Report");
+                CellStyle headerStyle = createHeaderStyle(workbook);
+                CellStyle titleStyle = createTitleStyle(workbook);
+                CellStyle currencyStyle = createCurrencyStyle(workbook);
+                CellStyle numberStyle = createNumberStyle(workbook);
+                CellStyle totalStyle = createTotalStyle(workbook);
 
-            int rowNum = 0;
+                int rowNum = 0;
 
-            Row titleRow = sheet.createRow(rowNum++);
-            Cell titleCell = titleRow.createCell(0);
-            titleCell.setCellValue("INVENTORY REPORT");
-            titleCell.setCellStyle(titleStyle);
-            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 8));
+                Row titleRow = sheet.createRow(rowNum++);
+                Cell titleCell = titleRow.createCell(0);
+                titleCell.setCellValue("INVENTORY REPORT");
+                titleCell.setCellStyle(titleStyle);
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 8));
 
-            Row dateRow = sheet.createRow(rowNum++);
-            Cell dateCell = dateRow.createCell(0);
-            dateCell.setCellValue("Report date: " +
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 8));
+                Row dateRow = sheet.createRow(rowNum++);
+                Cell dateCell = dateRow.createCell(0);
+                dateCell.setCellValue("Report date: " +
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 8));
 
-            rowNum++;
+                rowNum++;
 
-            Row headerRow = sheet.createRow(rowNum++);
-            String[] headers = {
+                Row headerRow = sheet.createRow(rowNum++);
+                String[] headers = {
                     "STT", "Name car", "Manufacture year", "Version",
                     "Color", "Price", "Agency", "Quantity", "Total value"
-            };
+                };
 
-            for (int i = 0; i < headers.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(headers[i]);
-                cell.setCellStyle(headerStyle);
-            }
-
-            int stt = 1;
-            BigDecimal grandTotal = BigDecimal.ZERO;
-            Long totalQuantity = 0L;
-
-            for (InventoryReportResponseDTO data : reportData) {
-                Row row = sheet.createRow(rowNum++);
-
-                row.createCell(0).setCellValue(stt++);
-                row.createCell(1).setCellValue(data.getVehicleTypeName());
-                row.createCell(2).setCellValue(data.getManufactureYear() != null ? data.getManufactureYear() : 0);
-                row.createCell(3).setCellValue(data.getVersion() != null ? data.getVersion() : "");
-                row.createCell(4).setCellValue(data.getColor() != null ? data.getColor() : "");
-
-                Cell priceCell = row.createCell(5);
-                if (data.getPrice() != null) {
-                    priceCell.setCellValue(data.getPrice().doubleValue());
-                    priceCell.setCellStyle(currencyStyle);
+                for (int i = 0; i < headers.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(headers[i]);
+                    cell.setCellStyle(headerStyle);
                 }
 
-                row.createCell(6).setCellValue(data.getAgencyName() != null ? data.getAgencyName() : "No agency");
+                int stt = 1;
+                BigDecimal grandTotal = BigDecimal.ZERO;
+                long totalQuantity = 0L;
 
-                Cell qtyCell = row.createCell(7);
-                if (data.getTotalQuantity() != null) {
-                    qtyCell.setCellValue(data.getTotalQuantity());
-                    qtyCell.setCellStyle(numberStyle);
-                    totalQuantity += data.getTotalQuantity();
+                for (InventoryReportResponseDTO data : reportData) {
+                    Row row = sheet.createRow(rowNum++);
+
+                    row.createCell(0).setCellValue(stt++);
+                    row.createCell(1).setCellValue(data.getVehicleTypeName());
+                    row.createCell(2).setCellValue(data.getManufactureYear() != null ? data.getManufactureYear() : 0);
+                    row.createCell(3).setCellValue(data.getVersion() != null ? data.getVersion() : "");
+                    row.createCell(4).setCellValue(data.getColor() != null ? data.getColor() : "");
+
+                    Cell priceCell = row.createCell(5);
+                    if (data.getPrice() != null) {
+                        priceCell.setCellValue(data.getPrice().doubleValue());
+                        priceCell.setCellStyle(currencyStyle);
+                    }
+
+                    row.createCell(6).setCellValue(data.getAgencyName() != null ? data.getAgencyName() : "Unassigned");
+
+                    Cell qtyCell = row.createCell(7);
+                    if (data.getTotalQuantity() != null) {
+                        qtyCell.setCellValue(data.getTotalQuantity());
+                        qtyCell.setCellStyle(numberStyle);
+                        totalQuantity += data.getTotalQuantity();
+                    }
+
+                    Cell totalCell = row.createCell(8);
+                    if (data.getTotalValue() != null) {
+                        totalCell.setCellValue(data.getTotalValue().doubleValue());
+                        totalCell.setCellStyle(currencyStyle);
+                        grandTotal = grandTotal.add(data.getTotalValue());
+                    }
                 }
 
-                Cell totalCell = row.createCell(8);
-                if (data.getTotalValue() != null) {
-                    totalCell.setCellValue(data.getTotalValue().doubleValue());
-                    totalCell.setCellStyle(currencyStyle);
-                    grandTotal = grandTotal.add(data.getTotalValue());
+                Row totalRow = sheet.createRow(rowNum);
+                Cell totalLabelCell = totalRow.createCell(0);
+                totalLabelCell.setCellValue("SUMMARY");
+                totalLabelCell.setCellStyle(totalStyle);
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(rowNum, rowNum, 0, 6));
+
+                Cell totalQtyCell = totalRow.createCell(7);
+                totalQtyCell.setCellValue(totalQuantity);
+                totalQtyCell.setCellStyle(totalStyle);
+
+                Cell grandTotalCell = totalRow.createCell(8);
+                grandTotalCell.setCellValue(grandTotal.doubleValue());
+                grandTotalCell.setCellStyle(totalStyle);
+
+                for (int i = 0; i < headers.length; i++) {
+                    sheet.autoSizeColumn(i);
                 }
+
+                workbook.write(out);
+                return out.toByteArray();
             }
 
-            Row totalRow = sheet.createRow(rowNum);
-            Cell totalLabelCell = totalRow.createCell(0);
-            totalLabelCell.setCellValue("SUMMARY");
-            totalLabelCell.setCellStyle(totalStyle);
-            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(rowNum, rowNum, 0, 6));
-
-            Cell totalQtyCell = totalRow.createCell(7);
-            totalQtyCell.setCellValue(totalQuantity);
-            totalQtyCell.setCellStyle(totalStyle);
-
-            Cell grandTotalCell = totalRow.createCell(8);
-            grandTotalCell.setCellValue(grandTotal.doubleValue());
-            grandTotalCell.setCellStyle(totalStyle);
-
-            for (int i = 0; i < headers.length; i++) {
-                sheet.autoSizeColumn(i);
-            }
-
-            workbook.write(out);
-            return out.toByteArray();
+        } catch (Exception e) {
+            throw new InternalServerException("Error when exporting inventory report", e);
         }
     }
 
@@ -194,15 +200,11 @@ public class InventoryReportService {
         font.setFontHeightInPoints((short) 12);
         style.setFont(font);
         DataFormat format = workbook.createDataFormat();
-        style.setDataFormat(format.getFormat("#,##0 ₫")); 
+        style.setDataFormat(format.getFormat("#,##0 ₫"));
         style.setAlignment(HorizontalAlignment.RIGHT);
         style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setBorderTop(BorderStyle.DOUBLE);
-        CellStyle totalQtyStyle = workbook.createCellStyle();
-        totalQtyStyle.cloneStyleFrom(style);
-        totalQtyStyle.setDataFormat(format.getFormat("#,##0")); 
-        totalQtyStyle.setAlignment(HorizontalAlignment.CENTER);     
         return style;
     }
 }
