@@ -153,8 +153,11 @@ public class QuoteService {
                         // Tính giá gốc
                         BigDecimal basePrice = quotationDetailRequestDTO.getWholesalePrice();
 
+                        BigDecimal discountAmount = basePrice.multiply(
+                                        BigDecimal.ONE.subtract(discountPercent.divide(BigDecimal.valueOf(100))));
+
                         // Tính tổng tiền cuối cùng
-                        BigDecimal totalAmount = basePrice
+                        BigDecimal totalAmount = discountAmount
                                         .add(quotationDetailRequestDTO.getRegistrationTax())
                                         .add(quotationDetailRequestDTO.getLicensePlateFee())
                                         .add(quotationDetailRequestDTO.getRegistrartionFee())

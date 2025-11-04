@@ -12,12 +12,13 @@ import com.example.evsalesmanagement.model.Promotion;
 
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
-
+                // JOIN FETCH p.vehicleDetails v
+                // JOIN FETCH p.agencies a
     @Query("""
                 SELECT p
                 FROM Promotion p
-                JOIN FETCH p.vehicleTypeDetail v
-                JOIN FETCH p.agency a
+                JOIN p.vehicleDetails v
+                JOIN p.agencies a
                 WHERE a.agencyId = :agencyId AND v.vehicleTypeDetailId = :vehicleTypeDetailId
                 ORDER BY p.discountPercent DESC
 
