@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.example.evsalesmanagement.dto.Warehouse.WarehouseExportReceiptSummaryDTO;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service
 public class WarehouseExportService {
@@ -41,7 +42,7 @@ public class WarehouseExportService {
     @Transactional
     public WarehouseExportReceiptResponseDTO getByIdWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu xuất kho"));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         return new WarehouseExportReceiptResponseDTO(receipt);
     }
 
@@ -87,7 +88,7 @@ public class WarehouseExportService {
     @Transactional
     public ApiResponse<WarehouseExportReceiptResponseDTO> updateWarehouseExport(Integer id, WarehouseExportReceiptRequestDTO request) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu xuất kho"));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
             return new ApiResponse<>(false, "Chỉ được cập nhật khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
         }
@@ -123,7 +124,7 @@ public class WarehouseExportService {
     @Transactional
     public ApiResponse<Void> deleteWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy phiếu xuất kho"));
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
             return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
         }

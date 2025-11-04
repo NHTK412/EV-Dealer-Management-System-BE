@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.service;
 import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeRequestDTO;
 import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeResponseDTO;
 import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeSummaryDTO;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,14 @@ public class VehicleTypeService {
     @Transactional
     public VehicleTypeResponseDTO getVehicleTypeById(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại xe với id :" + vehicleTypeId));
         return new VehicleTypeResponseDTO(vehicleType);
     }
     
     @Transactional
     public VehicleTypeResponseDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeRequestDTO request) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại xe với id:" + vehicleTypeId));
         vehicleType.setVehicleTypeName(request.getVehicleTypeName());
         vehicleType.setManufactureYear(request.getManufactureYear());
         vehicleType.setDescription(request.getDescription());
@@ -54,7 +55,7 @@ public class VehicleTypeService {
     @Transactional
     public VehicleTypeResponseDTO deleteVehicleType(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại xe với id:" + vehicleTypeId));
         VehicleTypeResponseDTO dto = new VehicleTypeResponseDTO(vehicleType);
         vehicleTypeRepository.deleteById(vehicleTypeId);
         return dto;

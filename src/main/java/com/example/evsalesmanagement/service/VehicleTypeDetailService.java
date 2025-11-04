@@ -41,7 +41,7 @@ public class VehicleTypeDetailService {
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> getById(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type Detail not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());
         dto.setVehicleImage(entity.getVehicleImage());
@@ -83,7 +83,7 @@ public class VehicleTypeDetailService {
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId, VehicleTypeDetailRequestDTO requestDTO) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type Detail not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         entity.setVehicleImage(requestDTO.getVehicleImage());
         entity.setConfiguration(requestDTO.getConfiguration());
         entity.setColor(requestDTO.getColor());
@@ -110,7 +110,7 @@ public class VehicleTypeDetailService {
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> delete(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type Detail not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         vehicleTypeDetailRepository.delete(entity);
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());

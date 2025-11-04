@@ -2,6 +2,7 @@
 package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.policyDTO.*;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Policy;
 import com.example.evsalesmanagement.model.QuantityDiscountLevel;
 import com.example.evsalesmanagement.model.SalesDiscountLevel;
@@ -86,7 +87,7 @@ public class PolicyService {
 
     @Transactional()
     public PolicyResponseDTO getByIdPolicy(Integer policyId) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new RuntimeException("Không tìm thấy Policy"));
+        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
         policyResponseDTO.setPolicyType(policy.getPolicyType());
@@ -119,7 +120,7 @@ public class PolicyService {
 
     @Transactional
     public PolicyResponseDTO updatePolicy(Integer policyId, PolicyRequestDTO policyRequestDTO) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new RuntimeException("Không tìm thấy Policy"));
+        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         policy.setPolicyType(policyRequestDTO.getPolicyType());
         policy.setPolicyValue(policyRequestDTO.getPolicyValue());
         policy.setPolicyCondition(policyRequestDTO.getPolicyCondition());
@@ -132,14 +133,11 @@ public class PolicyService {
 
     @Transactional
     public PolicyResponseDTO deletePolicy(Integer policyId) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new RuntimeException("Không tìm thấy Policy"));
-        // Xóa các bản ghi QuantityDiscountLevel liên quan
+        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         List<QuantityDiscountLevel> quantityDiscountLevels = quantityDiscountLevelRepository.findByPolicy(policy);
         quantityDiscountLevelRepository.deleteAll(quantityDiscountLevels);
-        // Xóa các bản ghi SalesDiscountLevel liên quan
         List<SalesDiscountLevel> salesDiscountLevels = salesDiscountLevelRepository.findByPolicy(policy);
         salesDiscountLevelRepository.deleteAll(salesDiscountLevels);
-        // Xóa Policy
         policyRepository.delete(policy);
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
