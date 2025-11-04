@@ -1,18 +1,27 @@
 package com.example.evsalesmanagement.service;
 
 import java.beans.Transient;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
+import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
+import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.repository.PromotionRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
@@ -21,76 +30,172 @@ import jakarta.transaction.Transactional;
 @Service
 public class QuoteService {
 
-    @Autowired
-    QuoteRepository quoteRepository;
+        @Autowired
+        QuoteRepository quoteRepository;
 
-    @Autowired
-    EmployeeRepository employeeRepository;
+        @Autowired
+        EmployeeRepository employeeRepository;
 
-    @Autowired
-    VehicleTypeDetailRepository vehicleTypeDetailRepository;
+        @Autowired
+        VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-    @Transactional
-    public QuoteResponseDTO getQuoteById(Integer quoteId) {
-        Quote quote = quoteRepository.findById(quoteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
-        return new QuoteResponseDTO(quote);
-    }
+        @Autowired
+        PromotionRepository promotionRepository;
 
-    @Transactional
-    public QuoteResponseDTO createQuote(QuoteRequestDTO quoteRequestDTO) {
-        Quote quote = convertDTOtoEnity(quoteRequestDTO);
+        @Transactional
+        public QuoteResponseDTO getQuoteById(Integer quoteId) {
+                Quote quote = quoteRepository.findById(quoteId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                return new QuoteResponseDTO(quote);
+        }
 
-        quoteRepository.save(quote);
-        return new QuoteResponseDTO(quote);
-    }
+        @Transactional
+        public QuoteResponseDTO createQuote(QuoteRequestDTO quoteRequestDTO) {
+                Quote quote = new Quote();
 
-    private Quote convertDTOtoEnity(QuoteRequestDTO quoteRequestDTO) {
-        Quote quote = new Quote();
+                convertDTOtoEnity(quoteRequestDTO, quote);
 
-        quote.setEmployee(employeeRepository
-                .findById(quoteRequestDTO.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không tồn tại")));
+                quoteRepository.save(quote);
+                return new QuoteResponseDTO(quote);
+        }
 
-        quote.setStatus(quoteRequestDTO.getStatus());
-        quote.setQuotationDetails(
-                quoteRequestDTO.getQuotationDetailRequestDTOs()
-                        .stream()
-                        .map((quotationDetailRequestDTO) -> {
-                            QuotationDetail quotationDetail = new QuotationDetail();
+        @Transactional
+        public QuoteResponseDTO deleteQuote(Integer quoteId) {
+                Quote quote = quoteRepository.findById(quoteId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                quoteRepository.delete(quote);
+                return new QuoteResponseDTO(quote);
+        }
 
-                            quotationDetail.setQuantity(quotationDetailRequestDTO.getQuantity());
+        @Transactional
+        public QuoteResponseDTO updateQuote(Integer quoteId, QuoteRequestDTO quoteRequestDTO) {
+                Quote quote = quoteRepository.findById(quoteId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                // if (quote.getStatus() != "Padding") {
+                // throw new ConflictException("Trạng thái hiện tại không được sửa");
+                // }
+                quote.getQuotationDetails().clear();
 
-                            quotationDetail.setDiscount(quotationDetailRequestDTO.getDiscount());
+                convertDTOtoEnity(quoteRequestDTO, quote);
 
-                            quotationDetail.setRegistrationTax(quotationDetailRequestDTO.getRegistrationTax());
+                quoteRepository.save(quote);
 
-                            quotationDetail.setLicensePlateFee(quotationDetailRequestDTO.getLicensePlateFee());
+                return new QuoteResponseDTO(quote);
+        }
 
-                            quotationDetail.setRegistrartionFee(quotationDetailRequestDTO.getRegistrartionFee());
+        @Transactional
+        public QuoteResponseDTO updateStatusQuote(Integer quoteId, String status) {
+                Quote quote = quoteRepository.findById(quoteId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
 
-                            quotationDetail.setCompulsoryInsurance(quotationDetailRequestDTO.getCompulsoryInsurance());
+                quote.setStatus(status);
 
-                            quotationDetail.setMaterialInsurance(quotationDetailRequestDTO.getMaterialInsurance());
+                quoteRepository.save(quote);
 
-                            quotationDetail.setRoadMaintenanceMees(quotationDetailRequestDTO.getRoadMaintenanceMees());
+                return new QuoteResponseDTO(quote);
 
-                            quotationDetail.setVehicleRegistrationServiceFee(
-                                    quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
+        }
 
-                            quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
+        private void convertDTOtoEnity(QuoteRequestDTO quoteRequestDTO, Quote quote) {
 
-                            quotationDetail.setWholesalePrice(quotationDetailRequestDTO.getWholesalePrice());
+                quote.setEmployee(employeeRepository
+                                .findById(quoteRequestDTO.getEmployeeId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không tồn tại")));
 
-                            quotationDetail.setQuote(quote);
+                quote.setStatus(quoteRequestDTO.getStatus());
 
-                            quotationDetail.setVehicleTypeDetail(vehicleTypeDetailRepository
-                                    .findById(quotationDetailRequestDTO.getVehicleTypeDetailId())
-                                    .orElseThrow(() -> new ResourceNotFoundException("Mã xe không tồn tại")));
+                List<Integer> vehicleTypeDetailIds = quoteRequestDTO.getQuotationDetailRequestDTOs().stream()
+                                .map((quotationDetailRequestDTO) -> quotationDetailRequestDTO.getVehicleTypeDetailId())
+                                .toList();
 
-                            return quotationDetail;
+                List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
+                                .getAllByIdWithVehicleType(vehicleTypeDetailIds);
 
-                        }).collect(Collectors.toList()));
-        return quote;
-    }
+                Map<Integer, VehicleTypeDetail> vehicleTypeDetailMap = vehicleTypeDetails
+                                .stream()
+                                .collect(Collectors.toMap(
+                                                vehicleTypeDetail -> vehicleTypeDetail.getVehicleTypeDetailId(),
+                                                vehicleTypeDetail -> vehicleTypeDetail));
+
+                for (QuotationDetailRequestDTO quotationDetailRequestDTO : quoteRequestDTO
+                                .getQuotationDetailRequestDTOs()) {
+                        QuotationDetail quotationDetail = new QuotationDetail();
+
+                        quotationDetail.setQuantity(quotationDetailRequestDTO.getQuantity());
+
+                        quotationDetail.setDiscount(quotationDetailRequestDTO.getDiscount());
+
+                        quotationDetail.setRegistrationTax(quotationDetailRequestDTO.getRegistrationTax());
+
+                        quotationDetail.setLicensePlateFee(quotationDetailRequestDTO.getLicensePlateFee());
+
+                        quotationDetail.setRegistrartionFee(quotationDetailRequestDTO.getRegistrartionFee());
+
+                        quotationDetail.setCompulsoryInsurance(quotationDetailRequestDTO.getCompulsoryInsurance());
+
+                        quotationDetail.setMaterialInsurance(quotationDetailRequestDTO.getMaterialInsurance());
+
+                        quotationDetail.setRoadMaintenanceMees(quotationDetailRequestDTO.getRoadMaintenanceMees());
+
+                        quotationDetail.setVehicleRegistrationServiceFee(
+                                        quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
+
+                        quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
+
+                        quotationDetail.setWholesalePrice(quotationDetailRequestDTO.getWholesalePrice());
+
+                        List<Promotion> promotions = promotionRepository.getPromotionsByAgencyIdAndVehicleDetailsId(
+                                        quote.getEmployee().getAgency().getAgencyId(),
+                                        quotationDetailRequestDTO.getVehicleTypeDetailId());
+
+                        BigDecimal discountPercent = promotions.stream().findFirst().get().getDiscountPercent();
+
+                        // Tính giá gốc
+                        BigDecimal basePrice = quotationDetailRequestDTO.getWholesalePrice();
+
+                        // Tính tổng tiền cuối cùng
+                        BigDecimal totalAmount = basePrice
+                                        .add(quotationDetailRequestDTO.getRegistrationTax())
+                                        .add(quotationDetailRequestDTO.getLicensePlateFee())
+                                        .add(quotationDetailRequestDTO.getRegistrartionFee())
+                                        .add(quotationDetailRequestDTO.getCompulsoryInsurance())
+                                        .add(quotationDetailRequestDTO.getMaterialInsurance())
+                                        .add(quotationDetailRequestDTO.getRoadMaintenanceMees())
+                                        .add(quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
+                        // .subtract(quotationDetailRequestDTO.getDiscount())
+                        // .subtract(quotationDetailRequestDTO.getDiscountValue());
+
+                        quotationDetail.setTotalAmount(totalAmount);
+
+                        // double totalAmount = (quotationDetailRequestDTO.getWholesalePrice()
+                        // * quotationDetailRequestDTO.getQuantity())
+                        // - quotationDetailRequestDTO.getDiscount()
+                        // - (quotationDetailRequestDTO.getWholesalePrice()
+                        // * quotationDetailRequestDTO.getDiscountPercentage() / 100)
+                        // + quotationDetailRequestDTO.getRegistrationTax()
+                        // + quotationDetailRequestDTO.getLicensePlateFee()
+                        // + quotationDetailRequestDTO.getRegistrartionFee()
+                        // + quotationDetailRequestDTO.getCompulsoryInsurance()
+                        // + quotationDetailRequestDTO.getMaterialInsurance()
+                        // + quotationDetailRequestDTO.getRoadMaintenanceMees()
+                        // + quotationDetailRequestDTO.getVehicleRegistrationServiceFee();
+
+                        // Gan quan he
+                        quotationDetail.setQuote(quote);
+
+                        quotationDetail
+                                        .setVehicleTypeDetail(vehicleTypeDetailMap
+                                                        .get(quotationDetailRequestDTO.getVehicleTypeDetailId()));
+
+                        quote.getQuotationDetails().add(quotationDetail);
+                }
+
+                BigDecimal total = quote.getQuotationDetails()
+                                .stream()
+                                .map(QuotationDetail::getTotalAmount)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                quote.setTotalAmount(total);
+
+        }
 }

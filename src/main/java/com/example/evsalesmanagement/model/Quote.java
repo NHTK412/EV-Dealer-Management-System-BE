@@ -45,7 +45,7 @@ public class Quote extends Base {
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuotationDetail> quotationDetails = new ArrayList<>();
 
     public Integer getQuoteId() {
