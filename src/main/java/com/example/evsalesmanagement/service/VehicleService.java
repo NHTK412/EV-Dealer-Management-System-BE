@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
-import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleRequestDTO;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleSummaryDTO;
@@ -53,7 +52,6 @@ public class VehicleService {
         newVehicle.setAgency(agency);
         vehicleRepository.save(newVehicle);
         VehicleResponseDTO response = new VehicleResponseDTO(newVehicle);
-        response.setAgency(new AgencyDTO(agency));
         response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicleTypeDetail));
         return response;
 
@@ -71,7 +69,6 @@ public class VehicleService {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + vehicleId));
         VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
-        response.setAgency(new AgencyDTO(vehicle.getAgency()));
         response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicle.getVehicleTypeDetail()));
         return response;
     }
@@ -97,7 +94,6 @@ public class VehicleService {
         updateVehicle.setAgency(agency);
         vehicleRepository.save(updateVehicle);
         VehicleResponseDTO response = new VehicleResponseDTO(updateVehicle);
-        response.setAgency(new AgencyDTO(agency));
         response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicleTypeDetail));
         return response;
     }
@@ -107,7 +103,6 @@ public class VehicleService {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + vehicleId));
         VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
-        response.setAgency(new AgencyDTO(vehicle.getAgency()));
         response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicle.getVehicleTypeDetail()));
         vehicleRepository.deleteById(vehicleId);
         return response;

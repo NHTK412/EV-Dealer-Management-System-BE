@@ -37,6 +37,10 @@ public class WarehouseReceipt extends Base {
     @Column(name = "Note")
     private String note;
 
+
+    @Column(name = "Status")
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
     private Employee employeeId;
@@ -44,6 +48,13 @@ public class WarehouseReceipt extends Base {
     @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getWarehouseReceiptId() {
         return warehouseReceiptId;
