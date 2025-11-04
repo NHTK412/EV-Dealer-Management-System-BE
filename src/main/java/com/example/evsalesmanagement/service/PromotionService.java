@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
@@ -19,6 +18,7 @@ import jakarta.transaction.Transactional;
 
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 
 @Service
 public class PromotionService {
@@ -49,7 +49,7 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
                                                 .toList());
                 promotionResponseDTO.setAgencies(
                                 promotion.getAgencies()
@@ -96,7 +96,7 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 newPromotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
                                                 .toList());
                 promotionResponseDTO.setAgencies(
                                 newPromotion.getAgencies()
@@ -120,7 +120,7 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
                                                 .toList());
 
                 promotionResponseDTO.setAgencies(
@@ -167,7 +167,7 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 updatePromotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetails -> new VehicleTypeDetailDTO(vehicleTypeDetails))
+                                                .map(vehicleTypeDetails -> new VehicleTypeDetailResponseDTO(vehicleTypeDetails))
                                                 .toList());
 
                 promotionResponseDTO.setAgencies(

@@ -3,24 +3,28 @@ package com.example.evsalesmanagement.dto.Vehicle;
 
 
 import com.example.evsalesmanagement.model.Vehicle;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 
 public class VehicleResponseDTO{
+    private Integer vehicleId;
+    private String chassisNumber;
+    private String machineNumber;
+    private String status;
+    private String vehicleCondition;
+    private VehicleTypeDetailResponseDTO vehicleTypeDetail;
+    private Integer agencyId;
+
     public Integer getVehicleId() {
         return vehicleId;
     }
     public void setVehicleId(Integer vehicleId) {
         this.vehicleId = vehicleId;
     }
-    private Integer vehicleId;
-    private String chassisNumber;
-    private String machineNumber;
-    private String status;
-    private String vehicleCondition;
-    private VehicleTypeDetailDTO vehicleTypeDetail;
-    private Integer agencyId;
 
     public VehicleResponseDTO() {
     }
+
 
     public VehicleResponseDTO(Vehicle vehicle) {
         this.vehicleId = vehicle.getVehicleId();
@@ -29,7 +33,7 @@ public class VehicleResponseDTO{
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
         if (vehicle.getVehicleTypeDetail() != null) {
-            this.vehicleTypeDetail = new VehicleTypeDetailDTO(vehicle.getVehicleTypeDetail());
+            this.vehicleTypeDetail = new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail());
         }
         if (vehicle.getAgency() != null) {
             this.agencyId = vehicle.getAgency().getAgencyId();
@@ -37,7 +41,7 @@ public class VehicleResponseDTO{
     }
 
     public VehicleResponseDTO(String chassisNumber, String machineNumber, String status, String vehicleCondition,
-            VehicleTypeDetailDTO vehicleTypeDetail, Integer agencyId) {
+            VehicleTypeDetailResponseDTO vehicleTypeDetail, Integer agencyId) {
         this.chassisNumber = chassisNumber;
         this.machineNumber = machineNumber;
         this.status = status;
@@ -78,11 +82,11 @@ public class VehicleResponseDTO{
         this.vehicleCondition = vehicleCondition;
     }
 
-    public VehicleTypeDetailDTO getVehicleTypeDetail() {
+    public VehicleTypeDetailResponseDTO getVehicleTypeDetail() {
         return vehicleTypeDetail;
     }
 
-    public void setVehicleTypeDetail(VehicleTypeDetailDTO vehicleTypeDetail) {
+    public void setVehicleTypeDetail(VehicleTypeDetailResponseDTO vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
     }
 

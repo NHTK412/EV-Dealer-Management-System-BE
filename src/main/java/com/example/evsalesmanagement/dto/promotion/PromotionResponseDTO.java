@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.Promotion;
 
 public class PromotionResponseDTO {
@@ -30,7 +30,7 @@ public class PromotionResponseDTO {
 
     private String status;
 
-    private List<VehicleTypeDetailDTO> vehicleTypeDetails;
+    private List<VehicleTypeDetailResponseDTO> vehicleTypeDetails;
 
     private List<AgencyDTO> agencies;
 
@@ -50,7 +50,7 @@ public class PromotionResponseDTO {
     public PromotionResponseDTO(Integer promotionId, String promotionName, String promotionType,
             BigDecimal promotionValue, String criteria, BigDecimal discountAmount, BigDecimal discountPercent,
             LocalDateTime startDate, LocalDateTime endDate, String status,
-            List<VehicleTypeDetailDTO> vehicleTypeDetails,
+            List<VehicleTypeDetailResponseDTO> vehicleTypeDetails,
             List<AgencyDTO> agencies) {
         this.promotionId = promotionId;
         this.promotionName = promotionName;
@@ -62,7 +62,7 @@ public class PromotionResponseDTO {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.vehicleTypeDetails = vehicleTypeDetails;
+    this.vehicleTypeDetails = vehicleTypeDetails;
         this.agencies = agencies;
     }
 
@@ -149,11 +149,11 @@ public class PromotionResponseDTO {
         this.status = status;
     }
 
-    public List<VehicleTypeDetailDTO> getVehicleTypeDetails() {
+    public List<VehicleTypeDetailResponseDTO> getVehicleTypeDetails() {
         return vehicleTypeDetails;
     }
 
-    public void setVehicleTypeDetails(List<VehicleTypeDetailDTO> vehicleTypeDetails) {
+    public void setVehicleTypeDetails(List<VehicleTypeDetailResponseDTO> vehicleTypeDetails) {
         this.vehicleTypeDetails = vehicleTypeDetails;
     }
 

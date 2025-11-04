@@ -1,6 +1,8 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeRequestDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeResponseDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeSummaryDTO;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,48 +18,46 @@ public class VehicleTypeService {
     private VehicleTypeRepository vehicleTypeRepository;
 
     @Transactional
-    public VehicleTypeDTO createVehicleType(VehicleTypeDTO vehicleType) {
+    public VehicleTypeResponseDTO createVehicleType(VehicleTypeRequestDTO request) {
         VehicleType newVehicleType = new VehicleType();
-        newVehicleType.setVehicleTypeName(vehicleType.getVehicleTypeName());
-        newVehicleType.setManufactureYear(vehicleType.getManufactureYear());
-        newVehicleType.setDescription(vehicleType.getDescription());
+        newVehicleType.setVehicleTypeName(request.getVehicleTypeName());
+        newVehicleType.setManufactureYear(request.getManufactureYear());
+        newVehicleType.setDescription(request.getDescription());
         vehicleTypeRepository.save(newVehicleType);
-        VehicleTypeDTO vehicleTypeDTO = new VehicleTypeDTO(newVehicleType);
-        return vehicleTypeDTO;
-        }
+        return new VehicleTypeResponseDTO(newVehicleType);
+    }
     
      @Transactional
-    public Page<VehicleTypeDTO> getAllVehicleType(Pageable pageable) {
+    public Page<VehicleTypeSummaryDTO> getAllVehicleType(Pageable pageable) {
         Page<VehicleType> vehicleTypePage = vehicleTypeRepository.findAll(pageable);
-        return vehicleTypePage.map(VehicleTypeDTO::new);
+        return vehicleTypePage.map(VehicleTypeSummaryDTO::new);
     }
 
     @Transactional
-    public VehicleTypeDTO getVehicleTypeById(Integer vehicleTypeId) {
+    public VehicleTypeResponseDTO getVehicleTypeById(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                 .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
-        VehicleTypeDTO vehicleTypeDTO = new VehicleTypeDTO(vehicleType);
-        return vehicleTypeDTO;
+        return new VehicleTypeResponseDTO(vehicleType);
     }
     
     @Transactional
-    public VehicleTypeDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeDTO vehicleTypeDetails) {
+    public VehicleTypeResponseDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeRequestDTO request) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-                .orElseThrow(() -> new RuntimeException("Vehicle Type not found")); 
-        vehicleType.setVehicleTypeName(vehicleTypeDetails.getVehicleTypeName());
-        vehicleType.setManufactureYear(vehicleTypeDetails.getManufactureYear());
-        vehicleType.setDescription(vehicleTypeDetails.getDescription());
-        VehicleTypeDTO vehicleTypeDTO = new VehicleTypeDTO(vehicleType);
-        return vehicleTypeDTO;
+                .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
+        vehicleType.setVehicleTypeName(request.getVehicleTypeName());
+        vehicleType.setManufactureYear(request.getManufactureYear());
+        vehicleType.setDescription(request.getDescription());
+        vehicleTypeRepository.save(vehicleType);
+        return new VehicleTypeResponseDTO(vehicleType);
     }
 
     @Transactional
-    public VehicleTypeDTO deleteVehicleType(Integer vehicleTypeId) {
+    public VehicleTypeResponseDTO deleteVehicleType(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                 .orElseThrow(() -> new RuntimeException("Vehicle Type not found"));
-        VehicleTypeDTO vehicleTypeDTO = new VehicleTypeDTO(vehicleType);
+        VehicleTypeResponseDTO dto = new VehicleTypeResponseDTO(vehicleType);
         vehicleTypeRepository.deleteById(vehicleTypeId);
-        return vehicleTypeDTO;
+        return dto;
     }
 }
 

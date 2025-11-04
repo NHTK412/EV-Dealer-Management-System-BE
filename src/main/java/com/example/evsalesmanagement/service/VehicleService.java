@@ -13,7 +13,7 @@ import com.example.evsalesmanagement.repository.VehicleRepository;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleRequestDTO;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
 import com.example.evsalesmanagement.dto.Vehicle.VehicleSummaryDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;
 import com.example.evsalesmanagement.model.Agency;
@@ -52,7 +52,7 @@ public class VehicleService {
         newVehicle.setAgency(agency);
         vehicleRepository.save(newVehicle);
         VehicleResponseDTO response = new VehicleResponseDTO(newVehicle);
-        response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicleTypeDetail));
+        response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicleTypeDetail));
         return response;
 
        
@@ -69,7 +69,7 @@ public class VehicleService {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + vehicleId));
         VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
-        response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicle.getVehicleTypeDetail()));
+        response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail()));
         return response;
     }
 
@@ -94,7 +94,7 @@ public class VehicleService {
         updateVehicle.setAgency(agency);
         vehicleRepository.save(updateVehicle);
         VehicleResponseDTO response = new VehicleResponseDTO(updateVehicle);
-        response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicleTypeDetail));
+        response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicleTypeDetail));
         return response;
     }
 
@@ -103,7 +103,7 @@ public class VehicleService {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy xe với ID: " + vehicleId));
         VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
-        response.setVehicleTypeDetail(new VehicleTypeDetailDTO(vehicle.getVehicleTypeDetail()));
+        response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail()));
         vehicleRepository.deleteById(vehicleId);
         return response;
     }

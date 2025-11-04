@@ -1,37 +1,22 @@
-package com.example.evsalesmanagement.dto.Vehicle;
+
+package com.example.evsalesmanagement.dto.vehicleTypeDTO;
 
 import com.example.evsalesmanagement.model.VehicleType;
 
-
-
-public class VehicleTypeDTO {
+public class VehicleTypeResponseDTO {
     private Integer vehicleTypeId;
-
     private String vehicleTypeName;
-    // nam san xuat = manufactureYear
     private Integer manufactureYear;
-    // mo ta = description
     private String description;
 
-    public VehicleTypeDTO() {
-    }
+    public VehicleTypeResponseDTO() {}
 
-    public VehicleTypeDTO(VehicleType vehicleType){
-        this.vehicleTypeId = vehicleType.getVehicleTypeId();
-        this.vehicleTypeName = vehicleType.getVehicleTypeName();
-        this.manufactureYear = vehicleType.getManufactureYear();
-        this.description = vehicleType.getDescription();
-        }
-  
-        
-
-    public VehicleTypeDTO(Integer vehicleTypeId, String vehicleTypeName, Integer manufactureYear, String description){
-        this.vehicleTypeId = vehicleTypeId;
-        this.vehicleTypeName = vehicleTypeName;
-        this.manufactureYear = manufactureYear;
-        this.description = description;
+    public VehicleTypeResponseDTO(VehicleType entity) {
+        this.vehicleTypeId = entity.getVehicleTypeId();
+        this.vehicleTypeName = entity.getVehicleTypeName();
+        this.manufactureYear = entity.getManufactureYear();
+        this.description = entity.getDescription();
     }
-    
 
     public Integer getVehicleTypeId() {
         return vehicleTypeId;
@@ -58,6 +43,5 @@ public class VehicleTypeDTO {
         this.description = description;
     }
 
- 
-
+    
 }
