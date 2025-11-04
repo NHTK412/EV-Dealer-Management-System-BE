@@ -10,10 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.evsalesmanagement.dto.VehicleDTO;
-import com.example.evsalesmanagement.dto.VehicleTypeDTO;
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
-import com.example.evsalesmanagement.model.Vehicle;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleRequestDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleSummaryDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.service.VehicleService;
 import com.example.evsalesmanagement.service.VehicleTypeDetailService;
 import com.example.evsalesmanagement.service.VehicleTypeService;
@@ -24,46 +25,42 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 public class VehicleController {
 
     @Autowired private VehicleService vehicleService;
+
     @Autowired private VehicleTypeService vehicleTypeService;
+    
     @Autowired private VehicleTypeDetailService vehicleTypeDetailService;
 
     // =============== VEHICLE ===============
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Vehicle>> createVehicle(@RequestBody VehicleDTO request) {
-        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleService.createVehicle(request)));
-    }
-
-    @PostMapping("/batch")
-    public ResponseEntity<ApiResponse<List<Vehicle>>> createVehicleBatch(@RequestBody List<VehicleDTO> requests) {
-        List<Vehicle> result = new ArrayList<>();
-        for (VehicleDTO req : requests) {
-            result.add(vehicleService.createVehicle(req));
-        }
-        return ResponseEntity.ok(new ApiResponse<>(true, null, result));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(@RequestBody VehicleRequestDTO request) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.createVehicle(request);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<VehicleDTO>>> getAllVehicle(@RequestParam Integer page, @RequestParam Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<VehicleDTO> pageVehicle = vehicleService.getAllVehicle(pageable);
-        return ResponseEntity.ok(new ApiResponse<>(true, null, pageVehicle));
+    public ResponseEntity<ApiResponse<List<VehicleSummaryDTO>>> getAllVehicle(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page - 1 , size);
+        List<VehicleSummaryDTO> vehicleSummaryDTOs = vehicleService.getAllVehicle(pageable);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleSummaryDTOs));
     }
 
     @GetMapping("/{vehicleId}")
-    public ResponseEntity<ApiResponse<Vehicle>> getVehicleById(@PathVariable Integer vehicleId) {
-        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleService.getVehicleById(vehicleId)));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> getByIdVehicle(@PathVariable Integer vehicleId) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.getByIdVehicle(vehicleId);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
     @PutMapping("/{vehicleId}")
-    public ResponseEntity<ApiResponse<Vehicle>> updateVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleDTO request) {
-        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleService.updateVehicle(vehicleId, request)));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> updateVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleRequestDTO request) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.updateVehicle(vehicleId, request);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
     @DeleteMapping("/{vehicleId}")
-    public ResponseEntity<ApiResponse<String>> deleteVehicle(@PathVariable Integer vehicleId) {
-        vehicleService.deleteVehicle(vehicleId);
-        return ResponseEntity.ok(new ApiResponse<>(true, null, "Deleted Successfully"));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> deleteVehicle(@PathVariable Integer vehicleId) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.deleteVehicle(vehicleId);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
     // =============== VEHICLE TYPE ===============

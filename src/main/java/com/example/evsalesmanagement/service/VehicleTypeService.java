@@ -1,7 +1,6 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.VehicleTypeDTO;
-
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDTO;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

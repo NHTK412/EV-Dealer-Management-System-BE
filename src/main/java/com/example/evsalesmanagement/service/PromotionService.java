@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;

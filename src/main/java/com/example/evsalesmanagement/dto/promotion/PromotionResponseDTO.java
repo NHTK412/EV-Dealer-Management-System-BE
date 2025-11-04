@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.model.Promotion;
 
 public class PromotionResponseDTO {

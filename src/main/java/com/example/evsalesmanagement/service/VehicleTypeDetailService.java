@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;

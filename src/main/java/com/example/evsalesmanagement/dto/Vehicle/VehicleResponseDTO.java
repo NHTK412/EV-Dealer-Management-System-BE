@@ -1,36 +1,37 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.Vehicle;
 
 
-import com.example.evsalesmanagement.model.Agency;
+
+import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.model.Vehicle;
-import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
-
-public class VehicleDTO {
+public class VehicleResponseDTO{
     private String chassisNumber;
     private String machineNumber;
     private String status;
     private String vehicleCondition;
-    private Integer vehicleTypeDetailId;
-    private Integer agencyId;
     private VehicleTypeDetailDTO vehicleTypeDetail;
     private AgencyDTO agency;
 
-    
-    public VehicleDTO(Vehicle vehicle) {
+    public VehicleResponseDTO() {
+    }
+
+    public VehicleResponseDTO(Vehicle vehicle) {
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
-        VehicleTypeDetail detail = vehicle.getVehicleTypeDetail();
-        if (detail != null) {
-            this.vehicleTypeDetail = new VehicleTypeDetailDTO(detail);
-        }
+       
+    }
 
-        Agency agency = vehicle.getAgency();
-        if (agency != null) {
-            this.agency = new AgencyDTO(agency);
-        }
+    public VehicleResponseDTO(String chassisNumber, String machineNumber, String status, String vehicleCondition,
+            VehicleTypeDetailDTO vehicleTypeDetail, AgencyDTO agency) {
+        this.chassisNumber = chassisNumber;
+        this.machineNumber = machineNumber;
+        this.status = status;
+        this.vehicleCondition = vehicleCondition;
+        this.vehicleTypeDetail = vehicleTypeDetail;
+        this.agency = agency;
     }
 
     public String getChassisNumber() {
@@ -65,22 +66,6 @@ public class VehicleDTO {
         this.vehicleCondition = vehicleCondition;
     }
 
-    public Integer getVehicleTypeDetailId() {
-        return vehicleTypeDetailId;
-    }
-
-    public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
-        this.vehicleTypeDetailId = vehicleTypeDetailId;
-    }
-
-    public Integer getAgencyId() {
-        return agencyId;
-    }
-
-    public void setAgencyId(Integer agencyId) {
-        this.agencyId = agencyId;
-    }
-
     public VehicleTypeDetailDTO getVehicleTypeDetail() {
         return vehicleTypeDetail;
     }
@@ -98,4 +83,14 @@ public class VehicleDTO {
     }
 
     
+    
+
+
 }
+
+    
+
+    
+
+
+    
