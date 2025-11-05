@@ -123,7 +123,7 @@ public class QuoteService {
 
                         quotationDetail.setQuantity(quotationDetailRequestDTO.getQuantity());
 
-                        quotationDetail.setDiscount(quotationDetailRequestDTO.getDiscount());
+                        // quotationDetail.setDiscount(quotationDetailRequestDTO.getDiscount());
 
                         quotationDetail.setRegistrationTax(quotationDetailRequestDTO.getRegistrationTax());
 
@@ -140,7 +140,7 @@ public class QuoteService {
                         quotationDetail.setVehicleRegistrationServiceFee(
                                         quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
 
-                        quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
+                        // quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
 
                         quotationDetail.setWholesalePrice(quotationDetailRequestDTO.getWholesalePrice());
 
@@ -151,20 +151,60 @@ public class QuoteService {
                                         quote.getEmployee().getAgency().getAgencyId(),
                                         quotationDetailRequestDTO.getVehicleTypeDetailId());
 
-                        BigDecimal discountAmount = promotions.stream()
-                                        .map((promotion) -> {
-                                                if ("PERCENTAGE".equals(promotion.getPromotionType())) {
-                                                        return basePrice.multiply(
-                                                                        BigDecimal.ONE.subtract(
-                                                                                        promotion.getDiscountPercent()
-                                                                                                        .divide(BigDecimal
-                                                                                                                        .valueOf(100))));
-                                                }
-                                                return basePrice.subtract(
-                                                                promotion.getDiscountAmount());
-                                        })
-                                        .min(Comparator.naturalOrder())
-                                        .orElse(basePrice); // Nếu rỗng thì trả về basePrice
+                        // BigDecimal discountAmount = promotions.stream()
+                        // .map((promotion) -> {
+                        // if ("PERCENTAGE".equals(promotion.getPromotionType())) {
+                        // return basePrice.multiply(
+                        // BigDecimal.ONE.subtract(
+                        // promotion.getDiscountPercent()
+                        // .divide(BigDecimal
+                        // .valueOf(100))));
+                        // }
+                        // return basePrice.subtract(
+                        // promotion.getDiscountAmount());
+                        // })
+                        // .min(Comparator.naturalOrder())
+                        // .orElse(basePrice); // Nếu rỗng thì trả về basePrice
+
+                        Map<Promotion, BigDecimal> discountAmountMap = promotions.stream()
+                                        .collect(Collectors.toMap((promotion) -> promotion,
+                                                        (promotion) -> {
+                                                                if ("PERCENTAGE".equals(promotion.getPromotionType())) {
+                                                                        return basePrice.multiply(
+                                                                                        BigDecimal.ONE.subtract(
+                                                                                                        promotion.getDiscountPercent()
+                                                                                                                        .divide(BigDecimal
+                                                                                                                                        .valueOf(100))));
+                                                                }
+                                                                return basePrice.subtract(
+                                                                                promotion.getDiscountAmount());
+                                                        }));
+
+                        Map.Entry<Promotion, BigDecimal> maxDiscountPromotion = discountAmountMap.entrySet().stream()
+                                        .min((Map.Entry.comparingByValue())).orElse(null);
+
+                        BigDecimal discountAmount = null;
+
+                        if (maxDiscountPromotion != null) {
+                                discountAmount = maxDiscountPromotion.getValue();
+
+                                if ("PERCENTAGE".equals(maxDiscountPromotion.getKey().getPromotionType())) {
+
+                                        quotationDetail.setDiscountPercentage(
+                                                        maxDiscountPromotion.getKey().getDiscountPercent());
+
+                                } else {
+                                        quotationDetail.setDiscount(maxDiscountPromotion.getKey().getDiscountAmount());
+
+                                }
+                        } else {
+                                discountAmount = BigDecimal.valueOf(0);
+
+                                quotationDetail.setDiscount(BigDecimal.valueOf(0));
+
+                                quotationDetail.setDiscountPercentage(BigDecimal.valueOf(0));
+
+                        }
 
                         // BigDecimal discountPercent =
                         // promotions.stream().findFirst().get().getDiscountPercent();
@@ -181,6 +221,9 @@ public class QuoteService {
                                         .add(quotationDetailRequestDTO.getMaterialInsurance())
                                         .add(quotationDetailRequestDTO.getRoadMaintenanceMees())
                                         .add(quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
+
+                        totalAmount = totalAmount.multiply(BigDecimal.valueOf(quotationDetailRequestDTO.getQuantity()));
+                        
                         // .subtract(quotationDetailRequestDTO.getDiscount())
                         // .subtract(quotationDetailRequestDTO.getDiscountValue());
 

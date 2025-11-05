@@ -39,7 +39,7 @@ public class QuoteController {
     }
 
     @DeleteMapping("/{quoteId}")
-    public ResponseEntity<ApiResponse<QuoteResponseDTO>> deleteQuote(@RequestParam Integer quoteId) {
+    public ResponseEntity<ApiResponse<QuoteResponseDTO>> deleteQuote(@PathVariable Integer quoteId) {
         QuoteResponseDTO quoteResponseDTO = quoteService.deleteQuote(quoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
