@@ -4,12 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
-import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.service.PromotionService;
 
 import java.util.List;

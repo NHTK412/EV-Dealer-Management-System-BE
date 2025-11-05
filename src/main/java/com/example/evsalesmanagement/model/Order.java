@@ -2,7 +2,9 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +53,7 @@ public class Order extends Base {
     private Agency agency;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderDetail> OrderDetails = new ArrayList<>();
+    private Set<OrderDetail> orderDetails = new HashSet<>();
 
     public Integer getOrderId() {
         return orderId;
@@ -117,12 +119,12 @@ public class Order extends Base {
         this.agency = agency;
     }
 
-    public List<OrderDetail> getOrderDetails() {
-        return OrderDetails;
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        OrderDetails = orderDetails;
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     // @OneToOne(mappedBy = "donHang")
