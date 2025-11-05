@@ -124,5 +124,4 @@ public class QuotationDetailRequestDTO {
         this.wholesalePrice = wholesalePrice;
     }
 
-    
 }

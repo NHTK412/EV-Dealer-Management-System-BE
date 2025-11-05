@@ -2,6 +2,7 @@ package com.example.evsalesmanagement.service;
 
 import java.beans.Transient;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
-import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.model.QuotationDetail;
@@ -144,17 +144,33 @@ public class QuoteService {
 
                         quotationDetail.setWholesalePrice(quotationDetailRequestDTO.getWholesalePrice());
 
+                        // Tính giá gốc
+                        BigDecimal basePrice = quotationDetailRequestDTO.getWholesalePrice();
+
                         List<Promotion> promotions = promotionRepository.getPromotionsByAgencyIdAndVehicleDetailsId(
                                         quote.getEmployee().getAgency().getAgencyId(),
                                         quotationDetailRequestDTO.getVehicleTypeDetailId());
 
-                        BigDecimal discountPercent = promotions.stream().findFirst().get().getDiscountPercent();
+                        BigDecimal discountAmount = promotions.stream()
+                                        .map((promotion) -> {
+                                                if ("PERCENTAGE".equals(promotion.getPromotionType())) {
+                                                        return basePrice.multiply(
+                                                                        BigDecimal.ONE.subtract(
+                                                                                        promotion.getDiscountPercent()
+                                                                                                        .divide(BigDecimal
+                                                                                                                        .valueOf(100))));
+                                                }
+                                                return basePrice.subtract(
+                                                                promotion.getDiscountAmount());
+                                        })
+                                        .min(Comparator.naturalOrder())
+                                        .orElse(basePrice); // Nếu rỗng thì trả về basePrice
 
-                        // Tính giá gốc
-                        BigDecimal basePrice = quotationDetailRequestDTO.getWholesalePrice();
+                        // BigDecimal discountPercent =
+                        // promotions.stream().findFirst().get().getDiscountPercent();
 
-                        BigDecimal discountAmount = basePrice.multiply(
-                                        BigDecimal.ONE.subtract(discountPercent.divide(BigDecimal.valueOf(100))));
+                        // BigDecimal discountAmount = basePrice.multiply(
+                        // BigDecimal.ONE.subtract(discountPercent.divide(BigDecimal.valueOf(100))));
 
                         // Tính tổng tiền cuối cùng
                         BigDecimal totalAmount = discountAmount
