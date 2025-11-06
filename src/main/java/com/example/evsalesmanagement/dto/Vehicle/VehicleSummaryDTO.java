@@ -1,24 +1,28 @@
-package com.example.evsalesmanagement.dto;
-
+package com.example.evsalesmanagement.dto.Vehicle;
 
 import com.example.evsalesmanagement.model.Vehicle;
 
-
-public class VehicleDTO {
+public class VehicleSummaryDTO {
     private String chassisNumber;
     private String machineNumber;
     private String status;
     private String vehicleCondition;
-    private Integer vehicleTypeDetailId;
-    private Integer agencyId;
-    
-    public VehicleDTO(Vehicle vehicle) {
+
+    public VehicleSummaryDTO() {
+    }
+
+    public VehicleSummaryDTO(Vehicle vehicle) {
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
-        this.vehicleTypeDetailId = vehicle.getVehicleTypeDetail() != null ? vehicle.getVehicleTypeDetail().getVehicleTypeDetailId() : null;
-        this.agencyId = vehicle.getAgency() != null ? vehicle.getAgency().getAgencyId() : null;
+    }
+
+    public VehicleSummaryDTO(String chassisNumber, String machineNumber, String status, String vehicleCondition) {
+        this.chassisNumber = chassisNumber;
+        this.machineNumber = machineNumber;
+        this.status = status;
+        this.vehicleCondition = vehicleCondition;
     }
 
     public String getChassisNumber() {
@@ -44,29 +48,15 @@ public class VehicleDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    
     public String getVehicleCondition() {
         return vehicleCondition;
     }
-
+    
     public void setVehicleCondition(String vehicleCondition) {
         this.vehicleCondition = vehicleCondition;
     }
-
-    public Integer getVehicleTypeDetailId() {
-        return vehicleTypeDetailId;
-    }
-
-    public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
-        this.vehicleTypeDetailId = vehicleTypeDetailId;
-    }
-
-    public Integer getAgencyId() {
-        return agencyId;
-    }
-
-    public void setAgencyId(Integer agencyId) {
-        this.agencyId = agencyId;
-    }
-
+   
+    
+    
 }

@@ -68,12 +68,13 @@ public class Policy extends Base {
         this.policyValue = policyValue;
     }
 
-    public String getCondition() {
+  
+    public String getPolicyCondition() {
         return policyCondition;
     }
-
-    public void setCondition(String condition) {
-        this.policyCondition = condition;
+    
+    public void setPolicyCondition(String policyCondition) {
+        this.policyCondition = policyCondition;
     }
 
     public LocalDateTime getStartDate() {

@@ -29,13 +29,17 @@ public class WarehouseReceipt extends Base {
 
     // Season -ly do
     @Column(name = "Reason")
-    private String lyDo;
+    private String reason;
 
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
     @Column(name = "Note")
     private String note;
+
+
+    @Column(name = "Status")
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
@@ -44,6 +48,13 @@ public class WarehouseReceipt extends Base {
     @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getWarehouseReceiptId() {
         return warehouseReceiptId;
@@ -60,13 +71,29 @@ public class WarehouseReceipt extends Base {
     public void setWareHouseReceiptDate(LocalDateTime wareHouseReceiptDate) {
         this.warehouseReceiptDate = wareHouseReceiptDate;
     }
-
-    public String getLyDo() {
-        return lyDo;
+    
+    public LocalDateTime getWarehouseReceiptDate() {
+        return warehouseReceiptDate;
     }
 
-    public void setLyDo(String lyDo) {
-        this.lyDo = lyDo;
+    public void setWarehouseReceiptDate(LocalDateTime warehouseReceiptDate) {
+        this.warehouseReceiptDate = warehouseReceiptDate;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public BigDecimal getTotalAmount() {
