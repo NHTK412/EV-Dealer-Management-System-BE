@@ -1,17 +1,22 @@
-server.port=
-spring.application.name=
-server.servlet.context-path=
+server.port=8080
+spring.application.name=evsalesmanagement
+server.servlet.context-path=/api
 spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
 spring.datasource.driver-class-name=
 spring.jpa.hibernate.ddl-auto=
-spring.jpa.show-sql=
-spring.jpa.open-in-view=
+spring.jpa.show-sql=true
+spring.jpa.open-in-view=true
+spring.jpa.properties.hibernate.format_sql=true
 
-spring.mail.host=
-spring.mail.port=
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
 spring.mail.username=
 spring.mail.password=
-spring.mail.properties.mail.smtp.auth=
-spring.mail.properties.mail.smtp.starttls.enable=
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+
+jwt.secret-key = 
