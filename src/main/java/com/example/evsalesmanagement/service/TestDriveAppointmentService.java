@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.TestDriveAppointmentDTO;
+import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentDTO;
 import com.example.evsalesmanagement.model.TestDriveAppointment;
 import com.example.evsalesmanagement.repository.TestDriveAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;

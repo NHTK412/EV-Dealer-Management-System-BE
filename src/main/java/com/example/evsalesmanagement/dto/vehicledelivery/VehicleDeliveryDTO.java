@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.vehicledelivery;
 
 import java.time.LocalDateTime;
 import com.example.evsalesmanagement.model.VehicleDelivery;

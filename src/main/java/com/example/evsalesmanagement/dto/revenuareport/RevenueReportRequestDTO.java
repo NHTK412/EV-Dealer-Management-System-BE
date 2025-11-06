@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.revenuareport;
 
 
 import java.time.LocalDateTime;

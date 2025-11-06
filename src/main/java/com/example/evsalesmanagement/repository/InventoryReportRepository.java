@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.evsalesmanagement.dto.InventoryReportRequestDTO;
-import com.example.evsalesmanagement.dto.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
 import com.example.evsalesmanagement.model.Vehicle;
 
 @Repository

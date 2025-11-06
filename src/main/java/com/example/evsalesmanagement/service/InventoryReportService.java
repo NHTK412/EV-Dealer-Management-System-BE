@@ -22,8 +22,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.InventoryReportRequestDTO;
-import com.example.evsalesmanagement.dto.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
 import com.example.evsalesmanagement.exception.InternalServerException;
 import com.example.evsalesmanagement.repository.InventoryReportRepository;
 

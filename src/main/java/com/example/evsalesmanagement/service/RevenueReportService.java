@@ -25,10 +25,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import com.example.evsalesmanagement.exception.InternalServerException;
 
-import com.example.evsalesmanagement.dto.RevenueReportRequestDTO;
-import com.example.evsalesmanagement.dto.RevenueReportResponseDTO;
+import com.example.evsalesmanagement.dto.revenuareport.RevenueReportRequestDTO;
+import com.example.evsalesmanagement.dto.revenuareport.RevenueReportResponseDTO;
+import com.example.evsalesmanagement.exception.InternalServerException;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
 import com.example.evsalesmanagement.repository.RevenueReportRepository;

@@ -9,11 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestRequestDTO;
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestResponseDTO;
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestSummaryDTO;
-import com.example.evsalesmanagement.dto.importRequestDetail.ImportRequestDetailResponseDTO;
-import com.example.evsalesmanagement.dto.importRequestDetail.ImportRequestDetailRequestDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestRequestDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
+import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailRequestDTO;
+import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailResponseDTO;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;

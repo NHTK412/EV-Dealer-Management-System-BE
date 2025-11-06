@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.PaymentDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentDTO;
 import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,9 +3,9 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestRequestDTO;
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestResponseDTO;
-import com.example.evsalesmanagement.dto.importRequest.ImportRequestSummaryDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestRequestDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
+import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
 import com.example.evsalesmanagement.service.ImportRequestService;
 
 import jakarta.validation.constraints.Positive;

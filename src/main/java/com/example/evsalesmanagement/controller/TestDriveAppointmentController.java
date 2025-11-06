@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.TestDriveAppointmentDTO;
+import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentDTO;
 import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 
 import java.util.List;

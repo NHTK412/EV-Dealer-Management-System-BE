@@ -3,8 +3,8 @@ package com.example.evsalesmanagement.dto.warehouse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import com.example.evsalesmanagement.dto.EmployeeDTO;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 
 public class WarehouseImportReceiptResponseDTO {
@@ -14,7 +14,7 @@ public class WarehouseImportReceiptResponseDTO {
     private BigDecimal totalAmount;
     private String note;
     private String status;
-    private EmployeeDTO employee;
+    private EmployeeResponseDTO employee;
     private AgencyResponseDTO agency;
     private List<VehicleResponseDTO> vehicles;
 
@@ -28,7 +28,7 @@ public class WarehouseImportReceiptResponseDTO {
         this.note = entity.getNote();
         this.status = entity.getStatus();
         if (entity.getEmployeeId() != null) {
-            this.employee = new EmployeeDTO(entity.getEmployeeId());
+            this.employee = new EmployeeResponseDTO(entity.getEmployeeId());
         }
         if (entity.getAgencyId() != null) {
             this.agency = new AgencyResponseDTO(entity.getAgencyId());
@@ -76,10 +76,10 @@ public class WarehouseImportReceiptResponseDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-    public EmployeeDTO getEmployee() {
+    public EmployeeResponseDTO getEmployee() {
         return employee;
     }
-    public void setEmployee(EmployeeDTO employee) {
+    public void setEmployee(EmployeeResponseDTO employee) {
         this.employee = employee;
     }
     public AgencyResponseDTO getAgency() {

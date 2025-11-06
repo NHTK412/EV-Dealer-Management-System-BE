@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.VehicleDeliveryDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryDTO;
 import com.example.evsalesmanagement.enums.VehicleDeliveryEnum;
 import com.example.evsalesmanagement.service.VehicleDeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;

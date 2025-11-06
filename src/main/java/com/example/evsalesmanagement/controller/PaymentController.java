@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.PaymentDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentDTO;
 import com.example.evsalesmanagement.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
