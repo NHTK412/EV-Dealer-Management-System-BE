@@ -1,16 +1,21 @@
 package com.example.evsalesmanagement.dto.agency;
 
+import com.example.evsalesmanagement.enums.AgencyStatusEnum;
+
+import jakarta.persistence.Enumerated;
+
 public class AgencyRequestDTO {
 
-    private String agencyName;   
+    private String agencyName;
 
-    private String address;   
+    private String address;
 
-    private String phoneNumber;    
+    private String phoneNumber;
 
-    private String email;    
+    private String email;
 
-    private String status;
+    
+    private AgencyStatusEnum status;
 
     public String getAgencyName() {
         return agencyName;
@@ -44,14 +49,12 @@ public class AgencyRequestDTO {
         this.email = email;
     }
 
-    public String getStatus() {
+    public AgencyStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgencyStatusEnum status) {
         this.status = status;
-    }    
+    }
 
 }
-
-    

@@ -27,7 +27,8 @@ public class AuthService {
             throw new RuntimeException("Mật khẩu không hợp lệ");
         }
 
-        String accessToken = jwtUtil.generateToken(account.getUsername(), account.getRole().name(), expiration);
+        String accessToken = jwtUtil.generateToken(account.getUsername(), account.getRole().getDisplayName(),
+                expiration);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
         authResponseDTO.setAccessToken(accessToken);

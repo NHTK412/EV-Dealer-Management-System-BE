@@ -1,7 +1,11 @@
 package com.example.evsalesmanagement.model;
 
+import com.example.evsalesmanagement.enums.AgencyStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,8 +38,9 @@ public class Agency extends Base {
     private String email;
 
     // trang thai = status
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private AgencyStatusEnum status;
 
     public Integer getAgencyId() {
         return agencyId;
@@ -77,11 +82,11 @@ public class Agency extends Base {
         this.email = email;
     }
 
-    public String getStatus() {
+    public AgencyStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgencyStatusEnum status) {
         this.status = status;
     }
 
