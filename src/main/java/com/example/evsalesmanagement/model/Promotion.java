@@ -31,7 +31,7 @@ public class Promotion extends Base {
     @Column(name = "PromotionType")
     private String promotionType;
 
-    // promotion value = gia tri khuyen mai
+    // promotion value = gia tri khuyen mai --> hình như cái này thừa
     @Column(name = "PromotionValue")
     private BigDecimal promotionValue;
 

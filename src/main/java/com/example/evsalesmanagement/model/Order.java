@@ -2,8 +2,11 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +41,9 @@ public class Order extends Base {
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
+    @Column(name = "Type")
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "CustomerId")
     private Customer customer;
@@ -50,8 +56,8 @@ public class Order extends Base {
     @JoinColumn(name = "AgencyId")
     private Agency agency;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> OrderDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<OrderDetail> orderDetails = new HashSet<>();
 
     public Integer getOrderId() {
         return orderId;
@@ -93,6 +99,14 @@ public class Order extends Base {
         this.totalAmount = totalAmount;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -117,12 +131,12 @@ public class Order extends Base {
         this.agency = agency;
     }
 
-    public List<OrderDetail> getOrderDetails() {
-        return OrderDetails;
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        OrderDetails = orderDetails;
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     // @OneToOne(mappedBy = "donHang")
