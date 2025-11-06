@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.policy;
+package com.example.evsalesmanagement.dto.salesdiscountlevel;
 
 import java.math.BigDecimal;
 

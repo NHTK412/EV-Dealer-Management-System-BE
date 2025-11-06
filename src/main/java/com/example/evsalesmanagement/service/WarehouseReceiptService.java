@@ -1,8 +1,9 @@
 package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
-import com.example.evsalesmanagement.dto.warehouse.WarehouseImportReceiptRequestDTO;
-import com.example.evsalesmanagement.dto.warehouse.WarehouseImportReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptRequestDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptSummaryDTO;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.Employee;
@@ -20,7 +21,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.example.evsalesmanagement.dto.warehouse.WarehouseImportReceiptSummaryDTO;
+
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 

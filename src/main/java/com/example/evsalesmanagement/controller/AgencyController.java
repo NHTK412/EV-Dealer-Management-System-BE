@@ -21,36 +21,37 @@ public class AgencyController {
     private AgencyService agencyService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<ApiResponse<List<AgencySummaryDTO>>>> getAllAgencies(
-        @RequestParam Integer page,
-        @RequestParam @Positive Integer size) {
+    public ResponseEntity<ApiResponse<List<AgencySummaryDTO>>> getAllAgencies(
+            @RequestParam Integer page,
+            @RequestParam @Positive Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        ApiResponse<List<AgencySummaryDTO>> response = agencyService.getAllAgencies(pageable);
+        List<AgencySummaryDTO> response = agencyService.getAllAgencies(pageable);
         return ResponseEntity.ok(new ApiResponse<>(true, null, response));
     }
 
     @GetMapping("/{agencyId}")
-    public ResponseEntity<ApiResponse<ApiResponse<AgencyResponseDTO>>> getByIdAgency(@PathVariable Integer agencyId) {
-        ApiResponse<AgencyResponseDTO> response = agencyService.getByIdAgency(agencyId);
+    public ResponseEntity<ApiResponse<AgencyResponseDTO>> getByIdAgency(@PathVariable Integer agencyId) {
+        AgencyResponseDTO response = agencyService.getByIdAgency(agencyId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, response));
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<ApiResponse<AgencyResponseDTO>>> createAgency(@RequestBody AgencyRequestDTO agencyRequestDTO) {
-        ApiResponse<AgencyResponseDTO> response = agencyService.createAgency(agencyRequestDTO);
+    public ResponseEntity<ApiResponse<AgencyResponseDTO>> createAgency(
+            @RequestBody AgencyRequestDTO agencyRequestDTO) {
+        AgencyResponseDTO response = agencyService.createAgency(agencyRequestDTO);
         return ResponseEntity.ok(new ApiResponse<>(true, null, response));
     }
 
     @PutMapping("/{agencyId}")
-    public ResponseEntity<ApiResponse<ApiResponse<AgencyResponseDTO>>> updateAgency(@PathVariable Integer agencyId,
-                                                                      @RequestBody AgencyRequestDTO agencyRequestDTO) {
-        ApiResponse<AgencyResponseDTO> response = agencyService.updateAgency(agencyId, agencyRequestDTO);
+    public ResponseEntity<ApiResponse<AgencyResponseDTO>> updateAgency(@PathVariable Integer agencyId,
+            @RequestBody AgencyRequestDTO agencyRequestDTO) {
+        AgencyResponseDTO response = agencyService.updateAgency(agencyId, agencyRequestDTO);
         return ResponseEntity.ok(new ApiResponse<>(true, null, response));
     }
 
     @DeleteMapping("/{agencyId}")
-    public ResponseEntity<ApiResponse<ApiResponse<AgencyResponseDTO>>> deleteAgency(@PathVariable Integer agencyId) {
-        ApiResponse<AgencyResponseDTO> response = agencyService.deleteAgency(agencyId);
+    public ResponseEntity<ApiResponse<AgencyResponseDTO>> deleteAgency(@PathVariable Integer agencyId) {
+        AgencyResponseDTO response = agencyService.deleteAgency(agencyId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, response));
     }
 

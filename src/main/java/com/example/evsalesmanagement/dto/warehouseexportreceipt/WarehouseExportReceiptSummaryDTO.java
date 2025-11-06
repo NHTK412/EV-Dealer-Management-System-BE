@@ -1,21 +1,33 @@
-package com.example.evsalesmanagement.dto.warehouse;
+package com.example.evsalesmanagement.dto.warehouseexportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class WarehouseImportReceiptRequestDTO {
+public class WarehouseExportReceiptSummaryDTO {
+    private Integer warehouseReceiptId;
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
     private String status;
-    private Integer employeeId;
-    private Integer agencyId;
-    private List<Integer> vehicleIds;
 
-    public WarehouseImportReceiptRequestDTO() {}
+    public WarehouseExportReceiptSummaryDTO() {}
 
+    public WarehouseExportReceiptSummaryDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
+        this.warehouseReceiptId = entity.getWarehouseReceiptId();
+        this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
+        this.reason = entity.getReason();
+        this.totalAmount = entity.getTotalAmount();
+        this.note = entity.getNote();
+        this.status = entity.getStatus();
+    }
+
+    public Integer getWarehouseReceiptId() {
+        return warehouseReceiptId;
+    }
+    public void setWarehouseReceiptId(Integer warehouseReceiptId) {
+        this.warehouseReceiptId = warehouseReceiptId;
+    }
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;
     }
@@ -45,23 +57,5 @@ public class WarehouseImportReceiptRequestDTO {
     }
     public void setStatus(String status) {
         this.status = status;
-    }
-    public Integer getEmployeeId() {
-        return employeeId;
-    }
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
-    }
-    public Integer getAgencyId() {
-        return agencyId;
-    }
-    public void setAgencyId(Integer agencyId) {
-        this.agencyId = agencyId;
-    }
-    public List<Integer> getVehicleIds() {
-        return vehicleIds;
-    }
-    public void setVehicleIds(List<Integer> vehicleIds) {
-        this.vehicleIds = vehicleIds;
     }
 }

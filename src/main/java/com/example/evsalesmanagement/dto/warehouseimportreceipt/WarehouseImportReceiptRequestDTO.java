@@ -1,10 +1,10 @@
-package com.example.evsalesmanagement.dto.warehouse;
+package com.example.evsalesmanagement.dto.warehouseimportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class WarehouseExportReceiptRequestDTO {
+public class WarehouseImportReceiptRequestDTO {
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
@@ -14,7 +14,7 @@ public class WarehouseExportReceiptRequestDTO {
     private Integer agencyId;
     private List<Integer> vehicleIds;
 
-    public WarehouseExportReceiptRequestDTO() {}
+    public WarehouseImportReceiptRequestDTO() {}
 
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;

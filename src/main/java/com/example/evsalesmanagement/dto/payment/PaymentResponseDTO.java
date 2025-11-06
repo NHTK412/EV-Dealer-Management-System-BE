@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.dto.payment;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class PaymentDTO {
+public class PaymentResponseDTO {
 
     private Integer paymentId;
     private String paymentMethod;

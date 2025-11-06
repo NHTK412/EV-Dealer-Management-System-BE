@@ -1,43 +1,25 @@
-package com.example.evsalesmanagement.dto.warehouse;
+package com.example.evsalesmanagement.dto.warehouseimportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
-import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
-import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 
-public class WarehouseImportReceiptResponseDTO {
+public class WarehouseImportReceiptSummaryDTO {
     private Integer warehouseReceiptId;
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
     private String status;
-    private EmployeeResponseDTO employee;
-    private AgencyResponseDTO agency;
-    private List<VehicleResponseDTO> vehicles;
 
-    public WarehouseImportReceiptResponseDTO() {}
+    public WarehouseImportReceiptSummaryDTO() {}
 
-    public WarehouseImportReceiptResponseDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
+    public WarehouseImportReceiptSummaryDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
         this.warehouseReceiptId = entity.getWarehouseReceiptId();
         this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
         this.reason = entity.getReason();
         this.totalAmount = entity.getTotalAmount();
         this.note = entity.getNote();
         this.status = entity.getStatus();
-        if (entity.getEmployeeId() != null) {
-            this.employee = new EmployeeResponseDTO(entity.getEmployeeId());
-        }
-        if (entity.getAgencyId() != null) {
-            this.agency = new AgencyResponseDTO(entity.getAgencyId());
-        }
-        if (entity.getVehicles() != null) {
-            this.vehicles = entity.getVehicles().stream()
-                .map(VehicleResponseDTO::new)
-                .collect(java.util.stream.Collectors.toList());
-        }
     }
 
     public Integer getWarehouseReceiptId() {
@@ -75,23 +57,5 @@ public class WarehouseImportReceiptResponseDTO {
     }
     public void setStatus(String status) {
         this.status = status;
-    }
-    public EmployeeResponseDTO getEmployee() {
-        return employee;
-    }
-    public void setEmployee(EmployeeResponseDTO employee) {
-        this.employee = employee;
-    }
-    public AgencyResponseDTO getAgency() {
-        return agency;
-    }
-    public void setAgency(AgencyResponseDTO agency) {
-        this.agency = agency;
-    }
-    public List<VehicleResponseDTO> getVehicles() {
-        return vehicles;
-    }
-    public void setVehicles(List<VehicleResponseDTO> vehicles) {
-        this.vehicles = vehicles;
     }
 }

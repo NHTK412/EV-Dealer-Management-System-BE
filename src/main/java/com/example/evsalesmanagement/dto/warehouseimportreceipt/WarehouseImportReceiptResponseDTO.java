@@ -1,14 +1,13 @@
-package com.example.evsalesmanagement.dto.warehouse;
+package com.example.evsalesmanagement.dto.warehouseimportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-// import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 
-public class WarehouseExportReceiptResponseDTO {
+public class WarehouseImportReceiptResponseDTO {
     private Integer warehouseReceiptId;
     private LocalDateTime warehouseReceiptDate;
     private String reason;
@@ -19,9 +18,9 @@ public class WarehouseExportReceiptResponseDTO {
     private AgencyResponseDTO agency;
     private List<VehicleResponseDTO> vehicles;
 
-    public WarehouseExportReceiptResponseDTO() {}
+    public WarehouseImportReceiptResponseDTO() {}
 
-    public WarehouseExportReceiptResponseDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
+    public WarehouseImportReceiptResponseDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
         this.warehouseReceiptId = entity.getWarehouseReceiptId();
         this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
         this.reason = entity.getReason();

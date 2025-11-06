@@ -14,7 +14,7 @@ import com.example.evsalesmanagement.model.Vehicle;
 @Repository
 public interface InventoryReportRepository extends JpaRepository<Vehicle, Integer> {
 
-    @Query("SELECT new com.example.evsalesmanagement.dto.InventoryReportResponseDTO(" +
+    @Query("SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(" +
             "  vt.vehicleTypeId, vt.vehicleTypeName, vt.manufactureYear, " +
             "  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, " +
             "  a.agencyName, COUNT(v)) " +

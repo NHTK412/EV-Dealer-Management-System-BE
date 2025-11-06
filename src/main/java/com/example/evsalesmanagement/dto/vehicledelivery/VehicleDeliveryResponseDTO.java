@@ -3,7 +3,7 @@ package com.example.evsalesmanagement.dto.vehicledelivery;
 import java.time.LocalDateTime;
 import com.example.evsalesmanagement.model.VehicleDelivery;
 
-public class VehicleDeliveryDTO {
+public class VehicleDeliveryResponseDTO {
 
     private Integer vehicleDeliveryId;
     private LocalDateTime expectedDeliveryDate;
@@ -13,10 +13,11 @@ public class VehicleDeliveryDTO {
     private Integer employeeId;
 
     // Default constructor
-    public VehicleDeliveryDTO() {}
+    public VehicleDeliveryResponseDTO() {
+    }
 
     // Constructor nhận VehicleDelivery
-    public VehicleDeliveryDTO(VehicleDelivery vehicleDelivery) {
+    public VehicleDeliveryResponseDTO(VehicleDelivery vehicleDelivery) {
         this.vehicleDeliveryId = vehicleDelivery.getVehicleDeliveryId();
         this.expectedDeliveryDate = vehicleDelivery.getExpectedDeliveryDate();
         this.deliveryDate = vehicleDelivery.getDeliveryDate();

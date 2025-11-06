@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.evsalesmanagement.dto.quantitydiscountlevel.QuantityDiscountLevelResponseDTO;
+import com.example.evsalesmanagement.dto.salesdiscountlevel.SalesDiscountLevelResponseDTO;
+
 public class PolicyResponseDTO {
     private Integer policyId;
     private String policyType;
