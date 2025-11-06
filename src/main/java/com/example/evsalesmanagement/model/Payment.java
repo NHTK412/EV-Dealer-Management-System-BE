@@ -142,11 +142,11 @@ public class Payment extends Base {
         this.vnpayCode = vnpayCode;
     }
 
-    public Order getOder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOder(Order oder) {
+    public void setOrder(Order oder) {
         this.order = oder;
     }
 
