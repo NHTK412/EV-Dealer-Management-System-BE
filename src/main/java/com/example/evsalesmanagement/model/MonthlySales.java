@@ -2,8 +2,6 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

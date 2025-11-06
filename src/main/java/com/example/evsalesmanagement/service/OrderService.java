@@ -2,20 +2,17 @@ package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
-import com.example.evsalesmanagement.repository.AgencyRepository;
+// import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
@@ -35,8 +32,8 @@ public class OrderService {
         @Autowired
         private EmployeeRepository employeeRepository;
 
-        @Autowired
-        private AgencyRepository agencyRepository;
+        // @Autowired
+        // private AgencyRepository agencyRepository;
 
         @Autowired
         private CustomerRepository customerRepository;

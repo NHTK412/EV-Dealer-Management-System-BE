@@ -2,7 +2,6 @@ package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.VehicleDeliveryDTO;
 import com.example.evsalesmanagement.enums.VehicleDeliveryEnum;
-import com.example.evsalesmanagement.model.VehicleDelivery;
 import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

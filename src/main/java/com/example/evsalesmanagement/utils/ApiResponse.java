@@ -1,10 +1,6 @@
 package com.example.evsalesmanagement.utils;
 
-import java.util.List;
-
 import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceResponseDTO;
-import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceSummaryDTO;
-import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 
 public class ApiResponse<T> {
     private boolean success;

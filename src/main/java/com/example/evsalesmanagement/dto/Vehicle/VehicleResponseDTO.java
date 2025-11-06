@@ -3,7 +3,6 @@ package com.example.evsalesmanagement.dto.Vehicle;
 
 
 import com.example.evsalesmanagement.model.Vehicle;
-import com.example.evsalesmanagement.model.VehicleTypeDetail;
 import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 
 public class VehicleResponseDTO{

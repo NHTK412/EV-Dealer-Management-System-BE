@@ -5,11 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
-import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponseDTO;
 import com.example.evsalesmanagement.model.Order;
-import com.example.evsalesmanagement.model.Quote;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 public class OrderResponseDTO {
 
