@@ -1,11 +1,11 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.feedback;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class CreateFeedbackRequestDTO {
+public class FeadbackRequestDTO {
 
     @NotNull(message = "Customer ID is required")
     @Positive(message = "Customer ID must be positive")
@@ -18,7 +18,6 @@ public class CreateFeedbackRequestDTO {
     @NotBlank(message = "Feedback content cannot be blank")
     @Size(min = 10, max = 2000, message = "Content must be between 10 and 2000 characters")
     private String feedbackContent;
-
 
     // Getters and Setters
     public Integer getCustomerId() {

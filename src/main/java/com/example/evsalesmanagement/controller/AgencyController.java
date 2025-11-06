@@ -1,8 +1,8 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.agencyDTO.AgencyRequestDTO;
-import com.example.evsalesmanagement.dto.agencyDTO.AgencyResponseDTO;
-import com.example.evsalesmanagement.dto.agencyDTO.AgencySummaryDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyRequestDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.agency.AgencySummaryDTO;
 import com.example.evsalesmanagement.service.AgencyService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;

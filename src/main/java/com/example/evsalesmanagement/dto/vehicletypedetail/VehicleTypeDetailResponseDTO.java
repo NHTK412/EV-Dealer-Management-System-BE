@@ -1,8 +1,24 @@
-package com.example.evsalesmanagement.dto.vehicleTypeDetailDTO;
+
+package com.example.evsalesmanagement.dto.vehicletypedetail;
+
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 
 import java.math.BigDecimal;
 
-public class VehicleTypeDetailRequestDTO {
+public class VehicleTypeDetailResponseDTO {
+    public VehicleTypeDetailResponseDTO() {}
+
+    public VehicleTypeDetailResponseDTO(VehicleTypeDetail entity) {
+        this.vehicleTypeDetailId = entity.getVehicleTypeDetailId();
+        this.vehicleImage = entity.getVehicleImage();
+        this.configuration = entity.getConfiguration();
+        this.color = entity.getColor();
+        this.version = entity.getVersion();
+        this.features = entity.getFeatures();
+        this.price = entity.getPrice();
+        this.vehicleTypeId = entity.getVehicleType() != null ? entity.getVehicleType().getVehicleTypeId() : null;
+    }
+    private Integer vehicleTypeDetailId;
     private String vehicleImage;
     private String configuration;
     private String color;
@@ -10,6 +26,12 @@ public class VehicleTypeDetailRequestDTO {
     private String features;
     private BigDecimal price;
     private Integer vehicleTypeId;
+    public Integer getVehicleTypeDetailId() {
+        return vehicleTypeDetailId;
+    }
+    public void setVehicleTypeDetailId(Integer vehicleTypeDetailId) {
+        this.vehicleTypeDetailId = vehicleTypeDetailId;
+    }
     public String getVehicleImage() {
         return vehicleImage;
     }

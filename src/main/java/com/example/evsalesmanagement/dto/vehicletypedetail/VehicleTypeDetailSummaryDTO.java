@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.vehicleTypeDetailDTO;
+package com.example.evsalesmanagement.dto.vehicletypedetail;
 
 public class VehicleTypeDetailSummaryDTO {
     private Integer vehicleTypeDetailId;

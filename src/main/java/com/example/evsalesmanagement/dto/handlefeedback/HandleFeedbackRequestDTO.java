@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.handlefeedback;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

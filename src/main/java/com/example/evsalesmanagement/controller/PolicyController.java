@@ -1,9 +1,10 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.policyDTO.PolicyRequestDTO;
-import com.example.evsalesmanagement.dto.policyDTO.PolicyResponseDTO;
+import com.example.evsalesmanagement.dto.policy.PolicyRequestDTO;
+import com.example.evsalesmanagement.dto.policy.PolicyResponseDTO;
+import com.example.evsalesmanagement.dto.policy.PolicySummaryDTO;
 import com.example.evsalesmanagement.service.PolicyService;
-import com.example.evsalesmanagement.dto.policyDTO.PolicySummaryDTO;
+
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import com.example.evsalesmanagement.utils.ApiResponse;

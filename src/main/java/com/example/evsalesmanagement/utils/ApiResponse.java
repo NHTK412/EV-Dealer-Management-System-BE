@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.utils;
 
-import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceResponseDTO;
+import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceResponseDTO;
 
 public class ApiResponse<T> {
     private boolean success;

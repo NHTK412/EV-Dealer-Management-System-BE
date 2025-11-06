@@ -1,7 +1,7 @@
 
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.policyDTO.*;
+import com.example.evsalesmanagement.dto.policy.*;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Policy;
 import com.example.evsalesmanagement.model.QuantityDiscountLevel;

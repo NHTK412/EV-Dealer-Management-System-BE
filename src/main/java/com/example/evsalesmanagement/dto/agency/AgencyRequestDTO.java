@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.agencyDTO;
+package com.example.evsalesmanagement.dto.agency;
 
 public class AgencyRequestDTO {
 

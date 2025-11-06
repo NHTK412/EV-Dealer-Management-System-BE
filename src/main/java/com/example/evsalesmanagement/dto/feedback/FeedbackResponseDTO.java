@@ -1,39 +1,40 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.feedback;
 
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class FeedbackDetailDTO {
+public class FeedbackResponseDTO {
     private Integer feedbackId;
     private String feedbackTitle;
     private String feedbackContent;
     private String status;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createAt;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateAt;
-    
+
     private Integer customerId;
     private String customerName;
     private String customerEmail;
     private String customerPhone;
-    
+
     private Integer feedbackHandlingId;
     private String feedbackHandlingContent;
     private String feedbackHandlingMethod;
     private String handlingStatus;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime handlingCreateAt;
-    
+
     private Integer employeeId;
     private String employeeName;
     private String employeeEmail;
 
-    public FeedbackDetailDTO() {}
+    public FeedbackResponseDTO() {
+    }
 
     public Integer getFeedbackId() {
         return feedbackId;

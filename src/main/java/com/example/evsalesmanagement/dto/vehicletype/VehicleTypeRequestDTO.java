@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.vehicleTypeDTO;
+package com.example.evsalesmanagement.dto.vehicletype;
 
 public class VehicleTypeRequestDTO {
     private String vehicleTypeName;

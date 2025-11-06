@@ -1,20 +1,22 @@
-package com.example.evsalesmanagement.dto.policyDTO;
+package com.example.evsalesmanagement.dto.policy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class PolicyRequestDTO {
+public class PolicySummaryDTO {
+    private Integer policyId;
     private String policyType;
     private BigDecimal policyValue;
     private String policyCondition;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String status;
-    private Integer agencyId;
-
-    private List<QuantityDiscountLevelRequestDTO> quantityDiscountLevels;
-    private List<SalesDiscountLevelRequestDTO> salesDiscountLevels;
+    public Integer getPolicyId() {
+        return policyId;
+    }
+    public void setPolicyId(Integer policyId) {
+        this.policyId = policyId;
+    }
     public String getPolicyType() {
         return policyType;
     }
@@ -51,25 +53,6 @@ public class PolicyRequestDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-    public Integer getAgencyId() {
-        return agencyId;
-    }
-    public void setAgencyId(Integer agencyId) {
-        this.agencyId = agencyId;
-    }
-    public List<QuantityDiscountLevelRequestDTO> getQuantityDiscountLevels() {
-        return quantityDiscountLevels;
-    }
-    public void setQuantityDiscountLevels(List<QuantityDiscountLevelRequestDTO> quantityDiscountLevels) {
-        this.quantityDiscountLevels = quantityDiscountLevels;
-    }
-    public List<SalesDiscountLevelRequestDTO> getSalesDiscountLevels() {
-        return salesDiscountLevels;
-    }
-    public void setSalesDiscountLevels(List<SalesDiscountLevelRequestDTO> salesDiscountLevels) {
-        this.salesDiscountLevels = salesDiscountLevels;
-    }
-
-    // Getters and setters
+    
     
 }

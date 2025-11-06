@@ -1,6 +1,6 @@
-package com.example.evsalesmanagement.dto;
+package com.example.evsalesmanagement.dto.feedback;
 
-public class FeedbackListDTO {
+public class FeedBackSummaryDTO {
     private Integer feedbackId;
     private String feedbackTitle;
     private String feedbackContent;
@@ -8,10 +8,11 @@ public class FeedbackListDTO {
     private Integer customerId;
     private String customerName;
 
-    public FeedbackListDTO() {}
+    public FeedBackSummaryDTO() {
+    }
 
-    public FeedbackListDTO(Integer feedbackId, String feedbackTitle, String feedbackContent, 
-                           String status, Integer customerId, String customerName) {
+    public FeedBackSummaryDTO(Integer feedbackId, String feedbackTitle, String feedbackContent,
+            String status, Integer customerId, String customerName) {
         this.feedbackId = feedbackId;
         this.feedbackTitle = feedbackTitle;
         this.feedbackContent = feedbackContent;

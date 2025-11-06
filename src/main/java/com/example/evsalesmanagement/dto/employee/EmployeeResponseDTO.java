@@ -21,7 +21,8 @@ public class EmployeeResponseDTO {
     private LocalDateTime updatedAt;
 
     // Constructors
-    public EmployeeResponseDTO() {}
+    public EmployeeResponseDTO() {
+    }
 
     public EmployeeResponseDTO(Employee employee) {
         this.employeeId = employee.getEmployeeId();

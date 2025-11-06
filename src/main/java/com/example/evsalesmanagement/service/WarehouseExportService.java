@@ -1,7 +1,7 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.Warehouse.WarehouseExportReceiptRequestDTO;
-import com.example.evsalesmanagement.dto.Warehouse.WarehouseExportReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouse.WarehouseExportReceiptRequestDTO;
+import com.example.evsalesmanagement.dto.warehouse.WarehouseExportReceiptResponseDTO;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.WarehouseReceipt;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.example.evsalesmanagement.dto.Warehouse.WarehouseExportReceiptSummaryDTO;
+import com.example.evsalesmanagement.dto.warehouse.WarehouseExportReceiptSummaryDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service
@@ -42,7 +42,7 @@ public class WarehouseExportService {
     @Transactional
     public WarehouseExportReceiptResponseDTO getByIdWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         return new WarehouseExportReceiptResponseDTO(receipt);
     }
 
@@ -62,7 +62,8 @@ public class WarehouseExportService {
         }
         receipt.setAgencyId(agencyOpt.get());
         if (request.getEmployeeId() != null) {
-            Optional<com.example.evsalesmanagement.model.Employee> employeeOpt = employeeRepository.findById(request.getEmployeeId());
+            Optional<com.example.evsalesmanagement.model.Employee> employeeOpt = employeeRepository
+                    .findById(request.getEmployeeId());
             if (employeeOpt.isPresent()) {
                 receipt.setEmployeeId(employeeOpt.get());
             }
@@ -77,18 +78,19 @@ public class WarehouseExportService {
         warehouseReceiptRepository.save(receipt);
         WarehouseExportReceiptResponseDTO responseDTO = new WarehouseExportReceiptResponseDTO(receipt);
         responseDTO.setVehicles(
-            vehicles.stream()
-                .map(com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO::new)
-                .collect(java.util.stream.Collectors.toList())
-        );
+                vehicles.stream()
+                        .map(com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO::new)
+                        .collect(java.util.stream.Collectors.toList()));
         return new ApiResponse<>(true, "Xuất kho thành công", responseDTO);
     }
 
-    // PUT: Cập nhật phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo phiếu"
+    // PUT: Cập nhật phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo
+    // phiếu"
     @Transactional
-    public ApiResponse<WarehouseExportReceiptResponseDTO> updateWarehouseExport(Integer id, WarehouseExportReceiptRequestDTO request) {
+    public ApiResponse<WarehouseExportReceiptResponseDTO> updateWarehouseExport(Integer id,
+            WarehouseExportReceiptRequestDTO request) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
             return new ApiResponse<>(false, "Chỉ được cập nhật khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
         }
@@ -104,7 +106,8 @@ public class WarehouseExportService {
         }
         receipt.setAgencyId(agencyOpt.get());
         if (request.getEmployeeId() != null) {
-            Optional<com.example.evsalesmanagement.model.Employee> employeeOpt = employeeRepository.findById(request.getEmployeeId());
+            Optional<com.example.evsalesmanagement.model.Employee> employeeOpt = employeeRepository
+                    .findById(request.getEmployeeId());
             if (employeeOpt.isPresent()) {
                 receipt.setEmployeeId(employeeOpt.get());
             }
@@ -120,11 +123,12 @@ public class WarehouseExportService {
         return new ApiResponse<>(true, "Cập nhật phiếu xuất kho thành công", responseDTO);
     }
 
-    // DELETE: Xóa phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo phiếu"
+    // DELETE: Xóa phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo
+    // phiếu"
     @Transactional
     public ApiResponse<Void> deleteWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
             return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
         }

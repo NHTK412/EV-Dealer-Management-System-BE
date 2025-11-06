@@ -1,5 +1,5 @@
 
-package com.example.evsalesmanagement.dto.vehicleTypeDTO;
+package com.example.evsalesmanagement.dto.vehicletype;
 
 import com.example.evsalesmanagement.model.VehicleType;
 

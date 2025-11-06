@@ -1,9 +1,9 @@
 package com.example.evsalesmanagement.service;
 
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailRequestDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailSummaryDTO;
 import com.example.evsalesmanagement.utils.ApiResponse;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailRequestDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailSummaryDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;

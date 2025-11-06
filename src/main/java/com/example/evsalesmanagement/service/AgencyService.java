@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.repository.AgencyRepository;
-import com.example.evsalesmanagement.dto.agencyDTO.AgencyRequestDTO;
-import com.example.evsalesmanagement.dto.agencyDTO.AgencyResponseDTO;
-import com.example.evsalesmanagement.dto.agencyDTO.AgencySummaryDTO;
 import com.example.evsalesmanagement.utils.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.evsalesmanagement.dto.agency.AgencyRequestDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.agency.AgencySummaryDTO;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service

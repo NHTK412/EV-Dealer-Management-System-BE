@@ -1,10 +1,11 @@
-package com.example.evsalesmanagement.dto.AgencyWholesalePrice;
+package com.example.evsalesmanagement.dto.agencywholesaleprice;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
+
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 
 public class AgencyWholesalePriceResponseDTO {
@@ -14,7 +15,7 @@ public class AgencyWholesalePriceResponseDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String status;
-    private AgencyDTO agency;
+    private AgencyResponseDTO agency;
     private VehicleTypeDetailResponseDTO vehicleTypeDetail;
 
     public AgencyWholesalePriceResponseDTO() {
@@ -31,7 +32,7 @@ public class AgencyWholesalePriceResponseDTO {
 
     public AgencyWholesalePriceResponseDTO(Integer agencyWholesalePriceId, BigDecimal wholesalePrice,
             Integer minimumQuantity,
-            LocalDateTime startDate, LocalDateTime endDate, String status, AgencyDTO agency,
+            LocalDateTime startDate, LocalDateTime endDate, String status, AgencyResponseDTO agency,
             VehicleTypeDetailResponseDTO vehicleTypeDetail) {
         this.agencyWholesalePriceId = agencyWholesalePriceId;
         this.wholesalePrice = wholesalePrice;
@@ -91,11 +92,11 @@ public class AgencyWholesalePriceResponseDTO {
         this.status = status;
     }
 
-    public AgencyDTO getAgency() {
+    public AgencyResponseDTO getAgency() {
         return agency;
     }
 
-    public void setAgency(AgencyDTO agency) {
+    public void setAgency(AgencyResponseDTO agency) {
         this.agency = agency;
     }
 

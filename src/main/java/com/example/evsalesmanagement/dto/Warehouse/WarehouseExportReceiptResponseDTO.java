@@ -1,11 +1,12 @@
-package com.example.evsalesmanagement.dto.Warehouse;
+package com.example.evsalesmanagement.dto.warehouse;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import com.example.evsalesmanagement.dto.AgencyDTO;
+// import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.EmployeeDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 
 public class WarehouseExportReceiptResponseDTO {
     private Integer warehouseReceiptId;
@@ -15,7 +16,7 @@ public class WarehouseExportReceiptResponseDTO {
     private String note;
     private String status;
     private EmployeeDTO employee;
-    private AgencyDTO agency;
+    private AgencyResponseDTO agency;
     private List<VehicleResponseDTO> vehicles;
 
     public WarehouseExportReceiptResponseDTO() {}
@@ -31,7 +32,7 @@ public class WarehouseExportReceiptResponseDTO {
             this.employee = new EmployeeDTO(entity.getEmployeeId());
         }
         if (entity.getAgencyId() != null) {
-            this.agency = new AgencyDTO(entity.getAgencyId());
+            this.agency = new AgencyResponseDTO(entity.getAgencyId());
         }
         if (entity.getVehicles() != null) {
             this.vehicles = entity.getVehicles().stream()
@@ -82,10 +83,10 @@ public class WarehouseExportReceiptResponseDTO {
     public void setEmployee(EmployeeDTO employee) {
         this.employee = employee;
     }
-    public AgencyDTO getAgency() {
+    public AgencyResponseDTO getAgency() {
         return agency;
     }
-    public void setAgency(AgencyDTO agency) {
+    public void setAgency(AgencyResponseDTO agency) {
         this.agency = agency;
     }
     public List<VehicleResponseDTO> getVehicles() {
