@@ -1,73 +1,126 @@
 package com.example.evsalesmanagement.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.evsalesmanagement.dto.VehicleDTO;
-import com.example.evsalesmanagement.model.Vehicle;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleRequestDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.Vehicle.VehicleSummaryDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailRequestDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailSummaryDTO;
 import com.example.evsalesmanagement.service.VehicleService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-
+import com.example.evsalesmanagement.service.VehicleTypeDetailService;
+import com.example.evsalesmanagement.service.VehicleTypeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeRequestDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeResponseDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeSummaryDTO;
 
 @RestController
 @RequestMapping("/vehicle")
 public class VehicleController {
-    @Autowired
-    private VehicleService vehicleService;
+
+    @Autowired private VehicleService vehicleService;
+
+    @Autowired private VehicleTypeService vehicleTypeService;
+    
+    @Autowired private VehicleTypeDetailService vehicleTypeDetailService;
+
+    // =============== VEHICLE ===============
 
     @PostMapping
-    ResponseEntity<ApiResponse<Vehicle>> createVehicle(@RequestBody VehicleDTO request) {
-        // return xeService.createXe(request);
-
-        return ResponseEntity.ok(new ApiResponse<Vehicle>(true, null, vehicleService.createVehicle(request)));
-
-    }
-
-    @PostMapping("/batch")
-    public ResponseEntity<ApiResponse<List<Vehicle>>> createVehicleBatch(@RequestBody List<VehicleDTO> requests) {
-        List<Vehicle> result = new ArrayList<>();
-        for (VehicleDTO req : requests) {
-            result.add(vehicleService.createVehicle(req));
-        }
-        return ResponseEntity.ok(new ApiResponse<List<Vehicle>>(true, null, result));
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(@RequestBody VehicleRequestDTO request) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.createVehicle(request);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
     @GetMapping
-    ResponseEntity<ApiResponse<List<Vehicle>>> getAllVehicle() {
-        // return xeService.getAllXe();
-        return ResponseEntity.ok(new ApiResponse<List<Vehicle>>(true, null, vehicleService.getAllVehicle()));
-
+    public ResponseEntity<ApiResponse<List<VehicleSummaryDTO>>> getAllVehicle(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page - 1 , size);
+        List<VehicleSummaryDTO> vehicleSummaryDTOs = vehicleService.getAllVehicle(pageable);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleSummaryDTOs));
     }
 
-    @GetMapping("/{maXe}")
-    ResponseEntity<ApiResponse<Vehicle>> getVehicleById(@PathVariable Integer maXe) {
-        // return xeService.getXeById(maXe);
-        return ResponseEntity.ok(new ApiResponse<Vehicle>(true, null, vehicleService.getVehicleById(maXe)));
-
+    @GetMapping("/{vehicleId}")
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> getByIdVehicle(@PathVariable Integer vehicleId) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.getByIdVehicle(vehicleId);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
-    @PutMapping("/{maXe}")
-    ResponseEntity<ApiResponse<Vehicle>> updateVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleDTO request) {
-        // return xeService.updateXe(maXe, request);
-        return ResponseEntity.ok(new ApiResponse<Vehicle>(true, null, vehicleService.updateVehicle(vehicleId, request)));
-
+    @PutMapping("/{vehicleId}")
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> updateVehicle(@PathVariable Integer vehicleId, @RequestBody VehicleRequestDTO request) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.updateVehicle(vehicleId, request);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
-    @DeleteMapping("/{maXe}")
-    String deleteVehicle(@PathVariable Integer vehicleId) {
-        vehicleService.deleteVehicle(vehicleId);
-        return "Deleted Successfully";
+    @DeleteMapping("/{vehicleId}")
+    public ResponseEntity<ApiResponse<VehicleResponseDTO>> deleteVehicle(@PathVariable Integer vehicleId) {
+        VehicleResponseDTO vehicleResponseDTO = vehicleService.deleteVehicle(vehicleId);
+        return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
+    // =============== VEHICLE TYPE ===============
+
+    @GetMapping("/type")
+    public ResponseEntity<ApiResponse<Page<VehicleTypeSummaryDTO>>> getAllVehicleType(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page -1 , size);
+        Page<VehicleTypeSummaryDTO> pageVehicleType = vehicleTypeService.getAllVehicleType(pageable);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, pageVehicleType));
+    }
+
+    @GetMapping("/type/{vehicleTypeId}")
+    public ResponseEntity<ApiResponse<VehicleTypeResponseDTO>> getVehicleTypeById(@PathVariable Integer vehicleTypeId) {
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleTypeService.getVehicleTypeById(vehicleTypeId)));
+    }
+
+    @PostMapping("/type")
+    public ResponseEntity<ApiResponse<VehicleTypeResponseDTO>> createVehicleType(@RequestBody VehicleTypeRequestDTO request) {
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleTypeService.createVehicleType(request)));
+    }
+
+    @PutMapping("/type/{vehicleTypeId}")
+    public ResponseEntity<ApiResponse<VehicleTypeResponseDTO>> updateVehicleType(@PathVariable Integer vehicleTypeId, @RequestBody VehicleTypeRequestDTO request) {
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleTypeService.updateVehicleType(vehicleTypeId, request)));
+    }
+
+    @DeleteMapping("/type/{vehicleTypeId}")
+    public ResponseEntity<ApiResponse<VehicleTypeResponseDTO>> deleteVehicleType(@PathVariable Integer vehicleTypeId) {
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleTypeService.deleteVehicleType(vehicleTypeId)));
+    }
+
+    // =============== VEHICLE TYPE DETAIL ===============
+
+    @GetMapping("/type/detail")
+    public ResponseEntity<ApiResponse<Page<VehicleTypeDetailSummaryDTO>>> getAllVehicleTypeDetail(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page -1 , size);
+        ApiResponse<Page<VehicleTypeDetailSummaryDTO>> result = vehicleTypeDetailService.getAllVehicleTypeDetails(pageable);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/type/detail/{vehicleTypeDetailId}")
+    public ResponseEntity<ApiResponse<VehicleTypeDetailResponseDTO>> getVehicleTypeDetailById(@PathVariable Integer vehicleTypeDetailId) {
+        return ResponseEntity.ok(vehicleTypeDetailService.getById(vehicleTypeDetailId));
+    }
+
+    @PostMapping("/type/detail")
+    public ResponseEntity<ApiResponse<VehicleTypeDetailResponseDTO>> createVehicleTypeDetail(@RequestBody VehicleTypeDetailRequestDTO request) {
+        return ResponseEntity.ok(vehicleTypeDetailService.create(request));
+    }
+
+    @PutMapping("/type/detail/{vehicleTypeDetailId}")
+    public ResponseEntity<ApiResponse<VehicleTypeDetailResponseDTO>> updateVehicleTypeDetail(@PathVariable Integer vehicleTypeDetailId, @RequestBody VehicleTypeDetailRequestDTO request) {
+        return ResponseEntity.ok(vehicleTypeDetailService.update(vehicleTypeDetailId, request));
+    }
+
+    @DeleteMapping("/type/detail/{vehicleTypeDetailId}")
+    public ResponseEntity<ApiResponse<VehicleTypeDetailResponseDTO>> deleteVehicleTypeDetail(@PathVariable Integer vehicleTypeDetailId) {
+        return ResponseEntity.ok(vehicleTypeDetailService.delete(vehicleTypeDetailId));
+    }
 }

@@ -78,4 +78,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ApiResponse<>(false, ex.getMessage(), null));
     }
+
+    @ExceptionHandler(InternalServerException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInternalServerException(InternalServerException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse<>(false, ex.getMessage(), null));
+    }
 }
