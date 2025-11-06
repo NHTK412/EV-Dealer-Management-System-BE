@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.Vehicle;
+package com.example.evsalesmanagement.dto.vehicle;
 
 import com.example.evsalesmanagement.model.Vehicle;
 

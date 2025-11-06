@@ -1,9 +1,9 @@
-package com.example.evsalesmanagement.dto.importRequest;
+package com.example.evsalesmanagement.dto.importrequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.evsalesmanagement.dto.importRequestDetail.ImportRequestDetailResponseDTO;
+import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailResponseDTO;
 import com.example.evsalesmanagement.model.ImportRequest;
 
 public class ImportRequestResponseDTO {

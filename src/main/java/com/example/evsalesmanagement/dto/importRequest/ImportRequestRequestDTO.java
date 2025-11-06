@@ -1,8 +1,8 @@
-package com.example.evsalesmanagement.dto.importRequest;
+package com.example.evsalesmanagement.dto.importrequest;
 
 import java.util.List;
 
-import com.example.evsalesmanagement.dto.importRequestDetail.ImportRequestDetailRequestDTO;
+import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailRequestDTO;
 
 public class ImportRequestRequestDTO {
 

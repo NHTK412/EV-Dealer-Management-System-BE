@@ -1,6 +1,9 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.Warehouse.*;
+import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseExportReceiptRequestDTO;
+import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseExportReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseExportReceiptSummaryDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.*;
 import com.example.evsalesmanagement.service.WarehouseReceiptService;
 import com.example.evsalesmanagement.service.WarehouseExportService;
 import com.example.evsalesmanagement.utils.ApiResponse;

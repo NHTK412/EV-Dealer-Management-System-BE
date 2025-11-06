@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.PaymentDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
 import com.example.evsalesmanagement.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,22 +17,22 @@ public class PaymentController {
 
     // Lấy tất cả payment
     @GetMapping
-    public ResponseEntity<List<PaymentDTO>> getAllPayments() {
-        List<PaymentDTO> payments = paymentService.getAllPayments();
+    public ResponseEntity<List<PaymentResponseDTO>> getAllPayments() {
+        List<PaymentResponseDTO> payments = paymentService.getAllPayments();
         return ResponseEntity.ok(payments);
     }
 
     // Lấy payment trạng thái Pending
     @GetMapping("/pending")
-    public ResponseEntity<List<PaymentDTO>> getPendingPayments() {
-        List<PaymentDTO> pendingPayments = paymentService.getPendingPayments();
+    public ResponseEntity<List<PaymentResponseDTO>> getPendingPayments() {
+        List<PaymentResponseDTO> pendingPayments = paymentService.getPendingPayments();
         return ResponseEntity.ok(pendingPayments);
     }
 
     // Lấy payment trạng thái Paid
     @GetMapping("/paid")
-    public ResponseEntity<List<PaymentDTO>> getPaidPayments() {
-        List<PaymentDTO> paidPayments = paymentService.getPaidPayments();
+    public ResponseEntity<List<PaymentResponseDTO>> getPaidPayments() {
+        List<PaymentResponseDTO> paidPayments = paymentService.getPaidPayments();
         return ResponseEntity.ok(paidPayments);
     }
 }

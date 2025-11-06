@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.Promotion;
 
 public class PromotionResponseDTO {
@@ -32,7 +32,7 @@ public class PromotionResponseDTO {
 
     private List<VehicleTypeDetailResponseDTO> vehicleTypeDetails;
 
-    private List<AgencyDTO> agencies;
+    private List<AgencyResponseDTO> agencies;
 
     public PromotionResponseDTO(Promotion promotion) {
         this.promotionId = promotion.getPromotionId();
@@ -51,7 +51,7 @@ public class PromotionResponseDTO {
             BigDecimal promotionValue, String criteria, BigDecimal discountAmount, BigDecimal discountPercent,
             LocalDateTime startDate, LocalDateTime endDate, String status,
             List<VehicleTypeDetailResponseDTO> vehicleTypeDetails,
-            List<AgencyDTO> agencies) {
+            List<AgencyResponseDTO> agencies) {
         this.promotionId = promotionId;
         this.promotionName = promotionName;
         this.promotionType = promotionType;
@@ -62,7 +62,7 @@ public class PromotionResponseDTO {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-    this.vehicleTypeDetails = vehicleTypeDetails;
+        this.vehicleTypeDetails = vehicleTypeDetails;
         this.agencies = agencies;
     }
 
@@ -157,11 +157,11 @@ public class PromotionResponseDTO {
         this.vehicleTypeDetails = vehicleTypeDetails;
     }
 
-    public List<AgencyDTO> getAgencies() {
+    public List<AgencyResponseDTO> getAgencies() {
         return agencies;
     }
 
-    public void setAgencies(List<AgencyDTO> agencies) {
+    public void setAgencies(List<AgencyResponseDTO> agencies) {
         this.agencies = agencies;
     }
 

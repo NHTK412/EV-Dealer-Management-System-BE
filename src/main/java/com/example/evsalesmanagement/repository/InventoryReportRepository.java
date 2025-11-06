@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.evsalesmanagement.dto.InventoryReportRequestDTO;
-import com.example.evsalesmanagement.dto.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
 import com.example.evsalesmanagement.model.Vehicle;
 
 @Repository
 public interface InventoryReportRepository extends JpaRepository<Vehicle, Integer> {
 
-    @Query("SELECT new com.example.evsalesmanagement.dto.InventoryReportResponseDTO(" +
+    @Query("SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(" +
             "  vt.vehicleTypeId, vt.vehicleTypeName, vt.manufactureYear, " +
             "  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, " +
             "  a.agencyName, COUNT(v)) " +

@@ -37,7 +37,6 @@ public class WarehouseReceipt extends Base {
     @Column(name = "Note")
     private String note;
 
-
     @Column(name = "Status")
     private String status;
 
@@ -48,6 +47,7 @@ public class WarehouseReceipt extends Base {
     @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
+
     public String getStatus() {
         return status;
     }
@@ -71,7 +71,7 @@ public class WarehouseReceipt extends Base {
     public void setWareHouseReceiptDate(LocalDateTime wareHouseReceiptDate) {
         this.warehouseReceiptDate = wareHouseReceiptDate;
     }
-    
+
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;
     }

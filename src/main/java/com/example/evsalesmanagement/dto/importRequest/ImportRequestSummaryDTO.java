@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.importRequest;
+package com.example.evsalesmanagement.dto.importrequest;
 
 
 import com.example.evsalesmanagement.model.ImportRequest;

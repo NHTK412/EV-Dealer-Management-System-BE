@@ -1,9 +1,9 @@
-package com.example.evsalesmanagement.dto.Vehicle;
+package com.example.evsalesmanagement.dto.vehicle;
 
 
 
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.Vehicle;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 
 public class VehicleResponseDTO{
     private Integer vehicleId;

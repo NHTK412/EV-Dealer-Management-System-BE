@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.AgencyDTO;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+// import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
@@ -18,7 +20,6 @@ import jakarta.transaction.Transactional;
 
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 
 @Service
 public class PromotionService {
@@ -49,12 +50,13 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
+                                                                vehicleTypeDetail))
                                                 .toList());
                 promotionResponseDTO.setAgencies(
                                 promotion.getAgencies()
                                                 .stream()
-                                                .map(agency -> new AgencyDTO(agency))
+                                                .map(agency -> new AgencyResponseDTO(agency))
                                                 .toList());
                 // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
                 // khuyenMaiChiTiet.setChiTietLoaiXes(
@@ -96,12 +98,13 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 newPromotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
+                                                                vehicleTypeDetail))
                                                 .toList());
                 promotionResponseDTO.setAgencies(
                                 newPromotion.getAgencies()
                                                 .stream()
-                                                .map(agency -> new AgencyDTO(agency))
+                                                .map(agency -> new AgencyResponseDTO(agency))
                                                 .toList());
 
                 return promotionResponseDTO;
@@ -120,13 +123,14 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 promotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(vehicleTypeDetail))
+                                                .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
+                                                                vehicleTypeDetail))
                                                 .toList());
 
                 promotionResponseDTO.setAgencies(
                                 promotion.getAgencies()
                                                 .stream()
-                                                .map(agency -> new AgencyDTO(agency))
+                                                .map(agency -> new AgencyResponseDTO(agency))
                                                 .toList());
 
                 promotionRepository.deleteById(promotionId);
@@ -167,13 +171,14 @@ public class PromotionService {
                 promotionResponseDTO.setVehicleTypeDetails(
                                 updatePromotion.getVehicleDetails()
                                                 .stream()
-                                                .map(vehicleTypeDetails -> new VehicleTypeDetailResponseDTO(vehicleTypeDetails))
+                                                .map(vehicleTypeDetails -> new VehicleTypeDetailResponseDTO(
+                                                                vehicleTypeDetails))
                                                 .toList());
 
                 promotionResponseDTO.setAgencies(
                                 updatePromotion.getAgencies()
                                                 .stream()
-                                                .map(agency -> new AgencyDTO(agency))
+                                                .map(agency -> new AgencyResponseDTO(agency))
                                                 .toList());
 
                 // return promotionRepository.save(updatePromotion);

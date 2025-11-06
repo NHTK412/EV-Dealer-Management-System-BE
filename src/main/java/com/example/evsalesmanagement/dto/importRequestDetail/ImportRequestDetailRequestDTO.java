@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.importRequestDetail;
+package com.example.evsalesmanagement.dto.importrequestdetail;
 
 
 public class ImportRequestDetailRequestDTO {

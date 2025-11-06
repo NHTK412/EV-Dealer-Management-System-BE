@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.VehicleDeliveryDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
 import com.example.evsalesmanagement.enums.VehicleDeliveryEnum;
 import com.example.evsalesmanagement.service.VehicleDeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,38 +16,38 @@ public class VehicleDeliveryController {
     @Autowired
     private VehicleDeliveryService service;
 
-    //Lấy tất cả giao xe
+    // Lấy tất cả giao xe
     @GetMapping
-    public ResponseEntity<List<VehicleDeliveryDTO>> getAll() {
-        List<VehicleDeliveryDTO> list = service.getAll();
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getAll() {
+        List<VehicleDeliveryResponseDTO> list = service.getAll();
         return ResponseEntity.ok(list);
     }
 
-    //Lấy giao xe theo trạng thái Pending
+    // Lấy giao xe theo trạng thái Pending
     @GetMapping("/pending")
-    public ResponseEntity<List<VehicleDeliveryDTO>> getPending() {
-        List<VehicleDeliveryDTO> list = service.getPendingDeliveries();
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getPending() {
+        List<VehicleDeliveryResponseDTO> list = service.getPendingDeliveries();
         return ResponseEntity.ok(list);
     }
 
-    //Lấy giao xe theo trạng thái In Progress
+    // Lấy giao xe theo trạng thái In Progress
     @GetMapping("/in-progress")
-    public ResponseEntity<List<VehicleDeliveryDTO>> getInProgress() {
-        List<VehicleDeliveryDTO> list = service.getInProgressDeliveries();
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getInProgress() {
+        List<VehicleDeliveryResponseDTO> list = service.getInProgressDeliveries();
         return ResponseEntity.ok(list);
     }
 
-    //Lấy giao xe theo trạng thái Completed
+    // Lấy giao xe theo trạng thái Completed
     @GetMapping("/completed")
-    public ResponseEntity<List<VehicleDeliveryDTO>> getCompleted() {
-        List<VehicleDeliveryDTO> list = service.getCompletedDeliveries();
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getCompleted() {
+        List<VehicleDeliveryResponseDTO> list = service.getCompletedDeliveries();
         return ResponseEntity.ok(list);
     }
 
-    //Lấy giao xe theo trạng thái bất kỳ (truyền enum)
+    // Lấy giao xe theo trạng thái bất kỳ (truyền enum)
     @GetMapping("/by-status")
-    public ResponseEntity<List<VehicleDeliveryDTO>> getByStatus(@RequestParam VehicleDeliveryEnum status) {
-        List<VehicleDeliveryDTO> list = service.getByStatus(status);
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(@RequestParam VehicleDeliveryEnum status) {
+        List<VehicleDeliveryResponseDTO> list = service.getByStatus(status);
         return ResponseEntity.ok(list);
     }
 }

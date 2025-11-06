@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.evsalesmanagement.dto.FeedbackDetailDTO;
-import com.example.evsalesmanagement.dto.HandleFeedbackRequestDTO;
+import com.example.evsalesmanagement.dto.feedback.FeedbackResponseDTO;
+import com.example.evsalesmanagement.dto.handlefeedback.HandleFeedbackRequestDTO;
 import com.example.evsalesmanagement.enums.FeedbackHandlingMethodEnum;
 import com.example.evsalesmanagement.enums.FeedbackHandlingStatusEnum;
 import com.example.evsalesmanagement.enums.FeedbackStatusEnum;
@@ -44,7 +44,7 @@ public class FeedbackHandlingService {
     
     // xử lý phản hồi
     @Transactional
-    public FeedbackDetailDTO handleFeedback(
+    public FeedbackResponseDTO handleFeedback(
             Integer feedbackId, 
             HandleFeedbackRequestDTO request, 
             Integer employeeId) {

@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.evsalesmanagement.dto.AgencyWholesalePriceDTO;
-import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceRequestDTO;
-import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceResponseDTO;
-import com.example.evsalesmanagement.dto.AgencyWholesalePrice.AgencyWholesalePriceSummaryDTO;
+
+import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceRequestDTO;
+import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceResponseDTO;
+import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceSummaryDTO;
 import com.example.evsalesmanagement.service.AgencyWholesalePricesService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -27,7 +27,7 @@ public class AgencyWholesalePriceController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> createAgencyWholesalePrice(
-            @RequestBody AgencyWholesalePriceDTO agencyWholesalePriceDTO) {
+            @RequestBody AgencyWholesalePriceRequestDTO agencyWholesalePriceDTO) {
 
         AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.createAgencyWholesalePrice(agencyWholesalePriceDTO);
 

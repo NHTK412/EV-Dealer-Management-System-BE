@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.RevenueReportRequestDTO;
-import com.example.evsalesmanagement.dto.RevenueReportResponseDTO;
+import com.example.evsalesmanagement.dto.revenuareport.RevenueReportRequestDTO;
+import com.example.evsalesmanagement.dto.revenuareport.RevenueReportResponseDTO;
 import com.example.evsalesmanagement.service.RevenueReportService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 

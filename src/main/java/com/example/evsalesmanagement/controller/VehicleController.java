@@ -9,19 +9,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.evsalesmanagement.dto.Vehicle.VehicleRequestDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleResponseDTO;
-import com.example.evsalesmanagement.dto.Vehicle.VehicleSummaryDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailRequestDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailSummaryDTO;
 import com.example.evsalesmanagement.service.VehicleService;
 import com.example.evsalesmanagement.service.VehicleTypeDetailService;
 import com.example.evsalesmanagement.service.VehicleTypeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
-import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeRequestDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeResponseDTO;
-import com.example.evsalesmanagement.dto.vehicleTypeDTO.VehicleTypeSummaryDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleRequestDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleSummaryDTO;
+import com.example.evsalesmanagement.dto.vehicletype.VehicleTypeRequestDTO;
+import com.example.evsalesmanagement.dto.vehicletype.VehicleTypeResponseDTO;
+import com.example.evsalesmanagement.dto.vehicletype.VehicleTypeSummaryDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailRequestDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailSummaryDTO;
 
 @RestController
 @RequestMapping("/vehicle")

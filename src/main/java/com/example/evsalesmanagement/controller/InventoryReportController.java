@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.evsalesmanagement.dto.InventoryReportRequestDTO;
-import com.example.evsalesmanagement.dto.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
 import com.example.evsalesmanagement.service.InventoryReportService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
