@@ -20,7 +20,7 @@ public class AccountResponseDTO {
     public AccountResponseDTO(Account account) {
         this.accountId = account.getAccountId();
         this.username = account.getUsername();
-        this.role = account.getRole();
+        this.role = account.getRole().getDisplayName();
         this.status = account.getStatus();
         this.employeeId = account.getEmployee().getEmployeeId();
     }

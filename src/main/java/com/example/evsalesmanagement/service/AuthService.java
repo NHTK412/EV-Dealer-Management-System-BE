@@ -27,13 +27,12 @@ public class AuthService {
             throw new RuntimeException("Mật khẩu không hợp lệ");
         }
 
-        String accessToken = jwtUtil.generateToken(account.getUsername(), account.getRole(), expiration);
+        String accessToken = jwtUtil.generateToken(account.getUsername(), account.getRole().name(), expiration);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
         authResponseDTO.setAccessToken(accessToken);
         authResponseDTO.setExpiresIn(expiration);
         return authResponseDTO;
     }
-
 
 }
