@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
@@ -124,6 +126,23 @@ public class OrderService {
                 }
 
                 order.setTotalAmount(quote.getTotalAmount());
+
+                orderRepository.save(order);
+
+                return new OrderResponseDTO(order);
+        }
+
+        @Transactional
+        public OrderResponseDTO updateOrderById(Integer orderId, String status, String contractNumber) {
+                Order order = orderRepository.findByIdFetchAllRelations(orderId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợplệ"));
+
+                if (order.getStatus().equals("DONE")) {
+
+                        order.setStatus(status != null ? status : order.getStatus());
+
+                        order.setContractNumber(contractNumber != null ? contractNumber : order.getContractNumber());
+                }
 
                 orderRepository.save(order);
 
