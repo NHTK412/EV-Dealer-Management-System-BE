@@ -48,7 +48,7 @@ public class OrderResponseDTO {
         this.orderId = order.getOrderId();
         this.notes = order.getNotes();
         this.contractNumber = order.getContractNumber();
-        this.status = order.getStatus();
+        this.status = order.getStatus().getDisplayName();
         this.employeeId = order.getEmployee().getEmployeeId();
         this.employeeName = order.getEmployee().getEmployeeName();
         this.employeePhoneNumber = order.getEmployee().getPhoneNumber();

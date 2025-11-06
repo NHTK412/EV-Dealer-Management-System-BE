@@ -17,6 +17,7 @@ public class WarehouseExportReceiptResponseDTO {
     private String status;
     private EmployeeResponseDTO employee;
     private AgencyResponseDTO agency;
+
     private List<VehicleResponseDTO> vehicles;
 
     public WarehouseExportReceiptResponseDTO() {}
