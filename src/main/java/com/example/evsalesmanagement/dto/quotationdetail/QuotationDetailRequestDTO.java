@@ -26,7 +26,7 @@ public class QuotationDetailRequestDTO {
 
     // private BigDecimal discountPercentage;
 
-    private BigDecimal wholesalePrice;
+    // private BigDecimal wholesalePrice;
 
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
@@ -116,12 +116,12 @@ public class QuotationDetailRequestDTO {
     //     this.discountPercentage = discountPercentage;
     // }
 
-    public BigDecimal getWholesalePrice() {
-        return wholesalePrice;
-    }
+    // public BigDecimal getWholesalePrice() {
+    //     return wholesalePrice;
+    // }
 
-    public void setWholesalePrice(BigDecimal wholesalePrice) {
-        this.wholesalePrice = wholesalePrice;
-    }
+    // public void setWholesalePrice(BigDecimal wholesalePrice) {
+    //     this.wholesalePrice = wholesalePrice;
+    // }
 
 }

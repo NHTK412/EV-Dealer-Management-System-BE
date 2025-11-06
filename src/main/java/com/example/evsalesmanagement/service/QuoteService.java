@@ -140,12 +140,13 @@ public class QuoteService {
                         quotationDetail.setVehicleRegistrationServiceFee(
                                         quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
 
+                        // Tính giá gốc
+                        BigDecimal basePrice = vehicleTypeDetailMap
+                                        .get(quotationDetailRequestDTO.getVehicleTypeDetailId()).getPrice();
+
                         // quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
 
-                        quotationDetail.setWholesalePrice(quotationDetailRequestDTO.getWholesalePrice());
-
-                        // Tính giá gốc
-                        BigDecimal basePrice = quotationDetailRequestDTO.getWholesalePrice();
+                        // quotationDetail.setWholesalePrice(basePrice);
 
                         List<Promotion> promotions = promotionRepository.getPromotionsByAgencyIdAndVehicleDetailsId(
                                         quote.getEmployee().getAgency().getAgencyId(),
@@ -206,6 +207,8 @@ public class QuoteService {
 
                         }
 
+                        quotationDetail.setWholesalePrice(discountAmount);
+
                         // BigDecimal discountPercent =
                         // promotions.stream().findFirst().get().getDiscountPercent();
 
@@ -223,7 +226,7 @@ public class QuoteService {
                                         .add(quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
 
                         totalAmount = totalAmount.multiply(BigDecimal.valueOf(quotationDetailRequestDTO.getQuantity()));
-                        
+
                         // .subtract(quotationDetailRequestDTO.getDiscount())
                         // .subtract(quotationDetailRequestDTO.getDiscountValue());
 

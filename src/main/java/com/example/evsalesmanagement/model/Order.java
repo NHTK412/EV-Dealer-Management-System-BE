@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +41,9 @@ public class Order extends Base {
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
+    @Column(name = "Type")
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "CustomerId")
     private Customer customer;
@@ -52,7 +56,7 @@ public class Order extends Base {
     @JoinColumn(name = "AgencyId")
     private Agency agency;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
 
     public Integer getOrderId() {
@@ -93,6 +97,14 @@ public class Order extends Base {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Customer getCustomer() {
