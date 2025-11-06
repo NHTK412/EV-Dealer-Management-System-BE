@@ -7,7 +7,7 @@ import com.example.evsalesmanagement.model.Customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CustomerResponseDTO {
-    
+
     private Integer customerId;
     private String customerName;
     private String gender;
@@ -24,17 +24,18 @@ public class CustomerResponseDTO {
     private LocalDateTime updatedAt;
 
     // Constructors
-    public CustomerResponseDTO() {}
+    public CustomerResponseDTO() {
+    }
 
     public CustomerResponseDTO(Customer customer) {
         this.customerId = customer.getCustomerId();
         this.customerName = customer.getCustomerName();
-        this.gender = customer.getGender();
+        this.gender = customer.getGender().getDisplayName();
         this.birthDate = customer.getBirthDate();
         this.phoneNumber = customer.getPhoneNumber();
         this.email = customer.getEmail();
         this.address = customer.getAddress();
-        this.membershipLevel = customer.getMembershipLevel();
+        this.membershipLevel = customer.getMembershipLevel().getDisplayName();
         this.createdAt = customer.getCreateAt();
         this.updatedAt = customer.getUpdateAt();
     }

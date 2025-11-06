@@ -26,7 +26,7 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Service
 public class AgencyWholesalePricesService {
 
-        private final AgencyWholesalePriceController agencyWholesalePriceController;
+        // private final AgencyWholesalePriceController agencyWholesalePriceController;
 
         @Autowired
         private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
@@ -37,9 +37,9 @@ public class AgencyWholesalePricesService {
         @Autowired
         private VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-        AgencyWholesalePricesService(AgencyWholesalePriceController agencyWholesalePriceController) {
-                this.agencyWholesalePriceController = agencyWholesalePriceController;
-        }
+        // AgencyWholesalePricesService(AgencyWholesalePriceController agencyWholesalePriceController) {
+        //         this.agencyWholesalePriceController = agencyWholesalePriceController;
+        // }
 
         @Transactional
         public AgencyWholesalePriceResponseDTO createAgencyWholesalePrice(
