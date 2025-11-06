@@ -1,5 +1,6 @@
 package com.example.evsalesmanagement.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.example.evsalesmanagement.controller.AgencyWholesalePriceController;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceRequestDTO;
 import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceResponseDTO;
 import com.example.evsalesmanagement.dto.agencywholesaleprice.AgencyWholesalePriceSummaryDTO;
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.enums.AgencyWholesalePriceStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.AgencyWholesalePrice;
@@ -24,6 +26,8 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Service
 public class AgencyWholesalePricesService {
 
+        private final AgencyWholesalePriceController agencyWholesalePriceController;
+
         @Autowired
         private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
 
@@ -33,6 +37,10 @@ public class AgencyWholesalePricesService {
         @Autowired
         private VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
+        AgencyWholesalePricesService(AgencyWholesalePriceController agencyWholesalePriceController) {
+                this.agencyWholesalePriceController = agencyWholesalePriceController;
+        }
+
         @Transactional
         public AgencyWholesalePriceResponseDTO createAgencyWholesalePrice(
                         AgencyWholesalePriceRequestDTO agencyWholesalePriceDTO) {
@@ -41,7 +49,17 @@ public class AgencyWholesalePricesService {
                 newPrice.setMinimumQuantity(agencyWholesalePriceDTO.getMinimumQuantity());
                 newPrice.setStartDate(agencyWholesalePriceDTO.getStartDate());
                 newPrice.setEndDate(agencyWholesalePriceDTO.getEndDate());
-                newPrice.setStatus("Hoat Dong");
+
+                LocalDateTime now = LocalDateTime.now();
+
+                if (now.isBefore(agencyWholesalePriceDTO.getEndDate())
+                                && now.isAfter(agencyWholesalePriceDTO.getStartDate())) {
+                        newPrice.setStatus(AgencyWholesalePriceStatusEnum.ACTIVE);
+                } else if (now.isBefore(agencyWholesalePriceDTO.getStartDate())) {
+                        newPrice.setStatus(AgencyWholesalePriceStatusEnum.NOT_ACTIVE);
+                } else {
+                        newPrice.setStatus(AgencyWholesalePriceStatusEnum.INACTIVE);
+                }
 
                 Agency agency = agencyRepository.findById(agencyWholesalePriceDTO.getAgencyId())
                                 .orElseThrow(() -> new ResourceNotFoundException(

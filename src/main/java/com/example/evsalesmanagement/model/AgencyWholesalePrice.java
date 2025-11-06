@@ -3,8 +3,12 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.AgencyWholesalePriceStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,8 +43,9 @@ public class AgencyWholesalePrice extends Base {
     @Column(name = "EndDate")
     private LocalDateTime endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private AgencyWholesalePriceStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
@@ -90,11 +95,11 @@ public class AgencyWholesalePrice extends Base {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public AgencyWholesalePriceStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgencyWholesalePriceStatusEnum status) {
         this.status = status;
     }
 

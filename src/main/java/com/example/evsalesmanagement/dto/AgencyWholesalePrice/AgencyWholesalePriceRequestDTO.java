@@ -3,19 +3,17 @@ package com.example.evsalesmanagement.dto.agencywholesaleprice;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
-
+import com.example.evsalesmanagement.enums.AgencyWholesalePriceStatusEnum;
 
 public class AgencyWholesalePriceRequestDTO {
     private BigDecimal wholesalePrice;
     private Integer minimumQuantity;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private AgencyWholesalePriceStatusEnum status;
     private Integer agencyId;
     private Integer vehicleTypeDetailId;
 
-    
     public AgencyWholesalePriceRequestDTO() {
     }
 
@@ -51,11 +49,11 @@ public class AgencyWholesalePriceRequestDTO {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public AgencyWholesalePriceStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgencyWholesalePriceStatusEnum status) {
         this.status = status;
     }
 
@@ -75,9 +73,4 @@ public class AgencyWholesalePriceRequestDTO {
         this.vehicleTypeDetailId = vehicleTypeDetailId;
     }
 
-   
-
-    
-
-   
 }
