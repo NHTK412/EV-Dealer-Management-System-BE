@@ -3,9 +3,8 @@ package com.example.evsalesmanagement.dto.AgencyWholesalePrice;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 import com.example.evsalesmanagement.dto.AgencyDTO;
-import com.example.evsalesmanagement.dto.VehicleTypeDetailDTO;
+import com.example.evsalesmanagement.dto.vehicleTypeDetailDTO.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 
 public class AgencyWholesalePriceResponseDTO {
@@ -16,11 +15,11 @@ public class AgencyWholesalePriceResponseDTO {
     private LocalDateTime endDate;
     private String status;
     private AgencyDTO agency;
-    private VehicleTypeDetailDTO vehicleTypeDetail;
+    private VehicleTypeDetailResponseDTO vehicleTypeDetail;
 
     public AgencyWholesalePriceResponseDTO() {
     }
-    
+
     public AgencyWholesalePriceResponseDTO(AgencyWholesalePrice agencyWholesalePrice) {
         this.agencyWholesalePriceId = agencyWholesalePrice.getAgencyWholesalePriceId();
         this.wholesalePrice = agencyWholesalePrice.getWholesalePrice();
@@ -30,9 +29,10 @@ public class AgencyWholesalePriceResponseDTO {
         this.status = agencyWholesalePrice.getStatus();
     }
 
-    public AgencyWholesalePriceResponseDTO(Integer agencyWholesalePriceId, BigDecimal wholesalePrice, Integer minimumQuantity,
+    public AgencyWholesalePriceResponseDTO(Integer agencyWholesalePriceId, BigDecimal wholesalePrice,
+            Integer minimumQuantity,
             LocalDateTime startDate, LocalDateTime endDate, String status, AgencyDTO agency,
-           VehicleTypeDetailDTO vehicleTypeDetail) {
+            VehicleTypeDetailResponseDTO vehicleTypeDetail) {
         this.agencyWholesalePriceId = agencyWholesalePriceId;
         this.wholesalePrice = wholesalePrice;
         this.minimumQuantity = minimumQuantity;
@@ -99,17 +99,12 @@ public class AgencyWholesalePriceResponseDTO {
         this.agency = agency;
     }
 
-    public VehicleTypeDetailDTO getVehicleTypeDetail() {
+    public VehicleTypeDetailResponseDTO getVehicleTypeDetail() {
         return vehicleTypeDetail;
     }
 
-    public void setVehicleTypeDetail(VehicleTypeDetailDTO vehicleTypeDetail) {
+    public void setVehicleTypeDetail(VehicleTypeDetailResponseDTO vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
     }
 
-   
-   
-
-    
 }
-
