@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.repository.AgencyRepository;
@@ -20,6 +21,7 @@ public class AgencyService {
     @Autowired
     private AgencyRepository agencyRepository;
 
+    @Cacheable(value = "agency-all", key = "#pageable")
     public List<AgencySummaryDTO> getAllAgencies(Pageable pageable) {
         Page<Agency> agencies = agencyRepository.findAll(pageable);
         List<AgencySummaryDTO> summaryList = agencies.stream().map(agency -> {
@@ -32,6 +34,7 @@ public class AgencyService {
         return summaryList;
     }
 
+    @Cacheable(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO getByIdAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)

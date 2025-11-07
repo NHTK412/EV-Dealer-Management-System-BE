@@ -20,3 +20,8 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 
 jwt.secret-key = 
+
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+spring.data.redis.password= # nếu có
+spring.cache.type=redis
