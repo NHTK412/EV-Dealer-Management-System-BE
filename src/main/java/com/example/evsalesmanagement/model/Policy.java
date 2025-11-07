@@ -3,8 +3,13 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PolicyStatusEnum;
+import com.example.evsalesmanagement.enums.PolicyTypeEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,8 +26,9 @@ public class Policy extends Base {
     @Column(name = "PolicyId")
     private Integer policyId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PolicyType")
-    private String policyType;
+    private PolicyTypeEnum policyType;
 
     @Column(name = "PolicyValue")
     private BigDecimal policyValue;
@@ -37,8 +43,9 @@ public class Policy extends Base {
     @Column(name = "EndDate")
     private LocalDateTime endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private PolicyStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
@@ -52,11 +59,11 @@ public class Policy extends Base {
         this.policyId = policyId;
     }
 
-    public String getPolicyType() {
+    public PolicyTypeEnum getPolicyType() {
         return policyType;
     }
 
-    public void setPolicyType(String policyType) {
+    public void setPolicyType(PolicyTypeEnum policyType) {
         this.policyType = policyType;
     }
 
@@ -68,11 +75,10 @@ public class Policy extends Base {
         this.policyValue = policyValue;
     }
 
-  
     public String getPolicyCondition() {
         return policyCondition;
     }
-    
+
     public void setPolicyCondition(String policyCondition) {
         this.policyCondition = policyCondition;
     }
@@ -93,11 +99,11 @@ public class Policy extends Base {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public PolicyStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PolicyStatusEnum status) {
         this.status = status;
     }
 

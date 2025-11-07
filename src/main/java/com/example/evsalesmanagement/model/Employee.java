@@ -2,8 +2,13 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDate;
 
+import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,8 +29,9 @@ public class Employee extends Base {
     @Column(name = "EmployeeName", nullable = false)
     private String employeeName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Gender")
-    private String gender;
+    private GenderEnum gender;
 
     @Column(name = "BirthDate")
     private LocalDate birthDate;
@@ -41,8 +47,9 @@ public class Employee extends Base {
 
     // chuc vu = position
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Position")
-    private String position;
+    private EmployeePositionEnum position;
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
@@ -64,11 +71,11 @@ public class Employee extends Base {
         this.employeeName = employeeName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -105,11 +112,11 @@ public class Employee extends Base {
         this.address = address;
     }
 
-    public String getPosition() {
+    public EmployeePositionEnum getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(EmployeePositionEnum position) {
         this.position = position;
     }
 

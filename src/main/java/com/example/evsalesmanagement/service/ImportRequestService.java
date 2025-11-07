@@ -14,6 +14,7 @@ import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
 import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailRequestDTO;
 import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailResponseDTO;
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;
@@ -48,7 +49,8 @@ public class ImportRequestService {
                 // Khởi tạo 1 yêu cầu mới
                 ImportRequest importRequest = new ImportRequest();
 
-                importRequest.setStatus("Đã Yêu Cầu");
+                // importRequest.setStatus("Đã Yêu Cầu");
+                importRequest.setStatus(ImportRequestStatusEnum.REQUESTED);
 
                 importRequest.setNote(importRequestRequestDTO.getNote());
 

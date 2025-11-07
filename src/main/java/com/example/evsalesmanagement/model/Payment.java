@@ -3,8 +3,13 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PaymentMethodEnum;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,8 +28,9 @@ public class Payment extends Base {
     private Integer paymentId;
 
     // PhuongThucThanhToan = PaymentMethod
+    @Enumerated(EnumType.STRING)
     @Column(name = "PaymentMethod")
-    private String paymentMethod;
+    private PaymentMethodEnum paymentMethod;
 
     @Column(name = "PaymentForm")
     private String paymentForm;
@@ -50,8 +56,9 @@ public class Payment extends Base {
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private PaymentStatusEnum status;
 
     @Column(name = "VNPAYCode")
     private String vnpayCode;
@@ -68,11 +75,11 @@ public class Payment extends Base {
         this.paymentId = paymentId;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -126,11 +133,11 @@ public class Payment extends Base {
         this.penaltyAmount = penaltyAmount;
     }
 
-    public String getStatus() {
+    public PaymentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PaymentStatusEnum status) {
         this.status = status;
     }
 

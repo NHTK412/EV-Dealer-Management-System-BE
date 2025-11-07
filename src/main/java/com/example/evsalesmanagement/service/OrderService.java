@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
+import com.example.evsalesmanagement.enums.OrderTypeEnum;
+import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
@@ -73,9 +76,10 @@ public class OrderService {
 
                 order.setNotes(orderFromQuoteRequestDTO.getNotes());
 
-                order.setStatus("CREATE");
+                // order.setStatus("CREATE");
+                order.setStatus(OrderStatusEnum.PENDING);
 
-                order.setType("CUSTOMER");
+                order.setType(OrderTypeEnum.RETAIL_CUSTOMER);
 
                 order.setEmployee(employee);
 
@@ -130,15 +134,17 @@ public class OrderService {
         }
 
         @Transactional
-        public OrderResponseDTO updateOrderById(Integer orderId, String status, String contractNumber) {
+        public OrderResponseDTO updateOrderById(Integer orderId, OrderStatusEnum status, String contractNumber) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợplệ"));
 
-                if (order.getStatus().equals("DONE")) {
+                if (order.getStatus() != OrderStatusEnum.PAID) {
 
                         order.setStatus(status != null ? status : order.getStatus());
 
                         order.setContractNumber(contractNumber != null ? contractNumber : order.getContractNumber());
+                } else {
+                        throw new ConflictException("Hiện tại không thể cập nhật thông tin");
                 }
 
                 orderRepository.save(order);

@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.dto.importrequest;
 
-
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
 import com.example.evsalesmanagement.model.ImportRequest;
 
 public class ImportRequestSummaryDTO {
@@ -19,7 +19,7 @@ public class ImportRequestSummaryDTO {
 
     private String agencyName;
 
-    private String status;
+    private ImportRequestStatusEnum status;
 
     private String note;
 
@@ -35,7 +35,7 @@ public class ImportRequestSummaryDTO {
 
         this.employeeName = importRequest.getEmployee().getEmployeeName();
 
-        this.employeePosition = importRequest.getEmployee().getPosition();
+        this.employeePosition = importRequest.getEmployee().getPosition().getDisplayName();
 
         this.agencyId = importRequest.getEmployee().getAgency().getAgencyId();
 
@@ -94,11 +94,11 @@ public class ImportRequestSummaryDTO {
         this.agencyName = agencyName;
     }
 
-    public String getStatus() {
+    public ImportRequestStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ImportRequestStatusEnum status) {
         this.status = status;
     }
 

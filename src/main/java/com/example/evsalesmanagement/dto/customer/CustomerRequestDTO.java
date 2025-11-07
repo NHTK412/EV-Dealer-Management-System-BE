@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.dto.customer;
 
 import java.time.LocalDate;
 
+import com.example.evsalesmanagement.enums.GenderEnum;
+import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.Email;
@@ -16,16 +18,16 @@ public class CustomerRequestDTO {
     @Size(min = 2, max = 100, message = "Customer name must be between 2 and 100 characters")
     private String customerName;
 
-    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female' or 'Other'")
-    private String gender;
+    // @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male',
+    // 'Female' or 'Other'")
+    private GenderEnum gender;
 
     @Past(message = "Birth date must be a past date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @NotBlank(message = "Phone number cannot be blank")
-    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", 
-             message = "Phone number is not in the correct format")
+    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", message = "Phone number is not in the correct format")
     private String phoneNumber;
 
     @NotBlank(message = "Email cannot be blank")
@@ -35,12 +37,14 @@ public class CustomerRequestDTO {
     @Size(max = 200, message = "Address cannot exceed 200 characters")
     private String address;
 
-    @Pattern(regexp = "^(VIP|Regular)?$", 
-             message = "Membership level must be 'VIP' or 'Regular'")
-    private String membershipLevel;
+    // @Pattern(regexp = "^(VIP|Regular)?$", message = "Membership level must be
+    // 'VIP' or 'Regular'")
+
+    private CustomerMembershipLevelEnum membershipLevel;
 
     // Constructors
-    public CustomerRequestDTO() {}
+    public CustomerRequestDTO() {
+    }
 
     // Getters and Setters
     public String getCustomerName() {
@@ -51,11 +55,11 @@ public class CustomerRequestDTO {
         this.customerName = customerName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -91,11 +95,11 @@ public class CustomerRequestDTO {
         this.address = address;
     }
 
-    public String getMembershipLevel() {
+    public CustomerMembershipLevelEnum getMembershipLevel() {
         return membershipLevel;
     }
 
-    public void setMembershipLevel(String membershipLevel) {
+    public void setMembershipLevel(CustomerMembershipLevelEnum membershipLevel) {
         this.membershipLevel = membershipLevel;
     }
 }

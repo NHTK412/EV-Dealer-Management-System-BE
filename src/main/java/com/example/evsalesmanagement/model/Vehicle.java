@@ -1,5 +1,7 @@
 package com.example.evsalesmanagement.model;
 
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +29,7 @@ public class Vehicle extends Base {
 
     // trang thai = status
     @Column(name = "Status")
-    private String status;
+    private VehicleStatusEnum status;
 
     // tinh trang xe = vehicleCondition
     @Column(name = "VehicleCondition")
@@ -67,11 +69,11 @@ public class Vehicle extends Base {
 
     }
 
-    public String getStatus() {
+    public VehicleStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatusEnum status) {
         this.status = status;
     }
 

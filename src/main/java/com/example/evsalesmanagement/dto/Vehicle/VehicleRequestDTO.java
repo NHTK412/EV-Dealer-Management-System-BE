@@ -1,13 +1,11 @@
 package com.example.evsalesmanagement.dto.vehicle;
 
-
-
-
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 
 public class VehicleRequestDTO {
     private String chassisNumber;
     private String machineNumber;
-    private String status;
+    private VehicleStatusEnum status;
     private String vehicleCondition;
     private Integer vehicleTypeDetailId;
     private Integer agencyId;
@@ -31,11 +29,11 @@ public class VehicleRequestDTO {
         this.machineNumber = machineNumber;
     }
 
-    public String getStatus() {
+    public VehicleStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatusEnum status) {
         this.status = status;
     }
 

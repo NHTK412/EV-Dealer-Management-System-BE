@@ -1,5 +1,6 @@
 package com.example.evsalesmanagement.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.enums.PromotionStatusEnum;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
@@ -74,24 +76,35 @@ public class PromotionService {
         }
 
         @Transactional
-        public PromotionResponseDTO createPromotion(PromotionRequestDTO promotion) {
+        public PromotionResponseDTO createPromotion(PromotionRequestDTO promotionRequestDTO) {
 
                 Promotion newPromotion = new Promotion();
-                newPromotion.setPromotionName(promotion.getPromotionName());
-                newPromotion.setPromotionType(promotion.getPromotionType());
-                newPromotion.setPromotionValue(promotion.getPromotionValue());
-                newPromotion.setCriteria(promotion.getCriteria());
-                newPromotion.setDiscountAmount(promotion.getDiscountAmount());
-                newPromotion.setDiscountPercent(promotion.getDiscountPercent());
-                newPromotion.setStartDate(promotion.getStartDate());
-                newPromotion.setEndDate(promotion.getEndDate());
+                newPromotion.setPromotionName(promotionRequestDTO.getPromotionName());
+                newPromotion.setPromotionType(promotionRequestDTO.getPromotionType());
+                newPromotion.setPromotionValue(promotionRequestDTO.getPromotionValue());
+                newPromotion.setCriteria(promotionRequestDTO.getCriteria());
+                newPromotion.setDiscountAmount(promotionRequestDTO.getDiscountAmount());
+                newPromotion.setDiscountPercent(promotionRequestDTO.getDiscountPercent());
+                newPromotion.setStartDate(promotionRequestDTO.getStartDate());
+                newPromotion.setEndDate(promotionRequestDTO.getEndDate());
 
                 // Mặc định là đang hoạt động
-                newPromotion.setStatus("Hoạt động");
+                // newPromotion.setStatus("Hoạt động");
+                // newPromotion.setStatus();
+                LocalDateTime now = LocalDateTime.now();
+
+                if (now.isBefore(promotionRequestDTO.getEndDate())
+                                && now.isAfter(promotionRequestDTO.getStartDate())) {
+                        newPromotion.setStatus(PromotionStatusEnum.ACTIVE);
+                } else if (now.isBefore(promotionRequestDTO.getStartDate())) {
+                        newPromotion.setStatus(PromotionStatusEnum.NOT_ACTIVE);
+                } else {
+                        newPromotion.setStatus(PromotionStatusEnum.INACTIVE);
+                }
 
                 newPromotion.setVehicleDetails(
-                                vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
-                newPromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
+                                vehicleTypeDetailRepository.findAllById(promotionRequestDTO.getVehicleTypeDetailsId()));
+                newPromotion.setAgencies(agencyRepository.findAllById(promotionRequestDTO.getAgencysId()));
                 promotionRepository.save(newPromotion);
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(newPromotion);
 

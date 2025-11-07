@@ -2,8 +2,12 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,8 +36,9 @@ public class VehicleDelivery extends Base {
     @Column(name = "DeliveryDate")
     private LocalDateTime deliveryDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private VehicleDeliveryStatusEnum status;
 
     @OneToOne
     @JoinColumn(name = "OrderId", unique = true)
@@ -68,11 +73,11 @@ public class VehicleDelivery extends Base {
 
     }
 
-    public String getStatus() {
+    public VehicleDeliveryStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleDeliveryStatusEnum status) {
         this.status = status;
     }
 

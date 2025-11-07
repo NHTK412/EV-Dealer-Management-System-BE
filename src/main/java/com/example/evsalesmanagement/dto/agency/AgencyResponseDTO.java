@@ -19,7 +19,7 @@ public class AgencyResponseDTO {
         this.address = agency.getAddress();
         this.phoneNumber = agency.getPhoneNumber();
         this.email = agency.getEmail();
-        this.status = agency.getStatus();
+        this.status = agency.getStatus().getDisplayName();
     }
 
     public Integer getAgencyId() {

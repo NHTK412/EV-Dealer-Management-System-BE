@@ -4,9 +4,14 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
+import com.example.evsalesmanagement.enums.OrderTypeEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,11 +32,10 @@ public class Order extends Base {
     @Column(name = "ContractNumber")
     private String contractNumber;
 
-    // @Column(name = "NgayTao")
-    // private LocalDateTime ngayTao;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private OrderStatusEnum status;
+    // private String status;
 
     @Column(name = "Notes")
     private String notes;
@@ -39,8 +43,9 @@ public class Order extends Base {
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Type")
-    private String type;
+    private OrderTypeEnum type;
 
     @ManyToOne
     @JoinColumn(name = "CustomerId")
@@ -73,11 +78,11 @@ public class Order extends Base {
         this.contractNumber = contractNumber;
     }
 
-    public String getStatus() {
+    public OrderStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatusEnum status) {
         this.status = status;
     }
 
@@ -97,11 +102,11 @@ public class Order extends Base {
         this.totalAmount = totalAmount;
     }
 
-    public String getType() {
+    public OrderTypeEnum getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(OrderTypeEnum type) {
         this.type = type;
     }
 

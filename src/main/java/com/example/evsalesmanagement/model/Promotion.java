@@ -5,8 +5,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.PromotionStatusEnum;
+import com.example.evsalesmanagement.enums.PromotionTypeEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,8 +33,9 @@ public class Promotion extends Base {
     @Column(name = "PromotionName", nullable = false)
     private String promotionName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PromotionType")
-    private String promotionType;
+    private PromotionTypeEnum promotionType;
 
     // promotion value = gia tri khuyen mai --> hình như cái này thừa
     @Column(name = "PromotionValue")
@@ -54,8 +60,9 @@ public class Promotion extends Base {
     @Column(name = "EndDate")
     private LocalDateTime endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private PromotionStatusEnum status;
 
     @ManyToMany
     @JoinTable(name = "Promotion_VehicleDetail", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "VehicleDetailId"))
@@ -81,11 +88,11 @@ public class Promotion extends Base {
         this.promotionName = promotionName;
     }
 
-    public String getPromotionType() {
+    public PromotionTypeEnum getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(String promotionType) {
+    public void setPromotionType(PromotionTypeEnum promotionType) {
         this.promotionType = promotionType;
     }
 
@@ -137,11 +144,11 @@ public class Promotion extends Base {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public PromotionStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PromotionStatusEnum status) {
         this.status = status;
     }
 

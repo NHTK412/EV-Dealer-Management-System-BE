@@ -1,8 +1,15 @@
 package com.example.evsalesmanagement.model;
 
 import java.time.LocalDate;
+
+import com.example.evsalesmanagement.enums.GenderEnum;
+import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,8 +27,9 @@ public class Customer extends Base {
     @Column(name = "CustomerName", nullable = false)
     private String customerName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Gender")
-    private String gender;
+    private GenderEnum gender;
 
     @Column(name = "BirthDate")
     private LocalDate birthDate;
@@ -35,8 +43,9 @@ public class Customer extends Base {
     @Column(name = "Address")
     private String address;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "MembershipLevel")
-    private String membershipLevel;
+    private CustomerMembershipLevelEnum membershipLevel;
 
     public Integer getCustomerId() {
         return customerId;
@@ -54,11 +63,11 @@ public class Customer extends Base {
         this.customerName = customerName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -94,11 +103,11 @@ public class Customer extends Base {
         this.address = address;
     }
 
-    public String getMembershipLevel() {
+    public CustomerMembershipLevelEnum getMembershipLevel() {
         return membershipLevel;
     }
 
-    public void setMembershipLevel(String membershipLevel) {
+    public void setMembershipLevel(CustomerMembershipLevelEnum membershipLevel) {
         this.membershipLevel = membershipLevel;
     }
 

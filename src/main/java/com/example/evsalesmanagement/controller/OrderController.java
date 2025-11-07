@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.service.OrderService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -42,7 +43,8 @@ public class OrderController {
 
     @PatchMapping("{orderId}")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> updateOrderById(@PathVariable Integer orderId,
-            @RequestParam(required = false) String status, @RequestParam(required = false) String contractNumber) {
+            @RequestParam(required = false) OrderStatusEnum status,
+            @RequestParam(required = false) String contractNumber) {
 
         OrderResponseDTO orderResponseDTO = orderService.updateOrderById(orderId, status, contractNumber);
 

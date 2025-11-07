@@ -23,11 +23,11 @@ public class SalesDiscountLevel extends Base {
 
     // doanh so tu = salesFrom
     @Column(name = "SalesFrom")
-    private Integer salesFrom;
+    private BigDecimal salesFrom;
 
     // doanh so den = salesTo
     @Column(name = "SalesTo")
-    private Integer salesTo;
+    private BigDecimal salesTo;
 
     // phan tram chiet khau = discountPercentage
     @Column(name = "DiscountPercentage")
@@ -46,19 +46,19 @@ public class SalesDiscountLevel extends Base {
         this.salesDiscountLevelId = salesDiscountLevelId;
     }
 
-    public Integer getSalesFrom() {
+    public BigDecimal getSalesFrom() {
         return salesFrom;
     }
 
-    public void setSalesFrom(Integer salesFrom) {
+    public void setSalesFrom(BigDecimal salesFrom) {
         this.salesFrom = salesFrom;
     }
 
-    public Integer getSalesTo() {
+    public BigDecimal getSalesTo() {
         return salesTo;
     }
 
-    public void setSalesTo(Integer salesTo) {
+    public void setSalesTo(BigDecimal salesTo) {
         this.salesTo = salesTo;
     }
 

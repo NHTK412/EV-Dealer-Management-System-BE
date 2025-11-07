@@ -3,19 +3,21 @@ package com.example.evsalesmanagement.dto.customer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.model.Customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CustomerResponseDTO {
-    
+
     private Integer customerId;
     private String customerName;
-    private String gender;
+    private GenderEnum gender;
     private LocalDate birthDate;
     private String phoneNumber;
     private String email;
     private String address;
-    private String membershipLevel;
+    private CustomerMembershipLevelEnum membershipLevel;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -24,7 +26,8 @@ public class CustomerResponseDTO {
     private LocalDateTime updatedAt;
 
     // Constructors
-    public CustomerResponseDTO() {}
+    public CustomerResponseDTO() {
+    }
 
     public CustomerResponseDTO(Customer customer) {
         this.customerId = customer.getCustomerId();
@@ -56,11 +59,11 @@ public class CustomerResponseDTO {
         this.customerName = customerName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -96,11 +99,11 @@ public class CustomerResponseDTO {
         this.address = address;
     }
 
-    public String getMembershipLevel() {
+    public CustomerMembershipLevelEnum getMembershipLevel() {
         return membershipLevel;
     }
 
-    public void setMembershipLevel(String membershipLevel) {
+    public void setMembershipLevel(CustomerMembershipLevelEnum membershipLevel) {
         this.membershipLevel = membershipLevel;
     }
 

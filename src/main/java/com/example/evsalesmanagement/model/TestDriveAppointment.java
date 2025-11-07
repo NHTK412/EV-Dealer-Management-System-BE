@@ -3,8 +3,12 @@ package com.example.evsalesmanagement.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,8 +29,9 @@ public class TestDriveAppointment extends Base {
     @Column(name = "DateOfAppointment")
     private LocalDate dateOfAppointment;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private TestDriveAppointmentStatusEnum status;
 
     // gio hen = TimeOfAppointment
     @Column(name = "TimeOfAppointment")
@@ -56,11 +61,11 @@ public class TestDriveAppointment extends Base {
         this.dateOfAppointment = dateOfAppointment;
     }
 
-    public String getStatus() {
+    public TestDriveAppointmentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TestDriveAppointmentStatusEnum status) {
         this.status = status;
     }
 
