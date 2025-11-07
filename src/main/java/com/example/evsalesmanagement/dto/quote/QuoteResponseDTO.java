@@ -32,7 +32,7 @@ public class QuoteResponseDTO {
         this.employeePhoneNumber = quote.getEmployee().getPhoneNumber();
         this.employeeEmail = quote.getEmployee().getEmail();
         this.totalAmount = quote.getTotalAmount();
-        this.status = quote.getStatus();
+        this.status = quote.getStatus().getDisplayName();
         this.quotationDetailResponseDTOs = quote.getQuotationDetails().stream().map(quotationDetail -> {
             return new QuotationDetailResponseDTO(quotationDetail);
         }).toList();

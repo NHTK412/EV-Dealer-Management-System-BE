@@ -3,6 +3,8 @@ package com.example.evsalesmanagement.dto.testdriveappointment;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
+
 public class TestDriveAppointmentDTO {
     
     private Integer testDriveAppointmentId;
@@ -11,7 +13,7 @@ public class TestDriveAppointmentDTO {
     
     private LocalTime timeOfAppointment;
     
-    private String status;
+    private TestDriveAppointmentStatusEnum status;
     
     private String customerName; 
     
@@ -44,11 +46,11 @@ public class TestDriveAppointmentDTO {
         this.timeOfAppointment = timeOfAppointment;
     }
 
-    public String getStatus() {
+    public TestDriveAppointmentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TestDriveAppointmentStatusEnum status) {
         this.status = status;
     }
 

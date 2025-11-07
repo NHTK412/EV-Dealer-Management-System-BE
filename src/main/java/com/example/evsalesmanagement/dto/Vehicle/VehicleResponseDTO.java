@@ -29,7 +29,7 @@ public class VehicleResponseDTO{
         this.vehicleId = vehicle.getVehicleId();
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
-        this.status = vehicle.getStatus();
+        this.status = vehicle.getStatus().getDisplayName();
         this.vehicleCondition = vehicle.getVehicleCondition();
         if (vehicle.getVehicleTypeDetail() != null) {
             this.vehicleTypeDetail = new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail());

@@ -1,6 +1,8 @@
 package com.example.evsalesmanagement.dto.vehicledelivery;
 
 import java.time.LocalDateTime;
+
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.model.VehicleDelivery;
 
 public class VehicleDeliveryResponseDTO {
@@ -8,7 +10,7 @@ public class VehicleDeliveryResponseDTO {
     private Integer vehicleDeliveryId;
     private LocalDateTime expectedDeliveryDate;
     private LocalDateTime deliveryDate;
-    private String status;
+    private VehicleDeliveryStatusEnum status;
     private Integer orderId;
     private Integer employeeId;
 
@@ -52,11 +54,11 @@ public class VehicleDeliveryResponseDTO {
         this.deliveryDate = deliveryDate;
     }
 
-    public String getStatus() {
+    public VehicleDeliveryStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleDeliveryStatusEnum status) {
         this.status = status;
     }
 

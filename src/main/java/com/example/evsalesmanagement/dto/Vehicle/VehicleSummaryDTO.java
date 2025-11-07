@@ -14,7 +14,7 @@ public class VehicleSummaryDTO {
     public VehicleSummaryDTO(Vehicle vehicle) {
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
-        this.status = vehicle.getStatus();
+        this.status = vehicle.getStatus().getDisplayName();
         this.vehicleCondition = vehicle.getVehicleCondition();
     }
 

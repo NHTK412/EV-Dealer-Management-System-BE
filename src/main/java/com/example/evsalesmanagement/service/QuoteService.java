@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
+import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.model.QuotationDetail;
@@ -81,7 +82,7 @@ public class QuoteService {
         }
 
         @Transactional
-        public QuoteResponseDTO updateStatusQuote(Integer quoteId, String status) {
+        public QuoteResponseDTO updateStatusQuote(Integer quoteId, QuoteStatusEnum status) {
                 Quote quote = quoteRepository.findById(quoteId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
 
