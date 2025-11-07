@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.PromotionStatusEnum;
+import com.example.evsalesmanagement.enums.PromotionTypeEnum;
+
 public class PromotionRequestDTO {
 
     private String promotionName;
 
-    private String promotionType;
+    private PromotionTypeEnum promotionType;
 
     private BigDecimal promotionValue;
 
@@ -22,7 +25,7 @@ public class PromotionRequestDTO {
 
     private LocalDateTime endDate;
 
-    private String status;
+    private PromotionStatusEnum status;
 
     private List<Integer> vehicleTypeDetailsId;
 
@@ -39,11 +42,11 @@ public class PromotionRequestDTO {
         this.promotionName = promotionName;
     }
 
-    public String getPromotionType() {
+    public PromotionTypeEnum getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(String promotionType) {
+    public void setPromotionType(PromotionTypeEnum promotionType) {
         this.promotionType = promotionType;
     }
 
@@ -95,11 +98,11 @@ public class PromotionRequestDTO {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public PromotionStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PromotionStatusEnum status) {
         this.status = status;
     }
 
@@ -118,6 +121,5 @@ public class PromotionRequestDTO {
     public void setAgencysId(List<Integer> agencysId) {
         this.agencysId = agencysId;
     }
-
 
 }

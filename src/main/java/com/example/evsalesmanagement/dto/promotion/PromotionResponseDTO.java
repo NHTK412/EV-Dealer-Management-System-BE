@@ -37,14 +37,14 @@ public class PromotionResponseDTO {
     public PromotionResponseDTO(Promotion promotion) {
         this.promotionId = promotion.getPromotionId();
         this.promotionName = promotion.getPromotionName();
-        this.promotionType = promotion.getPromotionType();
+        this.promotionType = promotion.getPromotionType().getDisplayName();
         this.promotionValue = promotion.getPromotionValue();
         this.criteria = promotion.getCriteria();
         this.discountAmount = promotion.getDiscountAmount();
         this.discountPercent = promotion.getDiscountPercent();
         this.startDate = promotion.getStartDate();
         this.endDate = promotion.getEndDate();
-        this.status = promotion.getStatus();
+        this.status = promotion.getStatus().getDisplayName();
     }
 
     public PromotionResponseDTO(Integer promotionId, String promotionName, String promotionType,

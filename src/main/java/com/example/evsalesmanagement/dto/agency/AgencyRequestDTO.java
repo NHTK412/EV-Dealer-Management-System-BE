@@ -2,7 +2,6 @@ package com.example.evsalesmanagement.dto.agency;
 
 import com.example.evsalesmanagement.enums.AgencyStatusEnum;
 
-import jakarta.persistence.Enumerated;
 
 public class AgencyRequestDTO {
 
