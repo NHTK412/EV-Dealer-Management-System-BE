@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.enums;
 
-public enum CustomerGenderEnum {
+public enum GenderEnum {
 
     MALE("Nam Giới"),
 
@@ -8,7 +8,7 @@ public enum CustomerGenderEnum {
 
     private final String displayName;
 
-    CustomerGenderEnum(String displayName) {
+    GenderEnum(String displayName) {
         this.displayName = displayName;
     }
 

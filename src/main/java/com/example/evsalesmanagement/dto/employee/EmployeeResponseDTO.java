@@ -27,12 +27,12 @@ public class EmployeeResponseDTO {
     public EmployeeResponseDTO(Employee employee) {
         this.employeeId = employee.getEmployeeId();
         this.employeeName = employee.getEmployeeName();
-        this.gender = employee.getGender();
+        this.gender = employee.getGender().getDisplayName();
         this.birthDate = employee.getBirthDate();
         this.phoneNumber = employee.getPhoneNumber();
         this.email = employee.getEmail();
         this.address = employee.getAddress();
-        this.position = employee.getPosition();
+        this.position = employee.getPosition().getDisplayName();
 
         if (employee.getAgency() != null) {
             this.agencyId = employee.getAgency().getAgencyId();

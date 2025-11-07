@@ -2,8 +2,9 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDate;
 
-import com.example.evsalesmanagement.enums.CustomerGenderEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +29,7 @@ public class Customer extends Base {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Gender")
-    private CustomerGenderEnum gender;
+    private GenderEnum gender;
 
     @Column(name = "BirthDate")
     private LocalDate birthDate;
@@ -62,11 +63,11 @@ public class Customer extends Base {
         this.customerName = customerName;
     }
 
-    public CustomerGenderEnum getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(CustomerGenderEnum gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 

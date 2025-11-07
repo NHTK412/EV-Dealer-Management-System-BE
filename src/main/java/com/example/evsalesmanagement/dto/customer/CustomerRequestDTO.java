@@ -2,7 +2,7 @@ package com.example.evsalesmanagement.dto.customer;
 
 import java.time.LocalDate;
 
-import com.example.evsalesmanagement.enums.CustomerGenderEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,7 +20,7 @@ public class CustomerRequestDTO {
 
     // @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male',
     // 'Female' or 'Other'")
-    private CustomerGenderEnum gender;
+    private GenderEnum gender;
 
     @Past(message = "Birth date must be a past date")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -55,11 +55,11 @@ public class CustomerRequestDTO {
         this.customerName = customerName;
     }
 
-    public CustomerGenderEnum getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(CustomerGenderEnum gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 

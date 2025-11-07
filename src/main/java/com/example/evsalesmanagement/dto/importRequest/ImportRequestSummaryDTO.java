@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.dto.importrequest;
 
-
 import com.example.evsalesmanagement.model.ImportRequest;
 
 public class ImportRequestSummaryDTO {
@@ -35,7 +34,7 @@ public class ImportRequestSummaryDTO {
 
         this.employeeName = importRequest.getEmployee().getEmployeeName();
 
-        this.employeePosition = importRequest.getEmployee().getPosition();
+        this.employeePosition = importRequest.getEmployee().getPosition().getDisplayName();
 
         this.agencyId = importRequest.getEmployee().getAgency().getAgencyId();
 

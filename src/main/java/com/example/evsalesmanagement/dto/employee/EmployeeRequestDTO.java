@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.dto.employee;
 
 import java.time.LocalDate;
 
+import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.model.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -17,16 +19,16 @@ public class EmployeeRequestDTO {
     @Size(min = 2, max = 100, message = "Employee name must be between 2 and 100 characters")
     private String employeeName;
 
-    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female' or 'Other'")
-    private String gender;
+    // @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male',
+    // 'Female' or 'Other'")
+    private GenderEnum gender;
 
     @Past(message = "Birth date must be a past date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @NotBlank(message = "Phone number cannot be blank")
-    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", 
-             message = "Phone number is not in the correct format")
+    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", message = "Phone number is not in the correct format")
     private String phoneNumber;
 
     @NotBlank(message = "Email cannot be blank")
@@ -37,14 +39,14 @@ public class EmployeeRequestDTO {
     private String address;
 
     @NotBlank(message = "Position cannot be blank")
-    @Size(min = 2, max = 50, message = "Position must be between 2 and 50 characters")
-    private String position;
+    // @Size(min = 2, max = 50, message = "Position must be between 2 and 50 characters")
+    private EmployeePositionEnum position;
 
     private Integer agencyId;
 
-
     // Constructors
-    public EmployeeRequestDTO() {}
+    public EmployeeRequestDTO() {
+    }
 
     public EmployeeRequestDTO(Employee employee) {
         this.employeeName = employee.getEmployeeName();
@@ -60,7 +62,6 @@ public class EmployeeRequestDTO {
         }
     }
 
-
     // Getters and Setters
     public String getEmployeeName() {
         return employeeName;
@@ -70,11 +71,11 @@ public class EmployeeRequestDTO {
         this.employeeName = employeeName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -110,11 +111,11 @@ public class EmployeeRequestDTO {
         this.address = address;
     }
 
-    public String getPosition() {
+    public EmployeePositionEnum getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(EmployeePositionEnum position) {
         this.position = position;
     }
 
