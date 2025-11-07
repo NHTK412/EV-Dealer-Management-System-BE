@@ -35,7 +35,7 @@ public class ImportRequestResponseDTO {
 
     public ImportRequestResponseDTO(ImportRequest importRequest) {
         this.importRequestId = importRequest.getImportRequestId();
-        this.status = importRequest.getStatus();
+        this.status = importRequest.getStatus().getDisplayName();
         this.note = importRequest.getNote();
         // this.employeeDTO = new EmployeeDTO(importRequest.getEmployee());
 

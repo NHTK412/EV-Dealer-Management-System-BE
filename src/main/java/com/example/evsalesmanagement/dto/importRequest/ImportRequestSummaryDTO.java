@@ -26,7 +26,7 @@ public class ImportRequestSummaryDTO {
 
         this.importRequestId = importRequest.getImportRequestId();
 
-        this.status = importRequest.getStatus();
+        this.status = importRequest.getStatus().getDisplayName();
 
         this.note = importRequest.getNote();
 
