@@ -3,8 +3,12 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PaymentMethodEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,8 +27,9 @@ public class Payment extends Base {
     private Integer paymentId;
 
     // PhuongThucThanhToan = PaymentMethod
+    @Enumerated(EnumType.STRING)
     @Column(name = "PaymentMethod")
-    private String paymentMethod;
+    private PaymentMethodEnum paymentMethod;
 
     @Column(name = "PaymentForm")
     private String paymentForm;
@@ -68,11 +73,11 @@ public class Payment extends Base {
         this.paymentId = paymentId;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 

@@ -4,6 +4,7 @@ package com.example.evsalesmanagement.service;
 import com.example.evsalesmanagement.dto.policy.*;
 import com.example.evsalesmanagement.dto.quantitydiscountlevel.QuantityDiscountLevelResponseDTO;
 import com.example.evsalesmanagement.dto.salesdiscountlevel.SalesDiscountLevelResponseDTO;
+import com.example.evsalesmanagement.enums.PolicyTypeEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Policy;
 import com.example.evsalesmanagement.model.QuantityDiscountLevel;
@@ -47,7 +48,9 @@ public class PolicyService {
         }
         Policy savedPolicy = policyRepository.save(policy);
 
-        if ("quantity".equalsIgnoreCase(policyRequestDTO.getPolicyType()) && policyRequestDTO.getQuantityDiscountLevels() != null) {
+        // if ("quantity".equalsIgnoreCase(policyRequestDTO.getPolicyType())
+        if (policyRequestDTO.getPolicyType() == PolicyTypeEnum.QUANTITY
+                && policyRequestDTO.getQuantityDiscountLevels() != null) {
             policyRequestDTO.getQuantityDiscountLevels().forEach(quantityDiscountLevelRequestDTO -> {
                 QuantityDiscountLevel quantityDiscountLevel = new QuantityDiscountLevel();
                 quantityDiscountLevel.setQuantityFrom(quantityDiscountLevelRequestDTO.getQuantityFrom());
@@ -57,7 +60,8 @@ public class PolicyService {
                 quantityDiscountLevelRepository.save(quantityDiscountLevel);
             });
         }
-        if ("sales".equalsIgnoreCase(policyRequestDTO.getPolicyType()) && policyRequestDTO.getSalesDiscountLevels() != null) {
+        if (policyRequestDTO.getPolicyType() == PolicyTypeEnum.SALES
+                && policyRequestDTO.getSalesDiscountLevels() != null) {
             policyRequestDTO.getSalesDiscountLevels().forEach(salesDiscountLevelRequestDTO -> {
                 SalesDiscountLevel salesDiscountLevel = new SalesDiscountLevel();
                 salesDiscountLevel.setSalesFrom(salesDiscountLevelRequestDTO.getSalesFrom());
@@ -77,52 +81,58 @@ public class PolicyService {
         return policies.stream().map(policy -> {
             PolicySummaryDTO policySummaryDTO = new PolicySummaryDTO();
             policySummaryDTO.setPolicyId(policy.getPolicyId());
-            policySummaryDTO.setPolicyType(policy.getPolicyType());
+            policySummaryDTO.setPolicyType(policy.getPolicyType().getDisplayName());
             policySummaryDTO.setPolicyValue(policy.getPolicyValue());
             policySummaryDTO.setPolicyCondition(policy.getPolicyCondition());
             policySummaryDTO.setStartDate(policy.getStartDate());
             policySummaryDTO.setEndDate(policy.getEndDate());
-            policySummaryDTO.setStatus(policy.getStatus());
+            policySummaryDTO.setStatus(policy.getStatus().getDisplayName());
             return policySummaryDTO;
         }).collect(Collectors.toList());
     }
 
     @Transactional()
     public PolicyResponseDTO getByIdPolicy(Integer policyId) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+        Policy policy = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
-        policyResponseDTO.setPolicyType(policy.getPolicyType());
+        policyResponseDTO.setPolicyType(policy.getPolicyType().getDisplayName());
         policyResponseDTO.setPolicyValue(policy.getPolicyValue());
         policyResponseDTO.setPolicyCondition(policy.getPolicyCondition());
         policyResponseDTO.setStartDate(policy.getStartDate());
         policyResponseDTO.setEndDate(policy.getEndDate());
-        policyResponseDTO.setStatus(policy.getStatus());
+        policyResponseDTO.setStatus(policy.getStatus().getDisplayName());
         policyResponseDTO.setAgencyId(policy.getAgency() != null ? policy.getAgency().getAgencyId() : null);
-        List<QuantityDiscountLevelResponseDTO> quantityDiscountLevelResponseDTOs = quantityDiscountLevelRepository.findByPolicy(policy).stream().map(quantityDiscountLevel -> {
-            QuantityDiscountLevelResponseDTO quantityDiscountLevelResponseDTO = new QuantityDiscountLevelResponseDTO();
-            quantityDiscountLevelResponseDTO.setQuantityDiscountLevelId(quantityDiscountLevel.getQuantityDiscountLevelId());
-            quantityDiscountLevelResponseDTO.setQuantityFrom(quantityDiscountLevel.getQuantityFrom());
-            quantityDiscountLevelResponseDTO.setQuantityTo(quantityDiscountLevel.getQuantityTo());
-            quantityDiscountLevelResponseDTO.setDiscountPercentage(quantityDiscountLevel.getDiscountPercentage());
-            return quantityDiscountLevelResponseDTO;
-        }).collect(Collectors.toList());
+        List<QuantityDiscountLevelResponseDTO> quantityDiscountLevelResponseDTOs = quantityDiscountLevelRepository
+                .findByPolicy(policy).stream().map(quantityDiscountLevel -> {
+                    QuantityDiscountLevelResponseDTO quantityDiscountLevelResponseDTO = new QuantityDiscountLevelResponseDTO();
+                    quantityDiscountLevelResponseDTO
+                            .setQuantityDiscountLevelId(quantityDiscountLevel.getQuantityDiscountLevelId());
+                    quantityDiscountLevelResponseDTO.setQuantityFrom(quantityDiscountLevel.getQuantityFrom());
+                    quantityDiscountLevelResponseDTO.setQuantityTo(quantityDiscountLevel.getQuantityTo());
+                    quantityDiscountLevelResponseDTO
+                            .setDiscountPercentage(quantityDiscountLevel.getDiscountPercentage());
+                    return quantityDiscountLevelResponseDTO;
+                }).collect(Collectors.toList());
         policyResponseDTO.setQuantityDiscountLevels(quantityDiscountLevelResponseDTOs);
-        List<SalesDiscountLevelResponseDTO> salesDiscountLevelResponseDTOs = salesDiscountLevelRepository.findByPolicy(policy).stream().map(salesDiscountLevel -> {
-            SalesDiscountLevelResponseDTO salesDiscountLevelResponseDTO = new SalesDiscountLevelResponseDTO();
-            salesDiscountLevelResponseDTO.setSalesDiscountLevelId(salesDiscountLevel.getSalesDiscountLevelId());
-            salesDiscountLevelResponseDTO.setSalesFrom(salesDiscountLevel.getSalesFrom());
-            salesDiscountLevelResponseDTO.setSalesTo(salesDiscountLevel.getSalesTo());
-            salesDiscountLevelResponseDTO.setDiscountPercentage(salesDiscountLevel.getDiscountPercentage());
-            return salesDiscountLevelResponseDTO;
-        }).collect(Collectors.toList());
+        List<SalesDiscountLevelResponseDTO> salesDiscountLevelResponseDTOs = salesDiscountLevelRepository
+                .findByPolicy(policy).stream().map(salesDiscountLevel -> {
+                    SalesDiscountLevelResponseDTO salesDiscountLevelResponseDTO = new SalesDiscountLevelResponseDTO();
+                    salesDiscountLevelResponseDTO.setSalesDiscountLevelId(salesDiscountLevel.getSalesDiscountLevelId());
+                    salesDiscountLevelResponseDTO.setSalesFrom(salesDiscountLevel.getSalesFrom());
+                    salesDiscountLevelResponseDTO.setSalesTo(salesDiscountLevel.getSalesTo());
+                    salesDiscountLevelResponseDTO.setDiscountPercentage(salesDiscountLevel.getDiscountPercentage());
+                    return salesDiscountLevelResponseDTO;
+                }).collect(Collectors.toList());
         policyResponseDTO.setSalesDiscountLevels(salesDiscountLevelResponseDTOs);
         return policyResponseDTO;
     }
 
     @Transactional
     public PolicyResponseDTO updatePolicy(Integer policyId, PolicyRequestDTO policyRequestDTO) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+        Policy policy = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         policy.setPolicyType(policyRequestDTO.getPolicyType());
         policy.setPolicyValue(policyRequestDTO.getPolicyValue());
         policy.setPolicyCondition(policyRequestDTO.getPolicyCondition());
@@ -135,7 +145,8 @@ public class PolicyService {
 
     @Transactional
     public PolicyResponseDTO deletePolicy(Integer policyId) {
-        Policy policy = policyRepository.findById(policyId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+        Policy policy = policyRepository.findById(policyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         List<QuantityDiscountLevel> quantityDiscountLevels = quantityDiscountLevelRepository.findByPolicy(policy);
         quantityDiscountLevelRepository.deleteAll(quantityDiscountLevels);
         List<SalesDiscountLevel> salesDiscountLevels = salesDiscountLevelRepository.findByPolicy(policy);
@@ -143,16 +154,17 @@ public class PolicyService {
         policyRepository.delete(policy);
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
-        policyResponseDTO.setPolicyType(policy.getPolicyType());
+        policyResponseDTO.setPolicyType(policy.getPolicyType().getDisplayName());
         policyResponseDTO.setPolicyValue(policy.getPolicyValue());
         policyResponseDTO.setPolicyCondition(policy.getPolicyCondition());
         policyResponseDTO.setStartDate(policy.getStartDate());
         policyResponseDTO.setEndDate(policy.getEndDate());
-        policyResponseDTO.setStatus(policy.getStatus());
+        policyResponseDTO.setStatus(policy.getStatus().getDisplayName());
         policyResponseDTO.setAgencyId(policy.getAgency() != null ? policy.getAgency().getAgencyId() : null);
         policyResponseDTO.setQuantityDiscountLevels(quantityDiscountLevels.stream().map(quantityDiscountLevel -> {
             QuantityDiscountLevelResponseDTO quantityDiscountLevelResponseDTO = new QuantityDiscountLevelResponseDTO();
-            quantityDiscountLevelResponseDTO.setQuantityDiscountLevelId(quantityDiscountLevel.getQuantityDiscountLevelId());
+            quantityDiscountLevelResponseDTO
+                    .setQuantityDiscountLevelId(quantityDiscountLevel.getQuantityDiscountLevelId());
             quantityDiscountLevelResponseDTO.setQuantityFrom(quantityDiscountLevel.getQuantityFrom());
             quantityDiscountLevelResponseDTO.setQuantityTo(quantityDiscountLevel.getQuantityTo());
             quantityDiscountLevelResponseDTO.setDiscountPercentage(quantityDiscountLevel.getDiscountPercentage());
