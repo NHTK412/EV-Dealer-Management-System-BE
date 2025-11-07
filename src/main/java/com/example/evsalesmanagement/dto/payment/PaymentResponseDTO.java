@@ -3,17 +3,20 @@ package com.example.evsalesmanagement.dto.payment;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PaymentMethodEnum;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+
 public class PaymentResponseDTO {
 
     private Integer paymentId;
-    private String paymentMethod;
+    private PaymentMethodEnum paymentMethod;
     private String paymentForm;
     private BigDecimal amount;
     private Integer numberCycle;
     private LocalDateTime dueDate;
     private LocalDateTime paymentDate;
     private BigDecimal penaltyAmount;
-    private String status;
+    private PaymentStatusEnum status;
     private String vnpayCode;
     private Integer orderId;
 
@@ -26,11 +29,11 @@ public class PaymentResponseDTO {
         this.paymentId = paymentId;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethodEnum paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -82,11 +85,11 @@ public class PaymentResponseDTO {
         this.penaltyAmount = penaltyAmount;
     }
 
-    public String getStatus() {
+    public PaymentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PaymentStatusEnum status) {
         this.status = status;
     }
 

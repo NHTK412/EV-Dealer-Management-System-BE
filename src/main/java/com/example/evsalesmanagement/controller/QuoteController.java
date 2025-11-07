@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
+import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 import com.example.evsalesmanagement.service.QuoteService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -53,7 +54,7 @@ public class QuoteController {
 
     @PatchMapping("/{quoteId}/{status}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> updateStatusQuote(@PathVariable Integer quoteId,
-            @PathVariable String status) {
+            @PathVariable QuoteStatusEnum status) {
         QuoteResponseDTO quoteResponseDTO = quoteService.updateStatusQuote(quoteId, status);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }

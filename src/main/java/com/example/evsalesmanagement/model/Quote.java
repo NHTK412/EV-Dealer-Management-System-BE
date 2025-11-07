@@ -4,9 +4,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.QuoteStatusEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,9 +36,9 @@ public class Quote extends Base {
 
     // @Column(name = "NgayTaoPhieu")
     // private LocalDateTime ngayTaoPhieu;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private QuoteStatusEnum status;
 
     // @OneToOne
     // @JoinColumn(name = "OrderId", unique = true)
@@ -64,11 +68,11 @@ public class Quote extends Base {
         this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public QuoteStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(QuoteStatusEnum status) {
         this.status = status;
     }
 

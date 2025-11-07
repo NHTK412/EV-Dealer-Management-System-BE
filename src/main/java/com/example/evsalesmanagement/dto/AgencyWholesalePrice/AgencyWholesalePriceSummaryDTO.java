@@ -23,7 +23,7 @@ public class AgencyWholesalePriceSummaryDTO {
         this.minimumQuantity = agencyWholesalePrice.getMinimumQuantity();
         this.startDate = agencyWholesalePrice.getStartDate();
         this.endDate = agencyWholesalePrice.getEndDate();
-        this.status = agencyWholesalePrice.getStatus();
+        this.status = agencyWholesalePrice.getStatus().getDisplayName();
     }
 
     public AgencyWholesalePriceSummaryDTO(Integer agencyWholesalePriceId, BigDecimal wholesalePrice, Integer minimumQuantity,

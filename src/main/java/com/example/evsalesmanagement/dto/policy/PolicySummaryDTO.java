@@ -3,24 +3,27 @@ package com.example.evsalesmanagement.dto.policy;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PolicyStatusEnum;
+import com.example.evsalesmanagement.enums.PolicyTypeEnum;
+
 public class PolicySummaryDTO {
     private Integer policyId;
-    private String policyType;
+    private PolicyTypeEnum policyType;
     private BigDecimal policyValue;
     private String policyCondition;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private PolicyStatusEnum status;
     public Integer getPolicyId() {
         return policyId;
     }
     public void setPolicyId(Integer policyId) {
         this.policyId = policyId;
     }
-    public String getPolicyType() {
+    public PolicyTypeEnum getPolicyType() {
         return policyType;
     }
-    public void setPolicyType(String policyType) {
+    public void setPolicyType(PolicyTypeEnum policyType) {
         this.policyType = policyType;
     }
     public BigDecimal getPolicyValue() {
@@ -47,10 +50,10 @@ public class PolicySummaryDTO {
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
-    public String getStatus() {
+    public PolicyStatusEnum getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(PolicyStatusEnum status) {
         this.status = status;
     }
     

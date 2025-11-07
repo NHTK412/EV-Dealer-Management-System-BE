@@ -3,6 +3,8 @@ package com.example.evsalesmanagement.dto.promotion;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.PromotionStatusEnum;
+import com.example.evsalesmanagement.enums.PromotionTypeEnum;
 import com.example.evsalesmanagement.model.Promotion;
 
 public class PromotionSummaryDTO {
@@ -10,7 +12,7 @@ public class PromotionSummaryDTO {
 
     private String promotionName;
 
-    private String promotionType;
+    private PromotionTypeEnum promotionType;
 
     private BigDecimal promotionValue;
 
@@ -24,7 +26,7 @@ public class PromotionSummaryDTO {
 
     private LocalDateTime endDate;
 
-    private String status;
+    private PromotionStatusEnum status;
 
     public PromotionSummaryDTO() {
     }
@@ -38,24 +40,8 @@ public class PromotionSummaryDTO {
         this.discountAmount = promotion.getDiscountAmount();
         this.discountPercent = promotion.getDiscountPercent();
         this.startDate = promotion.getStartDate();
-        this.endDate =  promotion.getEndDate();
+        this.endDate = promotion.getEndDate();
         this.status = promotion.getStatus();
-    }
-        
-
-    public PromotionSummaryDTO(Integer promotionId, String promotionName, String promotionType, BigDecimal promotionValue,
-            String criteria, BigDecimal discountAmount, BigDecimal discountPercent, LocalDateTime startDate,
-            LocalDateTime endDate, String status) {
-        this.promotionId = promotionId;
-        this.promotionName = promotionName;
-        this.promotionType = promotionType;
-        this.promotionValue = promotionValue;
-        this.criteria = criteria;
-        this.discountAmount = discountAmount;
-        this.discountPercent = discountPercent;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
     }
 
     public Integer getPromotionId() {
@@ -74,11 +60,11 @@ public class PromotionSummaryDTO {
         this.promotionName = promotionName;
     }
 
-    public String getPromotionType() {
+    public PromotionTypeEnum getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(String promotionType) {
+    public void setPromotionType(PromotionTypeEnum promotionType) {
         this.promotionType = promotionType;
     }
 
@@ -130,14 +116,12 @@ public class PromotionSummaryDTO {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public PromotionStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PromotionStatusEnum status) {
         this.status = status;
     }
-
-    
 
 }

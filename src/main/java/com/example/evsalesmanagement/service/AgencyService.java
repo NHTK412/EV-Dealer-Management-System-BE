@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.repository.AgencyRepository;
-import com.example.evsalesmanagement.utils.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class AgencyService {
             AgencySummaryDTO agencySummaryDTO = new AgencySummaryDTO();
             agencySummaryDTO.setAgencyId(agency.getAgencyId());
             agencySummaryDTO.setAgencyName(agency.getAgencyName());
-            agencySummaryDTO.setStatus(agency.getStatus());
+            agencySummaryDTO.setStatus(agency.getStatus().getDisplayName());
             return agencySummaryDTO;
         }).toList();
         return summaryList;
@@ -43,7 +42,7 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
         return agencyResponseDTO;
     }
 
@@ -62,7 +61,7 @@ public class AgencyService {
         agencyResponseDTO.setAddress(savedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(savedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(savedAgency.getEmail());
-        agencyResponseDTO.setStatus(savedAgency.getStatus());
+        agencyResponseDTO.setStatus(savedAgency.getStatus().getDisplayName());
         return agencyResponseDTO;
     }
 
@@ -82,7 +81,7 @@ public class AgencyService {
         agencyResponseDTO.setAddress(updatedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(updatedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(updatedAgency.getEmail());
-        agencyResponseDTO.setStatus(updatedAgency.getStatus());
+        agencyResponseDTO.setStatus(updatedAgency.getStatus().getDisplayName());
         return agencyResponseDTO;
     }
 
@@ -97,7 +96,7 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
         return agencyResponseDTO;
     }
 

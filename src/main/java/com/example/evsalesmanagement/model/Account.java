@@ -2,8 +2,12 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.AccountRoleEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,8 +31,9 @@ public class Account extends Base {
     @Column(name = "Password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Role")
-    private String role;
+    private AccountRoleEnum role;
 
     @Column(name = "Status")
     private String status;
@@ -67,11 +72,11 @@ public class Account extends Base {
         this.password = password;
     }
 
-    public String getRole() {
+    public AccountRoleEnum getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(AccountRoleEnum role) {
         this.role = role;
     }
 

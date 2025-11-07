@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class SalesDiscountLevelResponseDTO {
     private Integer salesDiscountLevelId;
-    private Integer salesFrom;
-    private Integer salesTo;
+    private BigDecimal salesFrom;
+    private BigDecimal salesTo;
     private BigDecimal discountPercentage;
 
     public Integer getSalesDiscountLevelId() {
@@ -14,16 +14,16 @@ public class SalesDiscountLevelResponseDTO {
     public void setSalesDiscountLevelId(Integer salesDiscountLevelId) {
         this.salesDiscountLevelId = salesDiscountLevelId;
     }
-    public Integer getSalesFrom() {
+    public BigDecimal getSalesFrom() {
         return salesFrom;
     }
-    public void setSalesFrom(Integer salesFrom) {
+    public void setSalesFrom(BigDecimal salesFrom) {
         this.salesFrom = salesFrom;
     }
-    public Integer getSalesTo() {
+    public BigDecimal getSalesTo() {
         return salesTo;
     }
-    public void setSalesTo(Integer salesTo) {
+    public void setSalesTo(BigDecimal salesTo) {
         this.salesTo = salesTo;
     }
     public BigDecimal getDiscountPercentage() {

@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
+import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 
 public class QuoteRequestDTO {
 
     private Integer employeeId;
 
-    private String status;
+    private QuoteStatusEnum status;
 
     private List<QuotationDetailRequestDTO> quotationDetailRequestDTOs = new ArrayList<>();
 
@@ -21,11 +22,11 @@ public class QuoteRequestDTO {
         this.employeeId = employeeId;
     }
 
-    public String getStatus() {
+    public QuoteStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(QuoteStatusEnum status) {
         this.status = status;
     }
 

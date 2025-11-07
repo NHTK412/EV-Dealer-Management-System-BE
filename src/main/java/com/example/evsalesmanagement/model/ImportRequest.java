@@ -3,9 +3,13 @@ package com.example.evsalesmanagement.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,8 +27,9 @@ public class ImportRequest extends Base {
     @Column(name = "ImportRequestId")
     private Integer importRequestId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private ImportRequestStatusEnum status;
 
     @Column(name = "Note")
     private String note;
@@ -44,11 +49,11 @@ public class ImportRequest extends Base {
         this.importRequestId = importRequestId;
     }
 
-    public String getStatus() {
+    public ImportRequestStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ImportRequestStatusEnum status) {
         this.status = status;
     }
 
