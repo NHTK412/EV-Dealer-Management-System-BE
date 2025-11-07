@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponseDTO;
+import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 import com.example.evsalesmanagement.model.Quote;
 
 public class QuoteResponseDTO {
@@ -21,7 +22,7 @@ public class QuoteResponseDTO {
 
     private BigDecimal totalAmount;
 
-    private String status;
+    private QuoteStatusEnum status;
 
     private List<QuotationDetailResponseDTO> quotationDetailResponseDTOs = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class QuoteResponseDTO {
         this.employeePhoneNumber = quote.getEmployee().getPhoneNumber();
         this.employeeEmail = quote.getEmployee().getEmail();
         this.totalAmount = quote.getTotalAmount();
-        this.status = quote.getStatus().getDisplayName();
+        this.status = quote.getStatus();
         this.quotationDetailResponseDTOs = quote.getQuotationDetails().stream().map(quotationDetail -> {
             return new QuotationDetailResponseDTO(quotationDetail);
         }).toList();
@@ -89,11 +90,11 @@ public class QuoteResponseDTO {
         this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public QuoteStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(QuoteStatusEnum status) {
         this.status = status;
     }
 

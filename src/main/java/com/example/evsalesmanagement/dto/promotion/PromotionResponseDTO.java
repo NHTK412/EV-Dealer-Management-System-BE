@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.enums.PromotionStatusEnum;
+import com.example.evsalesmanagement.enums.PromotionTypeEnum;
 import com.example.evsalesmanagement.model.Promotion;
 
 public class PromotionResponseDTO {
@@ -14,7 +16,7 @@ public class PromotionResponseDTO {
 
     private String promotionName;
 
-    private String promotionType;
+    private PromotionTypeEnum promotionType;
 
     private BigDecimal promotionValue;
 
@@ -28,7 +30,7 @@ public class PromotionResponseDTO {
 
     private LocalDateTime endDate;
 
-    private String status;
+    private PromotionStatusEnum status;
 
     private List<VehicleTypeDetailResponseDTO> vehicleTypeDetails;
 
@@ -37,33 +39,14 @@ public class PromotionResponseDTO {
     public PromotionResponseDTO(Promotion promotion) {
         this.promotionId = promotion.getPromotionId();
         this.promotionName = promotion.getPromotionName();
-        this.promotionType = promotion.getPromotionType().getDisplayName();
+        this.promotionType = promotion.getPromotionType();
         this.promotionValue = promotion.getPromotionValue();
         this.criteria = promotion.getCriteria();
         this.discountAmount = promotion.getDiscountAmount();
         this.discountPercent = promotion.getDiscountPercent();
         this.startDate = promotion.getStartDate();
         this.endDate = promotion.getEndDate();
-        this.status = promotion.getStatus().getDisplayName();
-    }
-
-    public PromotionResponseDTO(Integer promotionId, String promotionName, String promotionType,
-            BigDecimal promotionValue, String criteria, BigDecimal discountAmount, BigDecimal discountPercent,
-            LocalDateTime startDate, LocalDateTime endDate, String status,
-            List<VehicleTypeDetailResponseDTO> vehicleTypeDetails,
-            List<AgencyResponseDTO> agencies) {
-        this.promotionId = promotionId;
-        this.promotionName = promotionName;
-        this.promotionType = promotionType;
-        this.promotionValue = promotionValue;
-        this.criteria = criteria;
-        this.discountAmount = discountAmount;
-        this.discountPercent = discountPercent;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.vehicleTypeDetails = vehicleTypeDetails;
-        this.agencies = agencies;
+        this.status = promotion.getStatus();
     }
 
     public PromotionResponseDTO() {
@@ -85,11 +68,11 @@ public class PromotionResponseDTO {
         this.promotionName = promotionName;
     }
 
-    public String getPromotionType() {
+    public PromotionTypeEnum getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(String promotionType) {
+    public void setPromotionType(PromotionTypeEnum promotionType) {
         this.promotionType = promotionType;
     }
 
@@ -141,11 +124,11 @@ public class PromotionResponseDTO {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public PromotionStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PromotionStatusEnum status) {
         this.status = status;
     }
 

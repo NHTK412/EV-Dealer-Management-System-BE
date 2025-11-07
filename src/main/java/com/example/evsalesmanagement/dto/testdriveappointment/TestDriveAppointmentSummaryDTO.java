@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
 
-public class TestDriveAppointmentDTO {
+public class TestDriveAppointmentSummaryDTO {
     
     private Integer testDriveAppointmentId;
     
@@ -19,7 +19,7 @@ public class TestDriveAppointmentDTO {
     
     private String vehicleName;
 
-    public TestDriveAppointmentDTO() {
+    public TestDriveAppointmentSummaryDTO() {
     }
 
     public Integer getTestDriveAppointmentId() {

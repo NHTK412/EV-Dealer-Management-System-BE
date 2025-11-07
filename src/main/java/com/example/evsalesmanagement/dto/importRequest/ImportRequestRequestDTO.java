@@ -3,10 +3,11 @@ package com.example.evsalesmanagement.dto.importrequest;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailRequestDTO;
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
 
 public class ImportRequestRequestDTO {
 
-    private String status;
+    private ImportRequestStatusEnum status;
 
     private String note;
 
@@ -17,11 +18,11 @@ public class ImportRequestRequestDTO {
     public ImportRequestRequestDTO() {
     }
 
-    public String getStatus() {
+    public ImportRequestStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ImportRequestStatusEnum status) {
         this.status = status;
     }
 

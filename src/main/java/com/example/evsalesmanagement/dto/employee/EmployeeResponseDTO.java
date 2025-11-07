@@ -3,18 +3,20 @@ package com.example.evsalesmanagement.dto.employee;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.model.Employee;
 
 public class EmployeeResponseDTO {
 
     private Integer employeeId;
     private String employeeName;
-    private String gender;
+    private GenderEnum gender;
     private LocalDate birthDate;
     private String phoneNumber;
     private String email;
     private String address;
-    private String position;
+    private EmployeePositionEnum position;
     private Integer agencyId;
     private String agencyName;
     private LocalDateTime createdAt;
@@ -27,12 +29,12 @@ public class EmployeeResponseDTO {
     public EmployeeResponseDTO(Employee employee) {
         this.employeeId = employee.getEmployeeId();
         this.employeeName = employee.getEmployeeName();
-        this.gender = employee.getGender().getDisplayName();
+        this.gender = employee.getGender();
         this.birthDate = employee.getBirthDate();
         this.phoneNumber = employee.getPhoneNumber();
         this.email = employee.getEmail();
         this.address = employee.getAddress();
-        this.position = employee.getPosition().getDisplayName();
+        this.position = employee.getPosition();
 
         if (employee.getAgency() != null) {
             this.agencyId = employee.getAgency().getAgencyId();
@@ -60,11 +62,11 @@ public class EmployeeResponseDTO {
         this.employeeName = employeeName;
     }
 
-    public String getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderEnum gender) {
         this.gender = gender;
     }
 
@@ -100,11 +102,11 @@ public class EmployeeResponseDTO {
         this.address = address;
     }
 
-    public String getPosition() {
+    public EmployeePositionEnum getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(EmployeePositionEnum position) {
         this.position = position;
     }
 

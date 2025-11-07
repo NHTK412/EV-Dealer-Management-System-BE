@@ -81,12 +81,12 @@ public class PolicyService {
         return policies.stream().map(policy -> {
             PolicySummaryDTO policySummaryDTO = new PolicySummaryDTO();
             policySummaryDTO.setPolicyId(policy.getPolicyId());
-            policySummaryDTO.setPolicyType(policy.getPolicyType().getDisplayName());
+            policySummaryDTO.setPolicyType(policy.getPolicyType());
             policySummaryDTO.setPolicyValue(policy.getPolicyValue());
             policySummaryDTO.setPolicyCondition(policy.getPolicyCondition());
             policySummaryDTO.setStartDate(policy.getStartDate());
             policySummaryDTO.setEndDate(policy.getEndDate());
-            policySummaryDTO.setStatus(policy.getStatus().getDisplayName());
+            policySummaryDTO.setStatus(policy.getStatus());
             return policySummaryDTO;
         }).collect(Collectors.toList());
     }
@@ -97,12 +97,12 @@ public class PolicyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
-        policyResponseDTO.setPolicyType(policy.getPolicyType().getDisplayName());
+        policyResponseDTO.setPolicyType(policy.getPolicyType());
         policyResponseDTO.setPolicyValue(policy.getPolicyValue());
         policyResponseDTO.setPolicyCondition(policy.getPolicyCondition());
         policyResponseDTO.setStartDate(policy.getStartDate());
         policyResponseDTO.setEndDate(policy.getEndDate());
-        policyResponseDTO.setStatus(policy.getStatus().getDisplayName());
+        policyResponseDTO.setStatus(policy.getStatus());
         policyResponseDTO.setAgencyId(policy.getAgency() != null ? policy.getAgency().getAgencyId() : null);
         List<QuantityDiscountLevelResponseDTO> quantityDiscountLevelResponseDTOs = quantityDiscountLevelRepository
                 .findByPolicy(policy).stream().map(quantityDiscountLevel -> {
@@ -154,12 +154,12 @@ public class PolicyService {
         policyRepository.delete(policy);
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
-        policyResponseDTO.setPolicyType(policy.getPolicyType().getDisplayName());
+        policyResponseDTO.setPolicyType(policy.getPolicyType());
         policyResponseDTO.setPolicyValue(policy.getPolicyValue());
         policyResponseDTO.setPolicyCondition(policy.getPolicyCondition());
         policyResponseDTO.setStartDate(policy.getStartDate());
         policyResponseDTO.setEndDate(policy.getEndDate());
-        policyResponseDTO.setStatus(policy.getStatus().getDisplayName());
+        policyResponseDTO.setStatus(policy.getStatus());
         policyResponseDTO.setAgencyId(policy.getAgency() != null ? policy.getAgency().getAgencyId() : null);
         policyResponseDTO.setQuantityDiscountLevels(quantityDiscountLevels.stream().map(quantityDiscountLevel -> {
             QuantityDiscountLevelResponseDTO quantityDiscountLevelResponseDTO = new QuantityDiscountLevelResponseDTO();

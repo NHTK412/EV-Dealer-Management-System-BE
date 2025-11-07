@@ -1,11 +1,12 @@
 package com.example.evsalesmanagement.dto.vehicle;
 
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.model.Vehicle;
 
 public class VehicleSummaryDTO {
     private String chassisNumber;
     private String machineNumber;
-    private String status;
+    private VehicleStatusEnum status;
     private String vehicleCondition;
 
     public VehicleSummaryDTO() {
@@ -14,11 +15,12 @@ public class VehicleSummaryDTO {
     public VehicleSummaryDTO(Vehicle vehicle) {
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
-        this.status = vehicle.getStatus().getDisplayName();
+        this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
     }
 
-    public VehicleSummaryDTO(String chassisNumber, String machineNumber, String status, String vehicleCondition) {
+    public VehicleSummaryDTO(String chassisNumber, String machineNumber, VehicleStatusEnum status,
+            String vehicleCondition) {
         this.chassisNumber = chassisNumber;
         this.machineNumber = machineNumber;
         this.status = status;
@@ -41,22 +43,20 @@ public class VehicleSummaryDTO {
         this.machineNumber = machineNumber;
     }
 
-    public String getStatus() {
+    public VehicleStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatusEnum status) {
         this.status = status;
     }
-    
+
     public String getVehicleCondition() {
         return vehicleCondition;
     }
-    
+
     public void setVehicleCondition(String vehicleCondition) {
         this.vehicleCondition = vehicleCondition;
     }
-   
-    
-    
+
 }

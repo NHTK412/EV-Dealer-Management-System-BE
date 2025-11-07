@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.evsalesmanagement.dto.importrequestdetail.ImportRequestDetailResponseDTO;
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
 import com.example.evsalesmanagement.model.ImportRequest;
 
 public class ImportRequestResponseDTO {
     private Integer importRequestId;
 
-    private String status;
+    private ImportRequestStatusEnum status;
 
     private String note;
 
@@ -35,7 +36,7 @@ public class ImportRequestResponseDTO {
 
     public ImportRequestResponseDTO(ImportRequest importRequest) {
         this.importRequestId = importRequest.getImportRequestId();
-        this.status = importRequest.getStatus().getDisplayName();
+        this.status = importRequest.getStatus();
         this.note = importRequest.getNote();
         // this.employeeDTO = new EmployeeDTO(importRequest.getEmployee());
 
@@ -70,11 +71,11 @@ public class ImportRequestResponseDTO {
         this.importRequestId = importRequestId;
     }
 
-    public String getStatus() {
+    public ImportRequestStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ImportRequestStatusEnum status) {
         this.status = status;
     }
 

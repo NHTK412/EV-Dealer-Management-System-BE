@@ -1,15 +1,14 @@
 package com.example.evsalesmanagement.dto.vehicle;
 
-
-
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.model.Vehicle;
 
-public class VehicleResponseDTO{
+public class VehicleResponseDTO {
     private Integer vehicleId;
     private String chassisNumber;
     private String machineNumber;
-    private String status;
+    private VehicleStatusEnum status;
     private String vehicleCondition;
     private VehicleTypeDetailResponseDTO vehicleTypeDetail;
     private Integer agencyId;
@@ -17,6 +16,7 @@ public class VehicleResponseDTO{
     public Integer getVehicleId() {
         return vehicleId;
     }
+
     public void setVehicleId(Integer vehicleId) {
         this.vehicleId = vehicleId;
     }
@@ -24,12 +24,11 @@ public class VehicleResponseDTO{
     public VehicleResponseDTO() {
     }
 
-
     public VehicleResponseDTO(Vehicle vehicle) {
         this.vehicleId = vehicle.getVehicleId();
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
-        this.status = vehicle.getStatus().getDisplayName();
+        this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
         if (vehicle.getVehicleTypeDetail() != null) {
             this.vehicleTypeDetail = new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail());
@@ -39,7 +38,8 @@ public class VehicleResponseDTO{
         }
     }
 
-    public VehicleResponseDTO(String chassisNumber, String machineNumber, String status, String vehicleCondition,
+    public VehicleResponseDTO(String chassisNumber, String machineNumber, VehicleStatusEnum status,
+            String vehicleCondition,
             VehicleTypeDetailResponseDTO vehicleTypeDetail, Integer agencyId) {
         this.chassisNumber = chassisNumber;
         this.machineNumber = machineNumber;
@@ -65,11 +65,11 @@ public class VehicleResponseDTO{
         this.machineNumber = machineNumber;
     }
 
-    public String getStatus() {
+    public VehicleStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatusEnum status) {
         this.status = status;
     }
 
@@ -93,19 +93,9 @@ public class VehicleResponseDTO{
     public Integer getAgencyId() {
         return agencyId;
     }
+
     public void setAgencyId(Integer agencyId) {
         this.agencyId = agencyId;
     }
 
-    
-    
-
-
 }
-
-    
-
-    
-
-
-    

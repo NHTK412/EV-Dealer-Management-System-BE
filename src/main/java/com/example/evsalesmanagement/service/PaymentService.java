@@ -42,7 +42,7 @@ public class PaymentService {
     private PaymentResponseDTO convertToDTO(Payment payment) {
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setPaymentId(payment.getPaymentId());
-        dto.setPaymentMethod(payment.getPaymentMethod().getDisplayName());
+        dto.setPaymentMethod(payment.getPaymentMethod());
         dto.setPaymentForm(payment.getPaymentForm());
         dto.setAmount(payment.getAmount());
         dto.setNumberCycle(payment.getNumberCycle());

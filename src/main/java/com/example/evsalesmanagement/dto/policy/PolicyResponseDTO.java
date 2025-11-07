@@ -6,15 +6,17 @@ import java.util.List;
 
 import com.example.evsalesmanagement.dto.quantitydiscountlevel.QuantityDiscountLevelResponseDTO;
 import com.example.evsalesmanagement.dto.salesdiscountlevel.SalesDiscountLevelResponseDTO;
+import com.example.evsalesmanagement.enums.PolicyStatusEnum;
+import com.example.evsalesmanagement.enums.PolicyTypeEnum;
 
 public class PolicyResponseDTO {
     private Integer policyId;
-    private String policyType;
+    private PolicyTypeEnum policyType;
     private BigDecimal policyValue;
     private String policyCondition;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private PolicyStatusEnum status;
     private Integer agencyId;
     private List<QuantityDiscountLevelResponseDTO> quantityDiscountLevels;
     private List<SalesDiscountLevelResponseDTO> salesDiscountLevels;
@@ -24,10 +26,10 @@ public class PolicyResponseDTO {
     public void setPolicyId(Integer policyId) {
         this.policyId = policyId;
     }
-    public String getPolicyType() {
+    public PolicyTypeEnum getPolicyType() {
         return policyType;
     }
-    public void setPolicyType(String policyType) {
+    public void setPolicyType(PolicyTypeEnum policyType) {
         this.policyType = policyType;
     }
     public BigDecimal getPolicyValue() {
@@ -54,10 +56,10 @@ public class PolicyResponseDTO {
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
-    public String getStatus() {
+    public PolicyStatusEnum getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(PolicyStatusEnum status) {
         this.status = status;
     }
     public Integer getAgencyId() {

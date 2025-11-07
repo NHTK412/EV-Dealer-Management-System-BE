@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,8 +56,9 @@ public class Payment extends Base {
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private PaymentStatusEnum status;
 
     @Column(name = "VNPAYCode")
     private String vnpayCode;
@@ -131,11 +133,11 @@ public class Payment extends Base {
         this.penaltyAmount = penaltyAmount;
     }
 
-    public String getStatus() {
+    public PaymentStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PaymentStatusEnum status) {
         this.status = status;
     }
 
