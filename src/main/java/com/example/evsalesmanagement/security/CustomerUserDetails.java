@@ -12,7 +12,6 @@ import com.example.evsalesmanagement.model.Account;
 public class CustomerUserDetails implements UserDetails {
 
     private Account account;
-    
 
     public CustomerUserDetails() {
     }

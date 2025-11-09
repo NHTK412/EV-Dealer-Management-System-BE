@@ -10,46 +10,46 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
+        @Bean
+        public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+                RedisTemplate<String, Object> template = new RedisTemplate<>();
+                template.setConnectionFactory(connectionFactory);
 
-        // Dùng JSON
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+                // Dùng JSON
+                GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
 
-        template.setKeySerializer(new StringRedisSerializer());
+                template.setKeySerializer(new StringRedisSerializer());
 
-        template.setValueSerializer(serializer); // STRING
+                template.setValueSerializer(serializer); // STRING
 
-        template.setHashKeySerializer(new StringRedisSerializer()); // HSET
+                template.setHashKeySerializer(new StringRedisSerializer()); // HSET
 
-        template.setHashValueSerializer(serializer); // HSET
+                template.setHashValueSerializer(serializer); // HSET
 
-        template.afterPropertiesSet();
+                template.afterPropertiesSet();
 
-        return template;
-    }
+                return template;
+        }
 
-    @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(30)) // thời gian sống của cache
-                .serializeKeysWith(
-                        org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair
-                                .fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(
-                        org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair
-                                .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+        @Bean
+        public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+                RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofMinutes(30)) // thời gian sống của cache
+                                .serializeKeysWith(
+                                                SerializationPair.fromSerializer(new StringRedisSerializer()))
+                                .serializeValuesWith(
+                                                SerializationPair.fromSerializer(
+                                                                new GenericJackson2JsonRedisSerializer()));
 
-        return RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(config)
-                .build();
-    }
+                return RedisCacheManager.builder(connectionFactory)
+                                .cacheDefaults(config)
+                                .build();
+        }
 
 }

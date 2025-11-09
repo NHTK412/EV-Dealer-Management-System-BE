@@ -18,6 +18,7 @@ public class AuthenticationEntryPointException implements AuthenticationEntryPoi
             AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
         // response.setContentType("application/json;charset=UTF-8");
-        // response.getWriter().write("{\"error\": \"Bạn chưa được xác thực hoặc token không hợp lệ!\"}");
+        // response.getWriter().write("{\"error\": \"Bạn chưa được xác thực hoặc token
+        // không hợp lệ!\"}");
     }
 }

@@ -2,6 +2,7 @@ package com.example.evsalesmanagement.dto.auth;
 
 public class AuthResponseDTO {
     private String accessToken;
+    private String refreshToken;
     private Long expiresIn;
 
     public AuthResponseDTO() {
@@ -21,6 +22,14 @@ public class AuthResponseDTO {
 
     public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }
