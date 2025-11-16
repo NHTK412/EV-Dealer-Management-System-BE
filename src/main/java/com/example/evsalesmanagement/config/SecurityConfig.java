@@ -32,8 +32,9 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // endpoint cong
-                                                                                                      // khai
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/images/**").permitAll() // endpoint
+                                                                                                                    // cong
+                        // khai
                         .anyRequest().authenticated()); // endpoint bao mat
 
         httpSecurity.exceptionHandling(ex -> ex
