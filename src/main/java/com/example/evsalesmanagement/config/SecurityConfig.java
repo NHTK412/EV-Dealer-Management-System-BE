@@ -1,5 +1,7 @@
 package com.example.evsalesmanagement.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.example.evsalesmanagement.exception.AccessDeniedHandlerException;
 import com.example.evsalesmanagement.exception.AuthenticationEntryPointException;
@@ -26,14 +29,48 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+        httpSecurity.cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+            corsConfiguration.setAllowedOrigins(List.of(
+                    "http://localhost:5173"));
+
+            corsConfiguration.setAllowedMethods(List.of(
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE",
+                    "PATCH"));
+
+            corsConfiguration.setAllowedHeaders(List.of(
+                    "Authorization",
+                    "Content-Type",
+                    "Accept",
+                    "Cache-Control",
+                    "X-Requested-With",
+                    "X-Client-Version",
+                    "X-Refresh-Token"));
+
+            corsConfiguration.setExposedHeaders(List.of("Authorization"));
+
+            corsConfiguration.setAllowCredentials(true);
+
+            return corsConfiguration;
+        }));
+
         httpSecurity.csrf(csrf -> csrf.disable());
 
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // endpoint cong
-                                                                                                      // khai
+                        .requestMatchers(
+                                "/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**")
+                        .permitAll() // endpoint cong
+                                     // khai
                         .anyRequest().authenticated()); // endpoint bao mat
 
         httpSecurity.exceptionHandling(ex -> ex
