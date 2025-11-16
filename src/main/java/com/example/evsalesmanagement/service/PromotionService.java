@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,7 @@ public class PromotionService {
         }
 
         // sử dụng trasactional để duy trình session đến hết hàm
+        @Cacheable(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO getByIdPromotion(Integer promotionId) {
 
@@ -125,6 +129,7 @@ public class PromotionService {
                 // return
         }
 
+        @CacheEvict(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO deletePromotion(Integer promotionId) {
 
@@ -151,6 +156,7 @@ public class PromotionService {
                 return promotionResponseDTO;
         }
 
+        @CachePut(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO updatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
 

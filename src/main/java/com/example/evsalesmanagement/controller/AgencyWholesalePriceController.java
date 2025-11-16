@@ -46,7 +46,7 @@ public class AgencyWholesalePriceController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, agencyWholesalePricesSummaryDTOs));
     }
 
-    @GetMapping("/{agencyWholesalePricesId}")
+    @GetMapping("/{agencyWholesalePriceId}")
     public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> getByIdAgencyWholesalePrice(@PathVariable Integer agencyWholesalePriceId) {
 
         AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.getByIdAgencyWholesalePrice(agencyWholesalePriceId);
@@ -54,19 +54,19 @@ public class AgencyWholesalePriceController {
         return ResponseEntity.ok(new ApiResponse<AgencyWholesalePriceResponseDTO>(true, null,agencyWholesalePriceResponseDTO));
     }
 
-    @PutMapping("/{agencyWholesalePricesId}")
-        public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> putAgencyWholesalePrice(@PathVariable Integer agencyWholesaleId,
+    @PutMapping("/{agencyWholesalePriceId}")
+        public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> putAgencyWholesalePrice(@PathVariable Integer agencyWholesalePriceId,
                         @RequestBody AgencyWholesalePriceRequestDTO agencyWholesalePrice) {
 
-            AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.updateAgencyWholesalePrice(agencyWholesaleId, agencyWholesalePrice);
+            AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.updateAgencyWholesalePrice(agencyWholesalePriceId, agencyWholesalePrice);
 
             return ResponseEntity.ok(new ApiResponse<AgencyWholesalePriceResponseDTO>(true, null,agencyWholesalePriceResponseDTO));
         }
 
-    @DeleteMapping("/{agencyWholesalePricesId}")
-        public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> deleteAgencyWholesalePrice(@PathVariable Integer agencyWholesaleId) {
+    @DeleteMapping("/{agencyWholesalePriceId}")
+        public ResponseEntity<ApiResponse<AgencyWholesalePriceResponseDTO>> deleteAgencyWholesalePrice(@PathVariable Integer agencyWholesalePriceId) {
 
-            AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.deleteAgencyWholesalePrice(agencyWholesaleId);
+            AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = agencyWholesalePriceService.deleteAgencyWholesalePrice(agencyWholesalePriceId);
             return ResponseEntity.ok(new ApiResponse<AgencyWholesalePriceResponseDTO>(true, null,agencyWholesalePriceResponseDTO));
         }
 }

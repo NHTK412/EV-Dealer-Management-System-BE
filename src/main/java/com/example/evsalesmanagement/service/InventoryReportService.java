@@ -47,7 +47,7 @@ public class InventoryReportService {
             List<InventoryReportResponseDTO> reportData = getInventoryReport(request);
 
             try (Workbook workbook = new XSSFWorkbook();
-                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
                 Sheet sheet = workbook.createSheet("Inventory Report");
                 CellStyle headerStyle = createHeaderStyle(workbook);
@@ -74,8 +74,8 @@ public class InventoryReportService {
 
                 Row headerRow = sheet.createRow(rowNum++);
                 String[] headers = {
-                    "STT", "Name car", "Manufacture year", "Version",
-                    "Color", "Price", "Agency", "Quantity", "Total value"
+                        "STT", "Name car", "Manufacture year", "Version",
+                        "Color", "Price", "Agency", "Quantity", "Total value"
                 };
 
                 for (int i = 0; i < headers.length; i++) {

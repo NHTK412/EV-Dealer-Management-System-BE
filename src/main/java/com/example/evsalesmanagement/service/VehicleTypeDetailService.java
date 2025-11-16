@@ -11,6 +11,9 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,8 +28,10 @@ public class VehicleTypeDetailService {
 
     @Autowired
     private VehicleTypeRepository vehicleTypeRepository;
+
     @Transactional
-    public ApiResponse<org.springframework.data.domain.Page<VehicleTypeDetailSummaryDTO>> getAllVehicleTypeDetails(Pageable pageable) {
+    public ApiResponse<org.springframework.data.domain.Page<VehicleTypeDetailSummaryDTO>> getAllVehicleTypeDetails(
+            Pageable pageable) {
         Page<VehicleTypeDetail> page = vehicleTypeDetailRepository.findAll(pageable);
         Page<VehicleTypeDetailSummaryDTO> summaryPage = page.map(entity -> {
             VehicleTypeDetailSummaryDTO dto = new VehicleTypeDetailSummaryDTO();
@@ -38,10 +43,12 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, summaryPage);
     }
 
+    @Cacheable(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> getById(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());
         dto.setVehicleImage(entity.getVehicleImage());
@@ -80,10 +87,13 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, dto);
     }
 
+    @CachePut(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
-    public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId, VehicleTypeDetailRequestDTO requestDTO) {
+    public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId,
+            VehicleTypeDetailRequestDTO requestDTO) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         entity.setVehicleImage(requestDTO.getVehicleImage());
         entity.setConfiguration(requestDTO.getConfiguration());
         entity.setColor(requestDTO.getColor());
@@ -107,10 +117,12 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, dto);
     }
 
+    @CacheEvict(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> delete(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         vehicleTypeDetailRepository.delete(entity);
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());

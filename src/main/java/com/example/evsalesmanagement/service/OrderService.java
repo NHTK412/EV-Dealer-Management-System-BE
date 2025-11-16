@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +129,7 @@ public class OrderService {
                 return new OrderResponseDTO(order);
         }
 
+        @CachePut(value = "order", key = "#orderId")
         @Transactional
         public OrderResponseDTO updateOrderById(Integer orderId, OrderStatusEnum status, String contractNumber) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)
