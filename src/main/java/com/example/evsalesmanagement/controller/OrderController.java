@@ -71,7 +71,7 @@ public class OrderController {
             @RequestParam int page,
             @RequestParam int size) {
 
-        Integer agencyId = 1;
+        Integer agencyId = customerUserDetails.getAgencyId();
 
         Pageable pageable = PageRequest.of(page - 1, size);
 

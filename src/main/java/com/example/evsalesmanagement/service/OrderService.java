@@ -176,7 +176,7 @@ public class OrderService {
                 // .toList();
 
                 return ordersPage.stream()
-                                .map((order) -> new OrderSummaryDTO(null))
+                                .map((order) -> new OrderSummaryDTO(order))
                                 .toList();
         }
 }
