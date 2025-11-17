@@ -11,8 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+// import org.springframework.security.core.context.SecurityContext;
+// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -169,9 +169,9 @@ public class EmployeeController {
 
                 Integer employeeId = customerUserDetails.getEmployeeId();
 
-                EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
+                EmployeeResponseDTO employeeResponseDTO = employeeService.getEmployeeById(employeeId);
                 return ResponseEntity.ok(
-                                new ApiResponse<>(true, null, employeeDTO));
+                                new ApiResponse<>(true, null, employeeResponseDTO));
         }
 
 }

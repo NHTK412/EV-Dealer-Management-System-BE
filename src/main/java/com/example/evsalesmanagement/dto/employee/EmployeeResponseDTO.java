@@ -13,6 +13,7 @@ import com.example.evsalesmanagement.model.Employee;
 public class EmployeeResponseDTO {
 
     private Integer employeeId;
+    private String username;
     private String employeeName;
     private GenderEnum gender;
     private LocalDate birthDate;
@@ -39,6 +40,7 @@ public class EmployeeResponseDTO {
         this.email = employee.getEmail();
         this.address = employee.getAddress();
         this.role = employee.getRole();
+        this.username = employee.getUsername();
 
         if (employee.getAgency() != null) {
             this.agencyId = employee.getAgency().getAgencyId();
@@ -106,13 +108,13 @@ public class EmployeeResponseDTO {
         this.address = address;
     }
 
-    public RoleEnum getPosition() {
-        return role;
-    }
+    // public RoleEnum getPosition() {
+    // return role;
+    // }
 
-    public void setPosition(RoleEnum role) {
-        this.role = role;
-    }
+    // public void setPosition(RoleEnum role) {
+    // this.role = role;
+    // }
 
     public Integer getAgencyId() {
         return agencyId;
@@ -145,4 +147,21 @@ public class EmployeeResponseDTO {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
+
 }
