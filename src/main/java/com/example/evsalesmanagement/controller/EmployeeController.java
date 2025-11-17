@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+
+import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.EmployeeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -36,138 +38,140 @@ import jakarta.validation.Valid;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+        @Autowired
+        private EmployeeService employeeService;
 
-    // Lấy danh sách tất cả nhân viên - có phân trang - sắp xếp
-    @GetMapping
-    public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getAllEmployees(
-            @RequestParam int page,
-            @RequestParam int size,
-            @RequestParam String sortBy,
-            @RequestParam String sortDir) {
+        // Lấy danh sách tất cả nhân viên - có phân trang - sắp xếp
+        @GetMapping
+        public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getAllEmployees(
+                        @RequestParam int page,
+                        @RequestParam int size,
+                        @RequestParam String sortBy,
+                        @RequestParam String sortDir) {
 
-        Sort sort = sortDir.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+                Sort sort = sortDir.equalsIgnoreCase("asc")
+                                ? Sort.by(sortBy).ascending()
+                                : Sort.by(sortBy).descending();
+                Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<EmployeeResponseDTO> employeePage = employeeService.getAllEmployees(pageable);
+                Page<EmployeeResponseDTO> employeePage = employeeService.getAllEmployees(pageable);
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get list employees successfully", employeePage));
-    }
-
-    // Lấy thông tin chi tiết một nhân viên theo ID
-    @GetMapping("/{employeeId}")
-    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Integer employeeId) {
-        EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get employee information successfully", employeeDTO));
-    }
-
-    // Tạo nhân viên mới
-    @PostMapping
-    public ResponseEntity<ApiResponse<?>> createEmployee(
-            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(
-                            error -> error.getField(),
-                            error -> error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Invalid data", errors));
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get list employees successfully", employeePage));
         }
 
-        EmployeeResponseDTO createdEmployee = employeeService.createEmployee(employeeRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Employee created successfully", createdEmployee));
-    }
-
-    // Cập nhật thông tin nhân viên
-    @PutMapping("/{employeeId}")
-    public ResponseEntity<ApiResponse<?>> updateEmployee(
-            @PathVariable Integer employeeId,
-            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(
-                            error -> error.getField(),
-                            error -> error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Invalid data", errors));
+        // Lấy thông tin chi tiết một nhân viên theo ID
+        @GetMapping("/{employeeId}")
+        public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Integer employeeId) {
+                EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get employee information successfully", employeeDTO));
         }
 
-        EmployeeResponseDTO updatedEmployee = employeeService.updateEmployee(employeeId, employeeRequestDTO);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Employee updated successfully", updatedEmployee));
-    }
+        // Tạo nhân viên mới
+        @PostMapping
+        public ResponseEntity<ApiResponse<?>> createEmployee(
+                        @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
+                        BindingResult bindingResult) {
 
-    // Xóa nhân viên theo ID
-    @DeleteMapping("/{employeeId}")
-    public ResponseEntity<ApiResponse<Void>> deleteEmployee(@PathVariable Integer employeeId) {
-        employeeService.deleteEmployee(employeeId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Employee deleted successfully", null));
-    }
+                if (bindingResult.hasErrors()) {
+                        Map<String, String> errors = bindingResult.getFieldErrors().stream()
+                                        .collect(Collectors.toMap(
+                                                        error -> error.getField(),
+                                                        error -> error.getDefaultMessage()));
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ApiResponse<>(false, "Invalid data", errors));
+                }
 
-    // Lấy danh sách nhân viên theo chức vụ - phân trang
-    @GetMapping("/by-position")
-    public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByPosition(
-            @RequestParam String position,
-            @RequestParam int page,
-            @RequestParam int size) {
+                EmployeeResponseDTO createdEmployee = employeeService.createEmployee(employeeRequestDTO);
+                return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(new ApiResponse<>(true, "Employee created successfully", createdEmployee));
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByPosition(position, pageable);
+        // Cập nhật thông tin nhân viên
+        @PutMapping("/{employeeId}")
+        public ResponseEntity<ApiResponse<?>> updateEmployee(
+                        @PathVariable Integer employeeId,
+                        @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
+                        BindingResult bindingResult) {
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get employees by position successfully", employeePage));
-    }
+                if (bindingResult.hasErrors()) {
+                        Map<String, String> errors = bindingResult.getFieldErrors().stream()
+                                        .collect(Collectors.toMap(
+                                                        error -> error.getField(),
+                                                        error -> error.getDefaultMessage()));
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ApiResponse<>(false, "Invalid data", errors));
+                }
 
-    // Lấy danh sách nhân viên theo đại lý - phân trang
-    @GetMapping("/agencies/{agencyId}")
-    public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByAgency(
-            @PathVariable Integer agencyId,
-            @RequestParam int page,
-            @RequestParam int size) {
+                EmployeeResponseDTO updatedEmployee = employeeService.updateEmployee(employeeId, employeeRequestDTO);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Employee updated successfully", updatedEmployee));
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByAgency(agencyId, pageable);
+        // Xóa nhân viên theo ID
+        @DeleteMapping("/{employeeId}")
+        public ResponseEntity<ApiResponse<Void>> deleteEmployee(@PathVariable Integer employeeId) {
+                employeeService.deleteEmployee(employeeId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Employee deleted successfully", null));
+        }
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get employees by agency successfully", employeePage));
-    }
+        // Lấy danh sách nhân viên theo chức vụ - phân trang
+        @GetMapping("/by-position")
 
-    // Đếm số lượng nhân viên theo đại lý
-    @GetMapping("/agencies/{agencyId}/count")
-    public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable Integer agencyId) {
-        long count = employeeService.countByAgency(agencyId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Count employees by agency successfully", count));
-    }
+        public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByRole(
+                        @RequestParam RoleEnum role,
+                        @RequestParam int page,
+                        @RequestParam int size) {
 
-    // Đếm số lượng nhân viên theo chức vụ
-    @GetMapping("/positions/{position}/count")
-    public ResponseEntity<ApiResponse<Long>> countEmployeesByPosition(@PathVariable String position) {
-        long count = employeeService.countByPosition(position);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Count employees by position successfully", count));
-    }
+                Pageable pageable = PageRequest.of(page, size);
 
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getCurrentEmployee(
-            @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+                Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByRole(role, pageable);
 
-        Integer employeeId = customerUserDetails.getEmployeeId();
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get employees by position successfully", employeePage));
+        }
 
-        EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, null, employeeDTO));
-    }
+        // Lấy danh sách nhân viên theo đại lý - phân trang
+        @GetMapping("/agencies/{agencyId}")
+        public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByAgency(
+                        @PathVariable Integer agencyId,
+                        @RequestParam int page,
+                        @RequestParam int size) {
+
+                Pageable pageable = PageRequest.of(page, size);
+                Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByAgency(agencyId, pageable);
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get employees by agency successfully", employeePage));
+        }
+
+        // Đếm số lượng nhân viên theo đại lý
+        @GetMapping("/agencies/{agencyId}/count")
+        public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable Integer agencyId) {
+                long count = employeeService.countByAgency(agencyId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Count employees by agency successfully", count));
+        }
+
+        // Đếm số lượng nhân viên theo chức vụ
+        @GetMapping("/positions/{position}/count")
+        public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
+                long count = employeeService.countByRole(role);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Count employees by position successfully", count));
+        }
+
+        @GetMapping("/me")
+        public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getCurrentEmployee(
+                        @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+
+                Integer employeeId = customerUserDetails.getEmployeeId();
+
+                EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, null, employeeDTO));
+        }
 
 }

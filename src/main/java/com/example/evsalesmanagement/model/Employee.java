@@ -2,8 +2,11 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDate;
 
-import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+// import com.example.evsalesmanagement.enums.AccountRoleEnum;
+// import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+import com.example.evsalesmanagement.enums.EmployeeStatusEnum;
 import com.example.evsalesmanagement.enums.GenderEnum;
+import com.example.evsalesmanagement.enums.RoleEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +28,12 @@ public class Employee extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EmployeeId")
     private Integer employeeId;
+
+    @Column(name = "Username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "Password", nullable = false)
+    private String password;
 
     @Column(name = "EmployeeName", nullable = false)
     private String employeeName;
@@ -48,8 +57,12 @@ public class Employee extends Base {
     // chuc vu = position
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Position")
-    private EmployeePositionEnum position;
+    @Column(name = "Role")
+    private RoleEnum role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Status")
+    private EmployeeStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
@@ -112,12 +125,12 @@ public class Employee extends Base {
         this.address = address;
     }
 
-    public EmployeePositionEnum getPosition() {
-        return position;
+    public RoleEnum getRole() {
+        return role;
     }
 
-    public void setPosition(EmployeePositionEnum position) {
-        this.position = position;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 
     public Agency getAgency() {
@@ -126,6 +139,30 @@ public class Employee extends Base {
 
     public void setAgency(Agency agency) {
         this.agency = agency;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public EmployeeStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EmployeeStatusEnum status) {
+        this.status = status;
     }
 
     // @OneToOne(mappedBy = "nhanVien")

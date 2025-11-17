@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Agency;
@@ -56,7 +57,7 @@ public class EmployeeService {
         employee.setPhoneNumber(requestDTO.getPhoneNumber());
         employee.setEmail(requestDTO.getEmail());
         employee.setAddress(requestDTO.getAddress());
-        employee.setPosition(requestDTO.getPosition());
+        employee.setRole(requestDTO.getRole());
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
@@ -89,7 +90,7 @@ public class EmployeeService {
         employee.setPhoneNumber(requestDTO.getPhoneNumber());
         employee.setEmail(requestDTO.getEmail());
         employee.setAddress(requestDTO.getAddress());
-        employee.setPosition(requestDTO.getPosition());
+        employee.setRole(requestDTO.getRole());
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
@@ -114,8 +115,8 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo position - có phân trang
-    public Page<EmployeeResponseDTO> getEmployeesByPosition(String position, Pageable pageable) {
-        return employeeRepository.findByPosition(position, pageable)
+    public Page<EmployeeResponseDTO> getEmployeesByRole(RoleEnum role, Pageable pageable) {
+        return employeeRepository.findByRole(role, pageable)
                 .map(EmployeeResponseDTO::new);
     }
 
@@ -131,7 +132,7 @@ public class EmployeeService {
     }
 
     // Đếm nhân viên theo position
-    public long countByPosition(String position) {
-        return employeeRepository.countByPosition(position);
+    public long countByRole(RoleEnum role) {
+        return employeeRepository.countByRole(role);
     }
 }
