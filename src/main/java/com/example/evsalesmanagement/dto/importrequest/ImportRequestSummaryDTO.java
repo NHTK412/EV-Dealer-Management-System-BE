@@ -35,7 +35,7 @@ public class ImportRequestSummaryDTO {
 
         this.employeeName = importRequest.getEmployee().getEmployeeName();
 
-        this.employeePosition = importRequest.getEmployee().getPosition().getDisplayName();
+        this.employeePosition = importRequest.getEmployee().getRole().getDisplayName();
 
         this.agencyId = importRequest.getEmployee().getAgency().getAgencyId();
 

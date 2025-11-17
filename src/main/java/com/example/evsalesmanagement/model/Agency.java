@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.model;
 
 import com.example.evsalesmanagement.enums.AgencyStatusEnum;
+import com.example.evsalesmanagement.enums.AgencyTypeEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,10 @@ public class Agency extends Base {
     // trang thai = status
     @Column(name = "Email")
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Type")
+    private AgencyTypeEnum type;
 
     // trang thai = status
     @Enumerated(EnumType.STRING)
@@ -88,6 +93,14 @@ public class Agency extends Base {
 
     public void setStatus(AgencyStatusEnum status) {
         this.status = status;
+    }
+
+    public AgencyTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(AgencyTypeEnum type) {
+        this.type = type;
     }
 
     // @OneToMany(mappedBy = "daiLy")
