@@ -2,11 +2,11 @@ package com.example.evsalesmanagement.enums;
 
 public enum PromotionStatusEnum {
 
-    NOT_ACTIVE("Chưa Hoạt Động"),
+        NOT_ACTIVE("Chưa Hoạt Động"),
 
-    ACTIVE("Đang Hoạt Động"),
+        ACTIVE("Đang Hoạt Động"),
 
-    INACTIVE("Dừng Hoạt Động");
+        INACTIVE("Dừng Hoạt Động");
 
     private final String displayName;
 

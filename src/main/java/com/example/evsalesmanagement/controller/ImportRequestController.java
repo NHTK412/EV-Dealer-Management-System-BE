@@ -8,6 +8,7 @@ import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.ImportRequestService;
+import com.example.evsalesmanagement.utils.ApiResponse;
 
 import jakarta.validation.constraints.Positive;
 
@@ -35,48 +36,83 @@ public class ImportRequestController {
 
     // Chưa tạo logic gửi thông báo đến đại lý
     @PostMapping()
-    public ResponseEntity<ImportRequestResponseDTO> createImportRequest(
+    public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> createImportRequest(
             @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
-        return ResponseEntity.ok(importRequestService.createImportRequest(importRequestRequestDTO));
+
+        ImportRequestResponseDTO importRequestResponseDTO = importRequestService
+                .createImportRequest(importRequestRequestDTO);
+
+        return ResponseEntity.ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
     }
 
     @DeleteMapping("/{importRequestId}")
-    public ResponseEntity<ImportRequestResponseDTO> deleteImportRequest(@PathVariable Integer importRequestId) {
+    public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> deleteImportRequest(
+            @PathVariable Integer importRequestId) {
 
-        return ResponseEntity.ok(importRequestService.deleteImportRequest(importRequestId));
+        ImportRequestResponseDTO importRequestResponseDTO = importRequestService.deleteImportRequest(importRequestId);
+
+        return ResponseEntity.ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
+        // return ResponseEntity.ok());
     }
 
     @PutMapping("/{importRequestId}")
-    public ResponseEntity<ImportRequestResponseDTO> updateImportRequest(
+    public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> updateImportRequest(
             @PathVariable Integer importRequestId,
             @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
-        return ResponseEntity.ok(importRequestService.updateImportRequest(importRequestId, importRequestRequestDTO));
+        // return
+        // ResponseEntity.ok(importRequestService.updateImportRequest(importRequestId,
+        // importRequestRequestDTO));
+
+        ImportRequestResponseDTO importRequestResponseDTO = importRequestService.updateImportRequest(importRequestId,
+                importRequestRequestDTO);
+
+        return ResponseEntity.ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<ImportRequestSummaryDTO>> getAllImportRequests(@RequestParam Integer page,
+    public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getAllImportRequests(@RequestParam Integer page,
             @RequestParam @Positive Integer size,
             @RequestParam(required = false) Integer employeeId) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
+
+        List<ImportRequestSummaryDTO> importRequestSummaryDTOs = importRequestService.getAllImportRequests(pageable,
+                employeeId);
+
+        return ResponseEntity.ok(new ApiResponse<List<ImportRequestSummaryDTO>>(true, null, importRequestSummaryDTOs));
+
+        // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,
+        // employeeId));
     }
 
     @GetMapping("/{importRequestId}")
-    public ResponseEntity<ImportRequestResponseDTO> getImportRequestDetail(@PathVariable Integer importRequestId) {
-        return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
+    public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> getImportRequestDetail(
+            @PathVariable Integer importRequestId) {
+
+        ImportRequestResponseDTO importRequestResponseDTO = importRequestService
+                .getImportRequestDetail(importRequestId);
+
+        return ResponseEntity.ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
+
+        // return
+        // ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
     }
 
-    // @GetMapping("/me")
-    // public ResponseEntity<ImportRequestResponseDTO> getMyImportRequest(
-    //         @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer page,
-    //         @RequestParam @Positive Integer size,
-    //         @RequestParam(required = false) Integer employeeId) {
-                
-    //     Pageable pageable = PageRequest.of(page - 1, size);
-        // Integer employeeId = customerUserDetails.get
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getMyImportRequest(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer page,
+            @RequestParam @Positive Integer size) {
 
-        // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
-    // }
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Integer employeeId = customerUserDetails.getEmployeeId();
+
+        List<ImportRequestSummaryDTO> importRequestSummaryDTOs = importRequestService
+                .getAllImportRequests(pageable, employeeId);
+
+        return ResponseEntity.ok(new ApiResponse<List<ImportRequestSummaryDTO>>(true, null, importRequestSummaryDTOs));
+
+        // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,
+        // employeeId));
+    }
 
     // @GetMapping("/nhanVien/{maNhanVien}")
     // public ResponseEntity<List<>> layTatCaYeuCauNhapHangTheoNhanVien(
