@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestRequestDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.ImportRequestService;
 
 import jakarta.validation.constraints.Positive;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +65,18 @@ public class ImportRequestController {
     public ResponseEntity<ImportRequestResponseDTO> getImportRequestDetail(@PathVariable Integer importRequestId) {
         return ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
     }
+
+    // @GetMapping("/me")
+    // public ResponseEntity<ImportRequestResponseDTO> getMyImportRequest(
+    //         @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer page,
+    //         @RequestParam @Positive Integer size,
+    //         @RequestParam(required = false) Integer employeeId) {
+                
+    //     Pageable pageable = PageRequest.of(page - 1, size);
+        // Integer employeeId = customerUserDetails.get
+
+        // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable, employeeId));
+    // }
 
     // @GetMapping("/nhanVien/{maNhanVien}")
     // public ResponseEntity<List<>> layTatCaYeuCauNhapHangTheoNhanVien(

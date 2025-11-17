@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.security.core.context.SecurityContext;
+// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+
+import com.example.evsalesmanagement.enums.RoleEnum;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.EmployeeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -113,13 +119,15 @@ public class EmployeeController {
 
         // Lấy danh sách nhân viên theo chức vụ - phân trang
         @GetMapping("/by-position")
-        public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByPosition(
-                        @RequestParam String position,
+
+        public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByRole(
+                        @RequestParam RoleEnum role,
                         @RequestParam int page,
                         @RequestParam int size) {
 
                 Pageable pageable = PageRequest.of(page, size);
-                Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByPosition(position, pageable);
+
+                Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByRole(role, pageable);
 
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Get employees by position successfully", employeePage));
@@ -149,9 +157,21 @@ public class EmployeeController {
 
         // Đếm số lượng nhân viên theo chức vụ
         @GetMapping("/positions/{position}/count")
-        public ResponseEntity<ApiResponse<Long>> countEmployeesByPosition(@PathVariable String position) {
-                long count = employeeService.countByPosition(position);
+        public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
+                long count = employeeService.countByRole(role);
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Count employees by position successfully", count));
         }
+
+        @GetMapping("/me")
+        public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getCurrentEmployee(
+                        @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+
+                Integer employeeId = customerUserDetails.getEmployeeId();
+
+                EmployeeResponseDTO employeeResponseDTO = employeeService.getEmployeeById(employeeId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, null, employeeResponseDTO));
+        }
+
 }
