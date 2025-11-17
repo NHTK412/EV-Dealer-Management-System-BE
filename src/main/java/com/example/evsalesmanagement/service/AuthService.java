@@ -31,6 +31,8 @@ public class AuthService {
                 expiration);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
+        authResponseDTO.setUsername(account.getUsername());
+        authResponseDTO.setRole(account.getRole().name());
         authResponseDTO.setAccessToken(accessToken);
         authResponseDTO.setExpiresIn(expiration);
         return authResponseDTO;

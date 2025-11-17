@@ -18,7 +18,7 @@ import com.example.evsalesmanagement.repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {
-    
+
     @Autowired
     private EmployeeRepository employeeRepository;
 
@@ -28,13 +28,13 @@ public class EmployeeService {
     // Lấy tất cả nhân viên - có phân trang
     public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
         return employeeRepository.findAll(pageable)
-            .map(EmployeeResponseDTO::new);
+                .map(EmployeeResponseDTO::new);
     }
 
     // Lấy nhân viên theo ID
     public EmployeeResponseDTO getEmployeeById(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
         return new EmployeeResponseDTO(employee);
     }
 
@@ -44,7 +44,7 @@ public class EmployeeService {
         if (employeeRepository.existsByEmail(requestDTO.getEmail())) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
         }
-        
+
         if (employeeRepository.existsByPhoneNumber(requestDTO.getPhoneNumber())) {
             throw new ConflictException("Phone number already exists: " + requestDTO.getPhoneNumber());
         }
@@ -60,7 +60,8 @@ public class EmployeeService {
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with id: " + requestDTO.getAgencyId()));
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Agency not found with id: " + requestDTO.getAgencyId()));
             employee.setAgency(agency);
         }
 
@@ -72,7 +73,7 @@ public class EmployeeService {
     @Transactional
     public EmployeeResponseDTO updateEmployee(Integer employeeId, EmployeeRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
 
         if (employeeRepository.existsByEmailAndEmployeeIdNot(requestDTO.getEmail(), employeeId)) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
@@ -92,7 +93,8 @@ public class EmployeeService {
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with id: " + requestDTO.getAgencyId()));
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Agency not found with id: " + requestDTO.getAgencyId()));
             employee.setAgency(agency);
         } else {
             employee.setAgency(null);
@@ -114,13 +116,13 @@ public class EmployeeService {
     // Lấy nhân viên theo position - có phân trang
     public Page<EmployeeResponseDTO> getEmployeesByPosition(String position, Pageable pageable) {
         return employeeRepository.findByPosition(position, pageable)
-            .map(EmployeeResponseDTO::new);
+                .map(EmployeeResponseDTO::new);
     }
 
     // Lấy nhân viên theo agency - có phân trang
     public Page<EmployeeResponseDTO> getEmployeesByAgency(Integer agencyId, Pageable pageable) {
         return employeeRepository.findByAgency_AgencyId(agencyId, pageable)
-            .map(EmployeeResponseDTO::new);
+                .map(EmployeeResponseDTO::new);
     }
 
     // Đếm nhân viên theo agency
