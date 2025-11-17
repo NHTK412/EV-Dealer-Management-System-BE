@@ -5,20 +5,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-import com.example.evsalesmanagement.model.Account;
-import com.example.evsalesmanagement.repository.AccountRepository;
+import com.example.evsalesmanagement.model.Employee;
+// import com.example.evsalesmanagement.model.Account;
+// import com.example.evsalesmanagement.model.Employee;
+// import com.example.evsalesmanagement.repository.AccountRepository;
+import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 
 @Service
 public class AccountService {
+    // @Autowired
+    // private AccountRepository accountRepository;
+
+    // public UserDetails getAccountByUsername(String username) {
+    // Account account = accountRepository.findByUsername(username)
+    // .orElseThrow(() -> new ResourceNotFoundException("Username không tồn tại"));
+
+    // return new CustomerUserDetails(account);
+    // }
+
     @Autowired
-    private AccountRepository accountRepository;
+    private EmployeeRepository employeeRepository;
 
     public UserDetails getAccountByUsername(String username) {
-        Account account = accountRepository.findByUsername(username)
+        Employee employee = employeeRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Username không tồn tại"));
 
-        return new CustomerUserDetails(account);
+        return new CustomerUserDetails(employee);
     }
-
 }

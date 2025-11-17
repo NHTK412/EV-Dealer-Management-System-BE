@@ -4,15 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.auth.AuthResponseDTO;
-import com.example.evsalesmanagement.model.Account;
-import com.example.evsalesmanagement.repository.AccountRepository;
+import com.example.evsalesmanagement.model.Employee;
+// import com.example.evsalesmanagement.model.Account;
+// import com.example.evsalesmanagement.model.Employee;
+// import com.example.evsalesmanagement.repository.AccountRepository;
+import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.utils.JwtUtil;
 
 @Service
 public class AuthService {
 
+    // @Autowired
+    // AccountRepository accountRepository;
+
     @Autowired
-    AccountRepository accountRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -20,17 +26,19 @@ public class AuthService {
     private static long expiration = 1000 * 60 * 60; // 1h
 
     public AuthResponseDTO login(String userName, String password) {
-        Account account = accountRepository.findByUsername(userName)
+        Employee employee = employeeRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("Tên đăng nhập không tồn tại"));
 
-        if (!account.getPassword().equals(password)) {
+        if (!employee.getPassword().equals(password)) {
             throw new RuntimeException("Mật khẩu không hợp lệ");
         }
 
-        String accessToken = jwtUtil.generateToken(account.getUsername(), account.getRole().getDisplayName(),
+        String accessToken = jwtUtil.generateToken(employee.getUsername(), employee.getRole().getDisplayName(),
                 expiration);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
+        authResponseDTO.setUsername(employee.getUsername());
+        authResponseDTO.setRole(employee.getRole().name());
         authResponseDTO.setAccessToken(accessToken);
         authResponseDTO.setExpiresIn(expiration);
         return authResponseDTO;
