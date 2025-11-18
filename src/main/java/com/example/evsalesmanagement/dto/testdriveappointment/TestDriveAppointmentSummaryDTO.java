@@ -17,7 +17,7 @@ public class TestDriveAppointmentSummaryDTO {
     
     private String customerName; 
     
-    private String vehicleName;
+    private Integer vehicleId;
 
     public TestDriveAppointmentSummaryDTO() {
     }
@@ -62,11 +62,11 @@ public class TestDriveAppointmentSummaryDTO {
         this.customerName = customerName;
     }
 
-    public String getVehicleName() {
-        return vehicleName;
-    }
+   public Integer getVehicleId() {
+     return vehicleId;
+}
 
-    public void setVehicleName(String vehicleName) {
-        this.vehicleName = vehicleName;
-    }
+    public void setVehicleId(Integer vehicleId) { 
+     this.vehicleId = vehicleId;
+     }
 }

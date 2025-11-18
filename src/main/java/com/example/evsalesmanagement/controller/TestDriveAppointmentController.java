@@ -1,45 +1,56 @@
 package com.example.evsalesmanagement.controller;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
 import com.example.evsalesmanagement.service.TestDriveAppointmentService;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/test-drive-appointments")
 public class TestDriveAppointmentController {
 
     @Autowired
-    private TestDriveAppointmentService testDriveAppointmentService;
+    private TestDriveAppointmentService service;
 
-    @GetMapping()
-    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getAllAppointments() {
-        List<TestDriveAppointmentSummaryDTO> appointments = testDriveAppointmentService.getAllAppointments();
-        return ResponseEntity.ok(appointments);
+    @PatchMapping("/{id}")
+    public ResponseEntity<TestDriveAppointmentSummaryDTO> modifyAppointment(
+            @PathVariable("id") Integer id,
+            @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
+
+        TestDriveAppointmentSummaryDTO updatedAppointment = service.modifyAppointment(id, request);
+        
+        return ResponseEntity.ok(updatedAppointment);
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getPendingAppointments() {
-        List<TestDriveAppointmentSummaryDTO> appointments = testDriveAppointmentService.getPendingAppointments();
-        return ResponseEntity.ok(appointments);
+    
+    @PatchMapping("/{id}/confirm")
+    public ResponseEntity<TestDriveAppointmentSummaryDTO> confirmAppointment(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(service.updateAppointmentStatus(id, "SCHEDULED"));
     }
 
-    @GetMapping("/scheduled")
-    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getScheduledAppointments() {
-        List<TestDriveAppointmentSummaryDTO> appointments = testDriveAppointmentService.getScheduledAppointments();
-        return ResponseEntity.ok(appointments);
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<TestDriveAppointmentSummaryDTO> cancelAppointment(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(service.updateAppointmentStatus(id, "CANCELLED"));
     }
 
-    @GetMapping("/completed")
-    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getCompletedAppointments() {
-        List<TestDriveAppointmentSummaryDTO> appointments = testDriveAppointmentService.getCompletedAppointments();
-        return ResponseEntity.ok(appointments);
+    @PatchMapping("/{id}/arrive")
+    public ResponseEntity<TestDriveAppointmentSummaryDTO> arriveAppointment(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
+    }
+    
+    // Lấy tất cả
+    @GetMapping
+    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getAll() {
+        List<TestDriveAppointmentSummaryDTO> list = service.getAllAppointments();
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/by-status")
+    public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getByStatus(@RequestParam String status) {
+        List<TestDriveAppointmentSummaryDTO> list = service.getAppointmentsByStatus(status);
+        return ResponseEntity.ok(list);
     }
 }
