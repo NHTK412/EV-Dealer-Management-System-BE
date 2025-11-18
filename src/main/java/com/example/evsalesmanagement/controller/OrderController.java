@@ -80,4 +80,19 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
     }
 
+    @GetMapping("/employee")
+    public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrdersByEmployeeId(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        Integer employeeId = customerUserDetails.getEmployeeId();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<OrderSummaryDTO> orderResponseDTOs = orderService.getOrdersByAgencyId(employeeId, pageable);
+
+        return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
+    }
+
 }

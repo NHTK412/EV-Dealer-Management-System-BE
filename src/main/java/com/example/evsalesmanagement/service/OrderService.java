@@ -179,4 +179,19 @@ public class OrderService {
                                 .map((order) -> new OrderSummaryDTO(order))
                                 .toList();
         }
+
+        public List<OrderSummaryDTO> getOrdersByEmployeeId(Integer employeeId, Pageable pageable) {
+
+                Page<Order> ordersPage = orderRepository.findByEmployeeId(employeeId, pageable);
+
+                // List<Order> orders = ordersPage.getContent();
+
+                // List<OrderSummaryDTO> orderSummaryDTOs = orders.stream()
+                // .map(order -> new OrderSummaryDTO(order))
+                // .toList();
+
+                return ordersPage.stream()
+                                .map((order) -> new OrderSummaryDTO(order))
+                                .toList();
+        }
 }
