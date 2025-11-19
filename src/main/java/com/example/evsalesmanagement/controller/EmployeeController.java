@@ -116,51 +116,58 @@ public class EmployeeController {
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Employee deleted successfully", null));
         }
-        // <<<<<<<HEAD
 
         // // Lấy danh sách nhân viên theo chức vụ - phân trang
         // @GetMapping("/by-position")
 
-        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByPosition(
-        //                 @RequestParam String position,
-        //                 @RequestParam int page,
-        //                 @RequestParam int size) {
+        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>>
+        // getEmployeesByPosition(
+        // @RequestParam String position,
+        // @RequestParam int page,
+        // @RequestParam int size) {
 
-        //         Pageable pageable = PageRequest.of(page, size);
-        //         Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByPosition(position, pageable);
+        // Pageable pageable = PageRequest.of(page, size);
+        // Page<EmployeeResponseDTO> employeePage =
+        // employeeService.getEmployeesByPosition(position, pageable);
 
-        //         return ResponseEntity.ok(
-        //                         new ApiResponse<>(true, "Get employees by position successfully", employeePage));
+        // return ResponseEntity.ok(
+        // new ApiResponse<>(true, "Get employees by position successfully",
+        // employeePage));
         // }
 
         // // Lấy danh sách nhân viên theo đại lý - phân trang
         // @GetMapping("/agencies/{agencyId}")
-        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByAgency(
-        //                 @PathVariable Integer agencyId,
-        //                 @RequestParam int page,
-        //                 @RequestParam int size) {
+        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>>
+        // getEmployeesByAgency(
+        // @PathVariable Integer agencyId,
+        // @RequestParam int page,
+        // @RequestParam int size) {
 
-        //         Pageable pageable = PageRequest.of(page, size);
-        //         Page<EmployeeResponseDTO> employeePage = employeeService.getEmployeesByAgency(agencyId, pageable);
+        // Pageable pageable = PageRequest.of(page, size);
+        // Page<EmployeeResponseDTO> employeePage =
+        // employeeService.getEmployeesByAgency(agencyId, pageable);
 
-        //         return ResponseEntity.ok(
-        //                         new ApiResponse<>(true, "Get employees by agency successfully", employeePage));
+        // return ResponseEntity.ok(
+        // new ApiResponse<>(true, "Get employees by agency successfully",
+        // employeePage));
         // }
 
         // // Đếm số lượng nhân viên theo đại lý
         // @GetMapping("/agencies/{agencyId}/count")
-        // public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable Integer agencyId) {
-        //         long count = employeeService.countByAgency(agencyId);
-        //         return ResponseEntity.ok(
-        //                         new ApiResponse<>(true, "Count employees by agency successfully", count));
+        // public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable
+        // Integer agencyId) {
+        // long count = employeeService.countByAgency(agencyId);
+        // return ResponseEntity.ok(
+        // new ApiResponse<>(true, "Count employees by agency successfully", count));
         // }
 
         // // Đếm số lượng nhân viên theo chức vụ
         // @GetMapping("/positions/{position}/count")
-        // public ResponseEntity<ApiResponse<Long>> countEmployeesByPosition(@PathVariable String position) {
-        //         long count = employeeService.countByPosition(position);
-        //         return ResponseEntity.ok(
-        //                         new ApiResponse<>(true, "Count employees by position successfully", count));
+        // public ResponseEntity<ApiResponse<Long>>
+        // countEmployeesByPosition(@PathVariable String position) {
+        // long count = employeeService.countByPosition(position);
+        // return ResponseEntity.ok(
+        // new ApiResponse<>(true, "Count employees by position successfully", count));
         // }=======
 
         // Lấy danh sách nhân viên theo chức vụ - phân trang
@@ -220,5 +227,4 @@ public class EmployeeController {
                                 new ApiResponse<>(true, null, employeeResponseDTO));
         }
 
-        // >>>>>>>f00dfef9d296774a1947b5cf28b344528707bad4
 }

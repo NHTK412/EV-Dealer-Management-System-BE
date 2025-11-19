@@ -2,7 +2,7 @@ package com.example.evsalesmanagement.controller;
 
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
-import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum; 
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.service.VehicleDeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,19 +22,19 @@ public class VehicleDeliveryController {
     @PostMapping
     public ResponseEntity<VehicleDeliveryResponseDTO> createDelivery(
             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
-        
+
         VehicleDeliveryResponseDTO createdDelivery = service.createVehicleDelivery(request);
-        
+
         return new ResponseEntity<>(createdDelivery, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}") 
+    @PutMapping("/{id}")
     public ResponseEntity<VehicleDeliveryResponseDTO> updateDelivery(
             @PathVariable("id") Integer id,
             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
 
         VehicleDeliveryResponseDTO updatedDelivery = service.updateVehicleDelivery(id, request);
-        
+
         return ResponseEntity.ok(updatedDelivery);
     }
 
@@ -47,7 +47,8 @@ public class VehicleDeliveryController {
 
     // Lấy giao xe theo trạng thái bất kỳ
     @GetMapping("/by-status")
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(@RequestParam VehicleDeliveryStatusEnum status) {
+    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(
+            @RequestParam VehicleDeliveryStatusEnum status) {
         List<VehicleDeliveryResponseDTO> list = service.getDeliveriesByStatus(status);
         return ResponseEntity.ok(list);
     }

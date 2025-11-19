@@ -1,4 +1,5 @@
 package com.example.evsalesmanagement.controller;
+
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
 import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,10 @@ public class TestDriveAppointmentController {
             @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
 
         TestDriveAppointmentSummaryDTO updatedAppointment = service.modifyAppointment(id, request);
-        
+
         return ResponseEntity.ok(updatedAppointment);
     }
 
-    
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<TestDriveAppointmentSummaryDTO> confirmAppointment(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(service.updateAppointmentStatus(id, "SCHEDULED"));
@@ -40,7 +40,7 @@ public class TestDriveAppointmentController {
     public ResponseEntity<TestDriveAppointmentSummaryDTO> arriveAppointment(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
     }
-    
+
     // Lấy tất cả
     @GetMapping
     public ResponseEntity<List<TestDriveAppointmentSummaryDTO>> getAll() {

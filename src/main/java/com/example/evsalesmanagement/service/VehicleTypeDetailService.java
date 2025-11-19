@@ -25,9 +25,16 @@ public class VehicleTypeDetailService {
 
     @Autowired
     private VehicleTypeRepository vehicleTypeRepository;
+
     @Transactional
-    public ApiResponse<org.springframework.data.domain.Page<VehicleTypeDetailSummaryDTO>> getAllVehicleTypeDetails(Pageable pageable) {
-        Page<VehicleTypeDetail> page = vehicleTypeDetailRepository.findAll(pageable);
+    public ApiResponse<org.springframework.data.domain.Page<VehicleTypeDetailSummaryDTO>> getAllVehicleTypeDetails(
+            Pageable pageable, Integer vehicleTypeId) {
+
+        Page<VehicleTypeDetail> page = (vehicleTypeId != null)
+                ? vehicleTypeDetailRepository.findByVehicleType_VehicleTypeId(vehicleTypeId,
+                        pageable)
+                : vehicleTypeDetailRepository.findAll(pageable);
+
         Page<VehicleTypeDetailSummaryDTO> summaryPage = page.map(entity -> {
             VehicleTypeDetailSummaryDTO dto = new VehicleTypeDetailSummaryDTO();
             dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());
@@ -41,7 +48,8 @@ public class VehicleTypeDetailService {
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> getById(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());
         dto.setVehicleImage(entity.getVehicleImage());
@@ -81,9 +89,11 @@ public class VehicleTypeDetailService {
     }
 
     @Transactional
-    public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId, VehicleTypeDetailRequestDTO requestDTO) {
+    public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId,
+            VehicleTypeDetailRequestDTO requestDTO) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         entity.setVehicleImage(requestDTO.getVehicleImage());
         entity.setConfiguration(requestDTO.getConfiguration());
         entity.setColor(requestDTO.getColor());
@@ -110,7 +120,8 @@ public class VehicleTypeDetailService {
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> delete(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy chi tiết loại xe với ID: " + vehicleTypeDetailId));
         vehicleTypeDetailRepository.delete(entity);
         VehicleTypeDetailResponseDTO dto = new VehicleTypeDetailResponseDTO();
         dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());

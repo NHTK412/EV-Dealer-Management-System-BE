@@ -20,7 +20,7 @@ public class TestDriveAppointmentService {
 
     @Transactional
     public TestDriveAppointmentSummaryDTO modifyAppointment(Integer id, TestDriveAppointmentSummaryDTO request) {
-        
+
         TestDriveAppointment existingAppointment = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
 
@@ -32,12 +32,11 @@ public class TestDriveAppointmentService {
         if (request.getTimeOfAppointment() != null) {
             existingAppointment.setTimeOfAppointment(request.getTimeOfAppointment());
         }
-        
+
         // Cập nhật Trạng thái
         if (request.getStatus() != null) {
             existingAppointment.setStatus(request.getStatus());
         }
-     
 
         TestDriveAppointment updatedAppointment = repository.save(existingAppointment);
         return convertToDTO(updatedAppointment);
@@ -48,7 +47,7 @@ public class TestDriveAppointmentService {
 
         TestDriveAppointment existingAppointment = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
-        
+
         TestDriveAppointmentStatusEnum statusEnum;
         try {
             statusEnum = TestDriveAppointmentStatusEnum.valueOf(newStatus.toUpperCase());
@@ -56,14 +55,15 @@ public class TestDriveAppointmentService {
             throw new IllegalArgumentException("Trạng thái mới không hợp lệ: " + newStatus);
         }
 
-        if (existingAppointment.getStatus() == TestDriveAppointmentStatusEnum.ARRIVED && statusEnum == TestDriveAppointmentStatusEnum.CANCELLED) {
-             throw new IllegalStateException("Không thể hủy lịch hẹn đã được đánh dấu là Đã Tới.");
+        if (existingAppointment.getStatus() == TestDriveAppointmentStatusEnum.ARRIVED
+                && statusEnum == TestDriveAppointmentStatusEnum.CANCELLED) {
+            throw new IllegalStateException("Không thể hủy lịch hẹn đã được đánh dấu là Đã Tới.");
         }
 
         existingAppointment.setStatus(statusEnum);
-        
+
         TestDriveAppointment updatedAppointment = repository.save(existingAppointment);
-        
+
         return convertToDTO(updatedAppointment);
     }
 
@@ -77,25 +77,24 @@ public class TestDriveAppointmentService {
 
     @Transactional(readOnly = true)
     public List<TestDriveAppointmentSummaryDTO> getAppointmentsByStatus(String status) {
-        return repository.findByStatusIgnoreCase(status) 
+        return repository.findByStatusIgnoreCase(status)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    
+
     private TestDriveAppointmentSummaryDTO convertToDTO(TestDriveAppointment appointment) {
         TestDriveAppointmentSummaryDTO dto = new TestDriveAppointmentSummaryDTO();
-        
+
         dto.setTestDriveAppointmentId(appointment.getTestDriveAppointmentId());
         dto.setDateOfAppointment(appointment.getDateOfAppointment());
         dto.setTimeOfAppointment(appointment.getTimeOfAppointment());
         dto.setStatus(appointment.getStatus());
         if (appointment.getCustomer() != null) {
-        dto.setCustomerName(appointment.getCustomer().getCustomerName());
-    }
+            dto.setCustomerName(appointment.getCustomer().getCustomerName());
+        }
         dto.setVehicleId(appointment.getVehicle().getVehicleId());
-        
-        
+
         return dto;
     }
 }
