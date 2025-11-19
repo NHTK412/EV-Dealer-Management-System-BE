@@ -10,6 +10,7 @@ import com.example.evsalesmanagement.model.Order;
 
 @Repository
 public interface RevenueReportRepository extends JpaRepository<Order, Integer> {
+
     List<Order> findAll();
 
     List<Order> findByAgency_AgencyId(Integer agencyId);

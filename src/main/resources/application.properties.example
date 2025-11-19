@@ -28,3 +28,4 @@ spring.data.redis.port=6379
 spring.cache.type=redis
 
 image-upload-path = src/main/resources/static/images
+

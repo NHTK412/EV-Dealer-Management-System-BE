@@ -8,6 +8,9 @@ import com.example.evsalesmanagement.repository.VehicleRepository;
 import com.example.evsalesmanagement.repository.WarehouseReceiptRepository;
 import com.example.evsalesmanagement.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -40,6 +43,7 @@ public class WarehouseExportService {
     }
 
     // Lấy chi tiết phiếu xuất kho theo id
+    @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
     public WarehouseExportReceiptResponseDTO getByIdWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
@@ -87,6 +91,7 @@ public class WarehouseExportService {
 
     // PUT: Cập nhật phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo
     // phiếu"
+    @CachePut(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<WarehouseExportReceiptResponseDTO> updateWarehouseExport(Integer id,
             WarehouseExportReceiptRequestDTO request) {
@@ -126,6 +131,7 @@ public class WarehouseExportService {
 
     // DELETE: Xóa phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo
     // phiếu"
+    @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<Void> deleteWarehouseExport(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)

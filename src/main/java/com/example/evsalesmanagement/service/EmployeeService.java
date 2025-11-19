@@ -2,6 +2,9 @@
 package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo ID
+    @Cacheable(value = "employee", key = "#employeeId")
     public EmployeeResponseDTO getEmployeeById(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
@@ -71,6 +75,7 @@ public class EmployeeService {
     }
 
     // Cập nhật nhân viên
+    @CachePut(value = "employee", key = "#employeeId")
     @Transactional
     public EmployeeResponseDTO updateEmployee(Integer employeeId, EmployeeRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -106,6 +111,7 @@ public class EmployeeService {
     }
 
     // Xóa nhân viên
+    @CacheEvict(value = "employee", key = "#employeeId")
     @Transactional
     public void deleteEmployee(Integer employeeId) {
         if (!employeeRepository.existsById(employeeId)) {
@@ -115,8 +121,13 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo position - có phân trang
+// <<<<<<< HEAD
     public Page<EmployeeResponseDTO> getEmployeesByRole(RoleEnum role, Pageable pageable) {
         return employeeRepository.findByRole(role, pageable)
+// =======
+//     public Page<EmployeeResponseDTO> getEmployeesByPosition(String position, Pageable pageable) {
+//         return employeeRepository.findByPosition(position, pageable)
+// >>>>>>> feat/Khang/cauHinhRedis
                 .map(EmployeeResponseDTO::new);
     }
 

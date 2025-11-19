@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -116,6 +119,7 @@ public class ImportRequestService {
 
         }
 
+        @CacheEvict(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO deleteImportRequest(Integer importRequestId) {
 
@@ -138,6 +142,7 @@ public class ImportRequestService {
 
         }
 
+        @CachePut(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO updateImportRequest(Integer importRequestId,
                         ImportRequestRequestDTO importRequestRequestDTO) {
@@ -145,7 +150,8 @@ public class ImportRequestService {
                 ImportRequest importRequest = importRequestRepository.findById(importRequestId)
                                 .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
 
-                if (!importRequest.getStatus().equals("Chờ duyệt")) {
+                // if (!importRequest.getStatus().equals("Chờ duyệt")) {
+                if (importRequest.getStatus() != ImportRequestStatusEnum.REQUESTED) {
                         throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
                 }
 
@@ -210,6 +216,7 @@ public class ImportRequestService {
                 return importRequests.map(importRequest -> new ImportRequestSummaryDTO(importRequest)).toList();
         }
 
+        @Cacheable(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO getImportRequestDetail(Integer importRequestId) {
                 ImportRequest importRequest = importRequestRepository.findById(importRequestId)

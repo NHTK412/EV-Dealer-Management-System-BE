@@ -14,8 +14,16 @@ public class CustomerUserDetails implements UserDetails {
 
     private Employee employee;
 
+// <<<<<<< HEAD
     public CustomerUserDetails(Employee employee) {
         this.employee = employee;
+// =======
+//     public CustomerUserDetails() {
+//     }
+
+//     public CustomerUserDetails(Account account) {
+//         this.account = account;
+// >>>>>>> feat/Khang/cauHinhRedis
     }
 
     @Override

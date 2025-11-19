@@ -11,6 +11,9 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class VehicleTypeDetailService {
 
     @Transactional
     public ApiResponse<org.springframework.data.domain.Page<VehicleTypeDetailSummaryDTO>> getAllVehicleTypeDetails(
+            // <<<<<<< HEAD
             Pageable pageable, Integer vehicleTypeId) {
 
         Page<VehicleTypeDetail> page = (vehicleTypeId != null)
@@ -35,6 +39,10 @@ public class VehicleTypeDetailService {
                         pageable)
                 : vehicleTypeDetailRepository.findAll(pageable);
 
+        // =======
+        // Pageable pageable) {
+        // Page<VehicleTypeDetail> page = vehicleTypeDetailRepository.findAll(pageable);
+        // >>>>>>> feat/Khang/cauHinhRedis
         Page<VehicleTypeDetailSummaryDTO> summaryPage = page.map(entity -> {
             VehicleTypeDetailSummaryDTO dto = new VehicleTypeDetailSummaryDTO();
             dto.setVehicleTypeDetailId(entity.getVehicleTypeDetailId());
@@ -45,6 +53,7 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, summaryPage);
     }
 
+    @Cacheable(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> getById(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)
@@ -88,6 +97,7 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, dto);
     }
 
+    @CachePut(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> update(Integer vehicleTypeDetailId,
             VehicleTypeDetailRequestDTO requestDTO) {
@@ -117,6 +127,7 @@ public class VehicleTypeDetailService {
         return new ApiResponse<>(true, null, dto);
     }
 
+    @CacheEvict(value = "vehicle-type-detail", key = "#vehicleTypeDetailId")
     @Transactional
     public ApiResponse<VehicleTypeDetailResponseDTO> delete(Integer vehicleTypeDetailId) {
         VehicleTypeDetail entity = vehicleTypeDetailRepository.findById(vehicleTypeDetailId)

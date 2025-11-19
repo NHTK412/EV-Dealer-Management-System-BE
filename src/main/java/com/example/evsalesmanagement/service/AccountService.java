@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class AccountService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    // @Cacheable(value = "user", key = "#username")
     public UserDetails getAccountByUsername(String username) {
         Employee employee = employeeRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Username không tồn tại"));

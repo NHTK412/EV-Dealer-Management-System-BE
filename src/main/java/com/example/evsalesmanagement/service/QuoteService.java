@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
@@ -40,6 +43,7 @@ public class QuoteService {
         @Autowired
         PromotionRepository promotionRepository;
 
+        @Cacheable(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO getQuoteById(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -57,6 +61,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
+        @CacheEvict(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO deleteQuote(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -65,6 +70,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
+        @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateQuote(Integer quoteId, QuoteRequestDTO quoteRequestDTO) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -81,6 +87,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
+        @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateStatusQuote(Integer quoteId, QuoteStatusEnum status) {
                 Quote quote = quoteRepository.findById(quoteId)

@@ -3,8 +3,13 @@ package com.example.evsalesmanagement.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+// <<<<<<< HEAD
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+// =======
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+// >>>>>>> feat/Khang/cauHinhRedis
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
@@ -46,17 +51,11 @@ public class OrderService {
         @Autowired
         private CustomerRepository customerRepository;
 
+        @Cacheable(value = "order", key = "#orderId")
         @Transactional
         public OrderResponseDTO getOrderById(Integer orderId) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợplệ"));
-
-                // Order order = orderRepository.findById(orderId)
-                // .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợp
-                // lệ"));
-
-                // System.err.println("CHECK ---> " + " " + order.getOrderId() + " " +
-                // order.getContractNumber());
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợp lệ"));
 
                 return new OrderResponseDTO(order);
         }
@@ -146,6 +145,7 @@ public class OrderService {
                 return new OrderResponseDTO(order);
         }
 
+        @CachePut(value = "order", key = "#orderId")
         @Transactional
         public OrderResponseDTO updateOrderById(Integer orderId, OrderStatusEnum status, String contractNumber) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)

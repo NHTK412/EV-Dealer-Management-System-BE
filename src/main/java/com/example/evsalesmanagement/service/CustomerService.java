@@ -1,6 +1,9 @@
 package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,20 +18,21 @@ import com.example.evsalesmanagement.repository.CustomerRepository;
 
 @Service
 public class CustomerService {
-    
+
     @Autowired
     private CustomerRepository customerRepository;
 
     // Lấy tất cả khách hàng - có phân trang
     public Page<CustomerResponseDTO> getAllCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable)
-            .map(CustomerResponseDTO::new);
+                .map(CustomerResponseDTO::new);
     }
 
     // Lấy khách hàng theo ID
+    @Cacheable(value = "customer", key = "#customerId")
     public CustomerResponseDTO getCustomerById(Integer customerId) {
         Customer customer = customerRepository.findById(customerId)
-            .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
         return new CustomerResponseDTO(customer);
     }
 
@@ -38,7 +42,7 @@ public class CustomerService {
         if (customerRepository.existsByEmail(requestDTO.getEmail())) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
         }
-        
+
         if (customerRepository.existsByPhoneNumber(requestDTO.getPhoneNumber())) {
             throw new ConflictException("Phone number already exists: " + requestDTO.getPhoneNumber());
         }
@@ -57,10 +61,11 @@ public class CustomerService {
     }
 
     // Cập nhật khách hàng
+    @CachePut(value = "customer", key = "#customerId")
     @Transactional
     public CustomerResponseDTO updateCustomer(Integer customerId, CustomerRequestDTO requestDTO) {
         Customer customer = customerRepository.findById(customerId)
-            .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
 
         if (customerRepository.existsByEmailAndCustomerIdNot(requestDTO.getEmail(), customerId)) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
@@ -83,6 +88,7 @@ public class CustomerService {
     }
 
     // Xóa khách hàng
+    @CacheEvict(value = "customer", key = "#customerId")
     @Transactional
     public void deleteCustomer(Integer customerId) {
         if (!customerRepository.existsById(customerId)) {
@@ -94,7 +100,7 @@ public class CustomerService {
     // Lấy khách hàng theo membership level - có phân trang
     public Page<CustomerResponseDTO> getCustomersByMembershipLevel(String level, Pageable pageable) {
         return customerRepository.findByMembershipLevel(level, pageable)
-            .map(CustomerResponseDTO::new);
+                .map(CustomerResponseDTO::new);
     }
 
     // Đếm khách hàng theo membership level

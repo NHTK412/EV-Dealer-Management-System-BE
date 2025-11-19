@@ -7,11 +7,13 @@ import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.VehicleType;
 import com.example.evsalesmanagement.repository.VehicleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class VehicleTypeService {
@@ -27,20 +29,22 @@ public class VehicleTypeService {
         vehicleTypeRepository.save(newVehicleType);
         return new VehicleTypeResponseDTO(newVehicleType);
     }
-    
-     @Transactional
+
+    @Transactional
     public Page<VehicleTypeSummaryDTO> getAllVehicleType(Pageable pageable) {
         Page<VehicleType> vehicleTypePage = vehicleTypeRepository.findAll(pageable);
         return vehicleTypePage.map(VehicleTypeSummaryDTO::new);
     }
 
+    @Cacheable(value = "vehicle-type", key = "#vehicleTypeId")
     @Transactional
     public VehicleTypeResponseDTO getVehicleTypeById(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại xe với id :" + vehicleTypeId));
         return new VehicleTypeResponseDTO(vehicleType);
     }
-    
+
+    @CachePut(value = "vehicle-type", key = "#vehicleTypeId")
     @Transactional
     public VehicleTypeResponseDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeRequestDTO request) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
@@ -52,6 +56,7 @@ public class VehicleTypeService {
         return new VehicleTypeResponseDTO(vehicleType);
     }
 
+    @CacheEvict(value = "vehicle-type", key = "#vehicleTypeId")
     @Transactional
     public VehicleTypeResponseDTO deleteVehicleType(Integer vehicleTypeId) {
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
@@ -61,7 +66,3 @@ public class VehicleTypeService {
         return dto;
     }
 }
-
-   
-
-    
