@@ -37,6 +37,10 @@ public class CustomerUserDetails implements UserDetails {
         return this.employee.getEmployeeId();
     }
 
+    public Integer getAgencyId() {
+        return this.employee.getAgency().getAgencyId();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

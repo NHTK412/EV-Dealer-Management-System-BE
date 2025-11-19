@@ -1,14 +1,21 @@
 package com.example.evsalesmanagement.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
+import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.OrderService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -35,8 +42,14 @@ public class OrderController {
 
     @PostMapping("/from-quotation")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrderFromQuotation(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
             @RequestBody OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
-        OrderResponseDTO orderResponseDTO = orderService.createOrderFromQuotation(orderFromQuoteRequestDTO);
+        // OrderResponseDTO orderResponseDTO =
+        // orderService.createOrderFromQuotation(orderFromQuoteRequestDTO);
+
+        Integer employeeId = customerUserDetails.getEmployeeId();
+
+        OrderResponseDTO orderResponseDTO = orderService.createOrderFromQuotation(employeeId, orderFromQuoteRequestDTO);
 
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
@@ -51,4 +64,35 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
 
     }
+
+    @GetMapping("/agency")
+    public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrdersByAgencyId(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        Integer agencyId = customerUserDetails.getAgencyId();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<OrderSummaryDTO> orderResponseDTOs = orderService.getOrdersByAgencyId(agencyId, pageable);
+
+        return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
+    }
+
+    @GetMapping("/employee")
+    public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrdersByEmployeeId(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        Integer employeeId = customerUserDetails.getEmployeeId();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<OrderSummaryDTO> orderResponseDTOs = orderService.getOrdersByAgencyId(employeeId, pageable);
+
+        return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
+    }
+
 }

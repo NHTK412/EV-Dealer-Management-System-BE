@@ -1,10 +1,15 @@
 package com.example.evsalesmanagement.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
+import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.OrderTypeEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
@@ -57,13 +62,21 @@ public class OrderService {
         }
 
         @Transactional
-        public OrderResponseDTO createOrderFromQuotation(OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
+        // public OrderResponseDTO createOrderFromQuotation(OrderFromQuoteRequestDTO
+        // orderFromQuoteRequestDTO) {
+        public OrderResponseDTO createOrderFromQuotation(Integer employeeId,
+                        OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
 
                 Quote quote = quoteRepository.findById(orderFromQuoteRequestDTO.getQuoteId())
                                 .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không hợp lệ"));
 
-                Employee employee = employeeRepository.findById(orderFromQuoteRequestDTO.getEmployeeId())
+                Employee employee = employeeRepository.findById(employeeId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không hợp lệ"));
+
+                // Employee employee =
+                // employeeRepository.findById(orderFromQuoteRequestDTO.getEmployeeId())
+                // .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không hợp
+                // lệ"));
 
                 // Agency agency =
                 // agencyRepository.findById(orderFromQuoteRequestDTO.getAgencyId())
@@ -150,5 +163,35 @@ public class OrderService {
                 orderRepository.save(order);
 
                 return new OrderResponseDTO(order);
+        }
+
+        public List<OrderSummaryDTO> getOrdersByAgencyId(Integer agencyId, Pageable pageable) {
+
+                Page<Order> ordersPage = orderRepository.findByAgencyId(agencyId, pageable);
+
+                // List<Order> orders = ordersPage.getContent();
+
+                // List<OrderSummaryDTO> orderSummaryDTOs = orders.stream()
+                // .map(order -> new OrderSummaryDTO(order))
+                // .toList();
+
+                return ordersPage.stream()
+                                .map((order) -> new OrderSummaryDTO(order))
+                                .toList();
+        }
+
+        public List<OrderSummaryDTO> getOrdersByEmployeeId(Integer employeeId, Pageable pageable) {
+
+                Page<Order> ordersPage = orderRepository.findByEmployeeId(employeeId, pageable);
+
+                // List<Order> orders = ordersPage.getContent();
+
+                // List<OrderSummaryDTO> orderSummaryDTOs = orders.stream()
+                // .map(order -> new OrderSummaryDTO(order))
+                // .toList();
+
+                return ordersPage.stream()
+                                .map((order) -> new OrderSummaryDTO(order))
+                                .toList();
         }
 }
