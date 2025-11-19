@@ -29,4 +29,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
   long countByRole(RoleEnum role);
 
   Optional<Employee> findByUsername(String username);
+
+   boolean existsByUsername(String username);
 }

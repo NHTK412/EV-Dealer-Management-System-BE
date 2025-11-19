@@ -3,9 +3,6 @@ package com.example.evsalesmanagement.dto.employee;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-// import javax.management.relation.Role;
-
-// import com.example.evsalesmanagement.enums.EmployeePositionEnum;
 import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.model.Employee;

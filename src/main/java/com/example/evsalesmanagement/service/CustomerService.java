@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.customer.CustomerRequestDTO;
 import com.example.evsalesmanagement.dto.customer.CustomerResponseDTO;
+import com.example.evsalesmanagement.enums.CustomerMembershipLevelEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Customer;
@@ -92,15 +93,16 @@ public class CustomerService {
     }
 
     // Lấy khách hàng theo membership level - có phân trang
-    public Page<CustomerResponseDTO> getCustomersByMembershipLevel(String level, Pageable pageable) {
+    public Page<CustomerResponseDTO> getCustomersByMembershipLevel(CustomerMembershipLevelEnum level, Pageable pageable) {
         return customerRepository.findByMembershipLevel(level, pageable)
             .map(CustomerResponseDTO::new);
     }
 
     // Đếm khách hàng theo membership level
-    public long countByMembershipLevel(String level) {
+   public long countByMembershipLevel(CustomerMembershipLevelEnum level) {
         return customerRepository.countByMembershipLevel(level);
     }
+
 
     // Tổng số khách hàng
     public long getTotalCustomers() {
