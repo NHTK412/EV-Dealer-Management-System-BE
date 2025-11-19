@@ -42,7 +42,8 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
         return agencyResponseDTO;
     }
 
@@ -61,7 +62,9 @@ public class AgencyService {
         agencyResponseDTO.setAddress(savedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(savedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(savedAgency.getEmail());
-        agencyResponseDTO.setStatus(savedAgency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(savedAgency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 
@@ -81,7 +84,9 @@ public class AgencyService {
         agencyResponseDTO.setAddress(updatedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(updatedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(updatedAgency.getEmail());
-        agencyResponseDTO.setStatus(updatedAgency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(updatedAgency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 
@@ -96,7 +101,9 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 

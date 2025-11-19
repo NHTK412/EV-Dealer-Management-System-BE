@@ -48,7 +48,7 @@ public class ImportRequestResponseDTO {
 
         this.employeeEmail = importRequest.getEmployee().getEmail();
 
-        this.employeePosition = importRequest.getEmployee().getPosition().getDisplayName();
+        this.employeePosition = importRequest.getEmployee().getRole().getDisplayName();
 
         this.agencyId = importRequest.getEmployee().getAgency().getAgencyId();
 

@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.enums;
 
-public enum AccountRoleEnum {
+public enum RoleEnum {
 
     ROLE_ADMIN("Quản Trị Viên"),
 
@@ -12,7 +12,7 @@ public enum AccountRoleEnum {
 
     private final String displayName;
 
-    AccountRoleEnum(String displayName) {
+    RoleEnum(String displayName) {
         this.displayName = displayName;
     }
 
