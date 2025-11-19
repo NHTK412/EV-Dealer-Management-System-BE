@@ -1,11 +1,16 @@
 package com.example.evsalesmanagement.service;
 
+import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentResponseDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
 import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
 import com.example.evsalesmanagement.model.TestDriveAppointment;
 import com.example.evsalesmanagement.repository.TestDriveAppointmentRepository;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
+
+// import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +21,12 @@ import java.util.stream.Collectors;
 public class TestDriveAppointmentService {
 
     @Autowired
-    private TestDriveAppointmentRepository repository;
+    private TestDriveAppointmentRepository testDriveAppointmentRepository;
 
     @Transactional
     public TestDriveAppointmentSummaryDTO modifyAppointment(Integer id, TestDriveAppointmentSummaryDTO request) {
 
-        TestDriveAppointment existingAppointment = repository.findById(id)
+        TestDriveAppointment existingAppointment = testDriveAppointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
 
         // Cập nhật Ngày hẹn
@@ -38,14 +43,14 @@ public class TestDriveAppointmentService {
             existingAppointment.setStatus(request.getStatus());
         }
 
-        TestDriveAppointment updatedAppointment = repository.save(existingAppointment);
+        TestDriveAppointment updatedAppointment = testDriveAppointmentRepository.save(existingAppointment);
         return convertToDTO(updatedAppointment);
     }
 
     @Transactional
     public TestDriveAppointmentSummaryDTO updateAppointmentStatus(Integer id, String newStatus) {
 
-        TestDriveAppointment existingAppointment = repository.findById(id)
+        TestDriveAppointment existingAppointment = testDriveAppointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
 
         TestDriveAppointmentStatusEnum statusEnum;
@@ -62,25 +67,66 @@ public class TestDriveAppointmentService {
 
         existingAppointment.setStatus(statusEnum);
 
-        TestDriveAppointment updatedAppointment = repository.save(existingAppointment);
+        TestDriveAppointment updatedAppointment = testDriveAppointmentRepository.save(existingAppointment);
 
         return convertToDTO(updatedAppointment);
     }
 
     @Transactional(readOnly = true)
-    public List<TestDriveAppointmentSummaryDTO> getAllAppointments() {
-        return repository.findAll()
+    public List<TestDriveAppointmentSummaryDTO> getAllAppointments(Pageable pageable, String status) {
+
+        Page<TestDriveAppointment> appointmentPage = (status == null || status.isEmpty())
+                ? testDriveAppointmentRepository.findAll(pageable)
+                : testDriveAppointmentRepository.findByStatusIgnoreCase(status, pageable);
+
+        return appointmentPage
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<TestDriveAppointmentSummaryDTO> getAppointmentsByStatus(String status) {
-        return repository.findByStatusIgnoreCase(status)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    // @Transactional(readOnly = true)
+    // public List<TestDriveAppointmentSummaryDTO> getAppointmentsByStatus(String
+    // status) {
+    // return repository.findByStatusIgnoreCase(status)
+    // .stream()
+    // .map(this::convertToDTO)
+    // .collect(Collectors.toList());
+    // }
+
+    // public TestDriveRespon
+
+    public TestDriveAppointmentResponseDTO getAppointmentById(Integer id) {
+        TestDriveAppointment appointment = testDriveAppointmentRepository.findByIdWithCustomer(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id:"));
+
+        TestDriveAppointmentResponseDTO testDriveAppointmentResponseDTO = new TestDriveAppointmentResponseDTO();
+
+        testDriveAppointmentResponseDTO.setTestDriveAppointmentId(appointment.getTestDriveAppointmentId());
+        testDriveAppointmentResponseDTO.setDateOfAppointment(appointment.getDateOfAppointment());
+        testDriveAppointmentResponseDTO.setTimeOfAppointment(appointment.getTimeOfAppointment());
+        testDriveAppointmentResponseDTO.setStatus(appointment.getStatus());
+
+        if (appointment.getCustomer() != null) {
+            testDriveAppointmentResponseDTO.setCustomerId(appointment.getCustomer().getCustomerId());
+            testDriveAppointmentResponseDTO.setCustomerName(appointment.getCustomer().getCustomerName());
+            testDriveAppointmentResponseDTO.setEmail(appointment.getCustomer().getEmail());
+            testDriveAppointmentResponseDTO.setPhoneNumber(appointment.getCustomer().getPhoneNumber());
+        }
+        if (appointment.getVehicle() != null) {
+            testDriveAppointmentResponseDTO.setVehicleId(appointment.getVehicle().getVehicleId());
+            testDriveAppointmentResponseDTO.setChassicNumber(appointment.getVehicle().getChassicNumber());
+            testDriveAppointmentResponseDTO.setMachineNumber(appointment.getVehicle().getMachineNumber());
+            testDriveAppointmentResponseDTO.setColor(appointment.getVehicle().getVehicleTypeDetail().getColor());
+            testDriveAppointmentResponseDTO.setVersion(appointment.getVehicle().getVehicleTypeDetail().getVersion());
+            testDriveAppointmentResponseDTO.setFeatures(appointment.getVehicle().getVehicleTypeDetail().getFeatures());
+            testDriveAppointmentResponseDTO.setVehicleTypeName(
+                    appointment.getVehicle().getVehicleTypeDetail().getVehicleType().getVehicleTypeName());
+            testDriveAppointmentResponseDTO.setManufactureYear(
+                    appointment.getVehicle().getVehicleTypeDetail().getVehicleType().getManufactureYear());
+        }
+
+        return testDriveAppointmentResponseDTO;
     }
 
     private TestDriveAppointmentSummaryDTO convertToDTO(TestDriveAppointment appointment) {
