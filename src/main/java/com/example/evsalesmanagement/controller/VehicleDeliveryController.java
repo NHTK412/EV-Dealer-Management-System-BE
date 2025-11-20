@@ -7,6 +7,7 @@ import com.example.evsalesmanagement.service.VehicleDeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ public class VehicleDeliveryController {
     @Autowired
     private VehicleDeliveryService service;
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PostMapping
     public ResponseEntity<VehicleDeliveryResponseDTO> createDelivery(
             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
@@ -28,6 +30,7 @@ public class VehicleDeliveryController {
         return new ResponseEntity<>(createdDelivery, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<VehicleDeliveryResponseDTO> updateDelivery(
             @PathVariable("id") Integer id,
@@ -39,6 +42,7 @@ public class VehicleDeliveryController {
     }
 
     // Lấy tất cả giao xe
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping
     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getAll() {
         List<VehicleDeliveryResponseDTO> list = service.getAll();
@@ -46,6 +50,7 @@ public class VehicleDeliveryController {
     }
 
     // Lấy giao xe theo trạng thái bất kỳ
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/by-status")
     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(
             @RequestParam VehicleDeliveryStatusEnum status) {

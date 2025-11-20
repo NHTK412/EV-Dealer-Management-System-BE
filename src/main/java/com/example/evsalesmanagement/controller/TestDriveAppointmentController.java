@@ -7,19 +7,15 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 
 // import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/test-drive-appointments")
@@ -29,14 +25,17 @@ public class TestDriveAppointmentController {
     private TestDriveAppointmentService service;
 
     // @PutMapping("/{id}")
-    // public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> createTestDriveAppointment(
-    //         @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
+    // public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>>
+    // createTestDriveAppointment(
+    // @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
 
-    //     // TestDriveAppointmentSummaryDTO updatedAppointment = service.modifyAppointment(id, request);
+    // // TestDriveAppointmentSummaryDTO updatedAppointment =
+    // service.modifyAppointment(id, request);
 
-    //     TestDriveAppointmentSummaryDTO updatedAppointment = service.modifyAppointment(request.getTestDriveAppointmentId(), request);
+    // TestDriveAppointmentSummaryDTO updatedAppointment =
+    // service.modifyAppointment(request.getTestDriveAppointmentId(), request);
 
-    //     return ResponseEntity.ok(updatedAppointment);
+    // return ResponseEntity.ok(updatedAppointment);
     // }
 
     // @PatchMapping("/{id}/confirm")
@@ -57,6 +56,7 @@ public class TestDriveAppointmentController {
     // return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
     // }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> arriveAppointment(@PathVariable("id") Integer id,
             @RequestParam String status) {
@@ -68,6 +68,7 @@ public class TestDriveAppointmentController {
     }
 
     // Lấy tất cả
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<TestDriveAppointmentSummaryDTO>>> getAll(
             @RequestParam(value = "1") Integer page,
@@ -84,17 +85,19 @@ public class TestDriveAppointmentController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+    @Cacheable(value = "test-drive-appointment", key = "#testDriveAppointmentId")
     @GetMapping("/{testDriveAppointmentId}")
     public ResponseEntity<ApiResponse<TestDriveAppointmentResponseDTO>> getById(
             @PathVariable Integer testDriveAppointmentId) {
 
         TestDriveAppointmentResponseDTO dto = service.getAppointmentById(testDriveAppointmentId);
 
-        ApiResponse<TestDriveAppointmentResponseDTO> response = new ApiResponse<TestDriveAppointmentResponseDTO>(true, null, dto);
+        ApiResponse<TestDriveAppointmentResponseDTO> response = new ApiResponse<TestDriveAppointmentResponseDTO>(true,
+                null, dto);
 
         return ResponseEntity.ok(response);
     }
-    
 
     // @GetMapping("/by-status")
     // public ResponseEntity<List<TestDriveAppointmentSummaryDTO>>

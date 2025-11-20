@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/{orderId}")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> getOrderById(@PathVariable Integer orderId) {
 
@@ -40,6 +42,7 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEADLER_STAFF')")
     @PostMapping("/from-quotation")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrderFromQuotation(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -54,6 +57,7 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @PatchMapping("{orderId}")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> updateOrderById(@PathVariable Integer orderId,
             @RequestParam(required = false) OrderStatusEnum status,
@@ -65,6 +69,7 @@ public class OrderController {
 
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/agency")
     public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrdersByAgencyId(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -80,6 +85,7 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/employee")
     public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrdersByEmployeeId(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,

@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.util.List;
 
 @RestController
@@ -26,72 +28,92 @@ public class WarehouseController {
     private WarehouseExportService warehouseExportService;
 
     // --- Phiếu nhập kho ---
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/import")
     public ResponseEntity<ApiResponse<List<WarehouseImportReceiptSummaryDTO>>> getAllImport(
-        @RequestParam int page,
-        @RequestParam @Positive int size) {
-        Pageable pageable = PageRequest.of(page -1 , size);
+            @RequestParam int page,
+            @RequestParam @Positive int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         List<WarehouseImportReceiptSummaryDTO> data = warehouseReceiptService.getAllWarehouseReceipts(pageable);
         return ResponseEntity.ok(new ApiResponse<>(true, null, data));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/import/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> getImportById(@PathVariable Integer warehouseReceiptId) {
+    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> getImportById(
+            @PathVariable Integer warehouseReceiptId) {
         WarehouseImportReceiptResponseDTO dto = warehouseReceiptService.getWarehouseReceiptById(warehouseReceiptId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PostMapping("/import")
-    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> createImport(@RequestBody WarehouseImportReceiptRequestDTO request) {
+    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> createImport(
+            @RequestBody WarehouseImportReceiptRequestDTO request) {
         WarehouseImportReceiptResponseDTO dto = warehouseReceiptService.importReceipt(request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PutMapping("/import/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> updateImport(@PathVariable Integer warehouseReceiptId,
-                                                                                      @RequestBody WarehouseImportReceiptRequestDTO request) {
-        WarehouseImportReceiptResponseDTO dto = warehouseReceiptService.updateWarehouseReceipt(warehouseReceiptId, request).getData();
+    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> updateImport(
+            @PathVariable Integer warehouseReceiptId,
+            @RequestBody WarehouseImportReceiptRequestDTO request) {
+        WarehouseImportReceiptResponseDTO dto = warehouseReceiptService
+                .updateWarehouseReceipt(warehouseReceiptId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @DeleteMapping("/import/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> deleteImport(@PathVariable Integer warehouseReceiptId) {
+    public ResponseEntity<ApiResponse<WarehouseImportReceiptResponseDTO>> deleteImport(
+            @PathVariable Integer warehouseReceiptId) {
         WarehouseImportReceiptResponseDTO dto = warehouseReceiptService.getWarehouseReceiptById(warehouseReceiptId);
         warehouseReceiptService.deleteWarehouseReceipt(warehouseReceiptId);
         return ResponseEntity.ok(new ApiResponse<>(true, "xoá thành công", dto));
     }
 
     // --- Phiếu xuất kho ---
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/export")
     public ResponseEntity<ApiResponse<List<WarehouseExportReceiptSummaryDTO>>> getAllExport(
-        @RequestParam int page,
-        @RequestParam @Positive int size) {
-        Pageable pageable = PageRequest.of(page -1, size);
+            @RequestParam int page,
+            @RequestParam @Positive int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         List<WarehouseExportReceiptSummaryDTO> data = warehouseExportService.getAllWarehouseExports(pageable);
         return ResponseEntity.ok(new ApiResponse<>(true, null, data));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/export/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> getExportById(@PathVariable Integer warehouseReceiptId) {
+    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> getExportById(
+            @PathVariable Integer warehouseReceiptId) {
         WarehouseExportReceiptResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReceiptId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PostMapping("/export")
-    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> createExport(@RequestBody WarehouseExportReceiptRequestDTO request) {
+    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> createExport(
+            @RequestBody WarehouseExportReceiptRequestDTO request) {
         WarehouseExportReceiptResponseDTO dto = warehouseExportService.exportReceipt(request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PutMapping("/export/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> updateExport(@PathVariable Integer warehouseReceiptId,
-                                                                                      @RequestBody WarehouseExportReceiptRequestDTO request) {
-        WarehouseExportReceiptResponseDTO dto = warehouseExportService.updateWarehouseExport(warehouseReceiptId, request).getData();
+    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> updateExport(
+            @PathVariable Integer warehouseReceiptId,
+            @RequestBody WarehouseExportReceiptRequestDTO request) {
+        WarehouseExportReceiptResponseDTO dto = warehouseExportService
+                .updateWarehouseExport(warehouseReceiptId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @DeleteMapping("/export/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> deleteExport(@PathVariable Integer warehouseReceiptId) {
+    public ResponseEntity<ApiResponse<WarehouseExportReceiptResponseDTO>> deleteExport(
+            @PathVariable Integer warehouseReceiptId) {
         WarehouseExportReceiptResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReceiptId);
         warehouseExportService.deleteWarehouseExport(warehouseReceiptId);
         return ResponseEntity.ok(new ApiResponse<>(true, "xoá thành công ", dto));

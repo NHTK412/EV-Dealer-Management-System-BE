@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class PromotionController {
         @Autowired
         private PromotionService promotionService;
 
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @GetMapping()
         public ResponseEntity<ApiResponse<List<PromotionSummaryDTO>>> getAllPromotions(@RequestParam Integer page,
                         @RequestParam @Positive Integer size) {
@@ -44,6 +46,7 @@ public class PromotionController {
                 return ResponseEntity.ok(new ApiResponse<List<PromotionSummaryDTO>>(true, null, promotionSummaryDTOs));
         }
 
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @GetMapping("/{promotionId}")
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> getByIdPromotion(@PathVariable Integer promotionId) {
 
@@ -53,6 +56,7 @@ public class PromotionController {
 
         }
 
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @PostMapping()
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> createPromotion(
                         @RequestBody PromotionRequestDTO promotion) {
@@ -62,6 +66,7 @@ public class PromotionController {
 
         }
 
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @DeleteMapping("/{promotionId}")
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> DeletePromotion(@PathVariable Integer promotionId) {
 
@@ -71,6 +76,7 @@ public class PromotionController {
 
         }
 
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @PutMapping("/{promotionId}")
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> putPromotion(@PathVariable Integer promotionId,
                         @RequestBody PromotionRequestDTO promotion) {

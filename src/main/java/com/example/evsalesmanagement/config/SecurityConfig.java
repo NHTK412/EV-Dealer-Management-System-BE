@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,6 +16,7 @@ import com.example.evsalesmanagement.exception.AccessDeniedHandlerException;
 import com.example.evsalesmanagement.exception.AuthenticationEntryPointException;
 import com.example.evsalesmanagement.filter.JwtAuthFilter;
 
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
