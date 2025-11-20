@@ -27,13 +27,14 @@ public class InventoryReportController {
     @Autowired
     private InventoryReportService inventoryReportService;
 
+    // Lấy báo cáo tồn kho JSON
    @GetMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportDTO(
          @ModelAttribute InventoryReportRequestDTO request) {
 
     List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
-}
+    }
 
 
 

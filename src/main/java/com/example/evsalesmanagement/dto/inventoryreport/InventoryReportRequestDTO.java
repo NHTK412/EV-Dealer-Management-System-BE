@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 
 import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 
 public class InventoryReportRequestDTO {
 
-    @Min(value = 1, message = "Agency ID must be greater than 0")
+    @Positive(message = "Agency ID must be greater than 0")
     private Integer agencyId;
 
-    @Min(value = 1, message = "Vehicle Type ID must be greater than 0")
+    @Positive(message = "Vehicle Type ID must be greater than 0")
     private Integer vehicleTypeId;
 
     private VehicleStatusEnum status;
