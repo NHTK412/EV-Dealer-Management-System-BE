@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,12 +31,14 @@ import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
 import com.example.evsalesmanagement.model.Payment;
+import com.example.evsalesmanagement.model.PaymentPlan;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
-import com.example.evsalesmanagement.repository.CustomerRepository;
+// import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
+import com.example.evsalesmanagement.repository.PaymentPlanRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
 
 import jakarta.transaction.Transactional;
@@ -55,8 +58,11 @@ public class OrderService {
         // @Autowired
         // private AgencyRepository agencyRepository;
 
+        // @Autowired
+        // private CustomerRepository customerRepository;
+
         @Autowired
-        private CustomerRepository customerRepository;
+        private PaymentPlanRepository paymentPlanRepository;
 
         @Cacheable(value = "order", key = "#orderId")
         @Transactional
@@ -215,7 +221,9 @@ public class OrderService {
                 if (paymentRequestDTO.getPaymentType() == PaymentTypeEnum.FULL_PAYMENT) {
                         Payment payment = new Payment();
 
-                        payment.setPaymentMethod(PaymentMethodEnum.CASH);
+                        payment.setNumberCycle(0);
+
+                        payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
 
                         payment.setAmount(order.getTotalAmount());
 
@@ -229,7 +237,91 @@ public class OrderService {
 
                         payment.setOrder(order);
 
+                        if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
+                                payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
+                        }
+
                         order.getPayments().add(payment);
+
+                } else if (paymentRequestDTO.getPaymentType() == PaymentTypeEnum.INSTALLMENT) {
+                        PaymentPlan paymentPlan = paymentPlanRepository.findById(paymentRequestDTO.getPaymentPlanId())
+                                        .orElseThrow(() -> new ResourceNotFoundException("PaymentPlan Not Found"));
+
+                        // Tổng tiền của đơn hàng (tổng giá trị sản phẩm)
+                        BigDecimal total = order.getTotalAmount();
+
+                        // Lãi suất trả góp theo tháng (%) ví dụ: 1.2 nghĩa là 1.2%/tháng
+                        BigDecimal interestRate = paymentPlan.getInterestRate();
+
+                        // % trả trước, ví dụ 30 nghĩa là khách trả trước 30%
+                        BigDecimal downPercent = paymentPlan.getDownPaymentPercent();
+
+                        // Số kỳ trả góp, ví dụ 6 kỳ = 6 tháng
+                        int n = paymentPlan.getNumberOfInstallments();
+
+                        // === 1. TÍNH SỐ TIỀN TRẢ TRƯỚC ===
+                        // DownPayment = Total × (downPercent / 100)
+                        BigDecimal downPayment = total.multiply(downPercent).divide(BigDecimal.valueOf(100));
+
+                        Payment payment = new Payment();
+
+                        payment.setNumberCycle(0);
+
+                        payment.setAmount(downPayment);
+
+                        payment.setDueDate(LocalDateTime.now());
+
+                        payment.setPaymentDate(LocalDateTime.now());
+
+                        payment.setStatus(PaymentStatusEnum.PAID);
+
+                        payment.setPenaltyAmount(BigDecimal.valueOf(0));
+
+                        payment.setOrder(order);
+
+                        // === 2. SỐ TIỀN PHẢI TRẢ GÓP ===
+                        // LoanAmount = Total − DownPayment
+                        BigDecimal loanAmount = total.subtract(downPayment);
+
+                        // === 3. CHUYỂN LÃI SUẤT TỪ % SANG SỐ THẬP PHÂN ===
+                        // Ví dụ interestRate = 1.2 → 0.012
+                        BigDecimal r = interestRate.divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP);
+
+                        // === 4. TÍNH TIỀN PHẢI TRẢ MỖI KỲ THEO CÔNG THỨC PMT ===
+                        // Công thức: LoanAmount × r × (1 + r)^n / ((1 + r)^n − 1)
+
+                        // (1 + r)
+                        BigDecimal onePlusR = r.add(BigDecimal.ONE);
+
+                        // (1 + r)^n
+                        BigDecimal pow = onePlusR.pow(n);
+
+                        // Tử số: loanAmount × r × (1+r)^n
+                        BigDecimal numerator = loanAmount.multiply(r).multiply(pow);
+
+                        // Mẫu số: (1+r)^n − 1
+                        BigDecimal denominator = pow.subtract(BigDecimal.ONE);
+
+                        // Tiền mỗi kỳ cần trả (gốc + lãi)
+                        BigDecimal installmentAmount = numerator.divide(denominator, 2, RoundingMode.HALF_UP);
+
+                        for (int i = 1; i <= n; i++) {
+                                payment = new Payment();
+
+                                payment.setNumberCycle(i);
+
+                                payment.setAmount(installmentAmount);
+
+                                payment.setPaymentDate(LocalDateTime.now().plusMonths(i));
+
+                                payment.setStatus(PaymentStatusEnum.UNPAID);
+
+                                payment.setPenaltyAmount(BigDecimal.valueOf(0));
+
+                                payment.setOrder(order);
+
+                                order.getPayments().add(payment);
+                        }
 
                 }
 

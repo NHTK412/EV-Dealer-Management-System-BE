@@ -2,12 +2,21 @@ package com.example.evsalesmanagement.dto.payment;
 
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentTypeEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class PaymentRequestDTO {
-    
+
     private PaymentMethodEnum paymentMethod;
 
     private PaymentTypeEnum paymentType;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String vnpayCode;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer paymentPlanId;
+
+    
 
     public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
@@ -25,6 +34,20 @@ public class PaymentRequestDTO {
         this.paymentType = paymentType;
     }
 
-    
-    
+    public String getVnpayCode() {
+        return vnpayCode;
+    }
+
+    public void setVnpayCode(String vnpayCode) {
+        this.vnpayCode = vnpayCode;
+    }
+
+    public Integer getPaymentPlanId() {
+        return paymentPlanId;
+    }
+
+    public void setPaymentPlanId(Integer paymentPlanId) {
+        this.paymentPlanId = paymentPlanId;
+    }
+
 }
