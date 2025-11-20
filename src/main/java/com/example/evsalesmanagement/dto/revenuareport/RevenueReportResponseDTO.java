@@ -53,6 +53,8 @@ public class RevenueReportResponseDTO {
         this.netRevenue = this.totalRevenue.subtract(this.totalDiscount);
     }
 
+    public RevenueReportResponseDTO() {}
+
     // Getters and Setters
     public Integer getVehicleTypeId() {
         return vehicleTypeId;

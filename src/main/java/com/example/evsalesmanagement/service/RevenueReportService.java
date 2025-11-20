@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.service;
 
-
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,13 +10,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.revenuareport.RevenueReportRequestDTO;
 import com.example.evsalesmanagement.dto.revenuareport.RevenueReportResponseDTO;
+import com.example.evsalesmanagement.dto.revenuareport.RevenueReportSummaryDTO;
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.exception.InternalServerException;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
@@ -39,18 +36,35 @@ public class RevenueReportService {
     @Autowired
     private RevenueReportRepository revenueReportRepository;
 
+    private List<Order> getFilteredOrders(RevenueReportRequestDTO request) {
+        Integer agencyId = request.getAgencyId();
+        OrderStatusEnum status = request.getStatus();
+        LocalDateTime fromDate = request.getFromDate();
+        LocalDateTime toDate = request.getToDate();
+
+        if (agencyId != null && status != null && fromDate != null && toDate != null) {
+            return revenueReportRepository.findByAgency_AgencyIdAndStatusAndCreateAtBetween(
+                    agencyId, status, fromDate, toDate);
+        } else if (agencyId != null && status != null) {
+            return revenueReportRepository.findByAgency_AgencyIdAndStatus(agencyId, status);
+        } else if (agencyId != null && fromDate != null && toDate != null) {
+            return revenueReportRepository.findByAgency_AgencyIdAndCreateAtBetween(
+                    agencyId, fromDate, toDate);
+        } else if (status != null && fromDate != null && toDate != null) {
+            return revenueReportRepository.findByStatusAndCreateAtBetween(status, fromDate, toDate);
+        } else if (agencyId != null) {
+            return revenueReportRepository.findByAgency_AgencyId(agencyId);
+        } else if (status != null) {
+            return revenueReportRepository.findByStatus(status);
+        } else if (fromDate != null && toDate != null) {
+            return revenueReportRepository.findByCreateAtBetween(fromDate, toDate);
+        } else {
+            return revenueReportRepository.findAll();
+        }
+    }
 
     @Cacheable(value = "revenueReport", key = "#request.hashCode()")
     public List<RevenueReportResponseDTO> getRevenueReport(RevenueReportRequestDTO request) {
-
-        // if (request.getStatus() != null && !request.getStatus().isBlank()) {
-        //     try {
-        //         RevenueReportEnum.fromString(request.getStatus());
-        //     } catch (Exception e) {
-        //         throw new RuntimeException("Status is invalid: " + request.getStatus(), e);
-        //     }
-        // }
-
 
         List<Order> orders = getFilteredOrders(request);
         Map<String, RevenueData> map = new HashMap<>();
@@ -59,12 +73,13 @@ public class RevenueReportService {
             if (order.getOrderDetails() == null) continue;
 
             for (OrderDetail detail : order.getOrderDetails()) {
+
                 if (request.getVehicleTypeId() != null &&
-                    (detail.getVehicleTypeDetail() == null ||
-                     detail.getVehicleTypeDetail().getVehicleType() == null ||
-                     !request.getVehicleTypeId().equals(detail.getVehicleTypeDetail().getVehicleType().getVehicleTypeId()))) {
-                    continue;
-                }
+                    !request.getVehicleTypeId().equals(
+                            Optional.ofNullable(detail.getVehicleTypeDetail())
+                                    .map(v -> v.getVehicleType().getVehicleTypeId())
+                                    .orElse(null)
+                    )) continue;
 
                 String key = createGroupKey(detail, order);
                 RevenueData data = map.computeIfAbsent(key, k -> new RevenueData(detail, order));
@@ -80,176 +95,129 @@ public class RevenueReportService {
 
         return map.values().stream()
                 .map(RevenueData::toResponseDTO)
-                .sorted(Comparator.comparing(
-                        RevenueReportResponseDTO::getVehicleTypeName,
+                .sorted(Comparator.comparing(RevenueReportResponseDTO::getVehicleTypeName,
                         Comparator.nullsLast(String::compareToIgnoreCase)))
                 .collect(Collectors.toList());
     }
 
+    public RevenueReportSummaryDTO getTotalRevenueAll(RevenueReportRequestDTO request) {
+        List<Order> orders = getFilteredOrders(request);
 
-    private List<Order> getFilteredOrders(RevenueReportRequestDTO request) {
-        Integer agencyId = request.getAgencyId();
-        String status = request.getStatus();
-        LocalDateTime from = request.getFromDate();
-        LocalDateTime to = request.getToDate();
+        BigDecimal totalRevenue = BigDecimal.ZERO;
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+        int totalOrders = 0;
+        int totalQuantity = 0;
 
-        boolean hasAgency = agencyId != null;
-        boolean hasStatus = status != null && !status.isBlank();
-        boolean hasDate = from != null && to != null;
+        for (Order order : orders) {
+            totalOrders++;
 
-        if (hasAgency && hasStatus && hasDate)
-            return revenueReportRepository.findByAgency_AgencyIdAndStatusAndCreateAtBetween(agencyId, status, from, to);
-        if (hasAgency && hasStatus)
-            return revenueReportRepository.findByAgency_AgencyIdAndStatus(agencyId, status);
-        if (hasStatus && hasDate)
-            return revenueReportRepository.findByStatusAndCreateAtBetween(status, from, to);
-        if (hasAgency && hasDate)
-            return revenueReportRepository.findByAgency_AgencyIdAndCreateAtBetween(agencyId, from, to);
-        if (hasAgency)
-            return revenueReportRepository.findByAgency_AgencyId(agencyId);
-        if (hasStatus)
-            return revenueReportRepository.findByStatus(status);
-        if (hasDate)
-            return revenueReportRepository.findByCreateAtBetween(from, to);
+            if (order.getOrderDetails() != null) {
+                for (OrderDetail d : order.getOrderDetails()) {
+                    if (request.getVehicleTypeId() != null &&
+                        !request.getVehicleTypeId().equals(
+                                Optional.ofNullable(d.getVehicleTypeDetail())
+                                        .map(v -> v.getVehicleType().getVehicleTypeId())
+                                        .orElse(null)
+                        )) continue;
 
-        return revenueReportRepository.findAll();
+                    totalQuantity += Optional.ofNullable(d.getQuantity()).orElse(0);
+                    totalRevenue = totalRevenue.add(Optional.ofNullable(d.getTotalAmount()).orElse(BigDecimal.ZERO));
+                    totalDiscount = totalDiscount.add(Optional.ofNullable(d.getDiscount()).orElse(BigDecimal.ZERO));
+                }
+            }
+        }
+
+        return new RevenueReportSummaryDTO(totalRevenue, totalDiscount, totalOrders, totalQuantity);
     }
 
+    public RevenueReportSummaryDTO getTotalRevenueByAgency(Integer agencyId) {
+        RevenueReportRequestDTO request = new RevenueReportRequestDTO();
+        request.setAgencyId(agencyId);
+        return getTotalRevenueAll(request);
+    }
+
+    public RevenueReportSummaryDTO getTotalRevenueByStatus(OrderStatusEnum status) {
+        RevenueReportRequestDTO request = new RevenueReportRequestDTO();
+        request.setStatus(status);
+        return getTotalRevenueAll(request);
+    }
 
     public byte[] exportRevenueReportToExcel(RevenueReportRequestDTO request) {
-        try {
-            List<RevenueReportResponseDTO> reportData = getRevenueReport(request);
+        List<RevenueReportResponseDTO> report = getRevenueReport(request);
 
-            try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                Sheet sheet = workbook.createSheet("Revenue Report");
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Revenue Report");
 
-                CellStyle headerStyle = workbook.createCellStyle();
-                Font headerFont = workbook.createFont();
-                headerFont.setBold(true);
-                headerStyle.setFont(headerFont);
-                headerStyle.setAlignment(HorizontalAlignment.CENTER);
-                headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-                headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                headerStyle.setBorderBottom(BorderStyle.THIN);
-                headerStyle.setBorderTop(BorderStyle.THIN);
-                headerStyle.setBorderLeft(BorderStyle.THIN);
-                headerStyle.setBorderRight(BorderStyle.THIN);
-
-                CellStyle cellStyle = workbook.createCellStyle();
-                cellStyle.setBorderBottom(BorderStyle.THIN);
-                cellStyle.setBorderTop(BorderStyle.THIN);
-                cellStyle.setBorderLeft(BorderStyle.THIN);
-                cellStyle.setBorderRight(BorderStyle.THIN);
-
-                String[] headers = {"STT", "Type", "Version", "Color", "Agency", "Order Count",
-                        "Total Quantity", "Total Revenue", "Total Discount", "Net Revenue"};
-                Row headerRow = sheet.createRow(0);
-                for (int i = 0; i < headers.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(headers[i]);
-                    cell.setCellStyle(headerStyle);
-                }
-
-                int rowNum = 1;
-                int index = 1;
-                BigDecimal totalRevenue = BigDecimal.ZERO;
-                BigDecimal totalDiscount = BigDecimal.ZERO;
-                BigDecimal totalNet = BigDecimal.ZERO;
-                int totalQuantity = 0;
-                int totalOrders = 0;
-
-                for (RevenueReportResponseDTO dto : reportData) {
-                    Row row = sheet.createRow(rowNum++);
-                    int col = 0;
-
-                    row.createCell(col++).setCellValue(index++);
-                    row.createCell(col++).setCellValue(dto.getVehicleTypeName());
-                    row.createCell(col++).setCellValue(dto.getVersion());
-                    row.createCell(col++).setCellValue(dto.getColor());
-                    row.createCell(col++).setCellValue(dto.getAgencyName());
-                    row.createCell(col++).setCellValue(dto.getTotalOrders());
-                    row.createCell(col++).setCellValue(dto.getTotalQuantity());
-                    row.createCell(col++).setCellValue(dto.getTotalRevenue().doubleValue());
-                    row.createCell(col++).setCellValue(dto.getTotalDiscount().doubleValue());
-                    row.createCell(col++).setCellValue(dto.getNetRevenue().doubleValue());
-
-                    for (int i = 0; i < headers.length; i++) {
-                        row.getCell(i).setCellStyle(cellStyle);
-                    }
-
-                    totalOrders += Optional.ofNullable(dto.getTotalOrders()).orElse(0);
-                    totalQuantity += Optional.ofNullable(dto.getTotalQuantity()).orElse(0);
-                    totalRevenue = totalRevenue.add(dto.getTotalRevenue());
-                    totalDiscount = totalDiscount.add(dto.getTotalDiscount());
-                    totalNet = totalNet.add(dto.getNetRevenue());
-                }
-
-                // Sum 
-                Row totalRow = sheet.createRow(rowNum);
-                Cell totalLabel = totalRow.createCell(0);
-                totalLabel.setCellValue("SUMMARY");
-                totalLabel.setCellStyle(headerStyle);
-
-                for (int i = 1; i < headers.length; i++) {
-                    Cell c = totalRow.createCell(i);
-                    c.setCellStyle(headerStyle);
-                }
-
-                totalRow.getCell(5).setCellValue(totalOrders);
-                totalRow.getCell(6).setCellValue(totalQuantity);
-                totalRow.getCell(7).setCellValue(totalRevenue.doubleValue());
-                totalRow.getCell(8).setCellValue(totalDiscount.doubleValue());
-                totalRow.getCell(9).setCellValue(totalNet.doubleValue());
-
-                for (int i = 0; i < headers.length; i++) sheet.autoSizeColumn(i);
-
-                workbook.write(outputStream);
-                return outputStream.toByteArray();
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {"Vehicle Type", "Agency", "Total Orders", "Total Quantity", "Total Revenue", "Total Discount"};
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                CellStyle style = workbook.createCellStyle();
+                Font font = workbook.createFont();
+                font.setBold(true);
+                style.setFont(font);
+                cell.setCellStyle(style);
             }
+
+            int rowNum = 1;
+            for (RevenueReportResponseDTO dto : report) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(dto.getVehicleTypeName() != null ? dto.getVehicleTypeName() : "");
+                row.createCell(1).setCellValue(dto.getAgencyName() != null ? dto.getAgencyName() : "");
+                row.createCell(2).setCellValue(dto.getTotalOrders());
+                row.createCell(3).setCellValue(dto.getTotalQuantity());
+                row.createCell(4).setCellValue(dto.getTotalRevenue() != null ? dto.getTotalRevenue().doubleValue() : 0);
+                row.createCell(5).setCellValue(dto.getTotalDiscount() != null ? dto.getTotalDiscount().doubleValue() : 0);
+            }
+
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(out);
+            return out.toByteArray();
         } catch (Exception e) {
-            throw new InternalServerException("Error exporting revenue report to Excel", e);
+            throw new InternalServerException("Failed to export Excel: " + e.getMessage());
         }
     }
 
-
-    private String createGroupKey(OrderDetail d, Order o) {
-        Integer vt = (d.getVehicleTypeDetail() != null && d.getVehicleTypeDetail().getVehicleType() != null)
-                ? d.getVehicleTypeDetail().getVehicleType().getVehicleTypeId() : 0;
-        Integer vtd = d.getVehicleTypeDetail() != null ? d.getVehicleTypeDetail().getVehicleTypeDetailId() : 0;
-        Integer agency = o.getAgency() != null ? o.getAgency().getAgencyId() : 0;
-        return vt + "_" + vtd + "_" + agency;
+    private String createGroupKey(OrderDetail detail, Order order) {
+        String vehicleType = Optional.ofNullable(detail.getVehicleTypeDetail())
+                .map(v -> v.getVehicleType().getVehicleTypeName())
+                .orElse("Unknown");
+        String agency = Optional.ofNullable(order.getAgency())
+                .map(a -> a.getAgencyName())
+                .orElse("Unknown");
+        return vehicleType + "_" + agency;
     }
 
     private static class RevenueData {
-        Integer vehicleTypeId;
         String vehicleTypeName;
-        Integer vehicleTypeDetailId;
-        String version;
-        String color;
         String agencyName;
-        Integer totalOrders = 0;
-        Integer totalQuantity = 0;
+        int totalOrders = 0;
+        int totalQuantity = 0;
         BigDecimal totalRevenue = BigDecimal.ZERO;
         BigDecimal totalDiscount = BigDecimal.ZERO;
 
         RevenueData(OrderDetail detail, Order order) {
-            this.vehicleTypeId = Optional.ofNullable(detail.getVehicleTypeDetail())
-                    .map(vtd -> vtd.getVehicleType().getVehicleTypeId()).orElse(null);
             this.vehicleTypeName = Optional.ofNullable(detail.getVehicleTypeDetail())
-                    .map(vtd -> vtd.getVehicleType().getVehicleTypeName()).orElse(null);
-            this.vehicleTypeDetailId = Optional.ofNullable(detail.getVehicleTypeDetail())
-                    .map(vtd -> vtd.getVehicleTypeDetailId()).orElse(null);
-            this.version = Optional.ofNullable(detail.getVehicleTypeDetail())
-                    .map(vtd -> vtd.getVersion()).orElse(null);
-            this.color = Optional.ofNullable(detail.getVehicleTypeDetail())
-                    .map(vtd -> vtd.getColor()).orElse(null);
+                    .map(v -> v.getVehicleType().getVehicleTypeName())
+                    .orElse("Unknown");
             this.agencyName = Optional.ofNullable(order.getAgency())
-                    .map(a -> a.getAgencyName()).orElse("Unassigned");
+                    .map(a -> a.getAgencyName())
+                    .orElse("Unknown");
         }
 
         RevenueReportResponseDTO toResponseDTO() {
-            return new RevenueReportResponseDTO(vehicleTypeId, vehicleTypeName, vehicleTypeDetailId,
-                    version, color, agencyName, totalOrders, totalQuantity, totalRevenue, totalDiscount);
+            RevenueReportResponseDTO dto = new RevenueReportResponseDTO();
+            dto.setVehicleTypeName(vehicleTypeName);
+            dto.setAgencyName(agencyName);
+            dto.setTotalOrders(totalOrders);
+            dto.setTotalQuantity(totalQuantity);
+            dto.setTotalRevenue(totalRevenue);
+            dto.setTotalDiscount(totalDiscount);
+            return dto;
         }
     }
 }

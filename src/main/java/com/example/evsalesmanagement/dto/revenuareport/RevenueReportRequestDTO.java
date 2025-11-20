@@ -1,33 +1,19 @@
 package com.example.evsalesmanagement.dto.revenuareport;
 
-
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
 
 public class RevenueReportRequestDTO {
 
-    @NotNull(message = "agencyId must not be null")
     private Integer agencyId;
 
-    @NotNull(message = "vehicleTypeId must not be null")
     private Integer vehicleTypeId;
 
-    @Pattern(
-        regexp = "^(Completed|In process|Pending)?$",
-        message = "Status is invalid. Allowed values are: Completed, In process, Pending"
-    )
-    private String status;
+    private OrderStatusEnum status;
 
-    @NotNull(message = "fromDate must not be null")
-    @PastOrPresent(message = "fromDate must be in the past or present")
     private LocalDateTime fromDate;
 
-    @NotNull(message = "toDate must not be null")
-    @PastOrPresent(message = "toDate must be in the past or present")
     private LocalDateTime toDate;
 
     public RevenueReportRequestDTO() {}
@@ -41,7 +27,7 @@ public class RevenueReportRequestDTO {
         this.vehicleTypeId = vehicleTypeId;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatusEnum status) {
         this.status = status;
     }
 
@@ -61,7 +47,7 @@ public class RevenueReportRequestDTO {
         return vehicleTypeId;
     }
 
-    public String getStatus() {
+    public OrderStatusEnum getStatus() {
         return status;
     }
 
