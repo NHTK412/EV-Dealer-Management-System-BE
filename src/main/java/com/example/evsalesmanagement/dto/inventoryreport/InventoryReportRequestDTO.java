@@ -2,9 +2,9 @@ package com.example.evsalesmanagement.dto.inventoryreport;
 
 import java.time.LocalDateTime;
 
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
+
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 public class InventoryReportRequestDTO {
 
@@ -14,19 +14,14 @@ public class InventoryReportRequestDTO {
     @Min(value = 1, message = "Vehicle Type ID must be greater than 0")
     private Integer vehicleTypeId;
 
-    @Pattern(regexp = "^(AVAILABLE|SOLD|RESERVED)?$", message = "Status must be one of the following values: AVAILABLE, SOLD, RESERVED")
-    private String status;
+    private VehicleStatusEnum status;
 
-    @NotNull(message = "From date must not be null")
     private LocalDateTime fromDate;
 
-    @NotNull(message = "To date must not be null")
     private LocalDateTime toDate;
 
-    
     public InventoryReportRequestDTO() {
     }
-
 
     public Integer getAgencyId() {
         return agencyId;
@@ -44,11 +39,11 @@ public class InventoryReportRequestDTO {
         this.vehicleTypeId = vehicleTypeId;
     }
 
-    public String getStatus() {
+    public VehicleStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatusEnum status) {
         this.status = status;
     }
 
