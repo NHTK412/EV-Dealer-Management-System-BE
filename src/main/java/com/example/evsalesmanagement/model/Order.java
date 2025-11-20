@@ -66,7 +66,7 @@ public class Order extends Base {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<Payment> payments = new HashSet<>();
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private VehicleDelivery vehicleDelivery;
 
     public Integer getOrderId() {
@@ -141,7 +141,6 @@ public class Order extends Base {
         this.agency = agency;
     }
 
-
     public Set<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
@@ -165,10 +164,6 @@ public class Order extends Base {
     public void setVehicleDelivery(VehicleDelivery vehicleDelivery) {
         this.vehicleDelivery = vehicleDelivery;
     }
-
-    
-
-
 
     // @OneToOne(mappedBy = "donHang")
     // private BaoGia baoGia;

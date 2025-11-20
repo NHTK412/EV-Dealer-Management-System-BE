@@ -16,6 +16,7 @@ import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
@@ -45,7 +46,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
-    @PostMapping("/from-quotation/{quoteId}")
+    @PostMapping("/from-quotation")
     // public ResponseEntity<ApiResponse<OrderResponseDTO>>
     // createOrderFromQuotation(
     // @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -120,6 +121,17 @@ public class OrderController {
             @RequestBody PaymentRequestDTO paymentRequestDTO) {
 
         OrderResponseDTO orderResponseDTO = orderService.createPayment(orderId, paymentRequestDTO);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
+    }
+
+    // @PatchMapping("/payment/{paymentId}")
+
+    @PostMapping("/{orderId}/delivery")
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> createDelivery(@PathVariable Integer orderId, @RequestBody VehicleDeliveryRequestDTO vehicledeliveryRequestDTO
+            ) {
+
+        OrderResponseDTO orderResponseDTO = orderService.createDelivery(orderId, vehicledeliveryRequestDTO);
 
         return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
     }

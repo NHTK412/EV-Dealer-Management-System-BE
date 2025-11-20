@@ -1,80 +1,153 @@
-// package com.example.evsalesmanagement.dto.vehicledelivery;
+package com.example.evsalesmanagement.dto.vehicledelivery;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
-// import com.example.evsalesmanagement.model.VehicleDelivery;
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+import com.example.evsalesmanagement.model.VehicleDelivery;
 
-// public class VehicleDeliveryResponseDTO {
+public class VehicleDeliveryResponseDTO {
 
-//     private Integer vehicleDeliveryId;
-//     private LocalDateTime expectedDeliveryDate;
-//     private LocalDateTime deliveryDate;
-//     private VehicleDeliveryStatusEnum status;
-//     private Integer orderId;
-//     private Integer employeeId;
+    private Integer vehicleDeliveryId;
+    private LocalDateTime expectedDeliveryDate;
+    private LocalDateTime deliveryDate;
+    private VehicleDeliveryStatusEnum status;
+    // private Integer orderId;
+    private Integer employeeId;
 
-//     // Default constructor
-//     public VehicleDeliveryResponseDTO() {
-//     }
+    private String employeeName;
 
-//     // Constructor nhận VehicleDelivery
-//     public VehicleDeliveryResponseDTO(VehicleDelivery vehicleDelivery) {
-//         this.vehicleDeliveryId = vehicleDelivery.getVehicleDeliveryId();
-//         this.expectedDeliveryDate = vehicleDelivery.getExpectedDeliveryDate();
-//         this.deliveryDate = vehicleDelivery.getDeliveryDate();
-//         this.status = vehicleDelivery.getStatus();
-//         // Sử dụng getter đúng tên trong model
-//         this.orderId = vehicleDelivery.getOderId() != null ? vehicleDelivery.getOderId().getOrderId() : null;
-//         this.employeeId = vehicleDelivery.getEmployee() != null ? vehicleDelivery.getEmployee().getEmployeeId() : null;
-//     }
+    private String employeePhoneNumber;
 
-//     // Getters và Setters
-//     public Integer getVehicleDeliveryId() {
-//         return vehicleDeliveryId;
-//     }
 
-//     public void setVehicleDeliveryId(Integer vehicleDeliveryId) {
-//         this.vehicleDeliveryId = vehicleDeliveryId;
-//     }
+    private String address;
 
-//     public LocalDateTime getExpectedDeliveryDate() {
-//         return expectedDeliveryDate;
-//     }
+    private String phoneNumber;
 
-//     public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
-//         this.expectedDeliveryDate = expectedDeliveryDate;
-//     }
+    private String name;
 
-//     public LocalDateTime getDeliveryDate() {
-//         return deliveryDate;
-//     }
 
-//     public void setDeliveryDate(LocalDateTime deliveryDate) {
-//         this.deliveryDate = deliveryDate;
-//     }
+    // Default constructor
+    public VehicleDeliveryResponseDTO() {
+    }
 
-//     public VehicleDeliveryStatusEnum getStatus() {
-//         return status;
-//     }
+    // Constructor nhận VehicleDelivery
+    public VehicleDeliveryResponseDTO(VehicleDelivery vehicleDelivery) {
+        this.vehicleDeliveryId = vehicleDelivery.getVehicleDeliveryId();
+        // this.expectedDeliveryDate = vehicleDelivery.getExpectedDeliveryDate();
+        this.deliveryDate = vehicleDelivery.getDeliveryDate();
+        this.status = vehicleDelivery.getStatus();
 
-//     public void setStatus(VehicleDeliveryStatusEnum status) {
-//         this.status = status;
-//     }
+        this.employeeId = vehicleDelivery.getEmployee().getEmployeeId();
+        this.employeeName = vehicleDelivery.getEmployee().getEmployeeName();
+        this.employeePhoneNumber = vehicleDelivery.getEmployee().getPhoneNumber();
 
-//     public Integer getOrderId() {
-//         return orderId;
-//     }
 
-//     public void setOrderId(Integer orderId) {
-//         this.orderId = orderId;
-//     }
+        this.address = vehicleDelivery.getAddress();
+        this.phoneNumber = vehicleDelivery.getPhoneNumber();
 
-//     public Integer getEmployeeId() {
-//         return employeeId;
-//     }
+        this.name = vehicleDelivery.getName();
 
-//     public void setEmployeeId(Integer employeeId) {
-//         this.employeeId = employeeId;
-//     }
-// }
+        // Sử dụng getter đúng tên trong model
+        // this.orderId = vehicleDelivery.getOderId() != null ? vehicleDelivery.getOderId().getOrderId() : null;
+        // this.employeeId = vehicleDelivery.getEmployee() != null ? vehicleDelivery.getEmployee().getEmployeeId() : null;
+    }
+
+    // Getters và Setters
+    public Integer getVehicleDeliveryId() {
+        return vehicleDeliveryId;
+    }
+
+    public void setVehicleDeliveryId(Integer vehicleDeliveryId) {
+        this.vehicleDeliveryId = vehicleDeliveryId;
+    }
+
+    public LocalDateTime getExpectedDeliveryDate() {
+        return expectedDeliveryDate;
+    }
+
+    public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
+        this.expectedDeliveryDate = expectedDeliveryDate;
+    }
+
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public VehicleDeliveryStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(VehicleDeliveryStatusEnum status) {
+        this.status = status;
+    }
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getEmployeePhoneNumber() {
+        return employeePhoneNumber;
+    }
+
+    public void setEmployeePhoneNumber(String employeePhoneNumber) {
+        this.employeePhoneNumber = employeePhoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+
+    // public Integer getOrderId() {
+    //     return orderId;
+    // }
+
+    // public void setOrderId(Integer orderId) {
+    //     this.orderId = orderId;
+    // }
+
+    // public Integer getEmployeeId() {
+    //     return employeeId;
+    // }
+
+    // public void setEmployeeId(Integer employeeId) {
+    //     this.employeeId = employeeId;
+    // }
+}

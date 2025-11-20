@@ -20,11 +20,13 @@ import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.OrderTypeEnum;
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentTypeEnum;
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Customer;
@@ -35,12 +37,14 @@ import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.PaymentPlan;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
+import com.example.evsalesmanagement.model.VehicleDelivery;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
 // import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PaymentPlanRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
+import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -55,6 +59,9 @@ public class OrderService {
 
         @Autowired
         private EmployeeRepository employeeRepository;
+
+        @Autowired
+        private VehicleDeliveryRepository vehicleDeliveryRepository;
 
         // @Autowired
         // private AgencyRepository agencyRepository;
@@ -270,6 +277,7 @@ public class OrderService {
                         }
 
                 }
+                orderRepository.save(order);
 
                 return new OrderResponseDTO(order);
         }
@@ -446,5 +454,38 @@ public class OrderService {
                 // Payment payment = new Payment();
 
                 // }
+        }
+
+        @Transactional
+        public OrderResponseDTO createDelivery(Integer orderId, VehicleDeliveryRequestDTO vehicledeliveryRequestDTO) {
+
+                Order order = orderRepository.findById(orderId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                Employee employee = employeeRepository.findById(vehicledeliveryRequestDTO.getEmployeeId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+                order.setEmployee(employee);
+
+                VehicleDelivery vehicleDelivery = new VehicleDelivery();
+
+                vehicleDelivery.setEmployee(employee);
+
+                vehicleDelivery.setOderId(order);
+
+                vehicleDelivery.setAddress(vehicledeliveryRequestDTO.getAddress());
+
+                vehicleDelivery.setPhoneNumber(vehicledeliveryRequestDTO.getPhoneNumber());
+
+                vehicleDelivery.setName(vehicledeliveryRequestDTO.getName());
+
+                vehicleDelivery.setStatus(VehicleDeliveryStatusEnum.DELIVERED);
+
+                // vehicleDeliveryRepository.save(vehicleDelivery);
+
+                order.setVehicleDelivery(vehicleDelivery);
+
+                orderRepository.save(order);
+
+                return new OrderResponseDTO(order);
+
         }
 }

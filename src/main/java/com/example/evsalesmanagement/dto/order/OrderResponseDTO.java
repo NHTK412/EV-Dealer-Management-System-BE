@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
 import com.example.evsalesmanagement.model.Order;
+import com.example.evsalesmanagement.model.VehicleDelivery;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class OrderResponseDTO {
@@ -63,6 +65,9 @@ public class OrderResponseDTO {
 
     private Set<PaymentResponseDTO> paymentResponseDTOs = new HashSet<>();
 
+    private VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO;
+
+
     public OrderResponseDTO(Order order) {
         this.orderId = order.getOrderId();
         this.notes = order.getNotes();
@@ -95,6 +100,13 @@ public class OrderResponseDTO {
                         return new PaymentResponseDTO(payment);
                     })
                     .collect(Collectors.toSet());
+        }
+
+        if (order.getVehicleDelivery() != null)
+        {
+            // this.orderDetailResponseDTOs.add(new OrderDetailResponseDTO(order.getVehicleDelivery()));
+            this.vehicleDeliveryResponseDTO = new VehicleDeliveryResponseDTO(order.getVehicleDelivery());
+
         }
 
         this.orderDetailResponseDTOs = order.getOrderDetails().stream().map(orderDetail -> {
@@ -263,6 +275,14 @@ public class OrderResponseDTO {
 
     public void setPaymentResponseDTOs(Set<PaymentResponseDTO> paymentResponseDTOs) {
         this.paymentResponseDTOs = paymentResponseDTOs;
+    }
+
+    public VehicleDeliveryResponseDTO getVehicleDeliveryResponseDTO() {
+        return vehicleDeliveryResponseDTO;
+    }
+
+    public void setVehicleDeliveryResponseDTO(VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO) {
+        this.vehicleDeliveryResponseDTO = vehicleDeliveryResponseDTO;
     }
 
     
