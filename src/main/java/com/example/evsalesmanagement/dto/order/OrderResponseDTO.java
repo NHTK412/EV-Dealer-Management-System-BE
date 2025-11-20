@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
 import com.example.evsalesmanagement.model.Order;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class OrderResponseDTO {
 
@@ -16,12 +16,16 @@ public class OrderResponseDTO {
 
     private String contractNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer employeeId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeeName;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeePhoneNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeeEmail;
 
     private BigDecimal totalAmount;
@@ -38,9 +42,17 @@ public class OrderResponseDTO {
 
     private String customerAddress;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer agencyId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String agencyName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String agencyAddress;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String agencyPhone;
 
     private List<OrderDetailResponseDTO> orderDetailResponseDTOs = new ArrayList<>();
 
@@ -54,7 +66,7 @@ public class OrderResponseDTO {
         this.employeePhoneNumber = order.getEmployee().getPhoneNumber();
         this.employeeEmail = order.getEmployee().getEmail();
         this.totalAmount = order.getTotalAmount();
-        
+
         if (order.getCustomer() != null) {
             this.customerId = order.getCustomer().getCustomerId();
             this.customerName = order.getCustomer().getCustomerName();
@@ -65,6 +77,8 @@ public class OrderResponseDTO {
         if (order.getAgency() != null) {
             this.agencyId = order.getAgency().getAgencyId();
             this.agencyName = order.getAgency().getAgencyName();
+            this.agencyAddress = order.getAgency().getAddress();
+            this.agencyPhone = order.getAgency().getPhoneNumber();
         }
 
         this.orderDetailResponseDTOs = order.getOrderDetails().stream().map(orderDetail -> {

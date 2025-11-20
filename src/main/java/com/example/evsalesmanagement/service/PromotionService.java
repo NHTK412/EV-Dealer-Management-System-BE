@@ -18,6 +18,7 @@ import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.enums.PromotionStatusEnum;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
@@ -49,7 +50,7 @@ public class PromotionService {
         public PromotionResponseDTO getByIdPromotion(Integer promotionId) {
 
                 Promotion promotion = promotionRepository.findById(promotionId)
-                                .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
 
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(promotion);
 

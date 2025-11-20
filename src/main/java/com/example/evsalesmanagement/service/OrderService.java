@@ -63,10 +63,11 @@ public class OrderService {
         @Transactional
         // public OrderResponseDTO createOrderFromQuotation(OrderFromQuoteRequestDTO
         // orderFromQuoteRequestDTO) {
-        public OrderResponseDTO createOrderFromQuotation(Integer employeeId,
-                        OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
+        // public OrderResponseDTO createOrderFromQuotation(Integer employeeId,
+        // OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
+        public OrderResponseDTO createOrderFromQuotation(Integer employeeId, Integer quoteId, String note) {
 
-                Quote quote = quoteRepository.findById(orderFromQuoteRequestDTO.getQuoteId())
+                Quote quote = quoteRepository.findById(quoteId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không hợp lệ"));
 
                 Employee employee = employeeRepository.findById(employeeId)
@@ -81,12 +82,15 @@ public class OrderService {
                 // agencyRepository.findById(orderFromQuoteRequestDTO.getAgencyId())
                 // .orElseThrow(() -> new ResourceNotFoundException("Mã đại lý không hợp lệ"));
 
-                Customer customer = customerRepository.findById(orderFromQuoteRequestDTO.getCustomerId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã khách hàng không hợp lệ"));
+                // Customer customer = customerRepository.findById(quote.getEmployee().ge)
+                // .orElseThrow(() -> new ResourceNotFoundException("Mã khách hàng không hợp
+                // lệ"));
+
+                Customer customer = quote.getCustomer();
 
                 Order order = new Order();
 
-                order.setNotes(orderFromQuoteRequestDTO.getNotes());
+                order.setNotes(note);
 
                 // order.setStatus("CREATE");
                 order.setStatus(OrderStatusEnum.PENDING);

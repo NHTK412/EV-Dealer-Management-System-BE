@@ -42,17 +42,22 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEADLER_STAFF')")
-    @PostMapping("/from-quotation")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
+    @PostMapping("/from-quotation/{quoteId}")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrderFromQuotation(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
-            @RequestBody OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
+            @PathVariable Integer quoteId, @RequestParam(value = "", required = false) String note) {
+        // public ResponseEntity<ApiResponse<OrderResponseDTO>>
+        // createOrderFromQuotation(
+
+        // @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+        // @RequestBody OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
         // OrderResponseDTO orderResponseDTO =
         // orderService.createOrderFromQuotation(orderFromQuoteRequestDTO);
 
         Integer employeeId = customerUserDetails.getEmployeeId();
 
-        OrderResponseDTO orderResponseDTO = orderService.createOrderFromQuotation(employeeId, orderFromQuoteRequestDTO);
+        OrderResponseDTO orderResponseDTO = orderService.createOrderFromQuotation(employeeId, quoteId, note);
 
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }

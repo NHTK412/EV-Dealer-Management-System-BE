@@ -8,19 +8,13 @@ import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 
 public class QuoteRequestDTO {
 
-    private Integer employeeId;
+    // private Integer employeeId;
+    private Integer customerId;
 
     private QuoteStatusEnum status;
 
     private List<QuotationDetailRequestDTO> quotationDetailRequestDTOs = new ArrayList<>();
 
-    public Integer getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public QuoteStatusEnum getStatus() {
         return status;
@@ -36,6 +30,14 @@ public class QuoteRequestDTO {
 
     public void setQuotationDetailRequestDTOs(List<QuotationDetailRequestDTO> quotationDetailRequestDTOs) {
         this.quotationDetailRequestDTOs = quotationDetailRequestDTOs;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
 }

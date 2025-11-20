@@ -21,6 +21,7 @@ import com.example.evsalesmanagement.model.Promotion;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
 import com.example.evsalesmanagement.model.VehicleTypeDetail;
+import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.PromotionRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
@@ -43,6 +44,9 @@ public class QuoteService {
         @Autowired
         PromotionRepository promotionRepository;
 
+        @Autowired
+        CustomerRepository customerRepository;
+
         @Cacheable(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO getQuoteById(Integer quoteId) {
@@ -52,12 +56,17 @@ public class QuoteService {
         }
 
         @Transactional
-        public QuoteResponseDTO createQuote(QuoteRequestDTO quoteRequestDTO) {
+        public QuoteResponseDTO createQuote(Integer emloyeeId, QuoteRequestDTO quoteRequestDTO) {
                 Quote quote = new Quote();
+
+                quote.setEmployee(employeeRepository
+                                .findById(emloyeeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("EmployeeId not found")));
 
                 convertDTOtoEnity(quoteRequestDTO, quote);
 
                 quoteRepository.save(quote);
+
                 return new QuoteResponseDTO(quote);
         }
 
@@ -103,9 +112,14 @@ public class QuoteService {
 
         private void convertDTOtoEnity(QuoteRequestDTO quoteRequestDTO, Quote quote) {
 
-                quote.setEmployee(employeeRepository
-                                .findById(quoteRequestDTO.getEmployeeId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không tồn tại")));
+                // quote.setEmployee(employeeRepository
+                // .findById(quoteRequestDTO.getEmployeeId())
+                // .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không tồn
+                // tại")));
+
+                quote.setCustomer(customerRepository
+                                .findById(quoteRequestDTO.getCustomerId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Customer Not Found")));
 
                 quote.setStatus(quoteRequestDTO.getStatus());
 
@@ -121,6 +135,9 @@ public class QuoteService {
                                 .collect(Collectors.toMap(
                                                 vehicleTypeDetail -> vehicleTypeDetail.getVehicleTypeDetailId(),
                                                 vehicleTypeDetail -> vehicleTypeDetail));
+                if (vehicleTypeDetailMap.size() != vehicleTypeDetailIds.size()) {
+                        throw new ResourceNotFoundException("Vehicle Type Detail Not Found");
+                }
 
                 for (QuotationDetailRequestDTO quotationDetailRequestDTO : quoteRequestDTO
                                 .getQuotationDetailRequestDTOs()) {

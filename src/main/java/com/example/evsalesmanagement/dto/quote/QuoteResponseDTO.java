@@ -12,6 +12,14 @@ public class QuoteResponseDTO {
 
     private Integer quoteId;
 
+    private Integer customerId;
+
+    private String customerName;
+
+    private String customerPhone;
+
+    private String customerEmail;
+
     private Integer employeeId;
 
     private String employeeName;
@@ -34,6 +42,12 @@ public class QuoteResponseDTO {
         this.employeeEmail = quote.getEmployee().getEmail();
         this.totalAmount = quote.getTotalAmount();
         this.status = quote.getStatus();
+
+        this.customerId = quote.getCustomer().getCustomerId();
+        this.customerName = quote.getCustomer().getCustomerName();
+        this.customerPhone = quote.getCustomer().getPhoneNumber();
+        this.customerEmail = quote.getCustomer().getEmail();
+
         this.quotationDetailResponseDTOs = quote.getQuotationDetails().stream().map(quotationDetail -> {
             return new QuotationDetailResponseDTO(quotationDetail);
         }).toList();
@@ -105,5 +119,46 @@ public class QuoteResponseDTO {
     public void setQuotationDetails(List<QuotationDetailResponseDTO> quotationDetails) {
         this.quotationDetailResponseDTOs = quotationDetails;
     }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    // public List<QuotationDetailResponseDTO> getQuotationDetailResponseDTOs() {
+    // return quotationDetailResponseDTOs;
+    // }
+
+    // public void setQuotationDetailResponseDTOs(List<QuotationDetailResponseDTO>
+    // quotationDetailResponseDTOs) {
+    // this.quotationDetailResponseDTOs = quotationDetailResponseDTOs;
+    // }
 
 }

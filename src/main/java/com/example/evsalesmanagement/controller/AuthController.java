@@ -22,13 +22,13 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponseDTO>> postMethodName(@RequestBody AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> login(@RequestBody AuthRequestDTO authRequestDTO) {
         AuthResponseDTO authResponseDTO = authService.login(authRequestDTO.getUsername(), authRequestDTO.getPassword());
         return ResponseEntity.ok(new ApiResponse<AuthResponseDTO>(true, null, authResponseDTO));
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<ApiResponse<AuthResponseDTO>> postMethodName(@RequestParam String refreshToken) {
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> getAccessTokenWithRefreshToken(@RequestParam String refreshToken) {
 
         AuthResponseDTO authResponseDTO = authService.getAccessTokenWithRefreshToken(refreshToken);
 

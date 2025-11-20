@@ -49,6 +49,10 @@ public class Quote extends Base {
     @JoinColumn(name = "EmployeeId")
     private Employee employee;
 
+    @ManyToOne
+    @JoinColumn(name = "CustomerId") // --> tạo cho ai
+    private Customer customer;
+
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuotationDetail> quotationDetails = new ArrayList<>();
 
@@ -110,5 +114,14 @@ public class Quote extends Base {
     public void setQuotationDetails(List<QuotationDetail> quotationDetails) {
         this.quotationDetails = quotationDetails;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    
 
 }

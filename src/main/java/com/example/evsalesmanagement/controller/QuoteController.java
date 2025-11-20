@@ -3,12 +3,14 @@ package com.example.evsalesmanagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
 import com.example.evsalesmanagement.enums.QuoteStatusEnum;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.QuoteService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -37,8 +39,12 @@ public class QuoteController {
 
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @PostMapping
-    public ResponseEntity<ApiResponse<QuoteResponseDTO>> createQuote(@RequestBody QuoteRequestDTO quoteRequestDTO) {
-        QuoteResponseDTO quoteResponseDTO = quoteService.createQuote(quoteRequestDTO);
+    public ResponseEntity<ApiResponse<QuoteResponseDTO>> createQuote(
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+            @RequestBody QuoteRequestDTO quoteRequestDTO) {
+
+        Integer employeeId = customerUserDetails.getEmployeeId();
+        QuoteResponseDTO quoteResponseDTO = quoteService.createQuote(employeeId, quoteRequestDTO);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
@@ -67,6 +73,5 @@ public class QuoteController {
 
     // @GetMapping("/employee")
     // public ResponseEntity<ApiResponse<
-    
 
 }

@@ -38,7 +38,7 @@ public class AuthService {
     @Autowired
     JwtUtil jwtUtil;
 
-    private static long expiration = 1000 * 60 * 60; // 1h
+    private static long expiration = 1000 * 60 * 60 * 4; // 4h
 
     final private SecureRandom secureRandom = new SecureRandom();
 
@@ -88,6 +88,8 @@ public class AuthService {
                 expiration);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
+        authResponseDTO.setUsername(employee.getUsername());
+        authResponseDTO.setRole(employee.getRole().name());
         authResponseDTO.setAccessToken(accessToken);
         authResponseDTO.setRefreshToken(refreshToken);
         authResponseDTO.setExpiresIn(expiration);
