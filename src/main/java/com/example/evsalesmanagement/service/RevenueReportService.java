@@ -3,11 +3,14 @@ package com.example.evsalesmanagement.service;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -84,7 +87,9 @@ public class RevenueReportService {
                 String key = createGroupKey(detail, order);
                 RevenueData data = map.computeIfAbsent(key, k -> new RevenueData(detail, order));
 
-                data.totalOrders++;
+                // FIX: Chỉ đếm mỗi order 1 lần (tránh trùng lặp)
+                data.orderIds.add(order.getOrderId());
+                
                 data.totalQuantity += Optional.ofNullable(detail.getQuantity()).orElse(0);
                 data.totalRevenue = data.totalRevenue.add(
                         Optional.ofNullable(detail.getTotalAmount()).orElse(BigDecimal.ZERO));
@@ -105,11 +110,11 @@ public class RevenueReportService {
 
         BigDecimal totalRevenue = BigDecimal.ZERO;
         BigDecimal totalDiscount = BigDecimal.ZERO;
-        int totalOrders = 0;
+        Set<Integer> uniqueOrderIds = new HashSet<>(); // FIX: Đếm order không trùng lặp
         int totalQuantity = 0;
 
         for (Order order : orders) {
-            totalOrders++;
+            uniqueOrderIds.add(order.getOrderId());
 
             if (order.getOrderDetails() != null) {
                 for (OrderDetail d : order.getOrderDetails()) {
@@ -127,7 +132,8 @@ public class RevenueReportService {
             }
         }
 
-        return new RevenueReportSummaryDTO(totalRevenue, totalDiscount, totalOrders, totalQuantity);
+        return new RevenueReportSummaryDTO(totalRevenue, totalDiscount, 
+                                          uniqueOrderIds.size(), totalQuantity);
     }
 
     public RevenueReportSummaryDTO getTotalRevenueByAgency(Integer agencyId) {
@@ -144,23 +150,61 @@ public class RevenueReportService {
 
     public byte[] exportRevenueReportToExcel(RevenueReportRequestDTO request) {
         List<RevenueReportResponseDTO> report = getRevenueReport(request);
+        RevenueReportSummaryDTO summary = getTotalRevenueAll(request);
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            Sheet sheet = workbook.createSheet("Revenue Report");
+            Sheet sheet = workbook.createSheet("Báo cáo doanh thu");
 
-            Row headerRow = sheet.createRow(0);
-            String[] headers = {"Vehicle Type", "Agency", "Total Orders", "Total Quantity", "Total Revenue", "Total Discount"};
+            // THÊM: Metadata header
+            int rowNum = 0;
+            Row titleRow = sheet.createRow(rowNum++);
+            Cell titleCell = titleRow.createCell(0);
+            titleCell.setCellValue("BÁO CÁO DOANH THU");
+            CellStyle titleStyle = workbook.createCellStyle();
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 16);
+            titleStyle.setFont(titleFont);
+            titleCell.setCellStyle(titleStyle);
+
+            // Thông tin bộ lọc
+            if (request.getFromDate() != null && request.getToDate() != null) {
+                Row dateRow = sheet.createRow(rowNum++);
+                dateRow.createCell(0).setCellValue("Từ ngày: " + 
+                    request.getFromDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
+                    " - Đến ngày: " + 
+                    request.getToDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            }
+
+            if (request.getAgencyId() != null) {
+                Row agencyRow = sheet.createRow(rowNum++);
+                agencyRow.createCell(0).setCellValue("Đại lý: " + request.getAgencyId());
+            }
+
+            if (request.getStatus() != null) {
+                Row statusRow = sheet.createRow(rowNum++);
+                statusRow.createCell(0).setCellValue("Trạng thái: " + request.getStatus().getDisplayName());
+            }
+
+            rowNum++; // Dòng trống
+
+            // Header row
+            Row headerRow = sheet.createRow(rowNum++);
+            String[] headers = {"Loại xe", "Đại lý", "Số đơn hàng", "Số lượng xe", 
+                               "Tổng doanh thu", "Tổng giảm giá", "Doanh thu ròng"};
+            
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
-                CellStyle style = workbook.createCellStyle();
-                Font font = workbook.createFont();
-                font.setBold(true);
-                style.setFont(font);
-                cell.setCellStyle(style);
+                cell.setCellStyle(headerStyle);
             }
 
-            int rowNum = 1;
+            // Data rows
             for (RevenueReportResponseDTO dto : report) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(dto.getVehicleTypeName() != null ? dto.getVehicleTypeName() : "");
@@ -169,8 +213,23 @@ public class RevenueReportService {
                 row.createCell(3).setCellValue(dto.getTotalQuantity());
                 row.createCell(4).setCellValue(dto.getTotalRevenue() != null ? dto.getTotalRevenue().doubleValue() : 0);
                 row.createCell(5).setCellValue(dto.getTotalDiscount() != null ? dto.getTotalDiscount().doubleValue() : 0);
+                row.createCell(6).setCellValue(dto.getNetRevenue() != null ? dto.getNetRevenue().doubleValue() : 0);
             }
 
+            // THÊM: Tổng cộng cuối báo cáo
+            rowNum++; // Dòng trống
+            Row summaryRow = sheet.createRow(rowNum);
+            Cell summaryLabelCell = summaryRow.createCell(0);
+            summaryLabelCell.setCellValue("TỔNG CỘNG");
+            summaryLabelCell.setCellStyle(headerStyle);
+            
+            summaryRow.createCell(2).setCellValue(summary.getTotalOrders());
+            summaryRow.createCell(3).setCellValue(summary.getTotalQuantity());
+            summaryRow.createCell(4).setCellValue(summary.getTotalRevenue().doubleValue());
+            summaryRow.createCell(5).setCellValue(summary.getTotalDiscount().doubleValue());
+            summaryRow.createCell(6).setCellValue(summary.getNetRevenue().doubleValue());
+
+            // Auto-size columns
             for (int i = 0; i < headers.length; i++) {
                 sheet.autoSizeColumn(i);
             }
@@ -195,7 +254,7 @@ public class RevenueReportService {
     private static class RevenueData {
         String vehicleTypeName;
         String agencyName;
-        int totalOrders = 0;
+        Set<Integer> orderIds = new HashSet<>(); // FIX: Track unique orders
         int totalQuantity = 0;
         BigDecimal totalRevenue = BigDecimal.ZERO;
         BigDecimal totalDiscount = BigDecimal.ZERO;
@@ -213,10 +272,17 @@ public class RevenueReportService {
             RevenueReportResponseDTO dto = new RevenueReportResponseDTO();
             dto.setVehicleTypeName(vehicleTypeName);
             dto.setAgencyName(agencyName);
-            dto.setTotalOrders(totalOrders);
+            dto.setTotalOrders(orderIds.size()); // FIX: Sử dụng số order unique
             dto.setTotalQuantity(totalQuantity);
-            dto.setTotalRevenue(totalRevenue);
-            dto.setTotalDiscount(totalDiscount);
+            
+            // FIX: Null-safe BigDecimal operations
+            BigDecimal safeRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
+            BigDecimal safeDiscount = totalDiscount != null ? totalDiscount : BigDecimal.ZERO;
+            
+            dto.setTotalRevenue(safeRevenue);
+            dto.setTotalDiscount(safeDiscount);
+            dto.setNetRevenue(safeRevenue.subtract(safeDiscount));
+            
             return dto;
         }
     }
