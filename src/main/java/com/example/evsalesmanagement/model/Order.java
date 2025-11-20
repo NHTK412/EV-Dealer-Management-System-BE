@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 //DonHang = Oder
@@ -65,7 +66,8 @@ public class Order extends Base {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<Payment> payments = new HashSet<>();
 
-
+    @OneToOne(mappedBy = "order")
+    private VehicleDelivery vehicleDelivery;
 
     public Integer getOrderId() {
         return orderId;
@@ -154,6 +156,14 @@ public class Order extends Base {
 
     public void setPayments(Set<Payment> payments) {
         this.payments = payments;
+    }
+
+    public VehicleDelivery getVehicleDelivery() {
+        return vehicleDelivery;
+    }
+
+    public void setVehicleDelivery(VehicleDelivery vehicleDelivery) {
+        this.vehicleDelivery = vehicleDelivery;
     }
 
     

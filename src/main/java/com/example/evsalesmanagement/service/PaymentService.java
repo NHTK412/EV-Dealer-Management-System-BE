@@ -281,7 +281,7 @@ public void deletePayment(Integer id) {
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setPaymentId(payment.getPaymentId());
         dto.setPaymentMethod(payment.getPaymentMethod());
-        dto.setPaymentForm(payment.getPaymentForm());
+        // dto.setPaymentForm(payment.getPaymentForm());
         dto.setAmount(payment.getAmount());
         dto.setNumberCycle(payment.getNumberCycle());
         dto.setDueDate(payment.getDueDate());
@@ -289,7 +289,7 @@ public void deletePayment(Integer id) {
         dto.setPenaltyAmount(payment.getPenaltyAmount());
         dto.setStatus(payment.getStatus());
         dto.setVnpayCode(payment.getVnpayCode());
-        dto.setOrderId(payment.getOrder() != null ? payment.getOrder().getOrderId() : null);
+        // dto.setOrderId(payment.getOrder() != null ? payment.getOrder().getOrderId() : null);cl
         return dto;
     }
 }

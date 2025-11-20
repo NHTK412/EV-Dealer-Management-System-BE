@@ -2,9 +2,14 @@ package com.example.evsalesmanagement.dto.order;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
 import com.example.evsalesmanagement.model.Order;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -56,6 +61,8 @@ public class OrderResponseDTO {
 
     private List<OrderDetailResponseDTO> orderDetailResponseDTOs = new ArrayList<>();
 
+    private Set<PaymentResponseDTO> paymentResponseDTOs = new HashSet<>();
+
     public OrderResponseDTO(Order order) {
         this.orderId = order.getOrderId();
         this.notes = order.getNotes();
@@ -79,6 +86,15 @@ public class OrderResponseDTO {
             this.agencyName = order.getAgency().getAgencyName();
             this.agencyAddress = order.getAgency().getAddress();
             this.agencyPhone = order.getAgency().getPhoneNumber();
+        }
+
+        if (order.getPayments() != null) {
+            this.paymentResponseDTOs = order.getPayments()
+                    .stream()
+                    .map(payment -> {
+                        return new PaymentResponseDTO(payment);
+                    })
+                    .collect(Collectors.toSet());
         }
 
         this.orderDetailResponseDTOs = order.getOrderDetails().stream().map(orderDetail -> {
@@ -224,5 +240,33 @@ public class OrderResponseDTO {
     public void setContractNumber(String contractNumber) {
         this.contractNumber = contractNumber;
     }
+
+    public String getAgencyAddress() {
+        return agencyAddress;
+    }
+
+    public void setAgencyAddress(String agencyAddress) {
+        this.agencyAddress = agencyAddress;
+    }
+
+    public String getAgencyPhone() {
+        return agencyPhone;
+    }
+
+    public void setAgencyPhone(String agencyPhone) {
+        this.agencyPhone = agencyPhone;
+    }
+
+    public Set<PaymentResponseDTO> getPaymentResponseDTOs() {
+        return paymentResponseDTOs;
+    }
+
+    public void setPaymentResponseDTOs(Set<PaymentResponseDTO> paymentResponseDTOs) {
+        this.paymentResponseDTOs = paymentResponseDTOs;
+    }
+
+    
+
+
 
 }
