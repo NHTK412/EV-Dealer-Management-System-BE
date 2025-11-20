@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.OrderService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -104,6 +106,15 @@ public class OrderController {
         List<OrderSummaryDTO> orderResponseDTOs = orderService.getOrdersByAgencyId(employeeId, pageable);
 
         return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
+    }
+
+    @PostMapping("/{orderId}/process-payment")
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> createPayment(@PathVariable Integer orderId,
+            @RequestBody PaymentRequestDTO paymentRequestDTO) {
+
+        OrderResponseDTO orderResponseDTO = orderService.createPayment(orderId, paymentRequestDTO);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
     }
 
 }

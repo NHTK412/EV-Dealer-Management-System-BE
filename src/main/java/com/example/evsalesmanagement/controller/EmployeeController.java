@@ -226,7 +226,7 @@ public class EmployeeController {
                                 new ApiResponse<>(true, "Count employees by position successfully", count));
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','DEADLER_MANAGER')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/me")
         public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getCurrentEmployee(
                         @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {

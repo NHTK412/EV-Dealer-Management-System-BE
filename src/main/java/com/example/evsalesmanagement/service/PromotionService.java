@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
+// import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 // import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
@@ -60,11 +60,12 @@ public class PromotionService {
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
                                                                 vehicleTypeDetail))
                                                 .toList());
-                promotionResponseDTO.setAgencies(
-                                promotion.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyResponseDTO(agency))
-                                                .toList());
+                // promotionResponseDTO.setAgencies(
+                // promotion.getAgencies()
+                // .stream()
+                // .map(agency -> new AgencyResponseDTO(agency))
+                // .toList());
+
                 // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
                 // khuyenMaiChiTiet.setChiTietLoaiXes(
                 // khuyenMai.getChiTietLoaiXes()
@@ -81,7 +82,7 @@ public class PromotionService {
         }
 
         @Transactional
-        public PromotionResponseDTO createPromotion(PromotionRequestDTO promotionRequestDTO) {
+        public PromotionResponseDTO createPromotion(Integer agencyId, PromotionRequestDTO promotionRequestDTO) {
 
                 Promotion newPromotion = new Promotion();
                 newPromotion.setPromotionName(promotionRequestDTO.getPromotionName());
@@ -109,7 +110,10 @@ public class PromotionService {
 
                 newPromotion.setVehicleDetails(
                                 vehicleTypeDetailRepository.findAllById(promotionRequestDTO.getVehicleTypeDetailsId()));
-                newPromotion.setAgencies(agencyRepository.findAllById(promotionRequestDTO.getAgencysId()));
+
+                newPromotion.setAgency(agencyRepository.findById(agencyId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found")));
+                // newPromotion.setAgencies(agencyRepository.findAllById(promotionRequestDTO.getAgencysId()));
                 promotionRepository.save(newPromotion);
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(newPromotion);
 
@@ -119,11 +123,12 @@ public class PromotionService {
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
                                                                 vehicleTypeDetail))
                                                 .toList());
-                promotionResponseDTO.setAgencies(
-                                newPromotion.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyResponseDTO(agency))
-                                                .toList());
+
+                // promotionResponseDTO.setAgencies(
+                // newPromotion.getAgencies()
+                // .stream()
+                // .map(agency -> new AgencyResponseDTO(agency))
+                // .toList());
 
                 return promotionResponseDTO;
 
@@ -146,11 +151,11 @@ public class PromotionService {
                                                                 vehicleTypeDetail))
                                                 .toList());
 
-                promotionResponseDTO.setAgencies(
-                                promotion.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyResponseDTO(agency))
-                                                .toList());
+                // promotionResponseDTO.setAgencies(
+                // promotion.getAgencies()
+                // .stream()
+                // .map(agency -> new AgencyResponseDTO(agency))
+                // .toList());
 
                 promotionRepository.deleteById(promotionId);
 
@@ -159,7 +164,8 @@ public class PromotionService {
 
         @CachePut(value = "promotion", key = "#promotionId")
         @Transactional
-        public PromotionResponseDTO updatePromotion(Integer promotionId, PromotionRequestDTO promotion) {
+        public PromotionResponseDTO updatePromotion(Integer agencyId, Integer promotionId,
+                        PromotionRequestDTO promotion) {
 
                 Promotion updatePromotion = promotionRepository.findById(promotionId)
                                 .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
@@ -185,9 +191,14 @@ public class PromotionService {
 
                 updatePromotion.setVehicleDetails(
                                 vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
-                updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
+                // updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
+
+                // updatePromotion.setAgency(agencyRepository.findById(promotion));
+                updatePromotion.setAgency(agencyRepository.findById(agencyId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found")));
 
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(updatePromotion);
+
                 promotionResponseDTO.setVehicleTypeDetails(
                                 updatePromotion.getVehicleDetails()
                                                 .stream()
@@ -195,11 +206,11 @@ public class PromotionService {
                                                                 vehicleTypeDetails))
                                                 .toList());
 
-                promotionResponseDTO.setAgencies(
-                                updatePromotion.getAgencies()
-                                                .stream()
-                                                .map(agency -> new AgencyResponseDTO(agency))
-                                                .toList());
+                // promotionResponseDTO.setAgencies(
+                // updatePromotion.getAgencies()
+                // .stream()
+                // .map(agency -> new AgencyResponseDTO(agency))
+                // .toList());
 
                 // return promotionRepository.save(updatePromotion);
                 return promotionResponseDTO;

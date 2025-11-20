@@ -1,5 +1,7 @@
 package com.example.evsalesmanagement.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +14,22 @@ import org.springframework.cache.annotation.Cacheable;
 // >>>>>>> feat/Khang/cauHinhRedis
 import org.springframework.stereotype.Service;
 
-import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
+// import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.OrderTypeEnum;
+import com.example.evsalesmanagement.enums.PaymentMethodEnum;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.enums.PaymentTypeEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
+import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
@@ -197,5 +204,43 @@ public class OrderService {
                 return ordersPage.stream()
                                 .map((order) -> new OrderSummaryDTO(order))
                                 .toList();
+        }
+
+        @Transactional
+        public OrderResponseDTO createPayment(Integer orderId, PaymentRequestDTO paymentRequestDTO) {
+
+                Order order = orderRepository.findById(orderId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+                if (paymentRequestDTO.getPaymentType() == PaymentTypeEnum.FULL_PAYMENT) {
+                        Payment payment = new Payment();
+
+                        payment.setPaymentMethod(PaymentMethodEnum.CASH);
+
+                        payment.setAmount(order.getTotalAmount());
+
+                        payment.setDueDate(LocalDateTime.now());
+
+                        payment.setPaymentDate(LocalDateTime.now());
+
+                        payment.setStatus(PaymentStatusEnum.PAID);
+
+                        payment.setPenaltyAmount(BigDecimal.valueOf(0));
+
+                        payment.setOrder(order);
+
+                        order.getPayments().add(payment);
+
+                }
+
+                orderRepository.save(order);
+
+                return new OrderResponseDTO(order);
+
+                // if (paymentType.equals("THANG")) {
+
+                // Payment payment = new Payment();
+
+                // }
         }
 }

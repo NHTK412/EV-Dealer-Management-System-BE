@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.PromotionService;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,9 +61,12 @@ public class PromotionController {
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @PostMapping()
         public ResponseEntity<ApiResponse<PromotionResponseDTO>> createPromotion(
+                        @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
                         @RequestBody PromotionRequestDTO promotion) {
 
-                PromotionResponseDTO promotionResponseDTO = promotionService.createPromotion(promotion);
+                Integer agencyId = customerUserDetails.getAgencyId();
+
+                PromotionResponseDTO promotionResponseDTO = promotionService.createPromotion(agencyId, promotion);
                 return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
@@ -78,10 +83,15 @@ public class PromotionController {
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
         @PutMapping("/{promotionId}")
-        public ResponseEntity<ApiResponse<PromotionResponseDTO>> putPromotion(@PathVariable Integer promotionId,
+        public ResponseEntity<ApiResponse<PromotionResponseDTO>> updatePromotion(
+                        @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+                        @PathVariable Integer promotionId,
                         @RequestBody PromotionRequestDTO promotion) {
 
-                PromotionResponseDTO promotionResponseDTO = promotionService.updatePromotion(promotionId, promotion);
+                Integer agencyId = customerUserDetails.getAgencyId();
+                
+                PromotionResponseDTO promotionResponseDTO = promotionService.updatePromotion(agencyId, promotionId,
+                                promotion);
                 return ResponseEntity.ok(new ApiResponse<PromotionResponseDTO>(true, null, promotionResponseDTO));
 
         }
