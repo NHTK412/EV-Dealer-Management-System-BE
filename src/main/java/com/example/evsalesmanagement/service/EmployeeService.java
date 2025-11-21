@@ -7,11 +7,13 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+import com.example.evsalesmanagement.enums.EmployeeStatusEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
@@ -62,6 +64,17 @@ public class EmployeeService {
         employee.setEmail(requestDTO.getEmail());
         employee.setAddress(requestDTO.getAddress());
         employee.setRole(requestDTO.getRole());
+
+        employee.setUsername(requestDTO.getEmail());
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String rawPassword = "Evm123@";
+        String hashedPassword = encoder.encode(rawPassword);
+
+        employee.setPassword(hashedPassword);
+
+        employee.setStatus(EmployeeStatusEnum.ACTIVE);
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
@@ -121,13 +134,14 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo position - có phân trang
-// <<<<<<< HEAD
+    // <<<<<<< HEAD
     public Page<EmployeeResponseDTO> getEmployeesByRole(RoleEnum role, Pageable pageable) {
         return employeeRepository.findByRole(role, pageable)
-// =======
-//     public Page<EmployeeResponseDTO> getEmployeesByPosition(String position, Pageable pageable) {
-//         return employeeRepository.findByPosition(position, pageable)
-// >>>>>>> feat/Khang/cauHinhRedis
+                // =======
+                // public Page<EmployeeResponseDTO> getEmployeesByPosition(String position,
+                // Pageable pageable) {
+                // return employeeRepository.findByPosition(position, pageable)
+                // >>>>>>> feat/Khang/cauHinhRedis
                 .map(EmployeeResponseDTO::new);
     }
 

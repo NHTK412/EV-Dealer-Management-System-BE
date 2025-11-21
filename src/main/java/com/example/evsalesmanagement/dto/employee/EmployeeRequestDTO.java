@@ -16,30 +16,30 @@ import jakarta.validation.constraints.Size;
 
 public class EmployeeRequestDTO {
 
-    @NotBlank(message = "Employee name cannot be blank")
-    @Size(min = 2, max = 100, message = "Employee name must be between 2 and 100 characters")
+    // @NotBlank(message = "Employee name cannot be blank")
+    // @Size(min = 2, max = 100, message = "Employee name must be between 2 and 100 characters")
     private String employeeName;
 
     // @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male',
     // 'Female' or 'Other'")
     private GenderEnum gender;
 
-    @Past(message = "Birth date must be a past date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    // @Past(message = "Birth date must be a past date")
+    // @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
-    @NotBlank(message = "Phone number cannot be blank")
-    @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", message = "Phone number is not in the correct format")
+    // @NotBlank(message = "Phone number cannot be blank")
+    // @Pattern(regexp = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$", message = "Phone number is not in the correct format")
     private String phoneNumber;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email is not valid")
+    // @NotBlank(message = "Email cannot be blank")
+    // @Email(message = "Email is not valid")
     private String email;
 
-    @Size(max = 200, message = "Address cannot exceed 200 characters")
+    // @Size(max = 200, message = "Address cannot exceed 200 characters")
     private String address;
 
-    @NotBlank(message = "Position cannot be blank")
+    // @NotBlank(message = "Position cannot be blank")
     // @Size(min = 2, max = 50, message = "Position must be between 2 and 50
     // characters")
     private RoleEnum role;

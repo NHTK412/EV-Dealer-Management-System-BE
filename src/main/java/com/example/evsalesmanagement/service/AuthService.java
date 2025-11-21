@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.auth.AuthResponseDTO;
@@ -49,7 +50,10 @@ public class AuthService {
         Employee employee = employeeRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("Tên đăng nhập không tồn tại"));
 
-        if (!employee.getPassword().equals(password)) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        // if (!employee.getPassword().equals(password)) {
+        if (!encoder.matches(password, employee.getPassword())) {
             throw new RuntimeException("Mật khẩu không hợp lệ");
         }
 

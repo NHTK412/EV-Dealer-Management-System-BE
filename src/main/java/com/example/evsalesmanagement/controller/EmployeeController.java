@@ -72,7 +72,7 @@ public class EmployeeController {
         }
 
         // Tạo nhân viên mới
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+        @PreAuthorize("hasAnyRole('ADMIN')")
         @PostMapping
         public ResponseEntity<ApiResponse<?>> createEmployee(
                         @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
