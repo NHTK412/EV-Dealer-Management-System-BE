@@ -19,6 +19,7 @@ import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.OrderService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -128,12 +129,21 @@ public class OrderController {
     // @PatchMapping("/payment/{paymentId}")
 
     @PostMapping("/{orderId}/delivery")
-    public ResponseEntity<ApiResponse<OrderResponseDTO>> createDelivery(@PathVariable Integer orderId, @RequestBody VehicleDeliveryRequestDTO vehicledeliveryRequestDTO
-            ) {
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> createDelivery(@PathVariable Integer orderId,
+            @RequestBody VehicleDeliveryRequestDTO vehicledeliveryRequestDTO) {
 
         OrderResponseDTO orderResponseDTO = orderService.createDelivery(orderId, vehicledeliveryRequestDTO);
 
         return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
+    }
+
+    @PatchMapping("{orderId}/delivery")
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> updateDelivery(@PathVariable Integer orderId,
+            @RequestParam VehicleDeliveryStatusEnum vehicleDeliveryStatusEnum) {
+        OrderResponseDTO orderResponseDTO = orderService.updateDelivery(orderId, vehicleDeliveryStatusEnum);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
+
     }
 
 }

@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // <<<<<<< HEAD
@@ -27,6 +32,7 @@ import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentTypeEnum;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Customer;
@@ -37,7 +43,9 @@ import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.PaymentPlan;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
+import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.VehicleDelivery;
+import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
 // import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
@@ -45,6 +53,8 @@ import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PaymentPlanRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
 import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
+import com.example.evsalesmanagement.repository.VehicleRepository;
+import com.example.evsalesmanagement.repository.WarehouseReleaseNoteRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -60,8 +70,14 @@ public class OrderService {
         @Autowired
         private EmployeeRepository employeeRepository;
 
+        // @Autowired
+        // private VehicleDeliveryRepository vehicleDeliveryRepository;
+
         @Autowired
-        private VehicleDeliveryRepository vehicleDeliveryRepository;
+        private WarehouseReleaseNoteRepository warehouseReleaseNoteRepository;
+
+        @Autowired
+        private VehicleRepository vehicleRepository;
 
         // @Autowired
         // private AgencyRepository agencyRepository;
@@ -488,4 +504,61 @@ public class OrderService {
                 return new OrderResponseDTO(order);
 
         }
+
+        @Transactional
+        public OrderResponseDTO updateDelivery(Integer orderId, VehicleDeliveryStatusEnum vehicleDeliveryStatusEnum) {
+
+                Order order = orderRepository.findById(orderId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+                order.getVehicleDelivery().setStatus(vehicleDeliveryStatusEnum);
+
+                if (vehicleDeliveryStatusEnum == VehicleDeliveryStatusEnum.DELIVERING) {
+                        WarehouseReleaseNote warehouseReleaseNote = new WarehouseReleaseNote();
+
+                        warehouseReleaseNote.setEmployeeId(order.getEmployee());
+
+                        warehouseReleaseNote.setOder(order);
+
+                        warehouseReleaseNote.setTotalAmount(order.getTotalAmount());
+
+                        warehouseReleaseNote.setReleaseDate(LocalDateTime.now());
+
+                        // warehouseReleaseNote.get
+
+                        // Map<Integer, Integer> vehicleDetailQuantity = order.getOrderDetails()
+                        // .stream()
+                        // .collect(Collectors.toMap(
+                        // orderDetail -> orderDetail.
+
+                        Map<Integer, Integer> vehicleDetailQuantity = order.getOrderDetails()
+                                        .stream()
+                                        .collect(Collectors.toMap(
+                                                        orderDetail -> orderDetail.getVehicleTypeDetail()
+                                                                        .getVehicleTypeDetailId(),
+                                                        orderDetail -> orderDetail.getQuantity()));
+
+                        for (Entry<Integer, Integer> entry : vehicleDetailQuantity.entrySet()) {
+                                Set<Vehicle> vehicles = vehicleRepository.findAvailableVehicles(
+                                                VehicleStatusEnum.IN_STOCK,
+                                                order.getEmployee().getAgency().getAgencyId(),
+                                                entry.getKey());
+
+                                if (vehicles.size() < entry.getValue()) {
+                                        throw new ConflictException("Không đủ xe");
+                                }
+
+                                vehicles.stream().forEach((vehicle) -> vehicle.setStatus(VehicleStatusEnum.SOLD));
+
+                                warehouseReleaseNote.getVehicles().addAll(vehicles);
+                        }
+
+                        warehouseReleaseNoteRepository.save(warehouseReleaseNote);
+                        orderRepository.save(order);
+
+                        return new OrderResponseDTO(order);
+                }
+                return null;
+        }
+
 }

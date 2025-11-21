@@ -52,9 +52,12 @@ public class AuthService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+        // String code = encoder.encode(password);
+        // System.out.println(code);
+
         // if (!employee.getPassword().equals(password)) {
         if (!encoder.matches(password, employee.getPassword())) {
-            throw new RuntimeException("Mật khẩu không hợp lệ");
+            throw new InvalidRefreshTokenException("Mật khẩu không hợp lệ");
         }
 
         String accessToken = jwtUtil.generateToken(employee.getUsername(), employee.getRole().name(),

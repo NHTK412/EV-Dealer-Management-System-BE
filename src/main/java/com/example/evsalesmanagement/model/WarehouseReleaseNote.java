@@ -2,7 +2,9 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -41,6 +44,10 @@ public class WarehouseReleaseNote extends Base {
     @OneToOne
     @JoinColumn(name = "OrderId", unique = true)
     private Order order;
+
+    // @ManyToMany
+    // @JoinTable(name = "warehouseReleaseNote")
+
 
     public Integer getWarehouseReleaseNoteId() {
         return warehouseReleaseNoteId;
@@ -95,6 +102,16 @@ public class WarehouseReleaseNote extends Base {
 
     @ManyToMany
     @JoinTable(name = "WarehouseReleaseNoteDetail", joinColumns = @JoinColumn(name = "WarehouseReleaseNoteId"), inverseJoinColumns = @JoinColumn(name = "VehicleId"))
-    private List<Vehicle> vehicles;
+    private Set<Vehicle> vehicles = new HashSet<>();
 
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
+
+    
 }
