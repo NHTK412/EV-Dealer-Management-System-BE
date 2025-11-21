@@ -14,14 +14,16 @@ import com.example.evsalesmanagement.model.Vehicle;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-    @Query("""
-                SELECT v FROM Vehicle v
+        @Query("""
+                SELECT v 
+                FROM Vehicle v
+                JOIN v.vehicleTypeDetail vtd
                 WHERE v.status = :status
                         AND v.agency.agencyId = :agencyId
-                        AND v.vehicleTypeDetail.vehicleTypeDetailId = :vehicleTypeDetailId
-            """)
-    Set<Vehicle> findAvailableVehicles(
-            @Param("status") VehicleStatusEnum status,
-            @Param("agencyId") Integer agencyId,
-            @Param("vehicleTypeDetailId") Integer vehicleTypeDetailId);
+                        AND vtd.vehicleTypeDetailId = :vehicleTypeDetailId
+                        """)
+        Set<Vehicle> findAvailableVehicles(
+                        @Param("status") VehicleStatusEnum status,
+                        @Param("agencyId") Integer agencyId,
+                        @Param("vehicleTypeDetailId") Integer vehicleTypeDetailId);
 }
