@@ -59,8 +59,9 @@ public class OrderDetail extends Base {
     private BigDecimal discountPercentage;
 
     // WhoblesalePrice = gia si
-    @Column(name = "WholesalePrice")
-    private BigDecimal wholesalePrice;
+    // @Column(name = "WholesalePrice")
+    // private BigDecimal wholesalePrice;
+    private BigDecimal price;
 
     // total amount = tong tien
     @Column(name = "TotalAmount")
@@ -163,13 +164,13 @@ public class OrderDetail extends Base {
         this.discountPercentage = discountPercentage;
     }
 
-    public BigDecimal getWholesalePrice() {
-        return wholesalePrice;
-    }
+    // public BigDecimal getWholesalePrice() {
+    // return wholesalePrice;
+    // }
 
-    public void setWholesalePrice(BigDecimal wholesalePrice) {
-        this.wholesalePrice = wholesalePrice;
-    }
+    // public void setWholesalePrice(BigDecimal wholesalePrice) {
+    // this.wholesalePrice = wholesalePrice;
+    // }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;
@@ -193,6 +194,14 @@ public class OrderDetail extends Base {
 
     public void setVehicleTypeDetail(VehicleTypeDetail vehicleTypeDetail) {
         this.vehicleTypeDetail = vehicleTypeDetail;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
 }

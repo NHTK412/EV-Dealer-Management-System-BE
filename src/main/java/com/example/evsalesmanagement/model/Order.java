@@ -45,7 +45,7 @@ public class Order extends Base {
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Type")
+    @Column(name = "Types")
     private OrderTypeEnum type;
 
     @ManyToOne

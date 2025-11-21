@@ -61,8 +61,10 @@ public class QuotationDetail extends Base {
     private BigDecimal discountPercentage;
 
     // WhoblesalePrice = gia si
-    @Column(name = "WholesalePrice")
-    private BigDecimal wholesalePrice;
+    // @Column(name = "WholesalePrice")
+    // private BigDecimal wholesalePrice;
+    @Column(name = "Price")
+    private BigDecimal price;
 
     // total amount = tong tien
     @Column(name = "TotalAmount")
@@ -167,12 +169,12 @@ public class QuotationDetail extends Base {
         this.discountPercentage = discountPercentage;
     }
 
-    public BigDecimal getWholesalePrice() {
-        return wholesalePrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setWholesalePrice(BigDecimal wholesalePrice) {
-        this.wholesalePrice = wholesalePrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public BigDecimal getTotalAmount() {

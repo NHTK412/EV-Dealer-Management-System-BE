@@ -64,7 +64,7 @@ public class OrderDetailResponseDTO {
         this.roadMaintenanceMees = orderDetail.getRoadMaintenanceMees();
         this.vehicleRegistrationServiceFee = orderDetail.getVehicleRegistrationServiceFee();
         this.discountPercentage = orderDetail.getDiscountPercentage();
-        this.wholesalePrice = orderDetail.getWholesalePrice();
+        this.wholesalePrice = orderDetail.getPrice();
         this.totalAmount = orderDetail.getTotalAmount();
     }
 

@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collector;
+// import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.docx4j.model.datastorage.XPathEnhancerParser.primaryExpr_return;
 import org.springframework.beans.factory.annotation.Autowired;
 // <<<<<<< HEAD
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
+import com.example.evsalesmanagement.dto.order.OrderRequestDTO;
 // import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
@@ -35,6 +37,7 @@ import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
+import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Order;
@@ -45,15 +48,19 @@ import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
 import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.VehicleDelivery;
+import com.example.evsalesmanagement.model.VehicleTypeDetail;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
+import com.example.evsalesmanagement.repository.AgencyRepository;
+import com.example.evsalesmanagement.repository.AgencyWholesalePriceRepository;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
 // import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PaymentPlanRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
-import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
+// import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
+import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.WarehouseReleaseNoteRepository;
 
 import jakarta.transaction.Transactional;
@@ -78,6 +85,15 @@ public class OrderService {
 
         @Autowired
         private VehicleRepository vehicleRepository;
+
+        @Autowired
+        private AgencyRepository agencyRepository;
+
+        @Autowired
+        private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
+
+        @Autowired
+        private VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
         // @Autowired
         // private AgencyRepository agencyRepository;
@@ -135,7 +151,7 @@ public class OrderService {
                 // order.setStatus("CREATE");
                 order.setStatus(OrderStatusEnum.PENDING);
 
-                order.setType(OrderTypeEnum.RETAIL_CUSTOMER);
+                order.setType(OrderTypeEnum.CUSTOMER);
 
                 order.setEmployee(employee);
 
@@ -167,7 +183,7 @@ public class OrderService {
 
                         orderDetail.setDiscountPercentage(quotationDetail.getDiscountPercentage());
 
-                        orderDetail.setWholesalePrice(quotationDetail.getWholesalePrice());
+                        orderDetail.setPrice(quotationDetail.getPrice());
 
                         orderDetail.setTotalAmount(quotationDetail.getTotalAmount());
 
@@ -561,4 +577,94 @@ public class OrderService {
                 return null;
         }
 
+        @Transactional
+        public OrderResponseDTO createOrder(Integer employeeId, OrderRequestDTO orderRequestDTO) {
+
+                Order order = new Order();
+                order.setNotes(orderRequestDTO.getNotes());
+
+                Agency agency = agencyRepository.findById(orderRequestDTO.getAgencyId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found"));
+
+                Employee employee = employeeRepository.findById(employeeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found"));
+
+                order.setAgency(agency);
+                order.setEmployee(employee);
+                order.setStatus(OrderStatusEnum.DELIVERED);
+                order.setType(OrderTypeEnum.AGENCY);
+
+                orderRepository.save(order);
+
+                Map<Integer, Integer> vehicleTypeDetailMap = orderRequestDTO.getOrderDetails()
+                                .stream()
+                                // .map((orderDetailRequest) -> orderDetailRequest
+                                // .getVehicleTypeDetailId())
+                                // .collect(Collectors.toList()));
+                                .collect(Collectors.toMap((orderDetailRequest) -> orderDetailRequest
+                                                .getVehicleTypeDetailId(),
+                                                (orderDetailRequest) -> orderDetailRequest.getQuantity()));
+
+                if (vehicleTypeDetailMap.size() != orderRequestDTO.getOrderDetails().size()) {
+                        throw new ResourceNotFoundException("VehicleTypeDetail Not Found");
+                }
+
+                List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
+                                .findAllById(vehicleTypeDetailMap.keySet());
+
+                if (vehicleTypeDetails.size() != orderRequestDTO.getOrderDetails().size()) {
+                        throw new ResourceNotFoundException("VehicleTypeDetail Not Found");
+                }
+
+                Map<Integer, BigDecimal> vehicleTypeDetailPriceMap = agencyWholesalePriceRepository
+                                .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agency.getAgencyId(),
+                                                vehicleTypeDetailMap.keySet())
+                                .stream()
+                                .collect(Collectors.toMap(
+                                                agencyWholesalePrice -> agencyWholesalePrice.getVehicleTypeDetail()
+                                                                .getVehicleTypeDetailId(),
+                                                agencyWholesalePrice -> agencyWholesalePrice.getWholesalePrice()));
+
+                if (vehicleTypeDetailPriceMap.size() != orderRequestDTO.getOrderDetails().size()) {
+                        throw new ResourceNotFoundException("VehicleTypeDetail Not Found");
+                }
+
+                BigDecimal total = BigDecimal.ZERO;
+
+                for (VehicleTypeDetail vehicleTypeDetail : vehicleTypeDetails) {
+                        OrderDetail orderDetail = new OrderDetail();
+
+                        orderDetail.setVehicleTypeDetail(vehicleTypeDetail);
+
+                        orderDetail.setQuantity(vehicleTypeDetailMap.get(vehicleTypeDetail.getVehicleTypeDetailId()));
+
+                        orderDetail.setPrice(vehicleTypeDetailPriceMap.get(vehicleTypeDetail.getVehicleTypeDetailId()));
+
+                        orderDetail.setOrder(order);
+
+                        total = total.add(
+                                        orderDetail.getPrice().multiply(BigDecimal.valueOf(orderDetail.getQuantity())));
+
+                        order.getOrderDetails().add(orderDetail);
+
+                }
+
+                
+
+                order.setTotalAmount(total);
+
+                orderRepository.save(order);
+
+                return new OrderResponseDTO(order);
+
+                // Map<Integer, Double> vehicleTypeDetailPriceMap = vehicleTypeDetailRepository
+                // .findAllById(orderRequestDTO.getOrderDetails()
+                // .stream()
+                // .map((orderDetailRequest) -> orderDetailRequest
+                // .getVehicleTypeDetailId())
+                // .collect(Collectors.toList()))
+                // .stream()
+                // .collect(Collectors.toMap(null, null));
+
+        }
 }

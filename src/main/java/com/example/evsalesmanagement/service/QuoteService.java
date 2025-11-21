@@ -229,7 +229,7 @@ public class QuoteService {
 
                         }
 
-                        quotationDetail.setWholesalePrice(discountAmount);
+                        quotationDetail.setPrice(vehicleTypeDetailMap.get(quotationDetailRequestDTO.getVehicleTypeDetailId()).getPrice());
 
                         // BigDecimal discountPercent =
                         // promotions.stream().findFirst().get().getDiscountPercent();
