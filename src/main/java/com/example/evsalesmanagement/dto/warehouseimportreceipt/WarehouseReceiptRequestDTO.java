@@ -2,32 +2,22 @@ package com.example.evsalesmanagement.dto.warehouseimportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class WarehouseImportReceiptSummaryDTO {
-    private Integer warehouseReceiptId;
+import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
+
+public class WarehouseReceiptRequestDTO {
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
-    private String status;
+    private WarehouseReceiptStatusEnum status;
+    private Integer employeeId;
+    private Integer agencyId;
+    private List<Integer> vehicleIds;
 
-    public WarehouseImportReceiptSummaryDTO() {}
+    public WarehouseReceiptRequestDTO() {}
 
-    public WarehouseImportReceiptSummaryDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
-        this.warehouseReceiptId = entity.getWarehouseReceiptId();
-        this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
-        this.reason = entity.getReason();
-        this.totalAmount = entity.getTotalAmount();
-        this.note = entity.getNote();
-        this.status = entity.getStatus();
-    }
-
-    public Integer getWarehouseReceiptId() {
-        return warehouseReceiptId;
-    }
-    public void setWarehouseReceiptId(Integer warehouseReceiptId) {
-        this.warehouseReceiptId = warehouseReceiptId;
-    }
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;
     }
@@ -52,10 +42,28 @@ public class WarehouseImportReceiptSummaryDTO {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getStatus() {
+    public WarehouseReceiptStatusEnum getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(WarehouseReceiptStatusEnum status) {
         this.status = status;
+    }
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+    public Integer getAgencyId() {
+        return agencyId;
+    }
+    public void setAgencyId(Integer agencyId) {
+        this.agencyId = agencyId;
+    }
+    public List<Integer> getVehicleIds() {
+        return vehicleIds;
+    }
+    public void setVehicleIds(List<Integer> vehicleIds) {
+        this.vehicleIds = vehicleIds;
     }
 }

@@ -1,9 +1,10 @@
 package com.example.evsalesmanagement.service;
 
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
-import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptRequestDTO;
-import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptResponseDTO;
-import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseImportReceiptSummaryDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptRequestDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptSummaryDTO;
+import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.Employee;
@@ -37,21 +38,21 @@ public class WarehouseReceiptService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    public List<WarehouseImportReceiptSummaryDTO> getAllWarehouseReceipts(Pageable pageable) {
+    public List<WarehouseReceiptSummaryDTO> getAllWarehouseReceipts(Pageable pageable) {
         Page<WarehouseReceipt> receipts = warehouseReceiptRepository.findAll(pageable);
-        return receipts.stream().map(WarehouseImportReceiptSummaryDTO::new).toList();
+        return receipts.stream().map(WarehouseReceiptSummaryDTO::new).toList();
     }
 
     @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
-    public WarehouseImportReceiptResponseDTO getWarehouseReceiptById(Integer id) {
+    public WarehouseReceiptResponseDTO getWarehouseReceiptById(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất nhập với id:" + id));
-        return new WarehouseImportReceiptResponseDTO(receipt);
+        return new WarehouseReceiptResponseDTO(receipt);
     }
 
     @Transactional
-    public ApiResponse<WarehouseImportReceiptResponseDTO> importReceipt(WarehouseImportReceiptRequestDTO request) {
+    public ApiResponse<WarehouseReceiptResponseDTO> importReceipt(WarehouseReceiptRequestDTO request) {
         WarehouseReceipt receipt = new WarehouseReceipt();
         receipt.setWarehouseReceiptDate(request.getWarehouseReceiptDate());
         receipt.setReason(request.getReason());
@@ -76,7 +77,7 @@ public class WarehouseReceiptService {
         vehicleRepository.saveAll(vehicles);
         receipt.setVehicles(vehicles);
         warehouseReceiptRepository.save(receipt);
-        WarehouseImportReceiptResponseDTO responseDTO = new WarehouseImportReceiptResponseDTO(receipt);
+        WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
         responseDTO.setVehicles(
                 vehicles.stream()
                         .map(VehicleResponseDTO::new)
@@ -86,35 +87,16 @@ public class WarehouseReceiptService {
 
     @CachePut(value = "warehouse-receipt", key = "#id")
     @Transactional
-    public ApiResponse<WarehouseImportReceiptResponseDTO> updateWarehouseReceipt(Integer id,
-            WarehouseImportReceiptRequestDTO request) {
+    public ApiResponse<WarehouseReceiptResponseDTO> updateWarehouseReceipt(Integer id,
+            WarehouseReceiptRequestDTO request) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất nhập với id:" + id));
-        if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
-            return new ApiResponse<>(false, "Chỉ được cập nhật khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu nhập với id:" + id));
+        if (request.getStatus() != null) {
+            receipt.setStatus(request.getStatus());
         }
-        receipt.setWarehouseReceiptDate(request.getWarehouseReceiptDate());
-        receipt.setReason(request.getReason());
-        receipt.setTotalAmount(request.getTotalAmount());
-        receipt.setNote(request.getNote());
-        receipt.setStatus(request.getStatus());
-
-        Optional<Agency> agencyOpt = agencyRepository.findById(request.getAgencyId());
-        if (agencyOpt.isEmpty()) {
-            return new ApiResponse<>(false, "Không tìm thấy đại lý", null);
-        }
-        receipt.setAgencyId(agencyOpt.get());
-        // receipt.setEmployeeId(...);
-        List<Vehicle> vehicles = vehicleRepository.findAllById(request.getVehicleIds());
-        for (Vehicle v : vehicles) {
-            if (v.getAgency() == null) {
-                v.setAgency(agencyOpt.get());
-            }
-        }
-        vehicleRepository.saveAll(vehicles);
         warehouseReceiptRepository.save(receipt);
-        WarehouseImportReceiptResponseDTO responseDTO = new WarehouseImportReceiptResponseDTO(receipt);
-        return new ApiResponse<>(true, "Cập nhật phiếu nhập kho thành công", responseDTO);
+        WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
+        return new ApiResponse<>(true, "Cập nhật trạng thái phiếu nhập kho thành công", responseDTO);
     }
 
     @CacheEvict(value = "warehouse-receipt", key = "#id")
@@ -122,8 +104,8 @@ public class WarehouseReceiptService {
     public ApiResponse<Void> deleteWarehouseReceipt(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất nhập với id:" + id));
-        if (!"chờ xác nhận tạo phiếu".equalsIgnoreCase(receipt.getStatus())) {
-            return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ xác nhận tạo phiếu'", null);
+        if (receipt.getStatus() != WarehouseReceiptStatusEnum.PENDING_APPROVAL) {
+            return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ phê duyệt'", null);
         }
         warehouseReceiptRepository.delete(receipt);
         return new ApiResponse<>(true, "Xóa phiếu nhập kho thành công", null);

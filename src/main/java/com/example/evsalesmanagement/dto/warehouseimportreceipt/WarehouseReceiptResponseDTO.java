@@ -6,21 +6,23 @@ import java.util.List;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
+import com.example.evsalesmanagement.model.WarehouseReceipt;
 
-public class WarehouseImportReceiptResponseDTO {
+public class WarehouseReceiptResponseDTO {
     private Integer warehouseReceiptId;
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
-    private String status;
+    private WarehouseReceiptStatusEnum status;
     private EmployeeResponseDTO employee;
     private AgencyResponseDTO agency;
     private List<VehicleResponseDTO> vehicles;
 
-    public WarehouseImportReceiptResponseDTO() {}
+    public WarehouseReceiptResponseDTO() {}
 
-    public WarehouseImportReceiptResponseDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
+    public WarehouseReceiptResponseDTO(WarehouseReceipt entity) {
         this.warehouseReceiptId = entity.getWarehouseReceiptId();
         this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
         this.reason = entity.getReason();
@@ -70,12 +72,6 @@ public class WarehouseImportReceiptResponseDTO {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
     public EmployeeResponseDTO getEmployee() {
         return employee;
     }
@@ -93,5 +89,13 @@ public class WarehouseImportReceiptResponseDTO {
     }
     public void setVehicles(List<VehicleResponseDTO> vehicles) {
         this.vehicles = vehicles;
+    }
+
+    public WarehouseReceiptStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(WarehouseReceiptStatusEnum status) {
+        this.status = status;
     }
 }
