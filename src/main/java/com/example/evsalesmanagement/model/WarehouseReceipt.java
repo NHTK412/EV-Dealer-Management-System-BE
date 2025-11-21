@@ -60,14 +60,6 @@ public class WarehouseReceipt extends Base {
         this.warehouseReceiptId = warehouseReceiptId;
     }
 
-    public LocalDateTime getWareHouseReceiptDate() {
-        return warehouseReceiptDate;
-    }
-
-    public void setWareHouseReceiptDate(LocalDateTime wareHouseReceiptDate) {
-        this.warehouseReceiptDate = wareHouseReceiptDate;
-    }
-
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;
     }

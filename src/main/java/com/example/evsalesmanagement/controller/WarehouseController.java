@@ -1,9 +1,10 @@
 package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteRequestDTO;
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteResponseDTO;
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteSummaryDTO;
 import com.example.evsalesmanagement.dto.warehouseimportreceipt.*;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteRequestDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteResponseDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteStatusUpdateDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteSummaryDTO;
 import com.example.evsalesmanagement.service.WarehouseReceiptService;
 import com.example.evsalesmanagement.service.WarehouseReleaseNoteService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -56,11 +57,11 @@ public class WarehouseController {
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PatchMapping("/import/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseReceiptResponseDTO>> updateImport(
-            @PathVariable Integer warehouseReceiptId,
-            @RequestBody WarehouseReceiptRequestDTO request) {
+    public ResponseEntity<ApiResponse<WarehouseReceiptResponseDTO>> updateWarehouseReceiptStatus(
+        @PathVariable Integer warehouseReceiptId,
+        @RequestBody WarehouseReceiptStatusUpdateDTO request) {
         WarehouseReceiptResponseDTO dto = warehouseReceiptService
-                .updateWarehouseReceipt(warehouseReceiptId, request).getData();
+                .updateWarehouseReceiptStatus(warehouseReceiptId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
@@ -85,10 +86,10 @@ public class WarehouseController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-    @GetMapping("/export/{warehouseReceiptId}")
+    @GetMapping("/export/{warehouseReleaseNoteId}")
     public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> getExportById(
-            @PathVariable Integer warehouseReceiptId) {
-        WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReceiptId);
+            @PathVariable Integer warehouseReleaseNoteId) {
+        WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReleaseNoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
@@ -102,20 +103,20 @@ public class WarehouseController {
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PatchMapping("/export/{warehouseReceiptId}")
-    public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> updateExport(
-            @PathVariable Integer warehouseReceiptId,
-            @RequestBody WarehouseReleaseNoteRequestDTO request) {
+    public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> updateWarehouseExportStatus(
+        @PathVariable Integer warehouseReleaseNoteId,
+        @RequestBody WarehouseReleaseNoteStatusUpdateDTO request) {
         WarehouseReleaseNoteResponseDTO dto = warehouseExportService
-                .updateWarehouseExport(warehouseReceiptId, request).getData();
+                .updateWarehouseExport(warehouseReleaseNoteId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @DeleteMapping("/export/{warehouseReceiptId}")
     public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> deleteExport(
-            @PathVariable Integer warehouseReceiptId) {
-        WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReceiptId);
-        warehouseExportService.deleteWarehouseExport(warehouseReceiptId);
+            @PathVariable Integer warehouseReleaseNoteId) {
+        WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReleaseNoteId);
+        warehouseExportService.deleteWarehouseExport(warehouseReleaseNoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, "xoá thành công ", dto));
     }
 }

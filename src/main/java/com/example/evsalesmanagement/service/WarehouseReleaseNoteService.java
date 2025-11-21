@@ -24,9 +24,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteRequestDTO;
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteResponseDTO;
-import com.example.evsalesmanagement.dto.warehouseexportreceipt.WarehouseReleaseNoteSummaryDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteRequestDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteResponseDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteStatusUpdateDTO;
+import com.example.evsalesmanagement.dto.warehousereleasenote.WarehouseReleaseNoteSummaryDTO;
 import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
@@ -92,23 +93,17 @@ public class WarehouseReleaseNoteService {
     @CachePut(value = "warehouse-release-note", key = "#id")
     @Transactional
     public ApiResponse<WarehouseReleaseNoteResponseDTO> updateWarehouseExport(Integer id,
-            WarehouseReleaseNoteRequestDTO request) {
+            WarehouseReleaseNoteStatusUpdateDTO request) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
         if (release.getStatus() != null){
             release.setStatus(request.getStatus());
         }
-        Optional<Agency> agencyOpt = agencyRepository.findById(1);
-        if (agencyOpt.isEmpty()) {
-            return new ApiResponse<>(false, "Không tìm thấy đại lý mặc định (id=1)", null);
-        }
-        release.setAgencyId(agencyOpt.get());
         warehouseReleaseNoteRepository.save(release);
         WarehouseReleaseNoteResponseDTO responseDTO = new WarehouseReleaseNoteResponseDTO(release);
         return new ApiResponse<>(true, "Cập nhật trạng thái phiếu xuất kho thành công", responseDTO);
     }
 
-    // DELETE: Xóa phiếu xuất kho, chỉ cho phép khi status là "chờ xác nhận tạo
     // phiếu"
     @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional

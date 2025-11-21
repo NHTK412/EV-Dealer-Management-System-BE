@@ -1,4 +1,4 @@
-package com.example.evsalesmanagement.dto.warehouseexportreceipt;
+package com.example.evsalesmanagement.dto.warehousereleasenote;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

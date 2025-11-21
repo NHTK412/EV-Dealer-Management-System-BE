@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.service;
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptRequestDTO;
 import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptResponseDTO;
+import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptStatusUpdateDTO;
 import com.example.evsalesmanagement.dto.warehouseimportreceipt.WarehouseReceiptSummaryDTO;
 import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
 import com.example.evsalesmanagement.model.Agency;
@@ -87,16 +88,15 @@ public class WarehouseReceiptService {
 
     @CachePut(value = "warehouse-receipt", key = "#id")
     @Transactional
-    public ApiResponse<WarehouseReceiptResponseDTO> updateWarehouseReceipt(Integer id,
-            WarehouseReceiptRequestDTO request) {
-        WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu nhập với id:" + id));
-        if (request.getStatus() != null) {
-            receipt.setStatus(request.getStatus());
-        }
-        warehouseReceiptRepository.save(receipt);
-        WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
-        return new ApiResponse<>(true, "Cập nhật trạng thái phiếu nhập kho thành công", responseDTO);
+    public ApiResponse<WarehouseReceiptResponseDTO> updateWarehouseReceiptStatus(
+        Integer id,
+        WarehouseReceiptStatusUpdateDTO request) {
+    WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu nhập với id:" + id));
+    receipt.setStatus(request.getStatus());
+    warehouseReceiptRepository.save(receipt);
+    WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
+    return new ApiResponse<>(true, "Cập nhật trạng thái thành công", responseDTO);
     }
 
     @CacheEvict(value = "warehouse-receipt", key = "#id")
