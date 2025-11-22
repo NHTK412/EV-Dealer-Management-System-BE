@@ -2,10 +2,12 @@ package com.example.evsalesmanagement.model;
 
 import com.example.evsalesmanagement.enums.FeedbackStatusEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +17,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-
 @Table(name = "Feedback")
 public class Feedback extends Base {
     @Id
@@ -29,9 +30,6 @@ public class Feedback extends Base {
     @Column(name = "FeedbackContent")
     private String feedbackContent;
 
-    // @Column(name = "ThoiGian")
-    // private LocalDateTime thoiGian;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
     private FeedbackStatusEnum feedbackStatus;
@@ -40,9 +38,10 @@ public class Feedback extends Base {
     @JoinColumn(name = "CustomerId")
     private Customer customer;
 
-    @OneToOne(mappedBy = "feedback")
+    @OneToOne(mappedBy = "feedback", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private FeedbackHandling feedbackHandling;
 
+    // Getters and Setters
     public Integer getFeedbackId() {
         return feedbackId;
     }
@@ -66,14 +65,6 @@ public class Feedback extends Base {
     public void setFeedbackContent(String feedbackContent) {
         this.feedbackContent = feedbackContent;
     }
-
-    // public LocalDateTime getThoiGian() {
-    // return thoiGian;
-    // }
-
-    // public void setThoiGian(LocalDateTime thoiGian) {
-    // this.thoiGian = thoiGian;
-    // }
 
     public FeedbackStatusEnum getFeedbackStatus() {
         return feedbackStatus;

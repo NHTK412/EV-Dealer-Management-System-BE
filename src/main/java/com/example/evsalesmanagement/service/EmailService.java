@@ -44,7 +44,7 @@ public class EmailService {
             
 
         } catch (Exception e) {
-            log.error("Failed to send email to {}: {}", toEmail, e.getMessage());
+            // log.error("Failed to send email to {}: {}", toEmail, e.getMessage());
             throw new RuntimeException("Cannot send email: " + e.getMessage(), e);
         }
     }
@@ -76,7 +76,7 @@ public class EmailService {
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
             "%s\n\n" +
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
-            "If you have any further questions, please don't hesitate to contact us.\n\n" +
+            "If you have any further questions, please don't hesitate to contact us\n\n" +
             "Best regards,\n" +
             "%s Team\n\n" +
             "---\n" +
