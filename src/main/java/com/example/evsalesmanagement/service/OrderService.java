@@ -2,6 +2,7 @@ package com.example.evsalesmanagement.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.example.evsalesmanagement.enums.OrderTypeEnum;
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentTypeEnum;
+import com.example.evsalesmanagement.enums.PolicyTypeEnum;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
@@ -40,10 +42,13 @@ import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.Employee;
+import com.example.evsalesmanagement.model.MonthlySales;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
 import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.PaymentPlan;
+import com.example.evsalesmanagement.model.Policy;
+import com.example.evsalesmanagement.model.QuantityDiscountLevel;
 import com.example.evsalesmanagement.model.QuotationDetail;
 import com.example.evsalesmanagement.model.Quote;
 import com.example.evsalesmanagement.model.Vehicle;
@@ -55,8 +60,10 @@ import com.example.evsalesmanagement.repository.AgencyWholesalePriceRepository;
 // import com.example.evsalesmanagement.repository.AgencyRepository;
 // import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PaymentPlanRepository;
+import com.example.evsalesmanagement.repository.PolicyRepository;
 import com.example.evsalesmanagement.repository.QuoteRepository;
 // import com.example.evsalesmanagement.repository.VehicleDeliveryRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
@@ -94,6 +101,12 @@ public class OrderService {
 
         @Autowired
         private VehicleTypeDetailRepository vehicleTypeDetailRepository;
+
+        @Autowired
+        private PolicyRepository policyRepository;
+
+        @Autowired
+        private MonthlySalesRepository monthlySalesRepository;
 
         // @Autowired
         // private AgencyRepository agencyRepository;
@@ -197,6 +210,8 @@ public class OrderService {
                         order.getOrderDetails().add(orderDetail);
 
                 }
+
+                order.setOriginaAmount(quote.getTotalAmount());
 
                 order.setTotalAmount(quote.getTotalAmount());
 
@@ -649,9 +664,58 @@ public class OrderService {
 
                 }
 
-                
+                order.setOriginaAmount(total);
 
-                order.setTotalAmount(total);
+                Policy policy = policyRepository.findByAgency_AgencyId(agency.getAgencyId()).orElse(null);
+
+                if (policy != null) {
+                        if (policy.getPolicyType() == PolicyTypeEnum.QUANTITY) {
+                                Integer count = order.getOrderDetails().stream()
+                                                .reduce(0,
+                                                                (sum, orderDetail) -> sum + orderDetail.getQuantity(),
+                                                                Integer::sum);
+                                List<QuantityDiscountLevel> quantityDiscountLevels = policy.getQuantityDiscountLevel();
+
+                                QuantityDiscountLevel discount = quantityDiscountLevels.stream()
+                                                .filter(level -> count >= level.getQuantityFrom()
+                                                                && count <= level.getQuantityTo())
+                                                .findAny()
+                                                .orElse(null);
+                                BigDecimal discountPercentage = (discount != null) ? discount.getDiscountPercentage()
+                                                : BigDecimal.ZERO;
+
+                                BigDecimal discountAmount = order.getOriginaAmount()
+                                                .multiply(discountPercentage.divide(BigDecimal.valueOf(100)));
+
+                                order.setDiscountAmount(discountAmount);
+
+                                order.setTotalAmount(order.getOriginaAmount().subtract(order.getDiscountAmount()));
+
+                        } else {
+                                LocalDate now = LocalDate.now(); // hôm nay
+                                LocalDate previousMonth = now.minusMonths(1); // lùi 1 tháng
+
+                                int month = previousMonth.getMonthValue();
+                                int year = previousMonth.getYear();
+
+                                MonthlySales monthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(
+                                                agency.getAgencyId(),
+                                                month,
+                                                year).orElse(null);
+
+                                BigDecimal discountPercentage = (monthlySales != null) ? monthlySales.getSalesAmount()
+                                                : BigDecimal.ZERO;
+
+                                BigDecimal discountAmount = order.getOriginaAmount()
+                                                .multiply(discountPercentage.divide(BigDecimal.valueOf(100)));
+
+                                order.setDiscountAmount(discountAmount);
+
+                                order.setTotalAmount(order.getOriginaAmount().subtract(order.getDiscountAmount()));
+
+                        }
+
+                }
 
                 orderRepository.save(order);
 

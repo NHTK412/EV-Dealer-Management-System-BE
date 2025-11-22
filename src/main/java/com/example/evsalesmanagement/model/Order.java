@@ -41,6 +41,12 @@ public class Order extends Base {
     @Column(name = "Notes")
     private String notes;
 
+    @Column(name = "DiscountAmount")
+    private BigDecimal discountAmount;
+
+    @Column(name = "OriginalAmount")
+    private BigDecimal originaAmount;
+
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
@@ -164,6 +170,24 @@ public class Order extends Base {
     public void setVehicleDelivery(VehicleDelivery vehicleDelivery) {
         this.vehicleDelivery = vehicleDelivery;
     }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public BigDecimal getOriginaAmount() {
+        return originaAmount;
+    }
+
+    public void setOriginaAmount(BigDecimal originaAmount) {
+        this.originaAmount = originaAmount;
+    }
+
+    
 
     // @OneToOne(mappedBy = "donHang")
     // private BaoGia baoGia;
