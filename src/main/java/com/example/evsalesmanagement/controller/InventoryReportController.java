@@ -27,20 +27,21 @@ public class InventoryReportController {
     @Autowired
     private InventoryReportService inventoryReportService;
 
-    // GET - Lấy báo cáo tồn kho JSON
-    @GetMapping("/inventory")
+    // Lấy báo cáo tồn kho JSON
+   @GetMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportDTO(
-            @Valid @ModelAttribute InventoryReportRequestDTO request) {
+         @ModelAttribute InventoryReportRequestDTO request) {
 
-        List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
+    List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
 
-    // GET - Xuất báo cáo tồn kho Excel
+
+    // Xuất báo cáo tồn kho Excel
     @GetMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReport(
-            @Valid @ModelAttribute InventoryReportRequestDTO request) {
+             @ModelAttribute InventoryReportRequestDTO request) {
 
         byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
 
@@ -53,7 +54,7 @@ public class InventoryReportController {
     }
 
 
-    // POST - Lấy báo cáo tồn kho JSON
+    // Lấy báo cáo tồn kho JSON
     @PostMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {
@@ -63,7 +64,7 @@ public class InventoryReportController {
     }
 
     
-    // POST - Xuất báo cáo tồn kho Excel
+    // Xuất báo cáo tồn kho Excel
     @PostMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {

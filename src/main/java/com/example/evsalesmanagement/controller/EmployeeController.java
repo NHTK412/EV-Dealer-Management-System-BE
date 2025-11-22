@@ -11,8 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-// import org.springframework.security.core.context.SecurityContext;
-// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
-
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.EmployeeService;
@@ -156,7 +153,7 @@ public class EmployeeController {
         }
 
         // Đếm số lượng nhân viên theo chức vụ
-        @GetMapping("/positions/{position}/count")
+        @GetMapping("/positions/{role}/count")
         public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
                 long count = employeeService.countByRole(role);
                 return ResponseEntity.ok(

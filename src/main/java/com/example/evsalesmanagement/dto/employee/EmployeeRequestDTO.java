@@ -1,8 +1,11 @@
+
+
+
+
 package com.example.evsalesmanagement.dto.employee;
 
 import java.time.LocalDate;
 
-// import com.example.evsalesmanagement.enums.EmployeePositionEnum;
 import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.model.Employee;
@@ -10,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -39,12 +43,17 @@ public class EmployeeRequestDTO {
     @Size(max = 200, message = "Address cannot exceed 200 characters")
     private String address;
 
-    @NotBlank(message = "Position cannot be blank")
+    @NotNull(message = "Position cannot be blank")
     // @Size(min = 2, max = 50, message = "Position must be between 2 and 50
     // characters")
     private RoleEnum role;
 
     private Integer agencyId;
+
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    private String username;
+
 
     // Constructors
     public EmployeeRequestDTO() {
@@ -127,5 +136,13 @@ public class EmployeeRequestDTO {
 
     public void setAgencyId(Integer agencyId) {
         this.agencyId = agencyId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -50,6 +50,10 @@ public class EmployeeService {
             throw new ConflictException("Phone number already exists: " + requestDTO.getPhoneNumber());
         }
 
+        if (employeeRepository.existsByUsername(requestDTO.getUsername())) {
+        throw new ConflictException("Username already exists: " + requestDTO.getUsername());
+    }
+
         Employee employee = new Employee();
         employee.setEmployeeName(requestDTO.getEmployeeName());
         employee.setGender(requestDTO.getGender());
@@ -58,6 +62,8 @@ public class EmployeeService {
         employee.setEmail(requestDTO.getEmail());
         employee.setAddress(requestDTO.getAddress());
         employee.setRole(requestDTO.getRole());
+         employee.setUsername(requestDTO.getUsername()); 
+        //  employee.setPassword("Password@123"); 
 
         if (requestDTO.getAgencyId() != null) {
             Agency agency = agencyRepository.findById(requestDTO.getAgencyId())
