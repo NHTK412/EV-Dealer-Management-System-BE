@@ -45,13 +45,14 @@ public class VehicleController {
         return ResponseEntity.ok(new ApiResponse<VehicleResponseDTO>(true, null, vehicleResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<VehicleSummaryDTO>>> getAllVehicle(@RequestParam Integer page,
-            @RequestParam Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        List<VehicleSummaryDTO> vehicleSummaryDTOs = vehicleService.getAllVehicle(pageable);
-        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleSummaryDTOs));
+    public ResponseEntity<ApiResponse<Page<VehicleSummaryDTO>>> getAllVehicle(
+        @RequestParam Integer page,
+        @RequestParam Integer size) {
+
+    Pageable pageable = PageRequest.of(page - 1, size);
+    Page<VehicleSummaryDTO> vehiclePage = vehicleService.getAllVehicle(pageable);
+    return ResponseEntity.ok(new ApiResponse<>(true, null, vehiclePage));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")

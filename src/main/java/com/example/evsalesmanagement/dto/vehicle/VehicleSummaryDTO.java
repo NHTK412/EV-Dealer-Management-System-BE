@@ -8,23 +8,33 @@ public class VehicleSummaryDTO {
     private String machineNumber;
     private VehicleStatusEnum status;
     private String vehicleCondition;
+    private Integer id;
 
     public VehicleSummaryDTO() {
     }
 
     public VehicleSummaryDTO(Vehicle vehicle) {
+        this.id= vehicle.getVehicleId();
         this.chassisNumber = vehicle.getChassicNumber();
         this.machineNumber = vehicle.getMachineNumber();
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
     }
 
-    public VehicleSummaryDTO(String chassisNumber, String machineNumber, VehicleStatusEnum status,
+    public VehicleSummaryDTO(Integer id, String chassisNumber, String machineNumber, VehicleStatusEnum status,
             String vehicleCondition) {
+        this.id = id;
         this.chassisNumber = chassisNumber;
         this.machineNumber = machineNumber;
         this.status = status;
         this.vehicleCondition = vehicleCondition;
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getChassisNumber() {
