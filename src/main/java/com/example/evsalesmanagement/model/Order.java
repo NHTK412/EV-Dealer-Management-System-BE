@@ -41,6 +41,12 @@ public class Order extends Base {
     @Column(name = "Notes")
     private String notes;
 
+    @Column(name = "DiscountAmount")
+    private BigDecimal discountAmount;
+
+    @Column(name = "OriginalAmount")
+    private BigDecimal originaAmount;
+
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
@@ -57,8 +63,14 @@ public class Order extends Base {
     private Employee employee;
 
     @ManyToOne
+    @JoinColumn(name = "DealderAgencyId")
+    private Agency dealerAgency;
+
+    @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agency;
+
+    
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
@@ -133,12 +145,12 @@ public class Order extends Base {
         this.employee = employee;
     }
 
-    public Agency getAgency() {
-        return agency;
+    public Agency getDealderAgency() {
+        return dealerAgency;
     }
 
-    public void setAgency(Agency agency) {
-        this.agency = agency;
+    public void setDealderAgency(Agency dealerAgency) {
+        this.dealerAgency = dealerAgency;
     }
 
     public Set<OrderDetail> getOrderDetails() {
@@ -163,6 +175,38 @@ public class Order extends Base {
 
     public void setVehicleDelivery(VehicleDelivery vehicleDelivery) {
         this.vehicleDelivery = vehicleDelivery;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public BigDecimal getOriginaAmount() {
+        return originaAmount;
+    }
+
+    public void setOriginaAmount(BigDecimal originaAmount) {
+        this.originaAmount = originaAmount;
+    }
+
+    public Agency getDealerAgency() {
+        return dealerAgency;
+    }
+
+    public void setDealerAgency(Agency dealerAgency) {
+        this.dealerAgency = dealerAgency;
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
     }
 
     // @OneToOne(mappedBy = "donHang")

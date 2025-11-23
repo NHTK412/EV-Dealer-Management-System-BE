@@ -42,7 +42,7 @@ public class OrderSummaryDTO {
         this.employeeName = order.getEmployee().getEmployeeName();
         this.totalAmount = order.getTotalAmount();
         this.status = order.getStatus();
-        this.customerName = order.getCustomer().getCustomerName();
+        this.customerName = (order.getCustomer() != null) ? order.getCustomer().getCustomerName() : null;
     }
 
     public OrderSummaryDTO() {

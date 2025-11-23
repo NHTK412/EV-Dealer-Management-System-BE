@@ -1,5 +1,7 @@
 package com.example.evsalesmanagement.controller;
 
+import org.springframework.data.domain.Pageable;
+
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.XmlUtils;
@@ -41,6 +43,7 @@ import org.docx4j.wml.Tr;
 // import org.docx4j.wml.Tr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -51,6 +54,7 @@ import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponse
 // import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponseDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
+import com.example.evsalesmanagement.dto.quote.QuoteSummaryDTO;
 import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.QuoteService;
@@ -77,14 +81,14 @@ public class QuoteController {
     @Autowired
     QuoteService quoteService;
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @GetMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> getQuoteById(@RequestParam Integer quoteId) {
         QuoteResponseDTO quoteResponseDTO = quoteService.getQuoteById(quoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PostMapping
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> createQuote(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -95,14 +99,14 @@ public class QuoteController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @DeleteMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> deleteQuote(@PathVariable Integer quoteId) {
         QuoteResponseDTO quoteResponseDTO = quoteService.deleteQuote(quoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PutMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> updateQuote(@PathVariable Integer quoteId,
             @RequestBody QuoteRequestDTO quoteRequestDTO) {
@@ -110,7 +114,7 @@ public class QuoteController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PatchMapping("/{quoteId}/{status}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> updateStatusQuote(@PathVariable Integer quoteId,
             @PathVariable QuoteStatusEnum status) {
@@ -225,7 +229,6 @@ public class QuoteController {
         Docx4J.toPDF(wordMLPackage, pdfOutputStream);
         byte[] pdfBytes = pdfOutputStream.toByteArray();
 
-
         // 1. Tạo thư mục static runtime
         String staticPath = new File(imagePathString).getAbsolutePath();
         File dir = new File(staticPath);
@@ -247,6 +250,18 @@ public class QuoteController {
         response.setHeader("Content-Disposition", "inline; filename=quotation_" + quote.getQuoteId() + ".pdf");
         response.getOutputStream().write(pdfBytes);
         response.getOutputStream().flush();
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<QuoteSummaryDTO>>> getAllQuote(@RequestParam Integer page,
+            @RequestParam Integer size) {
+        // return new String();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<QuoteSummaryDTO> quoteSummaryDTOs = quoteService.getAllQuotes(pageable);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, quoteSummaryDTOs));
+
     }
 
     // @GetMapping("/employee")

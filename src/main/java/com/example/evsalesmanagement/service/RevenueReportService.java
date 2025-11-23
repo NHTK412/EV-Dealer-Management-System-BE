@@ -215,7 +215,7 @@ public class RevenueReportService {
                 ? d.getVehicleTypeDetail().getVehicleType().getVehicleTypeId()
                 : 0;
         Integer vtd = d.getVehicleTypeDetail() != null ? d.getVehicleTypeDetail().getVehicleTypeDetailId() : 0;
-        Integer agency = o.getAgency() != null ? o.getAgency().getAgencyId() : 0;
+        Integer agency = o.getDealderAgency() != null ? o.getDealderAgency().getAgencyId() : 0;
         return vt + "_" + vtd + "_" + agency;
     }
 
@@ -242,7 +242,7 @@ public class RevenueReportService {
                     .map(vtd -> vtd.getVersion()).orElse(null);
             this.color = Optional.ofNullable(detail.getVehicleTypeDetail())
                     .map(vtd -> vtd.getColor()).orElse(null);
-            this.agencyName = Optional.ofNullable(order.getAgency())
+            this.agencyName = Optional.ofNullable(order.getDealderAgency())
                     .map(a -> a.getAgencyName()).orElse("Unassigned");
         }
 

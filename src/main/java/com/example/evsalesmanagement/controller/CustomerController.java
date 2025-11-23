@@ -33,120 +33,129 @@ import jakarta.validation.Valid;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+        @Autowired
+        private CustomerService customerService;
 
-    // Lấy danh sách tất cả khách hàng - có phân trang - sắp xếp
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @GetMapping
-    public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getAllCustomers(
-            @RequestParam int page,
-            @RequestParam int size,
-            @RequestParam String sortBy,
-            @RequestParam String sortDir) {
+        // Lấy danh sách tất cả khách hàng - có phân trang - sắp xếp
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @GetMapping
+        public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getAllCustomers(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(required = false) String sortBy,
+                        @RequestParam(required = false) String sortDir) {
 
-        Sort sort = sortDir.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+                Pageable pageable;
 
-        Page<CustomerResponseDTO> customerPage = customerService.getAllCustomers(pageable);
+                // Nếu không truyền sortBy hoặc sortDir → bỏ sorting
+                if (sortBy == null || sortBy.isEmpty() || sortDir == null || sortDir.isEmpty()) {
+                        pageable = PageRequest.of(page, size);
+                } else {
+                        Sort sort = sortDir.equalsIgnoreCase("asc")
+                                        ? Sort.by(sortBy).ascending()
+                                        : Sort.by(sortBy).descending();
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get list customers successfully", customerPage));
-    }
+                        pageable = PageRequest.of(page, size, sort);
+                }
 
-    // Lấy thông tin chi tiết một khách hàng theo ID
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @GetMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Integer customerId) {
-        CustomerResponseDTO customerDTO = customerService.getCustomerById(customerId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get customer information successfully", customerDTO));
-    }
+                Page<CustomerResponseDTO> customerPage = customerService.getAllCustomers(pageable);
 
-    // Tạo khách hàng mới
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @PostMapping
-    public ResponseEntity<ApiResponse<?>> createCustomer(
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(
-                            error -> error.getField(),
-                            error -> error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Invalid data", errors));
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get list customers successfully", customerPage));
         }
 
-        CustomerResponseDTO createdCustomer = customerService.createCustomer(customerRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Customer created successfully", createdCustomer));
-    }
-
-    // Cập nhật thông tin khách hàng
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @PutMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<?>> updateCustomer(
-            @PathVariable Integer customerId,
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(
-                            error -> error.getField(),
-                            error -> error.getDefaultMessage()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Invalid data", errors));
+        // Lấy thông tin chi tiết một khách hàng theo ID
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @GetMapping("/{customerId}")
+        public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Integer customerId) {
+                CustomerResponseDTO customerDTO = customerService.getCustomerById(customerId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get customer information successfully", customerDTO));
         }
 
-        CustomerResponseDTO updatedCustomer = customerService.updateCustomer(customerId, customerRequestDTO);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Customer updated successfully", updatedCustomer));
-    }
+        // Tạo khách hàng mới
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @PostMapping
+        public ResponseEntity<ApiResponse<?>> createCustomer(
+                        @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
+                        BindingResult bindingResult) {
 
-    // Xóa khách hàng theo ID
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @DeleteMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<Void>> deleteCustomer(@PathVariable Integer customerId) {
-        customerService.deleteCustomer(customerId);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Customer deleted successfully", null));
-    }
+                if (bindingResult.hasErrors()) {
+                        Map<String, String> errors = bindingResult.getFieldErrors().stream()
+                                        .collect(Collectors.toMap(
+                                                        error -> error.getField(),
+                                                        error -> error.getDefaultMessage()));
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ApiResponse<>(false, "Invalid data", errors));
+                }
 
-    // Lấy danh sách khách hàng theo cấp độ thành viên
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @GetMapping("/by-membership")
-    public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getCustomersByMembership(
-            @RequestParam String level,
-            @RequestParam int page,
-            @RequestParam int size) {
+                CustomerResponseDTO createdCustomer = customerService.createCustomer(customerRequestDTO);
+                return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(new ApiResponse<>(true, "Customer created successfully", createdCustomer));
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<CustomerResponseDTO> customerPage = customerService.getCustomersByMembershipLevel(level, pageable);
+        // Cập nhật thông tin khách hàng
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @PutMapping("/{customerId}")
+        public ResponseEntity<ApiResponse<?>> updateCustomer(
+                        @PathVariable Integer customerId,
+                        @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
+                        BindingResult bindingResult) {
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get customers by membership level successfully", customerPage));
-    }
+                if (bindingResult.hasErrors()) {
+                        Map<String, String> errors = bindingResult.getFieldErrors().stream()
+                                        .collect(Collectors.toMap(
+                                                        error -> error.getField(),
+                                                        error -> error.getDefaultMessage()));
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ApiResponse<>(false, "Invalid data", errors));
+                }
 
-    // Đếm số lượng khách hàng theo cấp độ thành viên
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @GetMapping("/membership/{level}/count")
-    public ResponseEntity<ApiResponse<Long>> countCustomersByMembership(@PathVariable String level) {
-        long count = customerService.countByMembershipLevel(level);
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Count customers by membership level successfully", count));
-    }
+                CustomerResponseDTO updatedCustomer = customerService.updateCustomer(customerId, customerRequestDTO);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Customer updated successfully", updatedCustomer));
+        }
 
-    // Lấy tổng số khách hàng
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
-    @GetMapping("/total-count")
-    public ResponseEntity<ApiResponse<Long>> getTotalCustomers() {
-        long total = customerService.getTotalCustomers();
-        return ResponseEntity.ok(
-                new ApiResponse<>(true, "Get total customers successfully", total));
-    }
+        // Xóa khách hàng theo ID
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @DeleteMapping("/{customerId}")
+        public ResponseEntity<ApiResponse<Void>> deleteCustomer(@PathVariable Integer customerId) {
+                customerService.deleteCustomer(customerId);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Customer deleted successfully", null));
+        }
+
+        // Lấy danh sách khách hàng theo cấp độ thành viên
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @GetMapping("/by-membership")
+        public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getCustomersByMembership(
+                        @RequestParam String level,
+                        @RequestParam int page,
+                        @RequestParam int size) {
+
+                Pageable pageable = PageRequest.of(page, size);
+                Page<CustomerResponseDTO> customerPage = customerService.getCustomersByMembershipLevel(level, pageable);
+
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get customers by membership level successfully",
+                                                customerPage));
+        }
+
+        // Đếm số lượng khách hàng theo cấp độ thành viên
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @GetMapping("/membership/{level}/count")
+        public ResponseEntity<ApiResponse<Long>> countCustomersByMembership(@PathVariable String level) {
+                long count = customerService.countByMembershipLevel(level);
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Count customers by membership level successfully", count));
+        }
+
+        // Lấy tổng số khách hàng
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
+        @GetMapping("/total-count")
+        public ResponseEntity<ApiResponse<Long>> getTotalCustomers() {
+                long total = customerService.getTotalCustomers();
+                return ResponseEntity.ok(
+                                new ApiResponse<>(true, "Get total customers successfully", total));
+        }
 }

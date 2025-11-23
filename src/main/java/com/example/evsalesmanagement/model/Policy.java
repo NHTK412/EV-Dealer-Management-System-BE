@@ -2,6 +2,8 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.evsalesmanagement.enums.PolicyStatusEnum;
 import com.example.evsalesmanagement.enums.PolicyTypeEnum;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //ChinhSachChietKhau = Policy
@@ -48,8 +51,15 @@ public class Policy extends Base {
     private PolicyStatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "AgencyId")
+    @JoinColumn(name = "AgencyId" , unique = true)
     private Agency agency;
+
+    @OneToMany(mappedBy = "policy")
+    private List<QuantityDiscountLevel> quantityDiscountLevel = new ArrayList<>(); 
+
+    @OneToMany(mappedBy = "policy" )
+    private List<SalesDiscountLevel> saleDiscountLevel = new ArrayList<>();
+
 
     public Integer getPolicyId() {
         return policyId;
@@ -115,10 +125,28 @@ public class Policy extends Base {
         this.agency = agency;
     }
 
+    public List<QuantityDiscountLevel> getQuantityDiscountLevel() {
+        return quantityDiscountLevel;
+    }
+
+    public void setQuantityDiscountLevel(List<QuantityDiscountLevel> quantityDiscountLevel) {
+        this.quantityDiscountLevel = quantityDiscountLevel;
+    }
+
+    public List<SalesDiscountLevel> getSaleDiscountLevel() {
+        return saleDiscountLevel;
+    }
+
+    public void setSaleDiscountLevel(List<SalesDiscountLevel> saleDiscountLevel) {
+        this.saleDiscountLevel = saleDiscountLevel;
+    }
+
     // @OneToMany(mappedBy = "chinhSachChietKhau")
     // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
 
     // @OneToMany(mappedBy = "chinhSachChietKhau")
     // private List<BacChietKhauDoanhSo> bacChietKhauDoanhSos = new ArrayList<>();
+
+    
 
 }

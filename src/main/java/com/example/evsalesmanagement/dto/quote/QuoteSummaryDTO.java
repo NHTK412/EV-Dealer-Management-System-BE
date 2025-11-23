@@ -16,6 +16,8 @@ public class QuoteSummaryDTO {
 
     private String employeeEmail;
 
+    private String customerName;
+
     private BigDecimal totalAmount;
 
     private QuoteStatusEnum status;
@@ -28,6 +30,8 @@ public class QuoteSummaryDTO {
         this.employeeEmail = quote.getEmployee().getEmail();
         this.totalAmount = quote.getTotalAmount();
         this.status = quote.getStatus();
+
+        this.customerName = quote.getCustomer().getCustomerName();
     }
 
     public QuoteSummaryDTO() {
@@ -87,6 +91,14 @@ public class QuoteSummaryDTO {
 
     public void setStatus(QuoteStatusEnum status) {
         this.status = status;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
 }
