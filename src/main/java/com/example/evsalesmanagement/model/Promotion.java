@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 //Promotion = khuyen mai
@@ -68,9 +69,14 @@ public class Promotion extends Base {
     @JoinTable(name = "Promotion_VehicleDetail", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "VehicleDetailId"))
     private List<VehicleTypeDetail> vehicleDetails = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "Promotion_Agency", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "AgencyId"))
-    private List<Agency> agencies = new ArrayList<>();
+    // @ManyToMany
+    // @JoinTable(name = "Promotion_Agency", joinColumns = @JoinColumn(name =
+    // "PromotionId"), inverseJoinColumns = @JoinColumn(name = "AgencyId"))
+    // private List<Agency> agencies = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "AgencyId")
+    private Agency agency;
 
     public Integer getPromotionId() {
         return promotionId;
@@ -160,28 +166,36 @@ public class Promotion extends Base {
         this.vehicleDetails = vehicleDetails;
     }
 
-    public List<Agency> getAgencies() {
-        return agencies;
+    public Agency getAgency() {
+        return agency;
     }
 
-    public void setAgencies(List<Agency> agencies) {
-        this.agencies = agencies;
+    public void setAgency(Agency agency) {
+        this.agency = agency;
     }
 
-    @Override
-    public String toString() {
-        return "Promotion [promotionId=" + promotionId +
-                ", promotionName=" + promotionName +
-                ", promotionType=" + promotionType +
-                ", promotionValue=" + promotionValue +
-                ", criteria=" + criteria +
-                ", discountAmount=" + discountAmount +
-                ", discountPercent=" + discountPercent +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", status=" + status +
-                ", vehicleDetails=" + vehicleDetails +
-                ", agencies=" + agencies + "]";
-    }
+    // public List<Agency> getAgencies() {
+    // return agencies;
+    // }
+
+    // public void setAgencies(List<Agency> agencies) {
+    // this.agencies = agencies;
+    // }
+
+    // @Override
+    // public String toString() {
+    // return "Promotion [promotionId=" + promotionId +
+    // ", promotionName=" + promotionName +
+    // ", promotionType=" + promotionType +
+    // ", promotionValue=" + promotionValue +
+    // ", criteria=" + criteria +
+    // ", discountAmount=" + discountAmount +
+    // ", discountPercent=" + discountPercent +
+    // ", startDate=" + startDate +
+    // ", endDate=" + endDate +
+    // ", status=" + status +
+    // ", vehicleDetails=" + vehicleDetails +
+    // ", agencies=" + agencies + "]";
+    // }
 
 }

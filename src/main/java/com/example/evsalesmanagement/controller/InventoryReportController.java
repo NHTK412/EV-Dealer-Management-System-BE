@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class InventoryReportController {
     private InventoryReportService inventoryReportService;
 
     // GET - Lấy báo cáo tồn kho JSON
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportDTO(
             @Valid @ModelAttribute InventoryReportRequestDTO request) {
@@ -36,8 +38,8 @@ public class InventoryReportController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
-
     // GET - Xuất báo cáo tồn kho Excel
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReport(
             @Valid @ModelAttribute InventoryReportRequestDTO request) {
@@ -52,8 +54,8 @@ public class InventoryReportController {
         return ResponseEntity.ok().headers(headers).body(excelData);
     }
 
-
     // POST - Lấy báo cáo tồn kho JSON
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @PostMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {
@@ -62,8 +64,8 @@ public class InventoryReportController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
-    
     // POST - Xuất báo cáo tồn kho Excel
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @PostMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReportPost(
             @Valid @RequestBody InventoryReportRequestDTO request) {

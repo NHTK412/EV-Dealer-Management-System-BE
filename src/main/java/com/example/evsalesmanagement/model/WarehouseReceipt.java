@@ -3,9 +3,12 @@ package com.example.evsalesmanagement.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,8 +40,9 @@ public class WarehouseReceipt extends Base {
     @Column(name = "Note")
     private String note;
 
+   @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private WarehouseReceiptStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
@@ -48,28 +52,12 @@ public class WarehouseReceipt extends Base {
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Integer getWarehouseReceiptId() {
         return warehouseReceiptId;
     }
 
     public void setWarehouseReceiptId(Integer warehouseReceiptId) {
         this.warehouseReceiptId = warehouseReceiptId;
-    }
-
-    public LocalDateTime getWareHouseReceiptDate() {
-        return warehouseReceiptDate;
-    }
-
-    public void setWareHouseReceiptDate(LocalDateTime wareHouseReceiptDate) {
-        this.warehouseReceiptDate = wareHouseReceiptDate;
     }
 
     public LocalDateTime getWarehouseReceiptDate() {
@@ -134,4 +122,13 @@ public class WarehouseReceipt extends Base {
     @ManyToMany
     @JoinTable(name = "WarehouseReceiptDetail", joinColumns = @JoinColumn(name = "WarehouseReceiptId"), inverseJoinColumns = @JoinColumn(name = "VehicleId"))
     private List<Vehicle> vehicles;
+
+    public WarehouseReceiptStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(WarehouseReceiptStatusEnum status) {
+        this.status = status;
+    }
+    
 }

@@ -5,22 +5,51 @@ import java.time.LocalDateTime;
 
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.model.Payment;
 
 public class PaymentResponseDTO {
 
     private Integer paymentId;
+
     private PaymentMethodEnum paymentMethod;
-    private String paymentForm;
+
+    // private String paymentForm;
+
     private BigDecimal amount;
+
     private Integer numberCycle;
+
     private LocalDateTime dueDate;
+
     private LocalDateTime paymentDate;
+
     private BigDecimal penaltyAmount;
+
     private PaymentStatusEnum status;
+
     private String vnpayCode;
-    private Integer orderId;
+
+    // private Integer orderId;
+
+    public PaymentResponseDTO() {
+    }
+
+    public PaymentResponseDTO(Payment payment) {
+        this.paymentId = payment.getPaymentId();
+        this.paymentMethod = payment.getPaymentMethod();
+
+        this.amount = payment.getAmount();
+        this.numberCycle = payment.getNumberCycle();
+        this.dueDate = payment.getDueDate();
+
+        this.paymentDate = payment.getPaymentDate();
+        this.penaltyAmount = payment.getPenaltyAmount();
+        this.status = payment.getStatus();
+        this.vnpayCode = payment.getVnpayCode();
+    }
 
     // Getters & Setters
+
     public Integer getPaymentId() {
         return paymentId;
     }
@@ -37,13 +66,13 @@ public class PaymentResponseDTO {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getPaymentForm() {
-        return paymentForm;
-    }
+    // public String getPaymentForm() {
+    // return paymentForm;
+    // }
 
-    public void setPaymentForm(String paymentForm) {
-        this.paymentForm = paymentForm;
-    }
+    // public void setPaymentForm(String paymentForm) {
+    // this.paymentForm = paymentForm;
+    // }
 
     public BigDecimal getAmount() {
         return amount;
@@ -101,11 +130,11 @@ public class PaymentResponseDTO {
         this.vnpayCode = vnpayCode;
     }
 
-    public Integer getOrderId() {
-        return orderId;
-    }
+    // public Integer getOrderId() {
+    // return orderId;
+    // }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
+    // public void setOrderId(Integer orderId) {
+    // this.orderId = orderId;
+    // }
 }

@@ -1,12 +1,12 @@
 package com.example.evsalesmanagement.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +27,7 @@ public class RevenueReportController {
     private RevenueReportService revenueReportService;
 
     // Lấy báo cáo doanh thu JSON
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
     @PostMapping("/revenue")
     public ResponseEntity<ApiResponse<List<RevenueReportResponseDTO>>> getRevenueReport(
             @Valid @RequestBody RevenueReportRequestDTO request) {
@@ -36,6 +37,7 @@ public class RevenueReportController {
     }
 
     // Xuất báo cáo doanh thu Excel
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
     @PostMapping("/revenue/export")
     public ResponseEntity<byte[]> exportRevenueReport(@Valid @RequestBody RevenueReportRequestDTO request) {
 

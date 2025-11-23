@@ -17,6 +17,11 @@ public class AccessDeniedHandlerException implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
         // response.setContentType("application/json;charset=UTF-8");
-        // response.getWriter().write("{\"error\": \"Bạn không có quyền truy cập tài nguyên này!\"}");
+        // response.getWriter().write("{\"error\": \"Bạn không có quyền truy cập tài
+        // nguyên này!\"}");
+
+        // response.setContentType("application/json;charset=UTF-8");
+        // response.getWriter().write("{\"success\": false, \"message\": \"Bạn không có quyền truy cập!\"}");
+        // response.getWriter().flush();
     }
 }

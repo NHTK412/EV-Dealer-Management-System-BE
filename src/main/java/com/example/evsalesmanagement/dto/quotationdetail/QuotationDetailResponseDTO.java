@@ -65,7 +65,7 @@ public class QuotationDetailResponseDTO {
         this.roadMaintenanceMees = quotationDetail.getRoadMaintenanceMees();
         this.vehicleRegistrationServiceFee = quotationDetail.getVehicleRegistrationServiceFee();
         this.discountPercentage = quotationDetail.getDiscountPercentage();
-        this.wholesalePrice = quotationDetail.getWholesalePrice();
+        this.wholesalePrice = quotationDetail.getPrice();
         this.totalAmount = quotationDetail.getTotalAmount();
     }
 

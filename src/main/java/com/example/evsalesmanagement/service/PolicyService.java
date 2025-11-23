@@ -13,6 +13,9 @@ import com.example.evsalesmanagement.repository.PolicyRepository;
 import com.example.evsalesmanagement.repository.QuantityDiscountLevelRepository;
 import com.example.evsalesmanagement.repository.SalesDiscountLevelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PolicyService {
+
     @Autowired
     private PolicyRepository policyRepository;
     @Autowired
@@ -91,6 +95,7 @@ public class PolicyService {
         }).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "policy", key = "#policyId")
     @Transactional()
     public PolicyResponseDTO getByIdPolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)
@@ -129,6 +134,7 @@ public class PolicyService {
         return policyResponseDTO;
     }
 
+    @CachePut(value = "policy", key = "#policyId")
     @Transactional
     public PolicyResponseDTO updatePolicy(Integer policyId, PolicyRequestDTO policyRequestDTO) {
         Policy policy = policyRepository.findById(policyId)
@@ -143,6 +149,7 @@ public class PolicyService {
         return getByIdPolicy(savedPolicy.getPolicyId());
     }
 
+    @CacheEvict(value = "policy", key = "#policyId")
     @Transactional
     public PolicyResponseDTO deletePolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)

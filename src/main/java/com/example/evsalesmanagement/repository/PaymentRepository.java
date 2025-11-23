@@ -1,18 +1,37 @@
 package com.example.evsalesmanagement.repository;
 
-import com.example.evsalesmanagement.model.Payment;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.model.Payment;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
-    @Query("SELECT p FROM Payment p WHERE LOWER(p.status) = LOWER('Pending')")
-    List<Payment> findPendingPayments();
+    // @Query("SELECT p FROM Payment p WHERE LOWER(p.status) = LOWER('Pending')")
+    // List<Payment> findPendingPayments();
 
-    @Query("SELECT p FROM Payment p WHERE LOWER(p.status) = LOWER('Paid')")
-    List<Payment> findPaidPayments();
+    // @Query("SELECT p FROM Payment p WHERE LOWER(p.status) = LOWER('Paid')")
+    // List<Payment> findPaidPayments();
+
+    List<Payment> findByStatus(PaymentStatusEnum status);
+    
+    List<Payment> findByOrder_OrderId(Integer orderId);
+    
+    Optional<Payment> findByVnpayCode(String vnpayCode);
+    
+    @Query("SELECT p FROM Payment p WHERE p.status = :status AND p.dueDate < :currentDate")
+    List<Payment> findOverduePayments(@Param("status") PaymentStatusEnum status, 
+                                      @Param("currentDate") LocalDateTime currentDate);
+    
+    @Query("SELECT p FROM Payment p WHERE p.paymentDate BETWEEN :startDate AND :endDate")
+    List<Payment> findByPaymentDateRange(@Param("startDate") LocalDateTime startDate, 
+                                         @Param("endDate") LocalDateTime endDate);
 }

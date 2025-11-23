@@ -1,22 +1,24 @@
-package com.example.evsalesmanagement.dto.warehouseimportreceipt;
+package com.example.evsalesmanagement.dto.warehousereleasenote;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class WarehouseImportReceiptSummaryDTO {
+import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
+import com.example.evsalesmanagement.model.WarehouseReleaseNote;
+
+public class WarehouseReleaseNoteSummaryDTO {
     private Integer warehouseReceiptId;
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
-    private String status;
+    private WarehouseReleaseNoteStatusEnum status;
 
-    public WarehouseImportReceiptSummaryDTO() {}
+    public WarehouseReleaseNoteSummaryDTO() {}
 
-    public WarehouseImportReceiptSummaryDTO(com.example.evsalesmanagement.model.WarehouseReceipt entity) {
-        this.warehouseReceiptId = entity.getWarehouseReceiptId();
-        this.warehouseReceiptDate = entity.getWarehouseReceiptDate();
-        this.reason = entity.getReason();
+    public WarehouseReleaseNoteSummaryDTO(WarehouseReleaseNote entity) {
+        this.warehouseReceiptId = entity.getWarehouseReleaseNoteId();
+        this.warehouseReceiptDate = entity.getReleaseDate();
         this.totalAmount = entity.getTotalAmount();
         this.note = entity.getNote();
         this.status = entity.getStatus();
@@ -52,10 +54,10 @@ public class WarehouseImportReceiptSummaryDTO {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getStatus() {
+    public WarehouseReleaseNoteStatusEnum getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(WarehouseReleaseNoteStatusEnum status) {
         this.status = status;
     }
 }

@@ -7,33 +7,46 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.evsalesmanagement.model.Account;
+// import com.example.evsalesmanagement.model.Account;
+import com.example.evsalesmanagement.model.Employee;
 
 public class CustomerUserDetails implements UserDetails {
 
-    private Account account;
+    private Employee employee;
 
-    public CustomerUserDetails(Account account) {
-        this.account = account;
+// <<<<<<< HEAD
+    public CustomerUserDetails(Employee employee) {
+        this.employee = employee;
+// =======
+//     public CustomerUserDetails() {
+//     }
+
+//     public CustomerUserDetails(Account account) {
+//         this.account = account;
+// >>>>>>> feat/Khang/cauHinhRedis
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(account.getRole().name()));
+        return List.of(new SimpleGrantedAuthority(employee.getRole().name()));
     }
 
     @Override
     public String getPassword() {
-        return this.account.getPassword();
+        return this.employee.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.account.getUsername();
+        return this.employee.getUsername();
     }
 
     public Integer getEmployeeId() {
-        return this.account.getEmployee().getEmployeeId();
+        return this.employee.getEmployeeId();
+    }
+
+    public Integer getAgencyId() {
+        return this.employee.getAgency().getAgencyId();
     }
 
     @Override

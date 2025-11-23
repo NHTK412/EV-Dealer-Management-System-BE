@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.service;
 
-
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+// import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.revenuareport.RevenueReportRequestDTO;
@@ -39,30 +38,30 @@ public class RevenueReportService {
     @Autowired
     private RevenueReportRepository revenueReportRepository;
 
-
-    @Cacheable(value = "revenueReport", key = "#request.hashCode()")
+    // @Cacheable(value = "revenueReport", key = "#request.hashCode()")
     public List<RevenueReportResponseDTO> getRevenueReport(RevenueReportRequestDTO request) {
 
         // if (request.getStatus() != null && !request.getStatus().isBlank()) {
-        //     try {
-        //         RevenueReportEnum.fromString(request.getStatus());
-        //     } catch (Exception e) {
-        //         throw new RuntimeException("Status is invalid: " + request.getStatus(), e);
-        //     }
+        // try {
+        // RevenueReportEnum.fromString(request.getStatus());
+        // } catch (Exception e) {
+        // throw new RuntimeException("Status is invalid: " + request.getStatus(), e);
         // }
-
+        // }
 
         List<Order> orders = getFilteredOrders(request);
         Map<String, RevenueData> map = new HashMap<>();
 
         for (Order order : orders) {
-            if (order.getOrderDetails() == null) continue;
+            if (order.getOrderDetails() == null)
+                continue;
 
             for (OrderDetail detail : order.getOrderDetails()) {
                 if (request.getVehicleTypeId() != null &&
-                    (detail.getVehicleTypeDetail() == null ||
-                     detail.getVehicleTypeDetail().getVehicleType() == null ||
-                     !request.getVehicleTypeId().equals(detail.getVehicleTypeDetail().getVehicleType().getVehicleTypeId()))) {
+                        (detail.getVehicleTypeDetail() == null ||
+                                detail.getVehicleTypeDetail().getVehicleType() == null ||
+                                !request.getVehicleTypeId()
+                                        .equals(detail.getVehicleTypeDetail().getVehicleType().getVehicleTypeId()))) {
                     continue;
                 }
 
@@ -85,7 +84,6 @@ public class RevenueReportService {
                         Comparator.nullsLast(String::compareToIgnoreCase)))
                 .collect(Collectors.toList());
     }
-
 
     private List<Order> getFilteredOrders(RevenueReportRequestDTO request) {
         Integer agencyId = request.getAgencyId();
@@ -115,12 +113,12 @@ public class RevenueReportService {
         return revenueReportRepository.findAll();
     }
 
-
     public byte[] exportRevenueReportToExcel(RevenueReportRequestDTO request) {
         try {
             List<RevenueReportResponseDTO> reportData = getRevenueReport(request);
 
-            try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            try (Workbook workbook = new XSSFWorkbook();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 Sheet sheet = workbook.createSheet("Revenue Report");
 
                 CellStyle headerStyle = workbook.createCellStyle();
@@ -141,8 +139,8 @@ public class RevenueReportService {
                 cellStyle.setBorderLeft(BorderStyle.THIN);
                 cellStyle.setBorderRight(BorderStyle.THIN);
 
-                String[] headers = {"STT", "Type", "Version", "Color", "Agency", "Order Count",
-                        "Total Quantity", "Total Revenue", "Total Discount", "Net Revenue"};
+                String[] headers = { "STT", "Type", "Version", "Color", "Agency", "Order Count",
+                        "Total Quantity", "Total Revenue", "Total Discount", "Net Revenue" };
                 Row headerRow = sheet.createRow(0);
                 for (int i = 0; i < headers.length; i++) {
                     Cell cell = headerRow.createCell(i);
@@ -184,7 +182,7 @@ public class RevenueReportService {
                     totalNet = totalNet.add(dto.getNetRevenue());
                 }
 
-                // Sum 
+                // Sum
                 Row totalRow = sheet.createRow(rowNum);
                 Cell totalLabel = totalRow.createCell(0);
                 totalLabel.setCellValue("SUMMARY");
@@ -201,7 +199,8 @@ public class RevenueReportService {
                 totalRow.getCell(8).setCellValue(totalDiscount.doubleValue());
                 totalRow.getCell(9).setCellValue(totalNet.doubleValue());
 
-                for (int i = 0; i < headers.length; i++) sheet.autoSizeColumn(i);
+                for (int i = 0; i < headers.length; i++)
+                    sheet.autoSizeColumn(i);
 
                 workbook.write(outputStream);
                 return outputStream.toByteArray();
@@ -211,10 +210,10 @@ public class RevenueReportService {
         }
     }
 
-
     private String createGroupKey(OrderDetail d, Order o) {
         Integer vt = (d.getVehicleTypeDetail() != null && d.getVehicleTypeDetail().getVehicleType() != null)
-                ? d.getVehicleTypeDetail().getVehicleType().getVehicleTypeId() : 0;
+                ? d.getVehicleTypeDetail().getVehicleType().getVehicleTypeId()
+                : 0;
         Integer vtd = d.getVehicleTypeDetail() != null ? d.getVehicleTypeDetail().getVehicleTypeDetailId() : 0;
         Integer agency = o.getAgency() != null ? o.getAgency().getAgencyId() : 0;
         return vt + "_" + vtd + "_" + agency;

@@ -29,8 +29,8 @@ public class VehicleDelivery extends Base {
     // private LocalDateTime ngayTaoDon;
 
     // ngayDuKienGiaoXe = ExpectedDeliveryDate
-    @Column(name = "ExpectedDeliveryDate")
-    private LocalDateTime ExpectedDeliveryDate;
+    // @Column(name = "ExpectedDeliveryDate")
+    // private LocalDateTime ExpectedDeliveryDate;
 
     // ngayGiaoXe = DeliveryDate
     @Column(name = "DeliveryDate")
@@ -40,9 +40,18 @@ public class VehicleDelivery extends Base {
     @Column(name = "Status")
     private VehicleDeliveryStatusEnum status;
 
+    @Column(name = "Address")
+    private String address;
+
+    @Column(name = "PhoneNumber")
+    private String phoneNumber;
+
+    @Column(name = "CustomerName")
+    private String name;
+
     @OneToOne
     @JoinColumn(name = "OrderId", unique = true)
-    private Order orderId;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "EmployeeId")
@@ -56,13 +65,13 @@ public class VehicleDelivery extends Base {
         this.vehicleDeliveryId = vehicleDeliveryId;
     }
 
-    public LocalDateTime getExpectedDeliveryDate() {
-        return ExpectedDeliveryDate;
-    }
+    // public LocalDateTime getExpectedDeliveryDate() {
+    //     return ExpectedDeliveryDate;
+    // }
 
-    public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
-        ExpectedDeliveryDate = expectedDeliveryDate;
-    }
+    // public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
+    //     ExpectedDeliveryDate = expectedDeliveryDate;
+    // }
 
     public LocalDateTime getDeliveryDate() {
         return deliveryDate;
@@ -82,11 +91,11 @@ public class VehicleDelivery extends Base {
     }
 
     public Order getOderId() {
-        return orderId;
+        return order;
     }
 
-    public void setOderId(Order orderId) {
-        this.orderId = orderId;
+    public void setOderId(Order order) {
+        this.order = order;
 
     }
 
@@ -98,6 +107,40 @@ public class VehicleDelivery extends Base {
         this.employee = employee;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+
     // public LocalDateTime getNgayTaoDon() {
     // return ngayTaoDon;
     // }
@@ -105,5 +148,7 @@ public class VehicleDelivery extends Base {
     // public void setNgayTaoDon(LocalDateTime ngayTaoDon) {
     // this.ngayTaoDon = ngayTaoDon;
     // }
+
+
 
 }

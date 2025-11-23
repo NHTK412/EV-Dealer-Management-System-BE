@@ -2,11 +2,18 @@ package com.example.evsalesmanagement.dto.order;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
 import com.example.evsalesmanagement.model.Order;
-
+import com.example.evsalesmanagement.model.VehicleDelivery;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class OrderResponseDTO {
 
@@ -16,12 +23,16 @@ public class OrderResponseDTO {
 
     private String contractNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer employeeId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeeName;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeePhoneNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String employeeEmail;
 
     private BigDecimal totalAmount;
@@ -38,11 +49,24 @@ public class OrderResponseDTO {
 
     private String customerAddress;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer agencyId;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String agencyName;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String agencyAddress;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String agencyPhone;
+
     private List<OrderDetailResponseDTO> orderDetailResponseDTOs = new ArrayList<>();
+
+    private Set<PaymentResponseDTO> paymentResponseDTOs = new HashSet<>();
+
+    private VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO;
+
 
     public OrderResponseDTO(Order order) {
         this.orderId = order.getOrderId();
@@ -54,7 +78,7 @@ public class OrderResponseDTO {
         this.employeePhoneNumber = order.getEmployee().getPhoneNumber();
         this.employeeEmail = order.getEmployee().getEmail();
         this.totalAmount = order.getTotalAmount();
-        
+
         if (order.getCustomer() != null) {
             this.customerId = order.getCustomer().getCustomerId();
             this.customerName = order.getCustomer().getCustomerName();
@@ -65,6 +89,24 @@ public class OrderResponseDTO {
         if (order.getAgency() != null) {
             this.agencyId = order.getAgency().getAgencyId();
             this.agencyName = order.getAgency().getAgencyName();
+            this.agencyAddress = order.getAgency().getAddress();
+            this.agencyPhone = order.getAgency().getPhoneNumber();
+        }
+
+        if (order.getPayments() != null) {
+            this.paymentResponseDTOs = order.getPayments()
+                    .stream()
+                    .map(payment -> {
+                        return new PaymentResponseDTO(payment);
+                    })
+                    .collect(Collectors.toSet());
+        }
+
+        if (order.getVehicleDelivery() != null)
+        {
+            // this.orderDetailResponseDTOs.add(new OrderDetailResponseDTO(order.getVehicleDelivery()));
+            this.vehicleDeliveryResponseDTO = new VehicleDeliveryResponseDTO(order.getVehicleDelivery());
+
         }
 
         this.orderDetailResponseDTOs = order.getOrderDetails().stream().map(orderDetail -> {
@@ -210,5 +252,41 @@ public class OrderResponseDTO {
     public void setContractNumber(String contractNumber) {
         this.contractNumber = contractNumber;
     }
+
+    public String getAgencyAddress() {
+        return agencyAddress;
+    }
+
+    public void setAgencyAddress(String agencyAddress) {
+        this.agencyAddress = agencyAddress;
+    }
+
+    public String getAgencyPhone() {
+        return agencyPhone;
+    }
+
+    public void setAgencyPhone(String agencyPhone) {
+        this.agencyPhone = agencyPhone;
+    }
+
+    public Set<PaymentResponseDTO> getPaymentResponseDTOs() {
+        return paymentResponseDTOs;
+    }
+
+    public void setPaymentResponseDTOs(Set<PaymentResponseDTO> paymentResponseDTOs) {
+        this.paymentResponseDTOs = paymentResponseDTOs;
+    }
+
+    public VehicleDeliveryResponseDTO getVehicleDeliveryResponseDTO() {
+        return vehicleDeliveryResponseDTO;
+    }
+
+    public void setVehicleDeliveryResponseDTO(VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO) {
+        this.vehicleDeliveryResponseDTO = vehicleDeliveryResponseDTO;
+    }
+
+    
+
+
 
 }

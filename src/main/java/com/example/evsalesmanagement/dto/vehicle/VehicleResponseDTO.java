@@ -1,28 +1,21 @@
 package com.example.evsalesmanagement.dto.vehicle;
 
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.vehicletypedetail.VehicleTypeDetailResponseDTO;
 import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.model.Vehicle;
 
 public class VehicleResponseDTO {
+
     private Integer vehicleId;
     private String chassisNumber;
     private String machineNumber;
     private VehicleStatusEnum status;
     private String vehicleCondition;
     private VehicleTypeDetailResponseDTO vehicleTypeDetail;
-    private Integer agencyId;
+    private AgencyResponseDTO agency; 
 
-    public Integer getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(Integer vehicleId) {
-        this.vehicleId = vehicleId;
-    }
-
-    public VehicleResponseDTO() {
-    }
+    public VehicleResponseDTO() {}
 
     public VehicleResponseDTO(Vehicle vehicle) {
         this.vehicleId = vehicle.getVehicleId();
@@ -30,23 +23,23 @@ public class VehicleResponseDTO {
         this.machineNumber = vehicle.getMachineNumber();
         this.status = vehicle.getStatus();
         this.vehicleCondition = vehicle.getVehicleCondition();
+
         if (vehicle.getVehicleTypeDetail() != null) {
             this.vehicleTypeDetail = new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail());
         }
+
         if (vehicle.getAgency() != null) {
-            this.agencyId = vehicle.getAgency().getAgencyId();
+            this.agency = new AgencyResponseDTO(vehicle.getAgency());
         }
     }
 
-    public VehicleResponseDTO(String chassisNumber, String machineNumber, VehicleStatusEnum status,
-            String vehicleCondition,
-            VehicleTypeDetailResponseDTO vehicleTypeDetail, Integer agencyId) {
-        this.chassisNumber = chassisNumber;
-        this.machineNumber = machineNumber;
-        this.status = status;
-        this.vehicleCondition = vehicleCondition;
-        this.vehicleTypeDetail = vehicleTypeDetail;
-        this.agencyId = agencyId;
+    // Getter & Setter
+    public Integer getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Integer vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public String getChassisNumber() {
@@ -89,13 +82,11 @@ public class VehicleResponseDTO {
         this.vehicleTypeDetail = vehicleTypeDetail;
     }
 
-    // Đã loại bỏ getter/setter cho AgencyDTO, chỉ trả về agencyId
-    public Integer getAgencyId() {
-        return agencyId;
+    public AgencyResponseDTO getAgency() {
+        return agency;
     }
 
-    public void setAgencyId(Integer agencyId) {
-        this.agencyId = agencyId;
+    public void setAgency(AgencyResponseDTO agency) {
+        this.agency = agency;
     }
-
 }

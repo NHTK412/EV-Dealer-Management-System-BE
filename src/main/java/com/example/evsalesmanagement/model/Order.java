@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 //DonHang = Oder
@@ -44,7 +45,7 @@ public class Order extends Base {
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Type")
+    @Column(name = "Types")
     private OrderTypeEnum type;
 
     @ManyToOne
@@ -61,6 +62,12 @@ public class Order extends Base {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<Payment> payments = new HashSet<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private VehicleDelivery vehicleDelivery;
 
     public Integer getOrderId() {
         return orderId;
@@ -140,6 +147,22 @@ public class Order extends Base {
 
     public void setOrderDetails(Set<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public VehicleDelivery getVehicleDelivery() {
+        return vehicleDelivery;
+    }
+
+    public void setVehicleDelivery(VehicleDelivery vehicleDelivery) {
+        this.vehicleDelivery = vehicleDelivery;
     }
 
     // @OneToOne(mappedBy = "donHang")

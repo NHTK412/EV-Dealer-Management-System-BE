@@ -3,6 +3,9 @@ package com.example.evsalesmanagement.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.repository.AgencyRepository;
@@ -20,6 +23,7 @@ public class AgencyService {
     @Autowired
     private AgencyRepository agencyRepository;
 
+    // @Cacheable(value = "agency-all", key = "#pageable")
     public List<AgencySummaryDTO> getAllAgencies(Pageable pageable) {
         Page<Agency> agencies = agencyRepository.findAll(pageable);
         List<AgencySummaryDTO> summaryList = agencies.stream().map(agency -> {
@@ -32,6 +36,7 @@ public class AgencyService {
         return summaryList;
     }
 
+    @Cacheable(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO getByIdAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
@@ -42,7 +47,8 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
         return agencyResponseDTO;
     }
 
@@ -61,10 +67,13 @@ public class AgencyService {
         agencyResponseDTO.setAddress(savedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(savedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(savedAgency.getEmail());
-        agencyResponseDTO.setStatus(savedAgency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(savedAgency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 
+    @CachePut(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO updateAgency(Integer agencyId, AgencyRequestDTO agencyRequestDTO) {
         Agency agency = agencyRepository.findById(agencyId)
@@ -81,10 +90,13 @@ public class AgencyService {
         agencyResponseDTO.setAddress(updatedAgency.getAddress());
         agencyResponseDTO.setPhoneNumber(updatedAgency.getPhoneNumber());
         agencyResponseDTO.setEmail(updatedAgency.getEmail());
-        agencyResponseDTO.setStatus(updatedAgency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(updatedAgency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 
+    @CacheEvict(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO deleteAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
@@ -96,7 +108,9 @@ public class AgencyService {
         agencyResponseDTO.setAddress(agency.getAddress());
         agencyResponseDTO.setPhoneNumber(agency.getPhoneNumber());
         agencyResponseDTO.setEmail(agency.getEmail());
-        agencyResponseDTO.setStatus(agency.getStatus().getDisplayName());
+        agencyResponseDTO.setStatus(agency.getStatus());
+        agencyResponseDTO.setType(agency.getType());
+
         return agencyResponseDTO;
     }
 

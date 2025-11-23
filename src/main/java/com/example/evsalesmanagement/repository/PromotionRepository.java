@@ -17,7 +17,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
                             SELECT p
                             FROM Promotion p
                             JOIN p.vehicleDetails v
-                            JOIN p.agencies a
+                            JOIN p.agency a
                             WHERE a.agencyId = :agencyId AND v.vehicleTypeDetailId = :vehicleTypeDetailId
                             ORDER BY p.discountPercent DESC
 

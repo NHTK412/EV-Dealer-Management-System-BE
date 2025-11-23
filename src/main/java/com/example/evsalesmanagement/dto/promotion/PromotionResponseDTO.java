@@ -34,7 +34,12 @@ public class PromotionResponseDTO {
 
     private List<VehicleTypeDetailResponseDTO> vehicleTypeDetails;
 
-    private List<AgencyResponseDTO> agencies;
+    // private List<AgencyResponseDTO> agencies;
+    private Integer agencyId;
+
+    private String agencyName;
+
+    private String agencyAddress;
 
     public PromotionResponseDTO(Promotion promotion) {
         this.promotionId = promotion.getPromotionId();
@@ -47,6 +52,10 @@ public class PromotionResponseDTO {
         this.startDate = promotion.getStartDate();
         this.endDate = promotion.getEndDate();
         this.status = promotion.getStatus();
+
+        this.agencyId = promotion.getAgency().getAgencyId();
+        this.agencyName = promotion.getAgency().getAgencyName();
+        this.agencyAddress = promotion.getAgency().getAddress();
     }
 
     public PromotionResponseDTO() {
@@ -140,12 +149,38 @@ public class PromotionResponseDTO {
         this.vehicleTypeDetails = vehicleTypeDetails;
     }
 
-    public List<AgencyResponseDTO> getAgencies() {
-        return agencies;
+    public Integer getAgencyId() {
+        return agencyId;
     }
 
-    public void setAgencies(List<AgencyResponseDTO> agencies) {
-        this.agencies = agencies;
+    public void setAgencyId(Integer agencyId) {
+        this.agencyId = agencyId;
     }
+
+    public String getAgencyName() {
+        return agencyName;
+    }
+
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
+    }
+
+    public String getAgencyAddress() {
+        return agencyAddress;
+    }
+
+    public void setAgencyAddress(String agencyAddress) {
+        this.agencyAddress = agencyAddress;
+    }
+
+    // public List<AgencyResponseDTO> getAgencies() {
+    //     return agencies;
+    // }
+
+    // public void setAgencies(List<AgencyResponseDTO> agencies) {
+    //     this.agencies = agencies;
+    // }
+
+    
 
 }

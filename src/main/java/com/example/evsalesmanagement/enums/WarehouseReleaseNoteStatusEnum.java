@@ -1,8 +1,10 @@
 package com.example.evsalesmanagement.enums;
 
-public enum WarehouseExportReceiptStatusEnum {
+public enum WarehouseReleaseNoteStatusEnum {
 
     CREATED("Đã Tạo"),
+
+    PENDING_APPROVAL("Chờ Duyệt"),
 
     APPROVED("Đã Duyệt"),
 
@@ -14,7 +16,7 @@ public enum WarehouseExportReceiptStatusEnum {
 
     private final String displayName;
 
-    WarehouseExportReceiptStatusEnum(String displayName) {
+    WarehouseReleaseNoteStatusEnum(String displayName) {
         this.displayName = displayName;
     }
 

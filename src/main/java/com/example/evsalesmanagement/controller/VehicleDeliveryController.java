@@ -1,53 +1,60 @@
-package com.example.evsalesmanagement.controller;
+// package com.example.evsalesmanagement.controller;
 
-import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
-import com.example.evsalesmanagement.enums.VehicleDeliveryEnum;
-import com.example.evsalesmanagement.service.VehicleDeliveryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+// import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
+// import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
+// import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+// import com.example.evsalesmanagement.service.VehicleDeliveryService;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// import jakarta.validation.Valid;
+// import java.util.List;
 
-@RestController
-@RequestMapping("/vehicle-deliveries")
-public class VehicleDeliveryController {
+// @RestController
+// @RequestMapping("/vehicle-deliveries")
+// public class VehicleDeliveryController {
 
-    @Autowired
-    private VehicleDeliveryService service;
+//     @Autowired
+//     private VehicleDeliveryService service;
 
-    // Lấy tất cả giao xe
-    @GetMapping
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getAll() {
-        List<VehicleDeliveryResponseDTO> list = service.getAll();
-        return ResponseEntity.ok(list);
-    }
+//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
+//     @PostMapping
+//     public ResponseEntity<VehicleDeliveryResponseDTO> createDelivery(
+//             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
 
-    // Lấy giao xe theo trạng thái Pending
-    @GetMapping("/pending")
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getPending() {
-        List<VehicleDeliveryResponseDTO> list = service.getPendingDeliveries();
-        return ResponseEntity.ok(list);
-    }
+//         VehicleDeliveryResponseDTO createdDelivery = service.createVehicleDelivery(request);
 
-    // Lấy giao xe theo trạng thái In Progress
-    @GetMapping("/in-progress")
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getInProgress() {
-        List<VehicleDeliveryResponseDTO> list = service.getInProgressDeliveries();
-        return ResponseEntity.ok(list);
-    }
+//         return new ResponseEntity<>(createdDelivery, HttpStatus.CREATED);
+//     }
 
-    // Lấy giao xe theo trạng thái Completed
-    @GetMapping("/completed")
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getCompleted() {
-        List<VehicleDeliveryResponseDTO> list = service.getCompletedDeliveries();
-        return ResponseEntity.ok(list);
-    }
+//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
+//     @PutMapping("/{id}")
+//     public ResponseEntity<VehicleDeliveryResponseDTO> updateDelivery(
+//             @PathVariable("id") Integer id,
+//             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
 
-    // Lấy giao xe theo trạng thái bất kỳ (truyền enum)
-    @GetMapping("/by-status")
-    public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(@RequestParam VehicleDeliveryEnum status) {
-        List<VehicleDeliveryResponseDTO> list = service.getByStatus(status);
-        return ResponseEntity.ok(list);
-    }
-}
+//         VehicleDeliveryResponseDTO updatedDelivery = service.updateVehicleDelivery(id, request);
+
+//         return ResponseEntity.ok(updatedDelivery);
+//     }
+
+//     // Lấy tất cả giao xe
+//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
+//     @GetMapping
+//     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getAll() {
+//         List<VehicleDeliveryResponseDTO> list = service.getAll();
+//         return ResponseEntity.ok(list);
+//     }
+
+//     // Lấy giao xe theo trạng thái bất kỳ
+//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
+//     @GetMapping("/by-status")
+//     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(
+//             @RequestParam VehicleDeliveryStatusEnum status) {
+//         List<VehicleDeliveryResponseDTO> list = service.getDeliveriesByStatus(status);
+//         return ResponseEntity.ok(list);
+//     }
+// }

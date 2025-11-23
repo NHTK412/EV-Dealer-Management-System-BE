@@ -1,6 +1,6 @@
 package com.example.evsalesmanagement.enums;
 
-public enum WarehouseImportReceiptStatusEnum {
+public enum WarehouseReceiptStatusEnum {
 
     CREATED("Đã tạo"),
 
@@ -10,13 +10,11 @@ public enum WarehouseImportReceiptStatusEnum {
 
     CANCELLED("Đã hủy"),
 
-    PARTIALLY_RECEIVED("Nhập một phần"),
-
     PENDING_APPROVAL("Chờ phê duyệt");
 
     private final String displayName;
 
-    WarehouseImportReceiptStatusEnum(String displayName) {
+    WarehouseReceiptStatusEnum(String displayName) {
         this.displayName = displayName;
     }
 

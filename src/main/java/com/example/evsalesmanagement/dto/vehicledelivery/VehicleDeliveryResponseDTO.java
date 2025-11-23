@@ -11,8 +11,20 @@ public class VehicleDeliveryResponseDTO {
     private LocalDateTime expectedDeliveryDate;
     private LocalDateTime deliveryDate;
     private VehicleDeliveryStatusEnum status;
-    private Integer orderId;
+    // private Integer orderId;
     private Integer employeeId;
+
+    private String employeeName;
+
+    private String employeePhoneNumber;
+
+
+    private String address;
+
+    private String phoneNumber;
+
+    private String name;
+
 
     // Default constructor
     public VehicleDeliveryResponseDTO() {
@@ -21,12 +33,23 @@ public class VehicleDeliveryResponseDTO {
     // Constructor nhận VehicleDelivery
     public VehicleDeliveryResponseDTO(VehicleDelivery vehicleDelivery) {
         this.vehicleDeliveryId = vehicleDelivery.getVehicleDeliveryId();
-        this.expectedDeliveryDate = vehicleDelivery.getExpectedDeliveryDate();
+        // this.expectedDeliveryDate = vehicleDelivery.getExpectedDeliveryDate();
         this.deliveryDate = vehicleDelivery.getDeliveryDate();
         this.status = vehicleDelivery.getStatus();
+
+        this.employeeId = vehicleDelivery.getEmployee().getEmployeeId();
+        this.employeeName = vehicleDelivery.getEmployee().getEmployeeName();
+        this.employeePhoneNumber = vehicleDelivery.getEmployee().getPhoneNumber();
+
+
+        this.address = vehicleDelivery.getAddress();
+        this.phoneNumber = vehicleDelivery.getPhoneNumber();
+
+        this.name = vehicleDelivery.getName();
+
         // Sử dụng getter đúng tên trong model
-        this.orderId = vehicleDelivery.getOderId() != null ? vehicleDelivery.getOderId().getOrderId() : null;
-        this.employeeId = vehicleDelivery.getEmployee() != null ? vehicleDelivery.getEmployee().getEmployeeId() : null;
+        // this.orderId = vehicleDelivery.getOderId() != null ? vehicleDelivery.getOderId().getOrderId() : null;
+        // this.employeeId = vehicleDelivery.getEmployee() != null ? vehicleDelivery.getEmployee().getEmployeeId() : null;
     }
 
     // Getters và Setters
@@ -62,14 +85,6 @@ public class VehicleDeliveryResponseDTO {
         this.status = status;
     }
 
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -77,4 +92,62 @@ public class VehicleDeliveryResponseDTO {
     public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getEmployeePhoneNumber() {
+        return employeePhoneNumber;
+    }
+
+    public void setEmployeePhoneNumber(String employeePhoneNumber) {
+        this.employeePhoneNumber = employeePhoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+
+    // public Integer getOrderId() {
+    //     return orderId;
+    // }
+
+    // public void setOrderId(Integer orderId) {
+    //     this.orderId = orderId;
+    // }
+
+    // public Integer getEmployeeId() {
+    //     return employeeId;
+    // }
+
+    // public void setEmployeeId(Integer employeeId) {
+    //     this.employeeId = employeeId;
+    // }
 }

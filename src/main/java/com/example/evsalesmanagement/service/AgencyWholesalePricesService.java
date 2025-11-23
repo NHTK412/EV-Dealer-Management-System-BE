@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,8 +39,9 @@ public class AgencyWholesalePricesService {
         @Autowired
         private VehicleTypeDetailRepository vehicleTypeDetailRepository;
 
-        // AgencyWholesalePricesService(AgencyWholesalePriceController agencyWholesalePriceController) {
-        //         this.agencyWholesalePriceController = agencyWholesalePriceController;
+        // AgencyWholesalePricesService(AgencyWholesalePriceController
+        // agencyWholesalePriceController) {
+        // this.agencyWholesalePriceController = agencyWholesalePriceController;
         // }
 
         @Transactional
@@ -80,12 +84,14 @@ public class AgencyWholesalePricesService {
 
         }
 
+        // @Cacheable(value = "agency-wholesale-price-all", key = "#pageable")
         @Transactional
         public List<AgencyWholesalePriceSummaryDTO> getAllAgencyWholesalePrices(Pageable pageable) {
                 Page<AgencyWholesalePrice> agencyWholesalePrices = agencyWholesalePriceRepository.findAll(pageable);
                 return agencyWholesalePrices.stream().map(gs -> new AgencyWholesalePriceSummaryDTO(gs)).toList();
         }
 
+        @Cacheable(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         public AgencyWholesalePriceResponseDTO getByIdAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -99,6 +105,7 @@ public class AgencyWholesalePricesService {
                 return agencyWholesalePriceResponseDTO;
         }
 
+        @CachePut(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO updateAgencyWholesalePrice(Integer agencyWholesalePriceId,
                         AgencyWholesalePriceRequestDTO agencyWholesalePrice) {
@@ -133,6 +140,7 @@ public class AgencyWholesalePricesService {
 
         }
 
+        @CacheEvict(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO deleteAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)

@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.auth.AuthRequestDTO;
@@ -21,8 +22,16 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponseDTO>> postMethodName(@RequestBody AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> login(@RequestBody AuthRequestDTO authRequestDTO) {
         AuthResponseDTO authResponseDTO = authService.login(authRequestDTO.getUsername(), authRequestDTO.getPassword());
+        return ResponseEntity.ok(new ApiResponse<AuthResponseDTO>(true, null, authResponseDTO));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> getAccessTokenWithRefreshToken(@RequestParam String refreshToken) {
+
+        AuthResponseDTO authResponseDTO = authService.getAccessTokenWithRefreshToken(refreshToken);
+
         return ResponseEntity.ok(new ApiResponse<AuthResponseDTO>(true, null, authResponseDTO));
     }
 
