@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
+import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleRequestDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
 import com.example.evsalesmanagement.dto.vehicle.VehicleSummaryDTO;
@@ -61,11 +62,12 @@ public class VehicleService {
 
         }
 
-        @Transactional
-        public List<VehicleSummaryDTO> getAllVehicle(Pageable pageable) {
-                Page<Vehicle> vehicles = vehicleRepository.findAll(pageable);
-                return vehicles.stream().map(vehicle -> new VehicleSummaryDTO(vehicle)).toList();
+       @Transactional
+        public Page<VehicleSummaryDTO> getAllVehicle(Pageable pageable) {
+        Page<Vehicle> vehicles = vehicleRepository.findAll(pageable);
+        return vehicles.map(vehicle -> new VehicleSummaryDTO(vehicle));
         }
+
 
         @Cacheable(value = "vehicle", key = "#vehicleId")
         @Transactional
@@ -75,6 +77,7 @@ public class VehicleService {
                                                 "Không tìm thấy xe với ID: " + vehicleId));
                 VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
                 response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail()));
+                response.setAgency(new AgencyResponseDTO(vehicle.getAgency()));
                 return response;
         }
 

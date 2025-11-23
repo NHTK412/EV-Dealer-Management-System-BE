@@ -1,20 +1,22 @@
-package com.example.evsalesmanagement.dto.warehouseexportreceipt;
+package com.example.evsalesmanagement.dto.warehouseimportreceipt;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class WarehouseExportReceiptRequestDTO {
+import com.example.evsalesmanagement.enums.WarehouseReceiptStatusEnum;
+
+public class WarehouseReceiptRequestDTO {
     private LocalDateTime warehouseReceiptDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
-    private String status;
+    private WarehouseReceiptStatusEnum status;
     private Integer employeeId;
     private Integer agencyId;
     private List<Integer> vehicleIds;
 
-    public WarehouseExportReceiptRequestDTO() {}
+    public WarehouseReceiptRequestDTO() {}
 
     public LocalDateTime getWarehouseReceiptDate() {
         return warehouseReceiptDate;
@@ -40,10 +42,10 @@ public class WarehouseExportReceiptRequestDTO {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getStatus() {
+    public WarehouseReceiptStatusEnum getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(WarehouseReceiptStatusEnum status) {
         this.status = status;
     }
     public Integer getEmployeeId() {
