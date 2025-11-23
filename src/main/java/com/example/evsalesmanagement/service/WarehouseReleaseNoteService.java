@@ -42,9 +42,9 @@ public class WarehouseReleaseNoteService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    public List<WarehouseReleaseNoteSummaryDTO> getAllWarehouseExports(Pageable pageable) {
+    public Page<WarehouseReleaseNoteSummaryDTO> getAllWarehouseExports(Pageable pageable) {
         Page<WarehouseReleaseNote> release = warehouseReleaseNoteRepository.findAll(pageable);
-        return release.stream().map(WarehouseReleaseNoteSummaryDTO::new).toList();
+        return release.map(WarehouseReleaseNoteSummaryDTO::new);
     }
 
     @Cacheable(value = "warehouse-receipt", key = "#id")

@@ -39,9 +39,9 @@ public class WarehouseReceiptService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    public List<WarehouseReceiptSummaryDTO> getAllWarehouseReceipts(Pageable pageable) {
+    public Page<WarehouseReceiptSummaryDTO> getAllWarehouseReceipts(Pageable pageable) {
         Page<WarehouseReceipt> receipts = warehouseReceiptRepository.findAll(pageable);
-        return receipts.stream().map(WarehouseReceiptSummaryDTO::new).toList();
+        return receipts.map(WarehouseReceiptSummaryDTO::new);
     }
 
     @Cacheable(value = "warehouse-receipt", key = "#id")
@@ -64,7 +64,7 @@ public class WarehouseReceiptService {
         if (agencyOpt.isEmpty()) {
             return new ApiResponse<>(false, "Không tìm thấy đại lý", null);
         }
-        receipt.setAgencyId(agencyOpt.get());
+        receipt.setAgencyId(agencyOpt.get());  
         if (request.getEmployeeId() != null) {
             Optional<Employee> employeeOpt = employeeRepository.findById(request.getEmployeeId());
             if (employeeOpt.isPresent()) {

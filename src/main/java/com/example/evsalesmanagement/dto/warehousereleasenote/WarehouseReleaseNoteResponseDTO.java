@@ -11,8 +11,8 @@ import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 
 public class WarehouseReleaseNoteResponseDTO {
-    private Integer warehouseReceiptId;
-    private LocalDateTime warehouseReceiptDate;
+    private Integer warehouseReleaseNoteId;
+    private LocalDateTime warehouseReleaseNoteDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
@@ -25,8 +25,8 @@ public class WarehouseReleaseNoteResponseDTO {
     public WarehouseReleaseNoteResponseDTO() {}
 
     public WarehouseReleaseNoteResponseDTO(WarehouseReleaseNote entity) {
-        this.warehouseReceiptId = entity.getWarehouseReleaseNoteId();
-        this.warehouseReceiptDate = entity.getReleaseDate();
+        this.warehouseReleaseNoteId = entity.getWarehouseReleaseNoteId();
+        this.warehouseReleaseNoteDate= entity.getReleaseDate();
         this.reason = entity.getReason();
         this.totalAmount = entity.getTotalAmount();
         this.note = entity.getNote();
@@ -44,20 +44,20 @@ public class WarehouseReleaseNoteResponseDTO {
         }
     }
 
-    public Integer getWarehouseReceiptId() {
-        return warehouseReceiptId;
+    public Integer getWarehouseReleaseNoteId() {
+        return warehouseReleaseNoteId;
     }
 
-    public void setWarehouseReceiptId(Integer warehouseReceiptId) {
-        this.warehouseReceiptId = warehouseReceiptId;
+    public void setWarehouseReleaseNoteId(Integer warehouseReleaseNoteId) {
+        this.warehouseReleaseNoteId = warehouseReleaseNoteId;
     }
 
-    public LocalDateTime getWarehouseReceiptDate() {
-        return warehouseReceiptDate;
+    public LocalDateTime getWarehouseReleaseNoteDate() {
+        return warehouseReleaseNoteDate;
     }
-
-    public void setWarehouseReceiptDate(LocalDateTime warehouseReceiptDate) {
-        this.warehouseReceiptDate = warehouseReceiptDate;
+    
+    public void setWarehouseReleaseNoteDate(LocalDateTime warehouseReleaseNoteDate) {
+        this.warehouseReleaseNoteDate = warehouseReleaseNoteDate;
     }
 
     public String getReason() {

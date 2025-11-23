@@ -12,6 +12,7 @@ import com.example.evsalesmanagement.utils.ApiResponse;
 import jakarta.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,11 @@ public class WarehouseController {
     // --- Phiếu nhập kho ---
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/import")
-    public ResponseEntity<ApiResponse<List<WarehouseReceiptSummaryDTO>>> getAllImport(
+    public ResponseEntity<ApiResponse<Page<WarehouseReceiptSummaryDTO>>> getAllImport(
             @RequestParam int page,
             @RequestParam @Positive int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<WarehouseReceiptSummaryDTO> data = warehouseReceiptService.getAllWarehouseReceipts(pageable);
+        Page<WarehouseReceiptSummaryDTO> data = warehouseReceiptService.getAllWarehouseReceipts(pageable);
         return ResponseEntity.ok(new ApiResponse<>(true, null, data));
     }
 
@@ -77,11 +78,11 @@ public class WarehouseController {
     // --- Phiếu xuất kho ---
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @GetMapping("/export")
-    public ResponseEntity<ApiResponse<List<WarehouseReleaseNoteSummaryDTO>>> getAllExport(
+    public ResponseEntity<ApiResponse<Page<WarehouseReleaseNoteSummaryDTO>>> getAllExport(
             @RequestParam int page,
             @RequestParam @Positive int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<WarehouseReleaseNoteSummaryDTO> data = warehouseExportService.getAllWarehouseExports(pageable);
+        Page<WarehouseReleaseNoteSummaryDTO> data = warehouseExportService.getAllWarehouseExports(pageable);
         return ResponseEntity.ok(new ApiResponse<>(true, null, data));
     }
 
@@ -102,7 +103,7 @@ public class WarehouseController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-    @PatchMapping("/export/{warehouseReceiptId}")
+    @PatchMapping("/export/{warehouseReleaseNoteId}")
     public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> updateWarehouseExportStatus(
         @PathVariable Integer warehouseReleaseNoteId,
         @RequestBody WarehouseReleaseNoteStatusUpdateDTO request) {
@@ -112,7 +113,7 @@ public class WarehouseController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-    @DeleteMapping("/export/{warehouseReceiptId}")
+    @DeleteMapping("/export/{warehouseReleaseNoteId}")
     public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> deleteExport(
             @PathVariable Integer warehouseReleaseNoteId) {
         WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReleaseNoteId);
