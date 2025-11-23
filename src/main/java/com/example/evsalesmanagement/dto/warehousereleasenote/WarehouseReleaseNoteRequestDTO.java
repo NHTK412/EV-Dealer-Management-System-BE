@@ -1,26 +1,28 @@
-package com.example.evsalesmanagement.dto.warehouseimportreceipt;
+package com.example.evsalesmanagement.dto.warehousereleasenote;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-public class WarehouseImportReceiptRequestDTO {
-    private LocalDateTime warehouseReceiptDate;
+import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
+
+public class WarehouseReleaseNoteRequestDTO {
+    private LocalDateTime releaseDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
-    private String status;
+    private WarehouseReleaseNoteStatusEnum status;
     private Integer employeeId;
     private Integer agencyId;
-    private List<Integer> vehicleIds;
+    private Set<Integer> vehicleIds;
 
-    public WarehouseImportReceiptRequestDTO() {}
+    public WarehouseReleaseNoteRequestDTO() {}
 
-    public LocalDateTime getWarehouseReceiptDate() {
-        return warehouseReceiptDate;
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
     }
-    public void setWarehouseReceiptDate(LocalDateTime warehouseReceiptDate) {
-        this.warehouseReceiptDate = warehouseReceiptDate;
+    public void setReleaseDate(LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
     }
     public String getReason() {
         return reason;
@@ -40,12 +42,7 @@ public class WarehouseImportReceiptRequestDTO {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -58,10 +55,19 @@ public class WarehouseImportReceiptRequestDTO {
     public void setAgencyId(Integer agencyId) {
         this.agencyId = agencyId;
     }
-    public List<Integer> getVehicleIds() {
+    public Set<Integer> getVehicleIds() {
         return vehicleIds;
     }
-    public void setVehicleIds(List<Integer> vehicleIds) {
+    public void setVehicleIds(Set<Integer> vehicleIds) {
         this.vehicleIds = vehicleIds;
     }
+
+    public WarehouseReleaseNoteStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(WarehouseReleaseNoteStatusEnum status) {
+        this.status = status;
+    }
+
 }
