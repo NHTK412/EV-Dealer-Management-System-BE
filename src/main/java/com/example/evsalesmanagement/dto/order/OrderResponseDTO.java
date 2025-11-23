@@ -86,11 +86,11 @@ public class OrderResponseDTO {
             this.customerPhoneNumber = order.getCustomer().getPhoneNumber();
             this.customerAddress = order.getCustomer().getAddress();
         }
-        if (order.getAgency() != null) {
-            this.agencyId = order.getAgency().getAgencyId();
-            this.agencyName = order.getAgency().getAgencyName();
-            this.agencyAddress = order.getAgency().getAddress();
-            this.agencyPhone = order.getAgency().getPhoneNumber();
+        if (order.getDealderAgency() != null) {
+            this.agencyId = order.getDealderAgency().getAgencyId();
+            this.agencyName = order.getDealderAgency().getAgencyName();
+            this.agencyAddress = order.getDealderAgency().getAddress();
+            this.agencyPhone = order.getDealderAgency().getPhoneNumber();
         }
 
         if (order.getPayments() != null) {

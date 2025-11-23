@@ -63,8 +63,14 @@ public class Order extends Base {
     private Employee employee;
 
     @ManyToOne
+    @JoinColumn(name = "DealderAgencyId")
+    private Agency dealerAgency;
+
+    @ManyToOne
     @JoinColumn(name = "AgencyId")
     private Agency agency;
+
+    
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails = new HashSet<>();
@@ -139,12 +145,12 @@ public class Order extends Base {
         this.employee = employee;
     }
 
-    public Agency getAgency() {
-        return agency;
+    public Agency getDealderAgency() {
+        return dealerAgency;
     }
 
-    public void setAgency(Agency agency) {
-        this.agency = agency;
+    public void setDealderAgency(Agency dealerAgency) {
+        this.dealerAgency = dealerAgency;
     }
 
     public Set<OrderDetail> getOrderDetails() {
@@ -187,7 +193,21 @@ public class Order extends Base {
         this.originaAmount = originaAmount;
     }
 
-    
+    public Agency getDealerAgency() {
+        return dealerAgency;
+    }
+
+    public void setDealerAgency(Agency dealerAgency) {
+        this.dealerAgency = dealerAgency;
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
 
     // @OneToOne(mappedBy = "donHang")
     // private BaoGia baoGia;

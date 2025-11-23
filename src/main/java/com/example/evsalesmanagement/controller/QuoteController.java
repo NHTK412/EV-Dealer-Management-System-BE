@@ -81,14 +81,14 @@ public class QuoteController {
     @Autowired
     QuoteService quoteService;
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @GetMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> getQuoteById(@RequestParam Integer quoteId) {
         QuoteResponseDTO quoteResponseDTO = quoteService.getQuoteById(quoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PostMapping
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> createQuote(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -99,14 +99,14 @@ public class QuoteController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @DeleteMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> deleteQuote(@PathVariable Integer quoteId) {
         QuoteResponseDTO quoteResponseDTO = quoteService.deleteQuote(quoteId);
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PutMapping("/{quoteId}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> updateQuote(@PathVariable Integer quoteId,
             @RequestBody QuoteRequestDTO quoteRequestDTO) {
@@ -114,7 +114,7 @@ public class QuoteController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, quoteResponseDTO));
     }
 
-    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
     @PatchMapping("/{quoteId}/{status}")
     public ResponseEntity<ApiResponse<QuoteResponseDTO>> updateStatusQuote(@PathVariable Integer quoteId,
             @PathVariable QuoteStatusEnum status) {

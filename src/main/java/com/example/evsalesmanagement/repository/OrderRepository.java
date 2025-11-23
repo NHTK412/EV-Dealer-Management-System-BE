@@ -28,8 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
                         SELECT o
                         FROM Order o
                         LEFT JOIN FETCH o.employee e
-                        LEFT JOIN FETCH e.agency a
-                        LEFT JOIN FETCH o.customer c
+                        LEFT JOIN FETCH o.agency a
                         WHERE a.agencyId = :agencyId
                         """)
         Page<Order> findByAgencyId(@Param("agencyId") Integer agencyId, Pageable pageable);
@@ -42,7 +41,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
                         LEFT JOIN FETCH o.customer c
                         WHERE e.employeeId = :employeeId
                         """)
-        Page<Order> findByEmployeeId(@Param("employeeId") Integer employeeId, Pageable pageable);
+        Page<Order> findByEmployeeId(@Param("employeeId") Integer employeeId,
+                        Pageable pageable);
 
         // Page<Order> findByEmployee_Agency_AgencyId(Integer agencyId, Pageable
         // pageable);
