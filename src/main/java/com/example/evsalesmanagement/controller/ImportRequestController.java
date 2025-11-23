@@ -36,7 +36,7 @@ public class ImportRequestController {
         ImportRequestService importRequestService;
 
         // Chưa tạo logic gửi thông báo đến đại lý
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @PostMapping()
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> createImportRequest(
                         @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
@@ -48,7 +48,7 @@ public class ImportRequestController {
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @DeleteMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> deleteImportRequest(
                         @PathVariable Integer importRequestId) {
@@ -61,7 +61,7 @@ public class ImportRequestController {
                 // return ResponseEntity.ok());
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @PutMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> updateImportRequest(
                         @PathVariable Integer importRequestId,
@@ -78,7 +78,7 @@ public class ImportRequestController {
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping
         public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getAllImportRequests(
                         @RequestParam Integer page,
@@ -97,7 +97,7 @@ public class ImportRequestController {
                 // employeeId));
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> getImportRequestDetail(
                         @PathVariable Integer importRequestId) {
@@ -112,7 +112,7 @@ public class ImportRequestController {
                 // ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
         }
 
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping("/me")
         public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getMyImportRequest(
                         @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer page,

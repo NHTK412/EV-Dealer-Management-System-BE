@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
+import com.example.evsalesmanagement.dto.quote.QuoteSummaryDTO;
 import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Promotion;
@@ -283,6 +286,17 @@ public class QuoteService {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
                 quote.setTotalAmount(total);
-
         }
+
+        @Transactional
+        public List<QuoteSummaryDTO> getAllQuotes(Pageable pageable) {
+                // return quoteRepository.findAll();
+
+                Page<Quote> quotes = quoteRepository.findAll(pageable);
+
+                return quotes.stream()
+                                .map((quote) -> new QuoteSummaryDTO(quote))
+                                .toList();
+        }
+
 }
