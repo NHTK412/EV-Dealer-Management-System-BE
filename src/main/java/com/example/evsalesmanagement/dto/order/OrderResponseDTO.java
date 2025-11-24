@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
 import com.example.evsalesmanagement.model.Order;
-import com.example.evsalesmanagement.model.VehicleDelivery;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class OrderResponseDTO {

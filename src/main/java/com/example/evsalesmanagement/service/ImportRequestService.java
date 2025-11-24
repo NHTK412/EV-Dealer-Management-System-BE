@@ -237,4 +237,34 @@ public class ImportRequestService {
                 return importRequestDTO;
         }
 
+        // changeImportRequestStatus
+        @Transactional
+        public ImportRequestResponseDTO changeImportRequestStatus(Integer importRequestId,
+                        ImportRequestStatusEnum status) {
+
+                ImportRequest importRequest = importRequestRepository.findById(importRequestId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+
+                if (importRequest.getStatus() == ImportRequestStatusEnum.APPROVED
+                                || importRequest.getStatus() == ImportRequestStatusEnum.REJECTED) {
+                        throw new ConflictException("Trạng thái yêu cầu không thay đổi");
+                }
+                
+                importRequest.setStatus(status);
+
+                ImportRequestResponseDTO importRequestDTO = new ImportRequestResponseDTO(importRequest);
+
+                List<ImportRequestDetail> importRequestDetails = importRequestDetailRepository
+                                .findByImportRequest_ImportRequestId(importRequestId);
+
+                List<ImportRequestDetailResponseDTO> importRequestDetailDTOs = importRequestDetails.stream()
+                                .map((importRequestDetail) -> {
+                                        return new ImportRequestDetailResponseDTO(importRequestDetail);
+                                }).toList();
+
+                importRequestDTO.setImportRequestDetails(importRequestDetailDTOs);
+
+                return importRequestDTO;
+        }
+
 }

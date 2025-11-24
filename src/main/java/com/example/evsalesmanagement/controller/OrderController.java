@@ -124,14 +124,14 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
     }
 
-    @PatchMapping("/{orderId}/process-payment")
-    public ResponseEntity<ApiResponse<OrderResponseDTO>> updatePaymentStatus(@PathVariable Integer orderId,
-            @RequestBody PaymentRequestDTO paymentRequestDTO) {
+    // @PatchMapping("/{orderId}/process-payment")
+    // public ResponseEntity<ApiResponse<OrderResponseDTO>> updatePaymentStatus(@PathVariable Integer orderId,
+    //         @RequestBody PaymentRequestDTO paymentRequestDTO) {
 
-        OrderResponseDTO orderResponseDTO = orderService.updatePaymentStatus(orderId, paymentRequestDTO);
+    //     OrderResponseDTO orderResponseDTO = orderService.updatePaymentStatus(orderId, paymentRequestDTO);
 
-        return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
-    }
+    //     return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
+    // }
 
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrder(

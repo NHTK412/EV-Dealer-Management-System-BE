@@ -3,7 +3,6 @@ package com.example.evsalesmanagement.service;
 import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Vehicle;
-import com.example.evsalesmanagement.model.WarehouseReceipt;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;

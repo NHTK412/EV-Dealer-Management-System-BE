@@ -879,8 +879,8 @@ public class OrderService {
         @Autowired
         private SalesDiscountCalculator salesDiscountCalculator;
 
-        @Autowired
-        private MonthlySalesRepository monthlySalesRepository;
+        // @Autowired
+        // private MonthlySalesRepository monthlySalesRepository;
 
         @Transactional
         public List<OrderSummaryDTO> getOrdersByCustomerId(Integer agencyId, Integer customerId, Pageable pageable) {
@@ -964,7 +964,7 @@ public class OrderService {
                         order.setStatus(OrderStatusEnum.CANCEL);
 
                         WarehouseReleaseNote warehouseReleaseNote = warehouseReleaseNoteRepository
-                                        .findByOrderId(orderId)
+                                        .findByOrder_OrderId(orderId)
                                         .orElse(null);
                         if (warehouseReleaseNote != null) {
                                 for (Vehicle vehicle : warehouseReleaseNote.getVehicles()) {
@@ -985,55 +985,55 @@ public class OrderService {
                 return new OrderResponseDTO(order);
         }
 
-        @Transactional
-        public OrderResponseDTO updatePaymentStatus(Integer orderId, PaymentRequestDTO paymentRequestDTO) {
-                Order order = orderRepository.findByIdFetchAllRelations(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        // @Transactional
+        // public OrderResponseDTO updatePaymentStatus(Integer orderId, PaymentRequestDTO paymentRequestDTO) {
+        //         Order order = orderRepository.findByIdFetchAllRelations(orderId)
+        //                         .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-                for (Payment payment : order.getPayments()) {
-                        if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
-                                payment.setStatus(PaymentStatusEnum.PAID);
-                                payment.setPaymentDate(LocalDateTime.now());
-                                payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
+        //         for (Payment payment : order.getPayments()) {
+        //                 if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
+        //                         payment.setStatus(PaymentStatusEnum.PAID);
+        //                         payment.setPaymentDate(LocalDateTime.now());
+        //                         payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
 
-                                if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
-                                        payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
-                                }
+        //                         if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
+        //                                 payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
+        //                         }
 
-                                Integer month = LocalDateTime.now().getMonthValue();
-                                Integer year = LocalDateTime.now().getYear();
+        //                         Integer month = LocalDateTime.now().getMonthValue();
+        //                         Integer year = LocalDateTime.now().getYear();
 
-                                MonthlySales optionalMonthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(
-                                                order.getAgency().getAgencyId(),
-                                                month,
-                                                year).orElseGet(() -> {
-                                                        MonthlySales newMonthlySales = new MonthlySales();
-                                                        newMonthlySales.setAgency(order.getAgency());
+        //                         MonthlySales optionalMonthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(
+        //                                         order.getAgency().getAgencyId(),
+        //                                         month,
+        //                                         year).orElseGet(() -> {
+        //                                                 MonthlySales newMonthlySales = new MonthlySales();
+        //                                                 newMonthlySales.setAgency(order.getAgency());
 
-                                                        newMonthlySales.setSalesMonth(LocalDate.of(year, month, 1));
+        //                                                 newMonthlySales.setSalesMonth(LocalDate.of(year, month, 1));
 
-                                                        newMonthlySales.setSalesAmount(BigDecimal.ZERO);
-                                                        // set thêm các field mặc định khác nếu cần
-                                                        return monthlySalesRepository.save(newMonthlySales);
-                                                });
+        //                                                 newMonthlySales.setSalesAmount(BigDecimal.ZERO);
+        //                                                 // set thêm các field mặc định khác nếu cần
+        //                                                 return monthlySalesRepository.save(newMonthlySales);
+        //                                         });
 
-                                optionalMonthlySales.getSalesAmount().add(payment.getAmount());
+        //                         optionalMonthlySales.getSalesAmount().add(payment.getAmount());
 
-                                monthlySalesRepository.save(optionalMonthlySales);
-                                break;
-                        }
-                }
+        //                         monthlySalesRepository.save(optionalMonthlySales);
+        //                         break;
+        //                 }
+        //         }
 
-                for (Payment payment : order.getPayments()) {
-                        if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
-                                break;
-                        }
-                        order.setStatus(OrderStatusEnum.PAID);
-                }
+        //         for (Payment payment : order.getPayments()) {
+        //                 if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
+        //                         break;
+        //                 }
+        //                 order.setStatus(OrderStatusEnum.PAID);
+        //         }
 
-                orderRepository.save(order);
-                return new OrderResponseDTO(order);
-        }
+        //         orderRepository.save(order);
+        //         return new OrderResponseDTO(order);
+        // }
 
         @Transactional
         public OrderResponseDTO createOrder(Integer employeeId, OrderRequestDTO orderRequestDTO) {

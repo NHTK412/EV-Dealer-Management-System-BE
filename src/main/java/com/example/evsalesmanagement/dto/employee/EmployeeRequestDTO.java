@@ -6,13 +6,7 @@ import java.time.LocalDate;
 import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.model.Employee;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 public class EmployeeRequestDTO {
 

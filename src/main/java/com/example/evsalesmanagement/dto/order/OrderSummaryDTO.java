@@ -1,10 +1,7 @@
 package com.example.evsalesmanagement.dto.order;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.example.evsalesmanagement.dto.orderdetail.OrderDetailResponseDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.model.Order;
 
