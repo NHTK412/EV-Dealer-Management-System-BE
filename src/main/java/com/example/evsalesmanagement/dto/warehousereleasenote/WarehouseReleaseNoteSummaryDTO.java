@@ -7,8 +7,8 @@ import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 
 public class WarehouseReleaseNoteSummaryDTO {
-    private Integer warehouseReceiptId;
-    private LocalDateTime warehouseReceiptDate;
+    private Integer warehouseReleaseNoteId;
+    private LocalDateTime warehouseReleaseNoteDate;
     private String reason;
     private BigDecimal totalAmount;
     private String note;
@@ -17,25 +17,29 @@ public class WarehouseReleaseNoteSummaryDTO {
     public WarehouseReleaseNoteSummaryDTO() {}
 
     public WarehouseReleaseNoteSummaryDTO(WarehouseReleaseNote entity) {
-        this.warehouseReceiptId = entity.getWarehouseReleaseNoteId();
-        this.warehouseReceiptDate = entity.getReleaseDate();
+        this.warehouseReleaseNoteId = entity.getWarehouseReleaseNoteId();
+        this.warehouseReleaseNoteDate = entity.getReleaseDate();
         this.totalAmount = entity.getTotalAmount();
         this.note = entity.getNote();
         this.status = entity.getStatus();
     }
 
-    public Integer getWarehouseReceiptId() {
-        return warehouseReceiptId;
+    public Integer getWarehouseReleaseNoteId() {
+        return warehouseReleaseNoteId;
     }
-    public void setWarehouseReceiptId(Integer warehouseReceiptId) {
-        this.warehouseReceiptId = warehouseReceiptId;
+
+    public void setWarehouseReleaseNoteId(Integer warehouseReleaseNoteId) {
+        this.warehouseReleaseNoteId = warehouseReleaseNoteId;
     }
-    public LocalDateTime getWarehouseReceiptDate() {
-        return warehouseReceiptDate;
+    
+    public LocalDateTime getWarehouseReleaseNoteDate() {
+        return warehouseReleaseNoteDate;
     }
-    public void setWarehouseReceiptDate(LocalDateTime warehouseReceiptDate) {
-        this.warehouseReceiptDate = warehouseReceiptDate;
+
+    public void setWarehouseReleaseNoteDate(LocalDateTime warehouseReleaseNoteDate) {
+        this.warehouseReleaseNoteDate = warehouseReleaseNoteDate;
     }
+
     public String getReason() {
         return reason;
     }
