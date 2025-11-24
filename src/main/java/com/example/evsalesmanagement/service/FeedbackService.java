@@ -38,15 +38,15 @@ public class FeedbackService {
     // tạo feedback mới
     @Transactional
     public FeedbackResponseDTO createFeedback(FeadbackRequestDTO request) {
-        log.info("Creating feedback from customer: {}", request.getCustomerId());
+        log.info("Test create feedback for customer ID: {}", request.getCustomerId());
 
         // log bug
         if (request.getFeedbackTitle() == null || request.getFeedbackTitle().isBlank()) {
-            throw new BadRequestException("Feedback title is required.");
+            throw new BadRequestException("Feedback title is required");
         }
 
         if (request.getFeedbackContent() == null || request.getFeedbackContent().isBlank()) {
-            throw new BadRequestException("Feedback content is required.");
+            throw new BadRequestException("Feedback content is required");
         }
 
         Customer customer = customerRepository.findById(request.getCustomerId())
@@ -63,8 +63,7 @@ public class FeedbackService {
 
         Feedback savedFeedback = feedbackRepository.save(feedback);
 
-        // log.info("Feedback created successfully with ID: {}",
-        // savedFeedback.getFeedbackId());
+        log.info("Feedback created successfully with ID: {}", savedFeedback.getFeedbackId());
 
         return convertToDetailDTO(savedFeedback);
     }
@@ -72,8 +71,8 @@ public class FeedbackService {
     // lấy danh sách feedback với phân trang + lọc
     @Transactional(readOnly = true)
     public Page<FeedBackSummaryDTO> getFeedback(String statusStr, Pageable pageable) {
-        // log.debug("Getting feedback - status: {}, page: {}", statusStr,
-        // pageable.getPageNumber());
+        log.debug("Getting feedback - status: {}, page: {}", statusStr,
+        pageable.getPageNumber());
 
         if (statusStr == null || statusStr.trim().isEmpty()) {
             return getAllFeedback(pageable);
@@ -84,8 +83,8 @@ public class FeedbackService {
 
     // lấy tất cả feedback + phân trang
     public Page<FeedBackSummaryDTO> getAllFeedback(Pageable pageable) {
-        // log.debug("Getting all feedback - page: {}, size: {}",
-        // pageable.getPageNumber(), pageable.getPageSize());
+        log.debug("Getting all feedback - page: {}, size: {}",
+        pageable.getPageNumber(), pageable.getPageSize());
 
         return feedbackRepository.findAllByOrderByCreateAtDesc(pageable)
                 .map(this::convertToListDTO);
@@ -93,7 +92,7 @@ public class FeedbackService {
 
     // lấy feedback theo trạng thái + phân trang
     public Page<FeedBackSummaryDTO> getFeedbackByStatus(String statusStr, Pageable pageable) {
-        // log.debug("Getting feedback by status: {}", statusStr);
+        log.debug("Getting feedback by status: {}", statusStr);
 
         FeedbackStatusEnum status = validateAndParseStatus(statusStr);
 
@@ -103,7 +102,7 @@ public class FeedbackService {
 
     // lấy chi tiết feedback theo id
     public FeedbackResponseDTO getFeedbackDetail(Integer feedbackId) {
-        // log.debug("Getting feedback detail: {}", feedbackId);
+        log.debug("Getting feedback detail: {}", feedbackId);
 
         Feedback feedback = findFeedbackById(feedbackId);
 
@@ -112,7 +111,7 @@ public class FeedbackService {
 
     // đếm số lượng feedback theo trạng thái
     public Long countByStatus(String statusStr) {
-        // log.debug("Counting feedback by status: {}", statusStr);
+        log.debug("Counting feedback by status: {}", statusStr);
 
         FeedbackStatusEnum status = validateAndParseStatus(statusStr);
 

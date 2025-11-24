@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.AgencyWholesalePriceStatusEnum;
 import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 
 public class AgencyWholesalePriceSummaryDTO {
@@ -12,7 +13,7 @@ public class AgencyWholesalePriceSummaryDTO {
     private Integer minimumQuantity;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private AgencyWholesalePriceStatusEnum status;
 
     public AgencyWholesalePriceSummaryDTO() {
     }
@@ -23,11 +24,11 @@ public class AgencyWholesalePriceSummaryDTO {
         this.minimumQuantity = agencyWholesalePrice.getMinimumQuantity();
         this.startDate = agencyWholesalePrice.getStartDate();
         this.endDate = agencyWholesalePrice.getEndDate();
-        this.status = agencyWholesalePrice.getStatus().getDisplayName();
+        this.status = agencyWholesalePrice.getStatus();
     }
 
     public AgencyWholesalePriceSummaryDTO(Integer agencyWholesalePriceId, BigDecimal wholesalePrice, Integer minimumQuantity,
-            LocalDateTime startDate, LocalDateTime endDate, String status, List<Integer> agenciesId,
+            LocalDateTime startDate, LocalDateTime endDate, AgencyWholesalePriceStatusEnum status, List<Integer> agenciesId,
             List<Integer> vehicleTypeDetailsId) {
         this.agencyWholesalePriceId = agencyWholesalePriceId;
         this.wholesalePrice = wholesalePrice;
@@ -77,14 +78,12 @@ public class AgencyWholesalePriceSummaryDTO {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public AgencyWholesalePriceStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AgencyWholesalePriceStatusEnum status) {
         this.status = status;
     }
-
     
 }
-

@@ -34,9 +34,6 @@ import jakarta.validation.constraints.Positive;
 @Validated
 public class FeedbackController {
 
-        // private static final Logger log =
-        // LoggerFactory.getLogger(FeedbackController.class);
-
         @Autowired
         private FeedbackService feedbackService;
 
@@ -44,12 +41,10 @@ public class FeedbackController {
         private FeedbackHandlingService feedbackHandlingService;
 
         // tạo phản hồi mới từ customer
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @PostMapping
         public ResponseEntity<ApiResponse<FeedbackResponseDTO>> createFeedback(
                         @Valid @RequestBody FeadbackRequestDTO request) {
-
-                // log.info("POST /feedback - Create new feedback from customer {}",
                 // request.getCustomerId());
 
                 FeedbackResponseDTO result = feedbackService.createFeedback(request);
@@ -59,15 +54,12 @@ public class FeedbackController {
         }
 
         // lấy tất cả phản hồi + phân trang + lọc
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping
         public ResponseEntity<ApiResponse<Page<FeedBackSummaryDTO>>> getAllFeedback(
                         @RequestParam(required = false) String status,
                         @RequestParam(defaultValue = "0") @Min(0) int page,
                         @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size) {
-
-                // log.info("GET /feedback - status: {}, page: {}, size: {}", status, page,
-                // size);
 
                 Pageable pageable = PageRequest.of(page, size);
                 Page<FeedBackSummaryDTO> result = feedbackService.getFeedback(status, pageable);
@@ -77,12 +69,10 @@ public class FeedbackController {
         }
 
         // lấy phản hồi theo id
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+      @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/{feedbackId}")
         public ResponseEntity<ApiResponse<FeedbackResponseDTO>> getFeedbackDetail(
                         @PathVariable @Positive(message = "Id feedback must be positive") Integer feedbackId) {
-
-                // log.info("GET /feedback/{}", feedbackId);
 
                 FeedbackResponseDTO detail = feedbackService.getFeedbackDetail(feedbackId);
 
@@ -91,13 +81,12 @@ public class FeedbackController {
         }
 
         // xử lý phản hồi
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @PostMapping("/{feedbackId}/handle")
         public ResponseEntity<ApiResponse<FeedbackResponseDTO>> handleFeedback(
                         @PathVariable @Positive(message = "Id feedback must be positive") Integer feedbackId,
                         @Valid @RequestBody HandleFeedbackRequestDTO request) {
 
-                // log.info("POST /feedback/{}/handle", feedbackId);
                 Integer employeeId = 1;
 
                 FeedbackResponseDTO result = feedbackHandlingService.handleFeedback(
@@ -110,12 +99,10 @@ public class FeedbackController {
         }
 
         // đếm phản hồi theo trạng thái
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
+         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/count")
         public ResponseEntity<ApiResponse<Long>> countFeedbackByStatus(
                         @RequestParam String status) {
-
-                // log.info("GET /feedback/count - status: {}", status);
 
                 Long count = feedbackService.countByStatus(status);
 

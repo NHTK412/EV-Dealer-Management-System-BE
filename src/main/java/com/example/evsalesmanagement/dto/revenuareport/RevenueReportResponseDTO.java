@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.dto.revenuareport;
 
-
 import java.math.BigDecimal;
 
 public class RevenueReportResponseDTO {
@@ -29,12 +28,12 @@ public class RevenueReportResponseDTO {
         this.agencyName = agencyName;
         this.totalOrders = totalOrders;
         this.totalQuantity = totalQuantity;
+        
         this.totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
         this.totalDiscount = totalDiscount != null ? totalDiscount : BigDecimal.ZERO;
         this.netRevenue = this.totalRevenue.subtract(this.totalDiscount);
     }
     
-
     // Constructor - no netRevenue
     public RevenueReportResponseDTO(Integer vehicleTypeId, String vehicleTypeName,
                                     Integer vehicleTypeDetailId, String version, String color,
@@ -48,9 +47,17 @@ public class RevenueReportResponseDTO {
         this.agencyName = agencyName;
         this.totalOrders = totalOrders;
         this.totalQuantity = totalQuantity;
+        
+        // FIX: Null-safe operations
         this.totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
         this.totalDiscount = totalDiscount != null ? totalDiscount : BigDecimal.ZERO;
         this.netRevenue = this.totalRevenue.subtract(this.totalDiscount);
+    }
+
+    public RevenueReportResponseDTO() {
+        this.totalRevenue = BigDecimal.ZERO;
+        this.totalDiscount = BigDecimal.ZERO;
+        this.netRevenue = BigDecimal.ZERO;
     }
 
     // Getters and Setters
@@ -123,8 +130,10 @@ public class RevenueReportResponseDTO {
     }
 
     public void setTotalRevenue(BigDecimal totalRevenue) {
-        this.totalRevenue = totalRevenue;
-        this.netRevenue = totalRevenue.subtract(this.totalDiscount);
+        this.totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
+        
+        BigDecimal safeDiscount = this.totalDiscount != null ? this.totalDiscount : BigDecimal.ZERO;
+        this.netRevenue = this.totalRevenue.subtract(safeDiscount);
     }
 
     public BigDecimal getTotalDiscount() {
@@ -132,8 +141,10 @@ public class RevenueReportResponseDTO {
     }
 
     public void setTotalDiscount(BigDecimal totalDiscount) {
-        this.totalDiscount = totalDiscount;
-        this.netRevenue = this.totalRevenue.subtract(totalDiscount);
+        this.totalDiscount = totalDiscount != null ? totalDiscount : BigDecimal.ZERO;
+        
+        BigDecimal safeRevenue = this.totalRevenue != null ? this.totalRevenue : BigDecimal.ZERO;
+        this.netRevenue = safeRevenue.subtract(this.totalDiscount);
     }
 
     public BigDecimal getNetRevenue() {
@@ -141,6 +152,6 @@ public class RevenueReportResponseDTO {
     }
 
     public void setNetRevenue(BigDecimal netRevenue) {
-        this.netRevenue = netRevenue;
+        this.netRevenue = netRevenue != null ? netRevenue : BigDecimal.ZERO;
     }
 }
