@@ -1,4 +1,3 @@
-
 package com.example.evsalesmanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,9 @@ public class EmployeeService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    // Lấy tất cả nhân viên - có phân trang
+    // Lấy tất cả nhân viên - có phân trang 
     public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
-        return employeeRepository.findAll(pageable)
+        return employeeRepository.findByStatus(EmployeeStatusEnum.ACTIVE, pageable)
                 .map(EmployeeResponseDTO::new);
     }
 
@@ -48,12 +47,16 @@ public class EmployeeService {
     // Tạo nhân viên mới
     @Transactional
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO requestDTO) {
-        if (employeeRepository.existsByEmail(requestDTO.getEmail())) {
+        if (employeeRepository.existsByEmailAndStatus(requestDTO.getEmail(), EmployeeStatusEnum.ACTIVE)) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
         }
 
-        if (employeeRepository.existsByPhoneNumber(requestDTO.getPhoneNumber())) {
+        if (employeeRepository.existsByPhoneNumberAndStatus(requestDTO.getPhoneNumber(), EmployeeStatusEnum.ACTIVE)) {
             throw new ConflictException("Phone number already exists: " + requestDTO.getPhoneNumber());
+        }
+
+        if (employeeRepository.existsByUsernameAndStatus(requestDTO.getUsername(), EmployeeStatusEnum.ACTIVE)) {
+            throw new ConflictException("Username already exists: " + requestDTO.getUsername());
         }
 
         Employee employee = new Employee();
@@ -64,14 +67,11 @@ public class EmployeeService {
         employee.setEmail(requestDTO.getEmail());
         employee.setAddress(requestDTO.getAddress());
         employee.setRole(requestDTO.getRole());
-
-        employee.setUsername(requestDTO.getEmail());
+        employee.setUsername(requestDTO.getUsername());
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         String rawPassword = "Evm123@";
         String hashedPassword = encoder.encode(rawPassword);
-
         employee.setPassword(hashedPassword);
 
         employee.setStatus(EmployeeStatusEnum.ACTIVE);
@@ -94,11 +94,13 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
 
-        if (employeeRepository.existsByEmailAndEmployeeIdNot(requestDTO.getEmail(), employeeId)) {
+        if (employeeRepository.existsByEmailAndEmployeeIdNotAndStatus(
+                requestDTO.getEmail(), employeeId, EmployeeStatusEnum.ACTIVE)) {
             throw new ConflictException("Email already exists: " + requestDTO.getEmail());
         }
 
-        if (employeeRepository.existsByPhoneNumberAndEmployeeIdNot(requestDTO.getPhoneNumber(), employeeId)) {
+        if (employeeRepository.existsByPhoneNumberAndEmployeeIdNotAndStatus(
+                requestDTO.getPhoneNumber(), employeeId, EmployeeStatusEnum.ACTIVE)) {
             throw new ConflictException("Phone number already exists: " + requestDTO.getPhoneNumber());
         }
 
@@ -123,41 +125,31 @@ public class EmployeeService {
         return new EmployeeResponseDTO(updatedEmployee);
     }
 
-    // Xóa nhân viên
     @CacheEvict(value = "employee", key = "#employeeId")
     @Transactional
     public void deleteEmployee(Integer employeeId) {
-        if (!employeeRepository.existsById(employeeId)) {
-            throw new ResourceNotFoundException("Employee not found with id: " + employeeId);
-        }
-        employeeRepository.deleteById(employeeId);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+        
+        employee.setStatus(EmployeeStatusEnum.INACTIVE);
+        employeeRepository.save(employee);
     }
 
-    // Lấy nhân viên theo position - có phân trang
-    // <<<<<<< HEAD
     public Page<EmployeeResponseDTO> getEmployeesByRole(RoleEnum role, Pageable pageable) {
-        return employeeRepository.findByRole(role, pageable)
-                // =======
-                // public Page<EmployeeResponseDTO> getEmployeesByPosition(String position,
-                // Pageable pageable) {
-                // return employeeRepository.findByPosition(position, pageable)
-                // >>>>>>> feat/Khang/cauHinhRedis
+        return employeeRepository.findByRoleAndStatus(role, EmployeeStatusEnum.ACTIVE, pageable)
                 .map(EmployeeResponseDTO::new);
     }
 
-    // Lấy nhân viên theo agency - có phân trang
     public Page<EmployeeResponseDTO> getEmployeesByAgency(Integer agencyId, Pageable pageable) {
-        return employeeRepository.findByAgency_AgencyId(agencyId, pageable)
+        return employeeRepository.findByAgency_AgencyIdAndStatus(agencyId, EmployeeStatusEnum.ACTIVE, pageable)
                 .map(EmployeeResponseDTO::new);
     }
 
-    // Đếm nhân viên theo agency
     public long countByAgency(Integer agencyId) {
-        return employeeRepository.countByAgency_AgencyId(agencyId);
+        return employeeRepository.countByAgency_AgencyIdAndStatus(agencyId, EmployeeStatusEnum.ACTIVE);
     }
 
-    // Đếm nhân viên theo position
     public long countByRole(RoleEnum role) {
-        return employeeRepository.countByRole(role);
+        return employeeRepository.countByRoleAndStatus(role, EmployeeStatusEnum.ACTIVE);
     }
 }
