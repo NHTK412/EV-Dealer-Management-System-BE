@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.service.order.calculator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.evsalesmanagement.model.MonthlySales;
@@ -13,11 +14,15 @@ import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 @Component
 public class SalesDiscountCalculator implements DiscountCalculator {
 
-    private final MonthlySalesRepository monthlySalesRepository;
+    // private final MonthlySalesRepository monthlySalesRepository;
 
-    public SalesDiscountCalculator(MonthlySalesRepository monthlySalesRepository) {
-        this.monthlySalesRepository = monthlySalesRepository;
-    }
+    // public SalesDiscountCalculator(MonthlySalesRepository monthlySalesRepository)
+    // {
+    // this.monthlySalesRepository = monthlySalesRepository;
+    // }
+
+    @Autowired
+    private MonthlySalesRepository monthlySalesRepository;
 
     @Override
     public void calculateDiscount(Order order, Policy policy) {
@@ -26,12 +31,12 @@ public class SalesDiscountCalculator implements DiscountCalculator {
         int year = previousMonth.getYear();
 
         MonthlySales monthlySales = monthlySalesRepository
-            .findByAgencyAndMonthAndYear(order.getDealderAgency().getAgencyId(), month, year)
-            .orElse(null);
+                .findByAgencyAndMonthAndYear(order.getDealderAgency().getAgencyId(), month, year)
+                .orElse(null);
 
         BigDecimal discountPercentage = (monthlySales != null) ? monthlySales.getSalesAmount() : BigDecimal.ZERO;
         BigDecimal discountAmount = order.getOriginaAmount()
-            .multiply(discountPercentage.divide(BigDecimal.valueOf(100)));
+                .multiply(discountPercentage.divide(BigDecimal.valueOf(100)));
 
         order.setDiscountAmount(discountAmount);
         order.setTotalAmount(order.getOriginaAmount().subtract(discountAmount));

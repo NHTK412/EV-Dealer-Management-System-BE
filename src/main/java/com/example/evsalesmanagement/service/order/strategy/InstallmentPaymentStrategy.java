@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
@@ -16,12 +17,17 @@ import com.example.evsalesmanagement.repository.PaymentPlanRepository;
 @Component
 public class InstallmentPaymentStrategy implements PaymentStrategy {
 
-    private final PaymentPlanRepository paymentPlanRepository;
+    // private final PaymentPlanRepository paymentPlanRepository;
+
+    @Autowired
+    private PaymentPlanRepository paymentPlanRepository;
+
+
     private Integer paymentPlanId;
 
-    public InstallmentPaymentStrategy(PaymentPlanRepository paymentPlanRepository) {
-        this.paymentPlanRepository = paymentPlanRepository;
-    }
+    // public InstallmentPaymentStrategy(PaymentPlanRepository paymentPlanRepository) {
+    //     this.paymentPlanRepository = paymentPlanRepository;
+    // }
 
     public InstallmentPaymentStrategy withPaymentPlanId(Integer paymentPlanId) {
         this.paymentPlanId = paymentPlanId;

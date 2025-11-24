@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.evsalesmanagement.dto.orderdetail.OrderDetailRequestDTO;
@@ -23,27 +24,39 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
 @Component
 public class AgencyOrderFactory implements OrderFactory {
-    
-    private final AgencyRepository agencyRepository;
-    private final EmployeeRepository employeeRepository;
-    private final VehicleTypeDetailRepository vehicleTypeDetailRepository;
-    private final AgencyWholesalePriceRepository agencyWholesalePriceRepository;
-    
+
+    // private final AgencyRepository agencyRepository;
+    // private final EmployeeRepository employeeRepository;
+    // private final VehicleTypeDetailRepository vehicleTypeDetailRepository;
+    // private final AgencyWholesalePriceRepository agencyWholesalePriceRepository;
+
+    @Autowired
+    private AgencyRepository agencyRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private VehicleTypeDetailRepository vehicleTypeDetailRepository;
+
+    @Autowired
+    private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
+
     private Integer agencyId;
     private Integer employeeId;
     private String notes;
     private List<OrderDetailRequestDTO> orderDetailRequests;
 
-    public AgencyOrderFactory(
-            AgencyRepository agencyRepository,
-            EmployeeRepository employeeRepository,
-            VehicleTypeDetailRepository vehicleTypeDetailRepository,
-            AgencyWholesalePriceRepository agencyWholesalePriceRepository) {
-        this.agencyRepository = agencyRepository;
-        this.employeeRepository = employeeRepository;
-        this.vehicleTypeDetailRepository = vehicleTypeDetailRepository;
-        this.agencyWholesalePriceRepository = agencyWholesalePriceRepository;
-    }
+    // public AgencyOrderFactory(
+    // AgencyRepository agencyRepository,
+    // EmployeeRepository employeeRepository,
+    // VehicleTypeDetailRepository vehicleTypeDetailRepository,
+    // AgencyWholesalePriceRepository agencyWholesalePriceRepository) {
+    // this.agencyRepository = agencyRepository;
+    // this.employeeRepository = employeeRepository;
+    // this.vehicleTypeDetailRepository = vehicleTypeDetailRepository;
+    // this.agencyWholesalePriceRepository = agencyWholesalePriceRepository;
+    // }
 
     public AgencyOrderFactory withAgencyId(Integer agencyId) {
         this.agencyId = agencyId;
@@ -68,10 +81,10 @@ public class AgencyOrderFactory implements OrderFactory {
     @Override
     public Order createOrder() {
         Agency agency = agencyRepository.findById(agencyId)
-            .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found"));
 
         Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found"));
 
         Order order = new Order();
         order.setNotes(notes);
@@ -82,17 +95,17 @@ public class AgencyOrderFactory implements OrderFactory {
         order.setType(OrderTypeEnum.AGENCY);
 
         Map<Integer, Integer> vehicleTypeDetailMap = orderDetailRequests.stream()
-            .collect(Collectors.toMap(
-                OrderDetailRequestDTO::getVehicleTypeDetailId,
-                OrderDetailRequestDTO::getQuantity
-            ));
+                .collect(Collectors.toMap(
+                        OrderDetailRequestDTO::getVehicleTypeDetailId,
+                        OrderDetailRequestDTO::getQuantity));
 
         validateVehicleTypeDetails(vehicleTypeDetailMap);
 
         List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
-            .findAllById(vehicleTypeDetailMap.keySet());
+                .findAllById(vehicleTypeDetailMap.keySet());
 
-        Map<Integer, BigDecimal> vehicleTypeDetailPriceMap = getWholesalePrices(agency.getAgencyId(), vehicleTypeDetailMap.keySet());
+        Map<Integer, BigDecimal> vehicleTypeDetailPriceMap = getWholesalePrices(agency.getAgencyId(),
+                vehicleTypeDetailMap.keySet());
 
         BigDecimal total = addOrderDetails(order, vehicleTypeDetails, vehicleTypeDetailMap, vehicleTypeDetailPriceMap);
 
@@ -110,12 +123,11 @@ public class AgencyOrderFactory implements OrderFactory {
 
     private Map<Integer, BigDecimal> getWholesalePrices(Integer agencyId, java.util.Set<Integer> vehicleTypeDetailIds) {
         Map<Integer, BigDecimal> priceMap = agencyWholesalePriceRepository
-            .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agencyId, vehicleTypeDetailIds)
-            .stream()
-            .collect(Collectors.toMap(
-                awp -> awp.getVehicleTypeDetail().getVehicleTypeDetailId(),
-                awp -> awp.getWholesalePrice()
-            ));
+                .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agencyId, vehicleTypeDetailIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        awp -> awp.getVehicleTypeDetail().getVehicleTypeDetailId(),
+                        awp -> awp.getWholesalePrice()));
 
         if (priceMap.size() != orderDetailRequests.size()) {
             throw new ResourceNotFoundException("VehicleTypeDetail Not Found");
@@ -129,7 +141,7 @@ public class AgencyOrderFactory implements OrderFactory {
             List<VehicleTypeDetail> vehicleTypeDetails,
             Map<Integer, Integer> vehicleTypeDetailMap,
             Map<Integer, BigDecimal> vehicleTypeDetailPriceMap) {
-        
+
         BigDecimal total = BigDecimal.ZERO;
 
         for (VehicleTypeDetail vehicleTypeDetail : vehicleTypeDetails) {

@@ -786,10 +786,13 @@
 
 package com.example.evsalesmanagement.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -815,6 +818,7 @@ import com.example.evsalesmanagement.enums.VehicleStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Employee;
+import com.example.evsalesmanagement.model.MonthlySales;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.Policy;
@@ -822,6 +826,7 @@ import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.VehicleDelivery;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PolicyRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
@@ -872,6 +877,9 @@ public class OrderService {
 
         @Autowired
         private SalesDiscountCalculator salesDiscountCalculator;
+
+        @Autowired
+        private MonthlySalesRepository monthlySalesRepository;
 
         @Transactional
         public OrderResponseDTO getOrderById(Integer orderId) {
@@ -944,6 +952,26 @@ public class OrderService {
                                 if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
                                         payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
                                 }
+
+                                Integer month = LocalDateTime.now().getMonthValue();
+                                Integer year = LocalDateTime.now().getYear();
+
+                                MonthlySales optionalMonthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(
+                                                order.getAgency().getAgencyId(),
+                                                month,
+                                                year).orElseGet(() -> {
+                                                        MonthlySales newMonthlySales = new MonthlySales();
+                                                        newMonthlySales.setAgency(order.getAgency());
+
+                                                        newMonthlySales.setSalesMonth(LocalDate.of(year, month, 1));
+
+                                                        newMonthlySales.setSalesAmount(BigDecimal.ZERO);
+                                                        // set thêm các field mặc định khác nếu cần
+                                                        return monthlySalesRepository.save(newMonthlySales);
+                                                });
+
+                                optionalMonthlySales.getSalesAmount().add(payment.getAmount());
+                                monthlySalesRepository.save(optionalMonthlySales);
                                 break;
                         }
                 }
