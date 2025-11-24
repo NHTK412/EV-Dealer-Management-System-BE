@@ -117,9 +117,9 @@ public class EmployeeRequestDTO {
         return role;
     }
 
-    public void setPosition(RoleEnum role) {
-        this.role = role;
-    }
+    // public void setPosition(RoleEnum role) {
+    //     this.role = role;
+    // }
 
     public Integer getAgencyId() {
         return agencyId;

@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.dto.agency;
 
 import com.example.evsalesmanagement.enums.AgencyStatusEnum;
+import com.example.evsalesmanagement.enums.AgencyTypeEnum;
 
 
 public class AgencyRequestDTO {
@@ -12,6 +13,10 @@ public class AgencyRequestDTO {
     private String phoneNumber;
 
     private String email;
+
+    private AgencyTypeEnum type;
+
+
 
     
     private AgencyStatusEnum status;
@@ -54,6 +59,14 @@ public class AgencyRequestDTO {
 
     public void setStatus(AgencyStatusEnum status) {
         this.status = status;
+    }
+
+    public AgencyTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(AgencyTypeEnum type) {
+        this.type = type;
     }
 
 }

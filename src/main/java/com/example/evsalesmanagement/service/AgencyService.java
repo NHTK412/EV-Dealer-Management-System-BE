@@ -60,6 +60,7 @@ public class AgencyService {
         agency.setPhoneNumber(agencyRequestDTO.getPhoneNumber());
         agency.setEmail(agencyRequestDTO.getEmail());
         agency.setStatus(agencyRequestDTO.getStatus());
+        agency.setType(agencyRequestDTO.getType());
         Agency savedAgency = agencyRepository.save(agency);
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(savedAgency.getAgencyId());
