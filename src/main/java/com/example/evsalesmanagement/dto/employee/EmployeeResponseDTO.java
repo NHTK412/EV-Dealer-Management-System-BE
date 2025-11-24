@@ -3,9 +3,7 @@ package com.example.evsalesmanagement.dto.employee;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-// import javax.management.relation.Role;
-
-// import com.example.evsalesmanagement.enums.EmployeePositionEnum;
+import com.example.evsalesmanagement.enums.EmployeeStatusEnum;
 import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.model.Employee;
@@ -20,8 +18,8 @@ public class EmployeeResponseDTO {
     private String phoneNumber;
     private String email;
     private String address;
-    // private EmployeePositionEnum position;
     private RoleEnum role;
+    private EmployeeStatusEnum status;
     private Integer agencyId;
     private String agencyName;
     private LocalDateTime createdAt;
@@ -40,6 +38,7 @@ public class EmployeeResponseDTO {
         this.email = employee.getEmail();
         this.address = employee.getAddress();
         this.role = employee.getRole();
+        this.status = employee.getStatus();
         this.username = employee.getUsername();
 
         if (employee.getAgency() != null) {
@@ -108,14 +107,6 @@ public class EmployeeResponseDTO {
         this.address = address;
     }
 
-    // public RoleEnum getPosition() {
-    // return role;
-    // }
-
-    // public void setPosition(RoleEnum role) {
-    // this.role = role;
-    // }
-
     public Integer getAgencyId() {
         return agencyId;
     }
@@ -164,4 +155,11 @@ public class EmployeeResponseDTO {
         this.role = role;
     }
 
+    public EmployeeStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EmployeeStatusEnum status) {
+        this.status = status;
+    }
 }

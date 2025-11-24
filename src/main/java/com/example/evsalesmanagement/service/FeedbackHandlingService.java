@@ -49,26 +49,26 @@ public class FeedbackHandlingService {
             HandleFeedbackRequestDTO request, 
             Integer employeeId) {
         
-        // log.info("Processing feedback {} by employee {}", feedbackId, employeeId);
+        log.info("Processing feedback {} by employee {}", feedbackId, employeeId);
     
         Feedback feedback = validateFeedbackForHandling(feedbackId);
-        
         Employee employee = findEmployeeById(employeeId);
-        
         FeedbackHandlingMethodEnum method = validateHandlingMethod(request.getFeedbackHandlingMethod());
         
         updateFeedbackStatus(feedback, FeedbackStatusEnum.IN_PROCESSED);
-        // log.debug("Updated feedback {} status to IN_PROCESSED", feedbackId);
+        log.debug("Transition feedback {} to IN_PROCESSED", feedbackId);
         
         FeedbackHandling handling = createHandlingRecord(feedback, employee, request, method);
-        // log.debug("Created feedback handling record: {}", handling.getFeedbackHandlingId());
+        log.debug("Created FeedbackHandling with ID {}", handling.getFeedbackHandlingId());
+        
+        feedback.setFeedbackHandling(handling);
+        feedbackRepository.save(feedback);
         
         updateFeedbackStatus(feedback, FeedbackStatusEnum.PROCESSED);
-        // log.debug("Updated feedback {} status to PROCESSED", feedbackId);
+        log.debug("Transition feedback {} to PROCESSED", feedbackId);
         
         notifyCustomer(feedback, handling);
-        
-        // log.info("Successfully processed feedback {}", feedbackId);
+        log.info("Successfully processed feedback {}", feedbackId);
         
         return feedbackService.getFeedbackDetail(feedbackId);
     }
@@ -128,6 +128,8 @@ public class FeedbackHandlingService {
             HandleFeedbackRequestDTO request,
             FeedbackHandlingMethodEnum method) {
         
+        log.debug("Creating FeedbackHandling for feedback {}", feedback.getFeedbackId());
+        
         FeedbackHandling handling = new FeedbackHandling();
         handling.setFeedback(feedback);
         handling.setEmployee(employee);
@@ -135,7 +137,11 @@ public class FeedbackHandlingService {
         handling.setFeedbackHandlingMethod(method);
         handling.setStatus(FeedbackHandlingStatusEnum.COMPLETE);
         
-        return feedbackHandlingRepository.save(handling);
+        FeedbackHandling saved = feedbackHandlingRepository.save(handling);
+        
+        log.debug("Saved FeedbackHandling: {}", saved.getFeedbackHandlingId());
+        
+        return saved;
     }
     
     // gửi thông báo cho khách hàng 
@@ -159,7 +165,7 @@ public class FeedbackHandlingService {
             
         } catch (Exception e) {
             log.error("Failed to send notification for feedback {}: {}", 
-                feedback.getFeedbackId(), e.getMessage());
+                feedback.getFeedbackId(), e.getMessage(), e);
         }
     }
     
@@ -183,11 +189,12 @@ public class FeedbackHandlingService {
                 handling.getFeedbackHandlingContent()
             );
             
-            // log.info("Email notification sent to: {}", customer.getEmail());
+            log.info("Email notification sent to: {}", customer.getEmail());
             
         } catch (Exception e) {
             log.error("Failed to send email to {}: {}", 
-                customer.getEmail(), e.getMessage());
+                customer.getEmail(), e.getMessage(), e);
+            throw e; 
         }
     }
 }
