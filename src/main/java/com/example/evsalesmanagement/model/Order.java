@@ -34,7 +34,7 @@ public class Order extends Base {
     private String contractNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status")
+    @Column(name = "Statuss")
     private OrderStatusEnum status;
     // private String status;
 

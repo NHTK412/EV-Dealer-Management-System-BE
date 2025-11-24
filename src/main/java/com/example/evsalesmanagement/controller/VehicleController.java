@@ -154,4 +154,7 @@ public class VehicleController {
             @PathVariable Integer vehicleTypeDetailId) {
         return ResponseEntity.ok(vehicleTypeDetailService.delete(vehicleTypeDetailId));
     }
+
+
+
 }

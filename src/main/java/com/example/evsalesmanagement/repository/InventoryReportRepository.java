@@ -31,4 +31,6 @@ public interface InventoryReportRepository extends JpaRepository<Vehicle, Intege
             "  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, a.agencyName " +
             "ORDER BY vt.vehicleTypeName, vtd.version, a.agencyName")
     List<InventoryReportResponseDTO> getInventoryReportGrouped(@Param("request") InventoryReportRequestDTO request);
+
+
 }
