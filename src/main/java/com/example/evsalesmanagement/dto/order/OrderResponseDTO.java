@@ -67,7 +67,6 @@ public class OrderResponseDTO {
 
     private VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO;
 
-
     public OrderResponseDTO(Order order) {
         this.orderId = order.getOrderId();
         this.notes = order.getNotes();
@@ -102,9 +101,9 @@ public class OrderResponseDTO {
                     .collect(Collectors.toSet());
         }
 
-        if (order.getVehicleDelivery() != null)
-        {
-            // this.orderDetailResponseDTOs.add(new OrderDetailResponseDTO(order.getVehicleDelivery()));
+        if (order.getVehicleDelivery() != null) {
+            // this.orderDetailResponseDTOs.add(new
+            // OrderDetailResponseDTO(order.getVehicleDelivery()));
             this.vehicleDeliveryResponseDTO = new VehicleDeliveryResponseDTO(order.getVehicleDelivery());
 
         }
@@ -284,9 +283,5 @@ public class OrderResponseDTO {
     public void setVehicleDeliveryResponseDTO(VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO) {
         this.vehicleDeliveryResponseDTO = vehicleDeliveryResponseDTO;
     }
-
-    
-
-
 
 }

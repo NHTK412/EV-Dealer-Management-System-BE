@@ -91,7 +91,7 @@ public class AgencyOrderFactory implements OrderFactory {
         order.setAgency(employee.getAgency());
         order.setDealderAgency(agency);
         order.setEmployee(employee);
-        order.setStatus(OrderStatusEnum.DELIVERED);
+        order.setStatus(OrderStatusEnum.PENDING);
         order.setType(OrderTypeEnum.AGENCY);
 
         Map<Integer, Integer> vehicleTypeDetailMap = orderDetailRequests.stream()

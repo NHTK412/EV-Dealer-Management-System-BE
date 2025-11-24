@@ -44,7 +44,30 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
         Page<Order> findByEmployeeId(@Param("employeeId") Integer employeeId,
                         Pageable pageable);
 
+        @Query("""
+                        SELECT o
+                        FROM Order o
+                        LEFT JOIN FETCH o.customer c
+                        LEFT JOIN FETCH o.agency a
+                        WHERE a.agencyId = :agencyId AND c.customerId = :customerId
+                        """)
+        Page<Order> findByAgencyIdAndCustomerId(@Param("agencyId") Integer agencyId,
+                        @Param("customerId") Integer customerId, Pageable pageable);
+
         // Page<Order> findByEmployee_Agency_AgencyId(Integer agencyId, Pageable
         // pageable);
+
+        @Query("""
+                        SELECT o
+                        FROM Order o
+                        LEFT JOIN FETCH o.customer c
+                        LEFT JOIN FETCH o.agency a
+                        WHERE a.agencyId = :agencyId AND c.phoneNumber = :customerPhone
+                        """)
+        Page<Order> findByAgencyIdAndCustomerPhone(@Param("agencyId") Integer agencyId,
+                        @Param("customerPhone") String customerPhone, Pageable pageable);
+
+        // Tìm các đơn hàng của đại lý (DealderAgencyId) đó với số điện thoại của đại lý
+        // (AGency)
 
 }

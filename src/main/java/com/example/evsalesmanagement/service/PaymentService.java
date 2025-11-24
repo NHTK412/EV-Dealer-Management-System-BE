@@ -2,47 +2,107 @@ package com.example.evsalesmanagement.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.payment.PaymentCreateSummaryDTO;
+import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentResponseDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentUpdateSummaryDTO;
 import com.example.evsalesmanagement.dto.payment.VNPAYResponseDTO;
+import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.exception.ResourceNotFoundException;
+import com.example.evsalesmanagement.model.MonthlySales;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.Payment;
+import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PaymentRepository;
+
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 @Service
 public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
+    @Autowired
+    private MonthlySalesRepository monthlySalesRepository;
+
     // Tỷ lệ phạt mỗi ngày: 20%
     private static final BigDecimal PENALTY_RATE_PER_DAY = new BigDecimal("0.20");
 
+    @Transactional
+    public PaymentResponseDTO updatePaymentStatus(Integer paymentId, PaymentRequestDTO paymentRequestDTO) {
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found payment with ID: " + paymentId));
+
+        payment.setStatus(PaymentStatusEnum.PAID);
+        payment.setPaymentDate(LocalDateTime.now());
+        payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
+
+        if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
+            payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
+        }
+
+        Integer month = LocalDateTime.now().getMonthValue();
+        Integer year = LocalDateTime.now().getYear();
+
+        Order order = payment.getOrder();
+
+        MonthlySales optionalMonthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(
+                order.getAgency().getAgencyId(),
+                month,
+                year).orElseGet(() -> {
+                    MonthlySales newMonthlySales = new MonthlySales();
+                    newMonthlySales.setAgency(order.getAgency());
+
+                    newMonthlySales.setSalesMonth(LocalDate.of(year, month, 1));
+
+                    newMonthlySales.setSalesAmount(BigDecimal.ZERO);
+                    // set thêm các field mặc định khác nếu cần
+                    return monthlySalesRepository.save(newMonthlySales);
+                });
+
+        optionalMonthlySales.getSalesAmount().add(payment.getAmount());
+
+        monthlySalesRepository.save(optionalMonthlySales);
+
+        for (Payment paymentCheck : order.getPayments()) {
+            if (paymentCheck.getStatus() == PaymentStatusEnum.UNPAID) {
+                break;
+            }
+            order.setStatus(OrderStatusEnum.PAID);
+        }
+
+        orderRepository.save(order);
+        paymentRepository.save(payment);
+        return new PaymentResponseDTO(payment);
+    }
+
     // Lấy tất cả thanh toán
-    public List<PaymentResponseDTO> getAllPayments() {
-        return paymentRepository.findAll()
+    public List<PaymentResponseDTO> getPaymentsByCustomerPhone(String customerPhone, Pageable pageable) {
+        return paymentRepository.findByOrder_Customer_PhoneNumber(customerPhone, pageable)
                 .stream()
                 .map(this::convertToDTO)
                 .toList();
     }
-
 
     // Lấy thanh toán theo trạng thái
     public List<PaymentResponseDTO> getPaymentsByStatus(PaymentStatusEnum status) {
@@ -52,7 +112,6 @@ public class PaymentService {
                 .toList();
     }
 
-    
     // Lấy chi tiết thanh toán
     public PaymentResponseDTO getPaymentById(Integer id) {
         Payment payment = paymentRepository.findById(id)
@@ -60,10 +119,9 @@ public class PaymentService {
         if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
             calculatePenalty(payment);
         }
-        
+
         return convertToDTO(payment);
     }
-
 
     // Lấy thanh toán theo Order
     public List<PaymentResponseDTO> getPaymentsByOrderId(Integer orderId) {
@@ -73,13 +131,12 @@ public class PaymentService {
                 .toList();
     }
 
-
     // Tạo thanh toán mới
     @Transactional
     public PaymentResponseDTO createPayment(PaymentCreateSummaryDTO dto) {
         Order order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        
+
         Payment payment = new Payment();
         payment.setOrder(order);
         payment.setAmount(dto.getAmount());
@@ -89,18 +146,17 @@ public class PaymentService {
         payment.setNumberCycle(dto.getNumberCycle());
         payment.setStatus(PaymentStatusEnum.UNPAID);
         payment.setPenaltyAmount(BigDecimal.ZERO);
-        
+
         Payment saved = paymentRepository.save(payment);
         return convertToDTO(saved);
     }
-
 
     // Cập nhật thanh toán
     @Transactional
     public PaymentResponseDTO updatePayment(Integer id, PaymentUpdateSummaryDTO dto) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
-        
+
         if (dto.getAmount() != null) {
             payment.setAmount(dto.getAmount());
         }
@@ -122,147 +178,142 @@ public class PaymentService {
         if (dto.getVnpayCode() != null) {
             payment.setVnpayCode(dto.getVnpayCode());
         }
-        
+
         Payment updated = paymentRepository.save(payment);
         return convertToDTO(updated);
     }
-
 
     // Xác nhận thanh toán tiền mặt
     @Transactional
     public PaymentResponseDTO confirmCashPayment(Integer id) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
-        
+
         if (payment.getStatus() == PaymentStatusEnum.PAID) {
             throw new RuntimeException("This payment has already been confirmed");
         }
-        
+
         if (payment.getPaymentMethod() != PaymentMethodEnum.CASH) {
             throw new RuntimeException("Only applicable for cash payments");
         }
 
         calculatePenalty(payment);
-        
+
         payment.setStatus(PaymentStatusEnum.PAID);
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentForm("Full Payment");
-        
+
         Payment updated = paymentRepository.save(payment);
         return convertToDTO(updated);
     }
 
-    
+    // Tạo link thanh toán VNPAY
+    @Transactional
+    public VNPAYResponseDTO createVNPAYPayment(Integer id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
 
-    // Tạo link thanh toán VNPAY 
-@Transactional
-public VNPAYResponseDTO createVNPAYPayment(Integer id) {
-    Payment payment = paymentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
-    
-    if (payment.getStatus() == PaymentStatusEnum.PAID) {
-        throw new RuntimeException("This payment has already been completed");
-    }
-    
-    if (payment.getPaymentMethod() != PaymentMethodEnum.VNPAY) {
-        throw new RuntimeException("This payment does not use the VNPAY method");
-    }
-    
-    calculatePenalty(payment);
-    
-    String vnpayCode = "VNPAY_" + UUID.randomUUID().toString().replace("-", "").substring(0, 12);
-    payment.setVnpayCode(vnpayCode);
-    paymentRepository.save(payment);
-    
-    BigDecimal totalAmount = payment.getAmount().add(payment.getPenaltyAmount());
-    
-    String paymentUrl = String.format(
-        "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=%d&vnp_TxnRef=%s&vnp_OrderInfo=Payment_%d",
-        totalAmount.multiply(BigDecimal.valueOf(100)).longValue(),
-        vnpayCode,
-        payment.getPaymentId()
-    );
-    
-    return new VNPAYResponseDTO(paymentUrl, vnpayCode, "Create payment link successfully");
-}
-
-// Xử lý callback từ VNPAY 
-@Transactional
-public PaymentResponseDTO handleVNPAYCallback(String vnpayCode, String responseCode) {
-    if (vnpayCode == null || vnpayCode.trim().isEmpty()) {
-        throw new RuntimeException("Invalid VNPAY code");
-    }
-    
-    if (responseCode == null || responseCode.trim().isEmpty()) {
-        throw new RuntimeException("Invalid response code");
-    }
-    
-    Payment payment = paymentRepository.findByVnpayCode(vnpayCode)
-            .orElseThrow(() -> new RuntimeException("Not found payment with code: " + vnpayCode));
-    
-    if (payment.getStatus() == PaymentStatusEnum.PAID) {
-        throw new RuntimeException("This payment has already been processed");
-    }
-    
-    if ("00".equals(responseCode)) {
-        payment.setStatus(PaymentStatusEnum.PAID);
-        payment.setPaymentDate(LocalDateTime.now());
-        
-        if (payment.getPaymentForm() == null || payment.getPaymentForm().isEmpty()) {
-            payment.setPaymentForm("VNPAY Payment");
+        if (payment.getStatus() == PaymentStatusEnum.PAID) {
+            throw new RuntimeException("This payment has already been completed");
         }
-    } else {
-        payment.setStatus(PaymentStatusEnum.UNPAID);
-        // System.err.println("VNPAY payment failed with code: " + responseCode);
-    }
-    
-    Payment updated = paymentRepository.save(payment);
-    return convertToDTO(updated);
-}
 
-// Xóa thanh toán 
-@Transactional
-public void deletePayment(Integer id) {
-    if (id == null || id <= 0) {
-        throw new RuntimeException("Invalid payment ID");
-    }
-    
-    Payment payment = paymentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
-    
-    if (payment.getStatus() == PaymentStatusEnum.PAID) {
-        throw new RuntimeException("Cannot delete a payment that has been completed");
-    }
-    // if (payment.getOrder() != null) {}
-    try {
-        paymentRepository.delete(payment);
-    } catch (Exception e) {
-        throw new RuntimeException("Cannot delete payment. Error: " + e.getMessage());
-    }
-}
+        if (payment.getPaymentMethod() != PaymentMethodEnum.VNPAY) {
+            throw new RuntimeException("This payment does not use the VNPAY method");
+        }
 
-    // Tự động cập nhật tiền phạt 
-    @Scheduled(cron = "0 0 1 * * *") 
+        calculatePenalty(payment);
+
+        String vnpayCode = "VNPAY_" + UUID.randomUUID().toString().replace("-", "").substring(0, 12);
+        payment.setVnpayCode(vnpayCode);
+        paymentRepository.save(payment);
+
+        BigDecimal totalAmount = payment.getAmount().add(payment.getPenaltyAmount());
+
+        String paymentUrl = String.format(
+                "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=%d&vnp_TxnRef=%s&vnp_OrderInfo=Payment_%d",
+                totalAmount.multiply(BigDecimal.valueOf(100)).longValue(),
+                vnpayCode,
+                payment.getPaymentId());
+
+        return new VNPAYResponseDTO(paymentUrl, vnpayCode, "Create payment link successfully");
+    }
+
+    // Xử lý callback từ VNPAY
+    @Transactional
+    public PaymentResponseDTO handleVNPAYCallback(String vnpayCode, String responseCode) {
+        if (vnpayCode == null || vnpayCode.trim().isEmpty()) {
+            throw new RuntimeException("Invalid VNPAY code");
+        }
+
+        if (responseCode == null || responseCode.trim().isEmpty()) {
+            throw new RuntimeException("Invalid response code");
+        }
+
+        Payment payment = paymentRepository.findByVnpayCode(vnpayCode)
+                .orElseThrow(() -> new RuntimeException("Not found payment with code: " + vnpayCode));
+
+        if (payment.getStatus() == PaymentStatusEnum.PAID) {
+            throw new RuntimeException("This payment has already been processed");
+        }
+
+        if ("00".equals(responseCode)) {
+            payment.setStatus(PaymentStatusEnum.PAID);
+            payment.setPaymentDate(LocalDateTime.now());
+
+            if (payment.getPaymentForm() == null || payment.getPaymentForm().isEmpty()) {
+                payment.setPaymentForm("VNPAY Payment");
+            }
+        } else {
+            payment.setStatus(PaymentStatusEnum.UNPAID);
+            // System.err.println("VNPAY payment failed with code: " + responseCode);
+        }
+
+        Payment updated = paymentRepository.save(payment);
+        return convertToDTO(updated);
+    }
+
+    // Xóa thanh toán
+    @Transactional
+    public void deletePayment(Integer id) {
+        if (id == null || id <= 0) {
+            throw new RuntimeException("Invalid payment ID");
+        }
+
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+
+        if (payment.getStatus() == PaymentStatusEnum.PAID) {
+            throw new RuntimeException("Cannot delete a payment that has been completed");
+        }
+        // if (payment.getOrder() != null) {}
+        try {
+            paymentRepository.delete(payment);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot delete payment. Error: " + e.getMessage());
+        }
+    }
+
+    // Tự động cập nhật tiền phạt
+    @Scheduled(cron = "0 0 1 * * *")
     @Transactional
     public void updateOverduePayments() {
         List<Payment> overduePayments = paymentRepository.findOverduePayments(
-                PaymentStatusEnum.UNPAID, 
-                LocalDateTime.now()
-        );
-        
+                PaymentStatusEnum.UNPAID,
+                LocalDateTime.now());
+
         for (Payment payment : overduePayments) {
             calculatePenalty(payment);
             paymentRepository.save(payment);
         }
-        // System.out.println("Updated " + overduePayments.size() + " overdue payments");
+        // System.out.println("Updated " + overduePayments.size() + " overdue
+        // payments");
     }
 
-    
     private void calculatePenalty(Payment payment) {
         if (payment.getDueDate() == null || payment.getPaymentDate() != null) {
             return;
         }
-        
+
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(payment.getDueDate())) {
             long daysOverdue = ChronoUnit.DAYS.between(payment.getDueDate(), now);
@@ -270,13 +321,13 @@ public void deletePayment(Integer id) {
                     .multiply(PENALTY_RATE_PER_DAY)
                     .multiply(BigDecimal.valueOf(daysOverdue))
                     .setScale(2, RoundingMode.HALF_UP);
-            
+
             payment.setPenaltyAmount(penalty);
         } else {
             payment.setPenaltyAmount(BigDecimal.ZERO);
         }
     }
-    
+
     private PaymentResponseDTO convertToDTO(Payment payment) {
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setPaymentId(payment.getPaymentId());
@@ -289,7 +340,8 @@ public void deletePayment(Integer id) {
         dto.setPenaltyAmount(payment.getPenaltyAmount());
         dto.setStatus(payment.getStatus());
         dto.setVnpayCode(payment.getVnpayCode());
-        // dto.setOrderId(payment.getOrder() != null ? payment.getOrder().getOrderId() : null);cl
+        // dto.setOrderId(payment.getOrder() != null ? payment.getOrder().getOrderId() :
+        // null);cl
         return dto;
     }
 }

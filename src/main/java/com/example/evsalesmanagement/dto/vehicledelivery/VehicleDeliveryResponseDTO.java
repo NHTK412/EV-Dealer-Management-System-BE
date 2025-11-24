@@ -18,13 +18,13 @@ public class VehicleDeliveryResponseDTO {
 
     private String employeePhoneNumber;
 
+    private Integer orderId;
 
     private String address;
 
     private String phoneNumber;
 
     private String name;
-
 
     // Default constructor
     public VehicleDeliveryResponseDTO() {
@@ -41,15 +41,18 @@ public class VehicleDeliveryResponseDTO {
         this.employeeName = vehicleDelivery.getEmployee().getEmployeeName();
         this.employeePhoneNumber = vehicleDelivery.getEmployee().getPhoneNumber();
 
-
         this.address = vehicleDelivery.getAddress();
         this.phoneNumber = vehicleDelivery.getPhoneNumber();
 
         this.name = vehicleDelivery.getName();
 
+        this.orderId = vehicleDelivery.getOrder() != null ? vehicleDelivery.getOrder().getOrderId() : null;
+
         // Sử dụng getter đúng tên trong model
-        // this.orderId = vehicleDelivery.getOderId() != null ? vehicleDelivery.getOderId().getOrderId() : null;
-        // this.employeeId = vehicleDelivery.getEmployee() != null ? vehicleDelivery.getEmployee().getEmployeeId() : null;
+        // this.orderId = vehicleDelivery.getOderId() != null ?
+        // vehicleDelivery.getOderId().getOrderId() : null;
+        // this.employeeId = vehicleDelivery.getEmployee() != null ?
+        // vehicleDelivery.getEmployee().getEmployeeId() : null;
     }
 
     // Getters và Setters
@@ -133,21 +136,27 @@ public class VehicleDeliveryResponseDTO {
         this.name = name;
     }
 
-    
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
 
     // public Integer getOrderId() {
-    //     return orderId;
+    // return orderId;
     // }
 
     // public void setOrderId(Integer orderId) {
-    //     this.orderId = orderId;
+    // this.orderId = orderId;
     // }
 
     // public Integer getEmployeeId() {
-    //     return employeeId;
+    // return employeeId;
     // }
 
     // public void setEmployeeId(Integer employeeId) {
-    //     this.employeeId = employeeId;
+    // this.employeeId = employeeId;
     // }
 }

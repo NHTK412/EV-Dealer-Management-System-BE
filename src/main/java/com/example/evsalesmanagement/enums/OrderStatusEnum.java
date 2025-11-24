@@ -2,15 +2,17 @@ package com.example.evsalesmanagement.enums;
 
 public enum OrderStatusEnum {
 
-    PENDING("Chờ thanh toán"),
+    PENDING("Chờ xử lý"),
 
-    PENDING_DELIVERY("Chờ giao hàng"),
+    // PENDING_DELIVERY("Chờ giao hàng"),
 
-    DELIVERED("Đã giao hàng"),
+    // DELIVERED("Đã giao hàng"),
 
     PAID("Đã thanh toán"),
 
-    INSTALLMENT("Đang trả góp");
+    INSTALLMENT("Đang trả góp"),
+
+    CANCEL("Hủy đơn hàng");
 
     private final String displayName;
 
