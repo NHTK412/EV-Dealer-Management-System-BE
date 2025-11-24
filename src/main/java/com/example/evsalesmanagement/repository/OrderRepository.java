@@ -1,5 +1,6 @@
 package com.example.evsalesmanagement.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.evsalesmanagement.dto.salesreport.EmployeeSalesDTO;
 import com.example.evsalesmanagement.model.Order;
 
 @Repository
@@ -69,5 +71,81 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
         // Tìm các đơn hàng của đại lý (DealderAgencyId) đó với số điện thoại của đại lý
         // (AGency)
+
+        // Query doanh số theo nhân viên bán hàng
+        @Query("""
+                        SELECT new com.example.evsalesmanagement.dto.salesreport.EmployeeSalesDTO(
+                            e.employeeId,
+                            e.employeeName,
+                            e.phoneNumber,
+                            e.email,
+                            COUNT(o.orderId),
+                            COALESCE(SUM(o.totalAmount), 0)
+                        )
+                        FROM Order o
+                        JOIN o.employee e
+                        WHERE FUNCTION('YEAR', o.createAt) = :year
+                        AND FUNCTION('MONTH', o.createAt) = :month
+                        GROUP BY e.employeeId, e.employeeName, e.phoneNumber, e.email
+                        ORDER BY SUM(o.totalAmount) DESC
+                        """)
+        List<EmployeeSalesDTO> findEmployeeSalesByMonth(@Param("year") Integer year, @Param("month") Integer month);
+
+        @Query("""
+                        SELECT new com.example.evsalesmanagement.dto.salesreport.EmployeeSalesDTO(
+                            e.employeeId,
+                            e.employeeName,
+                            e.phoneNumber,
+                            e.email,
+                            COUNT(o.orderId),
+                            COALESCE(SUM(o.totalAmount), 0)
+                        )
+                        FROM Order o
+                        JOIN o.employee e
+                        WHERE FUNCTION('YEAR', o.createAt) = :year
+                        GROUP BY e.employeeId, e.employeeName, e.phoneNumber, e.email
+                        ORDER BY SUM(o.totalAmount) DESC
+                        """)
+        List<EmployeeSalesDTO> findEmployeeSalesByYear(@Param("year") Integer year);
+
+        @Query("""
+                        SELECT new com.example.evsalesmanagement.dto.salesreport.EmployeeSalesDTO(
+                            e.employeeId,
+                            e.employeeName,
+                            e.phoneNumber,
+                            e.email,
+                            COUNT(o.orderId),
+                            COALESCE(SUM(o.totalAmount), 0)
+                        )
+                        FROM Order o
+                        JOIN o.employee e
+                        WHERE e.employeeId = :employeeId
+                        AND FUNCTION('YEAR', o.createAt) = :year
+                        AND FUNCTION('MONTH', o.createAt) = :month
+                        GROUP BY e.employeeId, e.employeeName, e.phoneNumber, e.email
+                        """)
+        EmployeeSalesDTO findEmployeeSalesByEmployeeAndMonth(
+                        @Param("employeeId") Integer employeeId,
+                        @Param("year") Integer year,
+                        @Param("month") Integer month);
+
+        @Query("""
+                        SELECT new com.example.evsalesmanagement.dto.salesreport.EmployeeSalesDTO(
+                            e.employeeId,
+                            e.employeeName,
+                            e.phoneNumber,
+                            e.email,
+                            COUNT(o.orderId),
+                            COALESCE(SUM(o.totalAmount), 0)
+                        )
+                        FROM Order o
+                        JOIN o.employee e
+                        WHERE e.employeeId = :employeeId
+                        AND FUNCTION('YEAR', o.createAt) = :year
+                        GROUP BY e.employeeId, e.employeeName, e.phoneNumber, e.email
+                        """)
+        EmployeeSalesDTO findEmployeeSalesByEmployeeAndYear(
+                        @Param("employeeId") Integer employeeId,
+                        @Param("year") Integer year);
 
 }

@@ -40,7 +40,7 @@ public class CustomerController {
         // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
         @GetMapping
         public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getAllCustomers(
-                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "10") int size,
                         @RequestParam(required = false) String sortBy,
                         @RequestParam(required = false) String sortDir) {
@@ -49,13 +49,13 @@ public class CustomerController {
 
                 // Nếu không truyền sortBy hoặc sortDir → bỏ sorting
                 if (sortBy == null || sortBy.isEmpty() || sortDir == null || sortDir.isEmpty()) {
-                        pageable = PageRequest.of(page, size);
+                        pageable = PageRequest.of(page - 1, size);
                 } else {
                         Sort sort = sortDir.equalsIgnoreCase("asc")
                                         ? Sort.by(sortBy).ascending()
                                         : Sort.by(sortBy).descending();
 
-                        pageable = PageRequest.of(page, size, sort);
+                        pageable = PageRequest.of(page - 1, size, sort);
                 }
 
                 Page<CustomerResponseDTO> customerPage = customerService.getAllCustomers(pageable);

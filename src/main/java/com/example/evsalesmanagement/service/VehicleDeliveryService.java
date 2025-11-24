@@ -1,12 +1,17 @@
 package com.example.evsalesmanagement.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliverySummaryDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
@@ -80,6 +85,32 @@ public class VehicleDeliveryService {
         vehicleDeliveryRepository.save(vehicleDelivery);
         return new VehicleDeliveryResponseDTO(vehicleDelivery);
 
+    }
+
+    // Lấy danh sách đơn giao hàng của đại lý
+    public List<VehicleDeliverySummaryDTO> getAllByAgencyId(Integer agencyId, Pageable pageable) {
+        Page<VehicleDelivery> deliveries = vehicleDeliveryRepository.findByAgencyId(agencyId, pageable);
+        return deliveries.stream()
+                .map(VehicleDeliverySummaryDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    // Lấy chi tiết đơn giao hàng của đại lý
+    public VehicleDeliveryResponseDTO getByIdAndAgencyId(Integer vehicleDeliveryId, Integer agencyId) {
+        VehicleDelivery vehicleDelivery = vehicleDeliveryRepository
+                .findByIdAndAgencyId(vehicleDeliveryId, agencyId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy đơn giao hàng với id: " + vehicleDeliveryId + " thuộc đại lý: " + agencyId));
+        return new VehicleDeliveryResponseDTO(vehicleDelivery);
+    }
+
+    // Lấy chi tiết đơn giao hàng (tất cả quyền)
+    public VehicleDeliveryResponseDTO getById(Integer vehicleDeliveryId) {
+        VehicleDelivery vehicleDelivery = vehicleDeliveryRepository
+                .findByIdWithDetails(vehicleDeliveryId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy đơn giao hàng với id: " + vehicleDeliveryId));
+        return new VehicleDeliveryResponseDTO(vehicleDelivery);
     }
 
 }

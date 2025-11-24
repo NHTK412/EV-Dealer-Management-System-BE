@@ -54,7 +54,7 @@ public class EmployeeController {
                 Sort sort = sortDir.equalsIgnoreCase("asc")
                                 ? Sort.by(sortBy).ascending()
                                 : Sort.by(sortBy).descending();
-                Pageable pageable = PageRequest.of(page, size, sort);
+                Pageable pageable = PageRequest.of(page - 1, size, sort);
 
                 Page<EmployeeResponseDTO> employeePage = employeeService.getAllEmployees(pageable);
 
