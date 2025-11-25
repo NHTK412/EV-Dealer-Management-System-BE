@@ -44,7 +44,7 @@ public class VehicleDeliveryService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Order not found with id: " + vehicleDeliveryRequestDTO.getOrderId()));
 
-        if (order.getStatus() == OrderStatusEnum.INSTALLMENT || order.getStatus() == OrderStatusEnum.INSTALLMENT) {
+        if (order.getStatus() == OrderStatusEnum.INSTALLMENT || order.getStatus() == OrderStatusEnum.PAID) {
 
             Employee employee = employeeRepository.findById(vehicleDeliveryRequestDTO.getEmployeeId())
                     .orElseThrow(() -> new ResourceNotFoundException(

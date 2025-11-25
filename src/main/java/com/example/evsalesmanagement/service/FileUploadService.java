@@ -43,7 +43,7 @@ public class FileUploadService {
 
         FileUploadResponseDTO fileUploadResponseDTO = new FileUploadResponseDTO();
         fileUploadResponseDTO.setFileName(newFileName);
-        fileUploadResponseDTO.setFileName(destinationPath.toString());
+        fileUploadResponseDTO.setFilePath(destinationPath.toString());
 
         return fileUploadResponseDTO;
     }

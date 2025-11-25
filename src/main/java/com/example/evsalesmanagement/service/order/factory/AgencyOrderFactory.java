@@ -13,6 +13,7 @@ import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.OrderTypeEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Agency;
+import com.example.evsalesmanagement.model.AgencyWholesalePrice;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.OrderDetail;
@@ -104,10 +105,12 @@ public class AgencyOrderFactory implements OrderFactory {
         List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
                 .findAllById(vehicleTypeDetailMap.keySet());
 
-        Map<Integer, BigDecimal> vehicleTypeDetailPriceMap = getWholesalePrices(agency.getAgencyId(),
+        // Lấy thông tin giá sỉ kèm số lượng tối thiểu
+        Map<Integer, AgencyWholesalePrice> wholesalePriceMap = getWholesalePriceWithMinQuantity(
+                agency.getAgencyId(),
                 vehicleTypeDetailMap.keySet());
 
-        BigDecimal total = addOrderDetails(order, vehicleTypeDetails, vehicleTypeDetailMap, vehicleTypeDetailPriceMap);
+        BigDecimal total = addOrderDetails(order, vehicleTypeDetails, vehicleTypeDetailMap, wholesalePriceMap);
 
         order.setOriginaAmount(total);
         order.setTotalAmount(total);
@@ -121,34 +124,37 @@ public class AgencyOrderFactory implements OrderFactory {
         }
     }
 
-    private Map<Integer, BigDecimal> getWholesalePrices(Integer agencyId, java.util.Set<Integer> vehicleTypeDetailIds) {
-        Map<Integer, BigDecimal> priceMap = agencyWholesalePriceRepository
-                .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agencyId, vehicleTypeDetailIds)
-                .stream()
+    private Map<Integer, AgencyWholesalePrice> getWholesalePriceWithMinQuantity(
+            Integer agencyId,
+            java.util.Set<Integer> vehicleTypeDetailIds) {
+        
+        List<AgencyWholesalePrice> wholesalePrices = agencyWholesalePriceRepository
+                .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agencyId, vehicleTypeDetailIds);
+
+        return wholesalePrices.stream()
                 .collect(Collectors.toMap(
                         awp -> awp.getVehicleTypeDetail().getVehicleTypeDetailId(),
-                        awp -> awp.getWholesalePrice()));
-
-        if (priceMap.size() != orderDetailRequests.size()) {
-            throw new ResourceNotFoundException("VehicleTypeDetail Not Found");
-        }
-
-        return priceMap;
+                        awp -> awp));
     }
 
     private BigDecimal addOrderDetails(
             Order order,
             List<VehicleTypeDetail> vehicleTypeDetails,
             Map<Integer, Integer> vehicleTypeDetailMap,
-            Map<Integer, BigDecimal> vehicleTypeDetailPriceMap) {
+            Map<Integer, AgencyWholesalePrice> wholesalePriceMap) {
 
         BigDecimal total = BigDecimal.ZERO;
 
         for (VehicleTypeDetail vehicleTypeDetail : vehicleTypeDetails) {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setVehicleTypeDetail(vehicleTypeDetail);
-            orderDetail.setQuantity(vehicleTypeDetailMap.get(vehicleTypeDetail.getVehicleTypeDetailId()));
-            orderDetail.setPrice(vehicleTypeDetailPriceMap.get(vehicleTypeDetail.getVehicleTypeDetailId()));
+            
+            Integer quantity = vehicleTypeDetailMap.get(vehicleTypeDetail.getVehicleTypeDetailId());
+            orderDetail.setQuantity(quantity);
+
+            // Xác định giá: kiểm tra số lượng có đạt tối thiểu không
+            BigDecimal price = determinePrice(vehicleTypeDetail, quantity, wholesalePriceMap);
+            orderDetail.setPrice(price);
             orderDetail.setOrder(order);
 
             total = total.add(orderDetail.getPrice().multiply(BigDecimal.valueOf(orderDetail.getQuantity())));
@@ -156,5 +162,31 @@ public class AgencyOrderFactory implements OrderFactory {
         }
 
         return total;
+    }
+
+    /**
+     * Xác định giá cho sản phẩm:
+     * - Nếu có giá sỉ VÀ số lượng đạt tối thiểu → dùng giá sỉ
+     * - Ngược lại → dùng giá thường
+     */
+    private BigDecimal determinePrice(
+            VehicleTypeDetail vehicleTypeDetail,
+            Integer orderQuantity,
+            Map<Integer, AgencyWholesalePrice> wholesalePriceMap) {
+
+        AgencyWholesalePrice wholesalePrice = wholesalePriceMap.get(vehicleTypeDetail.getVehicleTypeDetailId());
+
+        if (wholesalePrice != null) {
+            Integer minimumQuantity = wholesalePrice.getMinimumQuantity();
+            
+            // Kiểm tra số lượng đặt hàng có đạt số lượng tối thiểu không
+            if (minimumQuantity != null && orderQuantity >= minimumQuantity) {
+                // Đạt số lượng tối thiểu → dùng giá sỉ
+                return wholesalePrice.getWholesalePrice();
+            }
+        }
+
+        // Không đạt số lượng tối thiểu hoặc không có giá sỉ → dùng giá thường
+        return vehicleTypeDetail.getPrice();
     }
 }
