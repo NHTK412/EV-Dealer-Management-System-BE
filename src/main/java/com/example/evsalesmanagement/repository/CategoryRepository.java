@@ -13,4 +13,6 @@ public interface CategoryRepository extends JpaRepository<VehicleCategory, Integ
 
     List<VehicleCategory> findByStatus(CategoryStatusEnum status);
 
+    List<VehicleCategory> findByVehicleTypes_VehicleTypeId(Integer vehicleTypeId);
+
 }
