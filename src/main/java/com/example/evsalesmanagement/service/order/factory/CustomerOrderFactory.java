@@ -3,6 +3,7 @@ package com.example.evsalesmanagement.service.order.factory;
 // import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
@@ -19,18 +20,25 @@ import com.example.evsalesmanagement.repository.QuoteRepository;
 
 @Component
 public class CustomerOrderFactory implements OrderFactory {
-    
-    private final QuoteRepository quoteRepository;
-    private final EmployeeRepository employeeRepository;
-    
+
+    // private final QuoteRepository quoteRepository;
+    // private final EmployeeRepository employeeRepository;
+
+    @Autowired
+    private QuoteRepository quoteRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     private Integer quoteId;
     private Integer employeeId;
     private String notes;
 
-    public CustomerOrderFactory(QuoteRepository quoteRepository, EmployeeRepository employeeRepository) {
-        this.quoteRepository = quoteRepository;
-        this.employeeRepository = employeeRepository;
-    }
+    // public CustomerOrderFactory(QuoteRepository quoteRepository,
+    // EmployeeRepository employeeRepository) {
+    // this.quoteRepository = quoteRepository;
+    // this.employeeRepository = employeeRepository;
+    // }
 
     public CustomerOrderFactory withQuoteId(Integer quoteId) {
         this.quoteId = quoteId;
@@ -50,10 +58,10 @@ public class CustomerOrderFactory implements OrderFactory {
     @Override
     public Order createOrder() {
         Quote quote = quoteRepository.findById(quoteId)
-            .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không hợp lệ"));
+                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không hợp lệ"));
 
         Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không hợp lệ"));
+                .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không hợp lệ"));
 
         Customer customer = quote.getCustomer();
 

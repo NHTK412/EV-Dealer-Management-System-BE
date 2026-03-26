@@ -21,12 +21,19 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
 import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventorySummaryDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleSummaryDTO;
 import com.example.evsalesmanagement.exception.InternalServerException;
+import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.repository.InventoryReportRepository;
+import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +43,27 @@ public class InventoryReportService {
 
     @Autowired
     private InventoryReportRepository inventoryReportRepository;
+
+    @Autowired
+    private VehicleTypeDetailRepository vehicleTypeDetailRepository;
+
+    public List<InventorySummaryDTO> getFullInventoryReport(Integer agencyId) {
+
+        return vehicleTypeDetailRepository.findInventoryByAgencyId(agencyId);
+
+    }
+
+    public List<VehicleSummaryDTO> getVehiclesByVehicleTypeDetailInInventory(
+            Integer agencyId, Integer vehicleTypeDetailId) {
+
+        List<Vehicle> vehicles = vehicleTypeDetailRepository
+                .findVehiclesByVehicleTypeDetailInInventory(agencyId, vehicleTypeDetailId);
+
+        return vehicles.stream()
+                .map(v -> new VehicleSummaryDTO(v))
+                .toList();
+
+    }
 
     public List<InventoryReportResponseDTO> getInventoryReport(InventoryReportRequestDTO request) {
         if (request.getToDate() != null) {

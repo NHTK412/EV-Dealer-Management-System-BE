@@ -55,6 +55,10 @@ public class VehicleDeliveryRequestDTO {
 
     private String name;
 
+    private Integer orderId;
+
+    
+
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -85,6 +89,14 @@ public class VehicleDeliveryRequestDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     

@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportRequestDTO;
 import com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO;
+import com.example.evsalesmanagement.dto.inventoryreport.InventorySummaryDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleRequestDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleResponseDTO;
+import com.example.evsalesmanagement.dto.vehicle.VehicleSummaryDTO;
+import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.service.InventoryReportService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -85,4 +91,28 @@ public class InventoryReportController {
 
         return ResponseEntity.ok().headers(headers).body(excelData);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEALER_MANAGER')")
+    @GetMapping("/inventory/{agencyId}")
+    public ResponseEntity<ApiResponse<List<InventorySummaryDTO>>> getFullInventoryReport(
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam Integer agencyId) {
+
+        List<InventorySummaryDTO> report = inventoryReportService.getFullInventoryReport(agencyId);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Get full inventory report successfully", report));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEALER_MANAGER')")
+    @GetMapping("/inventory/{agencyId}/vehicle-type-detail/{vehicleTypeDetailId}")
+    public ResponseEntity<ApiResponse<List<VehicleSummaryDTO>>> getVehiclesByVehicleTypeDetailInInventory(
+            @RequestParam Integer agencyId,
+            @RequestParam Integer vehicleTypeDetailId) {
+
+        List<VehicleSummaryDTO> vehicles = inventoryReportService.getVehiclesByVehicleTypeDetailInInventory(
+                agencyId, vehicleTypeDetailId);
+        return ResponseEntity
+                .ok(new ApiResponse<>(true, "Get vehicles by vehicle type detail in inventory successfully", vehicles));
+    }
+
 }

@@ -1,60 +1,98 @@
-// package com.example.evsalesmanagement.controller;
+package com.example.evsalesmanagement.controller;
 
-// import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
-// import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
-// import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
-// import com.example.evsalesmanagement.service.VehicleDeliveryService;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.HttpStatus;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.security.access.prepost.PreAuthorize;
-// import org.springframework.web.bind.annotation.*;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
+import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliverySummaryDTO;
+import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+import com.example.evsalesmanagement.model.Customer;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
+import com.example.evsalesmanagement.service.VehicleDeliveryService;
+import com.example.evsalesmanagement.utils.ApiResponse;
 
-// import jakarta.validation.Valid;
-// import java.util.List;
+import jakarta.validation.constraints.Positive;
 
-// @RestController
-// @RequestMapping("/vehicle-deliveries")
-// public class VehicleDeliveryController {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
-//     @Autowired
-//     private VehicleDeliveryService service;
+import java.util.List;
 
-//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-//     @PostMapping
-//     public ResponseEntity<VehicleDeliveryResponseDTO> createDelivery(
-//             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
+@RestController
+@RequestMapping("/vehicle-deliveries")
+public class VehicleDeliveryController {
 
-//         VehicleDeliveryResponseDTO createdDelivery = service.createVehicleDelivery(request);
+    @Autowired
+    private VehicleDeliveryService vehicleDeliveryService;
 
-//         return new ResponseEntity<>(createdDelivery, HttpStatus.CREATED);
-//     }
+    @PostMapping
+    public ResponseEntity<ApiResponse<VehicleDeliveryResponseDTO>> createVehicleDelivery(
+            @RequestBody VehicleDeliveryRequestDTO vehicleDeliveryRequestDTO) {
 
-//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-//     @PutMapping("/{id}")
-//     public ResponseEntity<VehicleDeliveryResponseDTO> updateDelivery(
-//             @PathVariable("id") Integer id,
-//             @Valid @RequestBody VehicleDeliveryRequestDTO request) {
+        VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO = vehicleDeliveryService
+                .createVehicleDelivery(vehicleDeliveryRequestDTO);
 
-//         VehicleDeliveryResponseDTO updatedDelivery = service.updateVehicleDelivery(id, request);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleDeliveryResponseDTO));
 
-//         return ResponseEntity.ok(updatedDelivery);
-//     }
+    }
 
-//     // Lấy tất cả giao xe
-//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-//     @GetMapping
-//     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getAll() {
-//         List<VehicleDeliveryResponseDTO> list = service.getAll();
-//         return ResponseEntity.ok(list);
-//     }
+    @PatchMapping("/{vehicleDeliveryId}/status")
+    public ResponseEntity<ApiResponse<VehicleDeliveryResponseDTO>> updateStatus(
+            @PathVariable Integer vehicleDeliveryId,
+            @RequestParam VehicleDeliveryStatusEnum status) {
 
-//     // Lấy giao xe theo trạng thái bất kỳ
-//     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
-//     @GetMapping("/by-status")
-//     public ResponseEntity<List<VehicleDeliveryResponseDTO>> getByStatus(
-//             @RequestParam VehicleDeliveryStatusEnum status) {
-//         List<VehicleDeliveryResponseDTO> list = service.getDeliveriesByStatus(status);
-//         return ResponseEntity.ok(list);
-//     }
-// }
+        VehicleDeliveryResponseDTO vehicleDeliveryResponseDTO = vehicleDeliveryService
+                .updateStatus(vehicleDeliveryId, status);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, null, vehicleDeliveryResponseDTO));
+    }
+
+    // Lấy danh sách đơn giao hàng của đại lý
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+    @GetMapping("/agency/{agencyId}")
+    public ResponseEntity<ApiResponse<List<VehicleDeliverySummaryDTO>>> getAllByAgency(
+            @PathVariable Integer agencyId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") @Positive Integer size,
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Integer agId = customerUserDetails.getAgencyId();
+
+        List<VehicleDeliverySummaryDTO> deliveries = vehicleDeliveryService.getAllByAgencyId(agId, pageable);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách đơn giao hàng thành công", deliveries));
+    }
+
+    // Lấy chi tiết đơn giao hàng của đại lý
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+    @GetMapping("/agency/{agencyId}/{vehicleDeliveryId}")
+    public ResponseEntity<ApiResponse<VehicleDeliveryResponseDTO>> getByIdAndAgency(
+            @PathVariable Integer agencyId,
+            @PathVariable Integer vehicleDeliveryId,
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+
+        Integer agId = customerUserDetails.getAgencyId();
+
+        VehicleDeliveryResponseDTO delivery = vehicleDeliveryService
+                .getByIdAndAgencyId(vehicleDeliveryId, agId);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết đơn giao hàng thành công", delivery));
+    }
+
+    // Lấy chi tiết đơn giao hàng (admin/staff)
+    @PreAuthorize("hasAnyRole('ADMIN', 'EVM_STAFF')")
+    @GetMapping("/{vehicleDeliveryId}")
+    public ResponseEntity<ApiResponse<VehicleDeliveryResponseDTO>> getById(
+            @PathVariable Integer vehicleDeliveryId) {
+
+        VehicleDeliveryResponseDTO delivery = vehicleDeliveryService.getById(vehicleDeliveryId);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết đơn giao hàng thành công", delivery));
+    }
+
+}

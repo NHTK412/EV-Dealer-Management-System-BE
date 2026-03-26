@@ -1,6 +1,7 @@
 package com.example.evsalesmanagement.repository;
 
 // import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,12 +14,33 @@ import com.example.evsalesmanagement.model.MonthlySales;
 @Repository
 public interface MonthlySalesRepository extends JpaRepository<MonthlySales, Integer> {
 
-    @Query("SELECT m FROM MonthlySales m " +
-            "WHERE m.agency.agencyId = :agencyId " +
-            "AND FUNCTION('MONTH', m.salesMonth) = :month " +
-            "AND FUNCTION('YEAR', m.salesMonth) = :year")
-    Optional<MonthlySales> findByAgencyAndMonthAndYear(
-            @Param("agencyId") Integer agencyId,
-            @Param("month") int month,
-            @Param("year") int year);
+        @Query("SELECT m FROM MonthlySales m " +
+                        "WHERE m.agency.agencyId = :agencyId " +
+                        "AND FUNCTION('MONTH', m.salesMonth) = :month " +
+                        "AND FUNCTION('YEAR', m.salesMonth) = :year")
+        Optional<MonthlySales> findByAgencyAndMonthAndYear(
+                        @Param("agencyId") Integer agencyId,
+                        @Param("month") int month,
+                        @Param("year") int year);
+
+        @Query("SELECT m FROM MonthlySales m " +
+                        "WHERE FUNCTION('MONTH', m.salesMonth) = :month " +
+                        "AND FUNCTION('YEAR', m.salesMonth) = :year " +
+                        "ORDER BY m.salesAmount DESC")
+        List<MonthlySales> findAllByMonthAndYear(
+                        @Param("month") int month,
+                        @Param("year") int year);
+
+        @Query("SELECT m FROM MonthlySales m " +
+                        "WHERE m.agency.agencyId = :agencyId " +
+                        "AND FUNCTION('YEAR', m.salesMonth) = :year " +
+                        "ORDER BY m.salesMonth ASC")
+        List<MonthlySales> findByAgencyAndYear(
+                        @Param("agencyId") Integer agencyId,
+                        @Param("year") int year);
+
+        @Query("SELECT m FROM MonthlySales m " +
+                        "WHERE FUNCTION('YEAR', m.salesMonth) = :year " +
+                        "ORDER BY m.agency.agencyId, m.salesMonth ASC")
+        List<MonthlySales> findAllByYear(@Param("year") int year);
 }

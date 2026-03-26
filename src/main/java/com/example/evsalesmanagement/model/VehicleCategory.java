@@ -3,8 +3,12 @@ package com.example.evsalesmanagement.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.evsalesmanagement.enums.CategoryStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +29,10 @@ public class VehicleCategory extends Base {
 
     @Column(name = "VehicleCategoryName", nullable = false)
     private String vehicleCategoryName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Status", nullable = false)
+    private CategoryStatusEnum status = CategoryStatusEnum.ACTIVE;
 
     @Column(name = "Description")
     private String description;
@@ -57,6 +65,22 @@ public class VehicleCategory extends Base {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CategoryStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(CategoryStatusEnum status) {
+        this.status = status;
+    }
+
+    public List<VehicleType> getVehicleTypes() {
+        return vehicleTypes;
+    }
+
+    public void setVehicleTypes(List<VehicleType> vehicleTypes) {
+        this.vehicleTypes = vehicleTypes;
     }
 
 }

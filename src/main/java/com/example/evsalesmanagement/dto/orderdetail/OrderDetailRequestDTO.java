@@ -9,7 +9,7 @@ public class OrderDetailRequestDTO {
 
     private Integer quantity;
 
-    private BigDecimal price;
+    // private BigDecimal price;
 
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
@@ -27,13 +27,13 @@ public class OrderDetailRequestDTO {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+    // public BigDecimal getPrice() {
+    //     return price;
+    // }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+    // public void setPrice(BigDecimal price) {
+    //     this.price = price;
+    // }
 
     
 

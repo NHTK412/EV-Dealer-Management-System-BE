@@ -1,5 +1,6 @@
 package com.example.evsalesmanagement.controller;
 
+import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentRequestDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentResponseDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
 import com.example.evsalesmanagement.service.TestDriveAppointmentService;
@@ -21,89 +22,127 @@ import java.util.List;
 @RequestMapping("/test-drive-appointments")
 public class TestDriveAppointmentController {
 
-    @Autowired
-    private TestDriveAppointmentService service;
+        @Autowired
+        private TestDriveAppointmentService service;
 
-    // @PutMapping("/{id}")
-    // public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>>
-    // createTestDriveAppointment(
-    // @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
+        // CREATE - Tạo lịch hẹn lái thử mới
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        @PostMapping
+        public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> createAppointment(
+                        @Valid @RequestBody TestDriveAppointmentRequestDTO request) {
+                TestDriveAppointmentSummaryDTO createdAppointment = service.createAppointment(request);
+                ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true,
+                                "Tạo lịch hẹn lái thử thành công", createdAppointment);
+                return ResponseEntity.ok(response);
+        }
 
-    // // TestDriveAppointmentSummaryDTO updatedAppointment =
-    // service.modifyAppointment(id, request);
+        // @PutMapping("/{id}")
+        // public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>>
+        // createTestDriveAppointment(
+        // @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
 
-    // TestDriveAppointmentSummaryDTO updatedAppointment =
-    // service.modifyAppointment(request.getTestDriveAppointmentId(), request);
+        // // TestDriveAppointmentSummaryDTO updatedAppointment =
+        // service.modifyAppointment(id, request);
 
-    // return ResponseEntity.ok(updatedAppointment);
-    // }
+        // TestDriveAppointmentSummaryDTO updatedAppointment =
+        // service.modifyAppointment(request.getTestDriveAppointmentId(), request);
 
-    // @PatchMapping("/{id}/confirm")
-    // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-    // confirmAppointment(@PathVariable("id") Integer id) {
-    // return ResponseEntity.ok(service.updateAppointmentStatus(id, "SCHEDULED"));
-    // }
+        // return ResponseEntity.ok(updatedAppointment);
+        // }
 
-    // @PatchMapping("/{id}/cancel")
-    // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-    // cancelAppointment(@PathVariable("id") Integer id) {
-    // return ResponseEntity.ok(service.updateAppointmentStatus(id, "CANCELLED"));
-    // }
+        // @PatchMapping("/{id}/confirm")
+        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
+        // confirmAppointment(@PathVariable("id") Integer id) {
+        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "SCHEDULED"));
+        // }
 
-    // @PatchMapping("/{id}/arrive")
-    // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-    // arriveAppointment(@PathVariable("id") Integer id) {
-    // return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
-    // }
+        // @PatchMapping("/{id}/cancel")
+        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
+        // cancelAppointment(@PathVariable("id") Integer id) {
+        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "CANCELLED"));
+        // }
 
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
-    @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> arriveAppointment(@PathVariable("id") Integer id,
-            @RequestParam String status) {
-        TestDriveAppointmentSummaryDTO updatedAppointment = service.updateAppointmentStatus(id, status);
+        // @PatchMapping("/{id}/arrive")
+        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
+        // arriveAppointment(@PathVariable("id") Integer id) {
+        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
+        // }
 
-        ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true, null, updatedAppointment);
+        // UPDATE - Cập nhật thông tin lịch hẹn
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        @PutMapping("/{id}")
+        public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> updateAppointment(
+                        @PathVariable("id") Integer id,
+                        @Valid @RequestBody TestDriveAppointmentRequestDTO request) {
+                TestDriveAppointmentSummaryDTO updatedAppointment = service.updateAppointment(id, request);
+                ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true,
+                                "Cập nhật lịch hẹn lái thử thành công", updatedAppointment);
+                return ResponseEntity.ok(response);
+        }
 
-        return ResponseEntity.ok(response);
-    }
+        // PATCH - Cập nhật trạng thái lịch hẹn
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        @PatchMapping("/{id}")
+        public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> updateAppointmentStatus(
+                        @PathVariable("id") Integer id,
+                        @RequestParam String status) {
+                TestDriveAppointmentSummaryDTO updatedAppointment = service.updateAppointmentStatus(id, status);
 
-    // Lấy tất cả
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<TestDriveAppointmentSummaryDTO>>> getAll(
-            @RequestParam(value = "1") Integer page,
-            @RequestParam(value = "10") Integer size, @RequestParam(required = false) String status) {
+                ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true, null,
+                                updatedAppointment);
 
-        Pageable pageable = PageRequest.of(page - 1, size);
+                return ResponseEntity.ok(response);
+        }
 
-        List<TestDriveAppointmentSummaryDTO> testDriveAppointmentSummaryDTOs = service.getAllAppointments(pageable,
-                status);
+        // DELETE - Xóa lịch hẹn
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        @DeleteMapping("/{id}")
+        public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable("id") Integer id) {
+                service.deleteAppointment(id);
+                ApiResponse<Void> response = new ApiResponse<>(true, "Xóa lịch hẹn lái thử thành công", null);
+                return ResponseEntity.ok(response);
+        }
 
-        ApiResponse<List<TestDriveAppointmentSummaryDTO>> response = new ApiResponse<List<TestDriveAppointmentSummaryDTO>>(
-                true, null, testDriveAppointmentSummaryDTOs);
+        // READ - Lấy tất cả lịch hẹn
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        @GetMapping
+        public ResponseEntity<ApiResponse<List<TestDriveAppointmentSummaryDTO>>> getAll(
+                        @RequestParam(defaultValue = "1") Integer page,
+                        @RequestParam(defaultValue = "10") Integer size,
+                        @RequestParam(required = false) String status) {
 
-        return ResponseEntity.ok(response);
-    }
+                Pageable pageable = PageRequest.of(page - 1, size);
 
-    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
-    @Cacheable(value = "test-drive-appointment", key = "#testDriveAppointmentId")
-    @GetMapping("/{testDriveAppointmentId}")
-    public ResponseEntity<ApiResponse<TestDriveAppointmentResponseDTO>> getById(
-            @PathVariable Integer testDriveAppointmentId) {
+                List<TestDriveAppointmentSummaryDTO> testDriveAppointmentSummaryDTOs = service.getAllAppointments(
+                                pageable,
+                                status);
 
-        TestDriveAppointmentResponseDTO dto = service.getAppointmentById(testDriveAppointmentId);
+                ApiResponse<List<TestDriveAppointmentSummaryDTO>> response = new ApiResponse<>(
+                                true, "Lấy danh sách lịch hẹn lái thử thành công", testDriveAppointmentSummaryDTOs);
 
-        ApiResponse<TestDriveAppointmentResponseDTO> response = new ApiResponse<TestDriveAppointmentResponseDTO>(true,
-                null, dto);
+                return ResponseEntity.ok(response);
+        }
 
-        return ResponseEntity.ok(response);
-    }
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
+        // @Cacheable(value = "test-drive-appointment", key = "#testDriveAppointmentId")
+        @GetMapping("/{testDriveAppointmentId}")
+        public ResponseEntity<ApiResponse<TestDriveAppointmentResponseDTO>> getById(
+                        @PathVariable Integer testDriveAppointmentId) {
 
-    // @GetMapping("/by-status")
-    // public ResponseEntity<List<TestDriveAppointmentSummaryDTO>>
-    // getByStatus(@RequestParam String status) {
-    // List<TestDriveAppointmentSummaryDTO> list =
-    // service.getAppointmentsByStatus(status);
-    // return ResponseEntity.ok(list);
-    // }
+                TestDriveAppointmentResponseDTO dto = service.getAppointmentById(testDriveAppointmentId);
+
+                ApiResponse<TestDriveAppointmentResponseDTO> response = new ApiResponse<>(
+                                true,
+                                "Lấy thông tin lịch hẹn lái thử thành công", dto);
+
+                return ResponseEntity.ok(response);
+        }
+
+        // @GetMapping("/by-status")
+        // public ResponseEntity<List<TestDriveAppointmentSummaryDTO>>
+        // getByStatus(@RequestParam String status) {
+        // List<TestDriveAppointmentSummaryDTO> list =
+        // service.getAppointmentsByStatus(status);
+        // return ResponseEntity.ok(list);
+        // }
 }

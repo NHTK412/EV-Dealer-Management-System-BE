@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestRequestDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestResponseDTO;
 import com.example.evsalesmanagement.dto.importrequest.ImportRequestSummaryDTO;
+import com.example.evsalesmanagement.enums.ImportRequestStatusEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.ImportRequestService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.ImportDocument.Import;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -137,5 +140,19 @@ public class ImportRequestController {
         // return
         // ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
         // }
+
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER','ADMIN')")
+        @PatchMapping("/{importRequestId}")
+        public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> changeImportRequestStatus(
+                        @PathVariable Integer importRequestId,
+                        @RequestParam ImportRequestStatusEnum status) {
+
+                ImportRequestResponseDTO importRequestResponseDTO = importRequestService
+                                .changeImportRequestStatus(importRequestId, status);
+
+                return ResponseEntity
+                                .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
+        }
+        
 
 }

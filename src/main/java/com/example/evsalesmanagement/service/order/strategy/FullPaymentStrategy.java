@@ -18,11 +18,10 @@ public class FullPaymentStrategy implements PaymentStrategy {
         payment.setNumberCycle(0);
         payment.setAmount(order.getTotalAmount());
         payment.setDueDate(LocalDateTime.now());
-        payment.setPaymentDate(LocalDateTime.now());
-        payment.setStatus(PaymentStatusEnum.PAID);
+        payment.setStatus(PaymentStatusEnum.UNPAID);
         payment.setPenaltyAmount(BigDecimal.ZERO);
         payment.setOrder(order);
-        
+
         order.getPayments().add(payment);
     }
 }

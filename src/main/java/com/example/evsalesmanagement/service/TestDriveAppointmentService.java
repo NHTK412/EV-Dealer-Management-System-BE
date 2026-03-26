@@ -1,10 +1,16 @@
 package com.example.evsalesmanagement.service;
 
+import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentRequestDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentResponseDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
 import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
+import com.example.evsalesmanagement.exception.BadRequestException;
+import com.example.evsalesmanagement.model.Customer;
 import com.example.evsalesmanagement.model.TestDriveAppointment;
+import com.example.evsalesmanagement.model.Vehicle;
+import com.example.evsalesmanagement.repository.CustomerRepository;
 import com.example.evsalesmanagement.repository.TestDriveAppointmentRepository;
+import com.example.evsalesmanagement.repository.VehicleRepository;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 // import org.springdoc.core.converters.models.Pageable;
@@ -22,6 +28,44 @@ public class TestDriveAppointmentService {
 
     @Autowired
     private TestDriveAppointmentRepository testDriveAppointmentRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+    @Transactional
+    public TestDriveAppointmentSummaryDTO createAppointment(TestDriveAppointmentRequestDTO request) {
+        // Validate Customer
+        Customer customer = customerRepository.findById(request.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy khách hàng với id: " + request.getCustomerId()));
+
+        // Validate Vehicle
+        Vehicle vehicle = vehicleRepository.findById(request.getVehicleId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy xe với id: " + request.getVehicleId()));
+
+        // Validate date and time
+        if (request.getDateOfAppointment() == null) {
+            throw new BadRequestException("Ngày hẹn không được để trống");
+        }
+        if (request.getTimeOfAppointment() == null) {
+            throw new BadRequestException("Giờ hẹn không được để trống");
+        }
+
+        // Create new appointment
+        TestDriveAppointment appointment = new TestDriveAppointment();
+        appointment.setDateOfAppointment(request.getDateOfAppointment());
+        appointment.setTimeOfAppointment(request.getTimeOfAppointment());
+        appointment.setStatus(TestDriveAppointmentStatusEnum.SCHEDULED);
+        appointment.setCustomer(customer);
+        appointment.setVehicle(vehicle);
+
+        TestDriveAppointment savedAppointment = testDriveAppointmentRepository.save(appointment);
+        return convertToDTO(savedAppointment);
+    }
 
     @Transactional
     public TestDriveAppointmentSummaryDTO modifyAppointment(Integer id, TestDriveAppointmentSummaryDTO request) {
@@ -41,6 +85,39 @@ public class TestDriveAppointmentService {
         // Cập nhật Trạng thái
         if (request.getStatus() != null) {
             existingAppointment.setStatus(request.getStatus());
+        }
+
+        TestDriveAppointment updatedAppointment = testDriveAppointmentRepository.save(existingAppointment);
+        return convertToDTO(updatedAppointment);
+    }
+
+    @Transactional
+    public TestDriveAppointmentSummaryDTO updateAppointment(Integer id, TestDriveAppointmentRequestDTO request) {
+        TestDriveAppointment existingAppointment = testDriveAppointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
+
+        // Update Customer if provided
+        if (request.getCustomerId() != null) {
+            Customer customer = customerRepository.findById(request.getCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Không tìm thấy khách hàng với id: " + request.getCustomerId()));
+            existingAppointment.setCustomer(customer);
+        }
+
+        // Update Vehicle if provided
+        if (request.getVehicleId() != null) {
+            Vehicle vehicle = vehicleRepository.findById(request.getVehicleId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Không tìm thấy xe với id: " + request.getVehicleId()));
+            existingAppointment.setVehicle(vehicle);
+        }
+
+        // Update date and time
+        if (request.getDateOfAppointment() != null) {
+            existingAppointment.setDateOfAppointment(request.getDateOfAppointment());
+        }
+        if (request.getTimeOfAppointment() != null) {
+            existingAppointment.setTimeOfAppointment(request.getTimeOfAppointment());
         }
 
         TestDriveAppointment updatedAppointment = testDriveAppointmentRepository.save(existingAppointment);
@@ -70,6 +147,22 @@ public class TestDriveAppointmentService {
         TestDriveAppointment updatedAppointment = testDriveAppointmentRepository.save(existingAppointment);
 
         return convertToDTO(updatedAppointment);
+    }
+
+    @Transactional
+    public void deleteAppointment(Integer id) {
+        TestDriveAppointment appointment = testDriveAppointmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn lái thử với id: " + id));
+
+        // Only allow deletion if status is PENDING or CANCELLED
+        if (appointment.getStatus() == TestDriveAppointmentStatusEnum.ARRIVED
+                || appointment.getStatus() == TestDriveAppointmentStatusEnum.SCHEDULED) {
+            throw new BadRequestException(
+                    "Không thể xóa lịch hẹn có trạng thái " + appointment.getStatus()
+                            + ". Chỉ có thể xóa lịch hẹn PENDING hoặc CANCELLED.");
+        }
+
+        testDriveAppointmentRepository.delete(appointment);
     }
 
     @Transactional(readOnly = true)

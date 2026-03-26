@@ -786,10 +786,13 @@
 
 package com.example.evsalesmanagement.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -812,9 +815,11 @@ import com.example.evsalesmanagement.enums.PaymentTypeEnum;
 import com.example.evsalesmanagement.enums.PolicyTypeEnum;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.enums.VehicleStatusEnum;
+import com.example.evsalesmanagement.enums.WarehouseReleaseNoteStatusEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.Employee;
+import com.example.evsalesmanagement.model.MonthlySales;
 import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.model.Payment;
 import com.example.evsalesmanagement.model.Policy;
@@ -822,6 +827,7 @@ import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.model.VehicleDelivery;
 import com.example.evsalesmanagement.model.WarehouseReleaseNote;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 import com.example.evsalesmanagement.repository.OrderRepository;
 import com.example.evsalesmanagement.repository.PolicyRepository;
 import com.example.evsalesmanagement.repository.VehicleRepository;
@@ -873,6 +879,19 @@ public class OrderService {
         @Autowired
         private SalesDiscountCalculator salesDiscountCalculator;
 
+        // @Autowired
+        // private MonthlySalesRepository monthlySalesRepository;
+
+        @Transactional
+        public List<OrderSummaryDTO> getOrdersByCustomerId(Integer agencyId, Integer customerId, Pageable pageable) {
+                Page<Order> orderSumaryPage = orderRepository.findByAgencyIdAndCustomerId(agencyId, customerId,
+                                pageable);
+
+                return orderSumaryPage.stream()
+                                .map((orderSumary) -> new OrderSummaryDTO(orderSumary))
+                                .toList();
+        }
+
         @Transactional
         public OrderResponseDTO getOrderById(Integer orderId) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)
@@ -895,26 +914,36 @@ public class OrderService {
 
                 paymentStrategy.applyPayment(order);
 
-                orderRepository.save(order);
-                return new OrderResponseDTO(order);
-        }
-
-        @CachePut(value = "order", key = "#orderId")
-        @Transactional
-        public OrderResponseDTO updateOrderById(Integer orderId, OrderStatusEnum status, String contractNumber) {
-                Order order = orderRepository.findByIdFetchAllRelations(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợplệ"));
-
-                if (order.getStatus() == OrderStatusEnum.PAID) {
-                        throw new ConflictException("Hiện tại không thể cập nhật thông tin");
+                if (request.getPaymentType() == PaymentTypeEnum.INSTALLMENT) {
+                        order.setStatus(OrderStatusEnum.INSTALLMENT);
                 }
 
-                order.setStatus(status != null ? status : order.getStatus());
-                order.setContractNumber(contractNumber != null ? contractNumber : order.getContractNumber());
-                orderRepository.save(order);
+                order.setContractNumber("HD" + order.getOrderId());
 
+                processWarehouseRelease(order);
+
+                orderRepository.save(order);
                 return new OrderResponseDTO(order);
         }
+
+        // @CachePut(value = "order", key = "#orderId")
+        // @Transactional
+        // public OrderResponseDTO updateOrderById(Integer orderId, OrderStatusEnum
+        // status, String contractNumber) {
+        // Order order = orderRepository.findByIdFetchAllRelations(orderId)
+        // .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợplệ"));
+
+        // if (order.getStatus() == OrderStatusEnum.PAID) {
+        // throw new ConflictException("Hiện tại không thể cập nhật thông tin");
+        // }
+
+        // order.setStatus(status != null ? status : order.getStatus());
+        // order.setContractNumber(contractNumber != null ? contractNumber :
+        // order.getContractNumber());
+        // orderRepository.save(order);
+
+        // return new OrderResponseDTO(order);
+        // }
 
         public List<OrderSummaryDTO> getOrdersByAgencyId(Integer agencyId, Pageable pageable) {
                 Page<Order> ordersPage = orderRepository.findByAgencyId(agencyId, pageable);
@@ -931,75 +960,86 @@ public class OrderService {
         }
 
         @Transactional
-        public OrderResponseDTO updatePaymentStatus(Integer orderId, PaymentRequestDTO paymentRequestDTO) {
+        public OrderResponseDTO cancelOrderById(Integer orderId) {
                 Order order = orderRepository.findByIdFetchAllRelations(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Mã đơn hàng không hợp lệ"));
 
-                for (Payment payment : order.getPayments()) {
-                        if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
-                                payment.setStatus(PaymentStatusEnum.PAID);
-                                payment.setPaymentDate(LocalDateTime.now());
-                                payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
+                if (order.getStatus() == OrderStatusEnum.PENDING) {
+                        order.setStatus(OrderStatusEnum.CANCEL);
 
-                                if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
-                                        payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
+                        WarehouseReleaseNote warehouseReleaseNote = warehouseReleaseNoteRepository
+                                        .findByOrder_OrderId(orderId)
+                                        .orElse(null);
+                        if (warehouseReleaseNote != null) {
+                                for (Vehicle vehicle : warehouseReleaseNote.getVehicles()) {
+                                        vehicle.setStatus(VehicleStatusEnum.IN_STOCK);
                                 }
-                                break;
                         }
+
+                        warehouseReleaseNote.setStatus(WarehouseReleaseNoteStatusEnum.CANCELLED);
+
+                        warehouseReleaseNoteRepository.save(warehouseReleaseNote);
+
+                } else {
+                        throw new ConflictException("Hiện tại không thể hủy đơn hàng");
                 }
 
-                orderRepository.save(order);
-                return new OrderResponseDTO(order);
-        }
-
-        @Transactional
-        public OrderResponseDTO createDelivery(Integer orderId, VehicleDeliveryRequestDTO vehicledeliveryRequestDTO) {
-                Order order = orderRepository.findById(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
-
-                if (order.getStatus() != OrderStatusEnum.PENDING) {
-                        throw new ConflictException("Order no status");
-                }
-
-                order.setStatus(OrderStatusEnum.PENDING_DELIVERY);
-
-                Employee employee = employeeRepository.findById(vehicledeliveryRequestDTO.getEmployeeId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
-                order.setEmployee(employee);
-
-                VehicleDelivery vehicleDelivery = new VehicleDelivery();
-                vehicleDelivery.setEmployee(employee);
-                vehicleDelivery.setOderId(order);
-                vehicleDelivery.setAddress(vehicledeliveryRequestDTO.getAddress());
-                vehicleDelivery.setPhoneNumber(vehicledeliveryRequestDTO.getPhoneNumber());
-                vehicleDelivery.setName(vehicledeliveryRequestDTO.getName());
-                vehicleDelivery.setStatus(VehicleDeliveryStatusEnum.DELIVERED);
-
-                order.setVehicleDelivery(vehicleDelivery);
                 orderRepository.save(order);
 
                 return new OrderResponseDTO(order);
         }
 
-        @Transactional
-        public OrderResponseDTO updateDelivery(Integer orderId, VehicleDeliveryStatusEnum vehicleDeliveryStatusEnum) {
-                Order order = orderRepository.findById(orderId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        // @Transactional
+        // public OrderResponseDTO updatePaymentStatus(Integer orderId,
+        // PaymentRequestDTO paymentRequestDTO) {
+        // Order order = orderRepository.findByIdFetchAllRelations(orderId)
+        // .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-                order.getVehicleDelivery().setStatus(vehicleDeliveryStatusEnum);
+        // for (Payment payment : order.getPayments()) {
+        // if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
+        // payment.setStatus(PaymentStatusEnum.PAID);
+        // payment.setPaymentDate(LocalDateTime.now());
+        // payment.setPaymentMethod(paymentRequestDTO.getPaymentMethod());
 
-                if (vehicleDeliveryStatusEnum == VehicleDeliveryStatusEnum.DELIVERING) {
-                        processWarehouseRelease(order);
-                        orderRepository.save(order);
-                        return new OrderResponseDTO(order);
-                } else if (vehicleDeliveryStatusEnum == VehicleDeliveryStatusEnum.DELIVERED) {
-                        order.setStatus(OrderStatusEnum.DELIVERED);
-                        orderRepository.save(order);
-                        return new OrderResponseDTO(order);
-                }
+        // if (paymentRequestDTO.getPaymentMethod() == PaymentMethodEnum.VNPAY) {
+        // payment.setVnpayCode(paymentRequestDTO.getVnpayCode());
+        // }
 
-                return null;
-        }
+        // Integer month = LocalDateTime.now().getMonthValue();
+        // Integer year = LocalDateTime.now().getYear();
+
+        // MonthlySales optionalMonthlySales =
+        // monthlySalesRepository.findByAgencyAndMonthAndYear(
+        // order.getAgency().getAgencyId(),
+        // month,
+        // year).orElseGet(() -> {
+        // MonthlySales newMonthlySales = new MonthlySales();
+        // newMonthlySales.setAgency(order.getAgency());
+
+        // newMonthlySales.setSalesMonth(LocalDate.of(year, month, 1));
+
+        // newMonthlySales.setSalesAmount(BigDecimal.ZERO);
+        // // set thêm các field mặc định khác nếu cần
+        // return monthlySalesRepository.save(newMonthlySales);
+        // });
+
+        // optionalMonthlySales.getSalesAmount().add(payment.getAmount());
+
+        // monthlySalesRepository.save(optionalMonthlySales);
+        // break;
+        // }
+        // }
+
+        // for (Payment payment : order.getPayments()) {
+        // if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
+        // break;
+        // }
+        // order.setStatus(OrderStatusEnum.PAID);
+        // }
+
+        // orderRepository.save(order);
+        // return new OrderResponseDTO(order);
+        // }
 
         @Transactional
         public OrderResponseDTO createOrder(Integer employeeId, OrderRequestDTO orderRequestDTO) {
@@ -1018,6 +1058,10 @@ public class OrderService {
                         DiscountCalculator discountCalculator = getDiscountCalculator(policy.getPolicyType());
                         discountCalculator.calculateDiscount(order, policy);
                 }
+
+                order.setContractNumber("HD" + order.getOrderId());
+
+                processWarehouseRelease(order);
 
                 orderRepository.save(order);
                 return new OrderResponseDTO(order);
