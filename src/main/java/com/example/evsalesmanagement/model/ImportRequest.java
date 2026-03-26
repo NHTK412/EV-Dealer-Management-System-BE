@@ -18,7 +18,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-//YeuCauNhapHang = ImportRequest
 @Entity
 @Table(name = "ImportRequest")
 public class ImportRequest extends Base {

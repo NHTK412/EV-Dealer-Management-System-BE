@@ -23,7 +23,6 @@ public class SalesReportController {
     @Autowired
     private SalesReportService salesReportService;
 
-    // ============ DOANH SỐ THEO NHÂN VIÊN BÁN HÀNG ============
 
     /**
      * Lấy doanh số tất cả nhân viên bán hàng theo tháng
@@ -78,7 +77,6 @@ public class SalesReportController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số nhân viên theo năm thành công", response));
     }
 
-    // ============ DOANH SỐ THEO ĐẠI LÝ ============
 
     /**
      * Lấy doanh số tất cả đại lý theo tháng

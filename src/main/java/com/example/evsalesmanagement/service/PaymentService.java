@@ -22,6 +22,9 @@ import com.example.evsalesmanagement.dto.payment.VNPAYResponseDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
 import com.example.evsalesmanagement.enums.PaymentMethodEnum;
 import com.example.evsalesmanagement.enums.PaymentStatusEnum;
+import com.example.evsalesmanagement.exception.BadRequestException;
+import com.example.evsalesmanagement.exception.ConflictException;
+import com.example.evsalesmanagement.exception.InternalServerException;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 import com.example.evsalesmanagement.model.MonthlySales;
 import com.example.evsalesmanagement.model.Order;
@@ -115,7 +118,7 @@ public class PaymentService {
     // Lấy chi tiết thanh toán
     public PaymentResponseDTO getPaymentById(Integer id) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + id));
         if (payment.getStatus() == PaymentStatusEnum.UNPAID) {
             calculatePenalty(payment);
         }
@@ -135,7 +138,7 @@ public class PaymentService {
     @Transactional
     public PaymentResponseDTO createPayment(PaymentCreateSummaryDTO dto) {
         Order order = orderRepository.findById(dto.getOrderId())
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + dto.getOrderId()));
 
         Payment payment = new Payment();
         payment.setOrder(order);
@@ -155,7 +158,7 @@ public class PaymentService {
     @Transactional
     public PaymentResponseDTO updatePayment(Integer id, PaymentUpdateSummaryDTO dto) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + id));
 
         if (dto.getAmount() != null) {
             payment.setAmount(dto.getAmount());
@@ -187,14 +190,14 @@ public class PaymentService {
     @Transactional
     public PaymentResponseDTO confirmCashPayment(Integer id) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + id));
 
         if (payment.getStatus() == PaymentStatusEnum.PAID) {
-            throw new RuntimeException("This payment has already been confirmed");
+            throw new ConflictException("This payment has already been confirmed");
         }
 
         if (payment.getPaymentMethod() != PaymentMethodEnum.CASH) {
-            throw new RuntimeException("Only applicable for cash payments");
+            throw new BadRequestException("This action is only applicable to CASH payments");
         }
 
         calculatePenalty(payment);
@@ -211,14 +214,14 @@ public class PaymentService {
     @Transactional
     public VNPAYResponseDTO createVNPAYPayment(Integer id) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + id));
 
         if (payment.getStatus() == PaymentStatusEnum.PAID) {
-            throw new RuntimeException("This payment has already been completed");
+            throw new ConflictException("This payment has already been completed");
         }
 
         if (payment.getPaymentMethod() != PaymentMethodEnum.VNPAY) {
-            throw new RuntimeException("This payment does not use the VNPAY method");
+            throw new BadRequestException("This payment does not use the VNPAY method");
         }
 
         calculatePenalty(payment);
@@ -242,18 +245,18 @@ public class PaymentService {
     @Transactional
     public PaymentResponseDTO handleVNPAYCallback(String vnpayCode, String responseCode) {
         if (vnpayCode == null || vnpayCode.trim().isEmpty()) {
-            throw new RuntimeException("Invalid VNPAY code");
+            throw new BadRequestException("Invalid VNPAY code");
         }
 
         if (responseCode == null || responseCode.trim().isEmpty()) {
-            throw new RuntimeException("Invalid response code");
+            throw new BadRequestException("Invalid response code");
         }
 
         Payment payment = paymentRepository.findByVnpayCode(vnpayCode)
-                .orElseThrow(() -> new RuntimeException("Not found payment with code: " + vnpayCode));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with code: " + vnpayCode));
 
         if (payment.getStatus() == PaymentStatusEnum.PAID) {
-            throw new RuntimeException("This payment has already been processed");
+            throw new ConflictException("This payment has already been processed");
         }
 
         if ("00".equals(responseCode)) {
@@ -276,20 +279,19 @@ public class PaymentService {
     @Transactional
     public void deletePayment(Integer id) {
         if (id == null || id <= 0) {
-            throw new RuntimeException("Invalid payment ID");
+            throw new BadRequestException("Invalid payment ID");
         }
 
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found payment with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + id));
 
         if (payment.getStatus() == PaymentStatusEnum.PAID) {
-            throw new RuntimeException("Cannot delete a payment that has been completed");
+            throw new ConflictException("Cannot delete a completed payment");
         }
-        // if (payment.getOrder() != null) {}
         try {
             paymentRepository.delete(payment);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot delete payment. Error: " + e.getMessage());
+            throw new InternalServerException("Failed to delete payment", e);
         }
     }
 
@@ -305,8 +307,6 @@ public class PaymentService {
             calculatePenalty(payment);
             paymentRepository.save(payment);
         }
-        // System.out.println("Updated " + overduePayments.size() + " overdue
-        // payments");
     }
 
     private void calculatePenalty(Payment payment) {

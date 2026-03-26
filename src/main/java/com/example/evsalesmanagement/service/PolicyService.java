@@ -52,7 +52,6 @@ public class PolicyService {
         }
         Policy savedPolicy = policyRepository.save(policy);
 
-        // if ("quantity".equalsIgnoreCase(policyRequestDTO.getPolicyType())
         if (policyRequestDTO.getPolicyType() == PolicyTypeEnum.QUANTITY
                 && policyRequestDTO.getQuantityDiscountLevels() != null) {
             policyRequestDTO.getQuantityDiscountLevels().forEach(quantityDiscountLevelRequestDTO -> {
@@ -99,7 +98,7 @@ public class PolicyService {
     @Transactional()
     public PolicyResponseDTO getByIdPolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+                .orElseThrow(() -> new ResourceNotFoundException("Policy not found with ID: " + policyId));
         PolicyResponseDTO policyResponseDTO = new PolicyResponseDTO();
         policyResponseDTO.setPolicyId(policy.getPolicyId());
         policyResponseDTO.setPolicyType(policy.getPolicyType());
@@ -138,7 +137,7 @@ public class PolicyService {
     @Transactional
     public PolicyResponseDTO updatePolicy(Integer policyId, PolicyRequestDTO policyRequestDTO) {
         Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+                .orElseThrow(() -> new ResourceNotFoundException("Policy not found with ID: " + policyId));
         policy.setPolicyType(policyRequestDTO.getPolicyType());
         policy.setPolicyValue(policyRequestDTO.getPolicyValue());
         policy.setPolicyCondition(policyRequestDTO.getPolicyCondition());
@@ -153,7 +152,7 @@ public class PolicyService {
     @Transactional
     public PolicyResponseDTO deletePolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Policy"));
+                .orElseThrow(() -> new ResourceNotFoundException("Policy not found with ID: " + policyId));
         List<QuantityDiscountLevel> quantityDiscountLevels = quantityDiscountLevelRepository.findByPolicy(policy);
         quantityDiscountLevelRepository.deleteAll(quantityDiscountLevels);
         List<SalesDiscountLevel> salesDiscountLevels = salesDiscountLevelRepository.findByPolicy(policy);

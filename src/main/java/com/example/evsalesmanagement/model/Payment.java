@@ -17,7 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//ThanhToan = Payment
 @Entity
 @Table(name = "Payment")
 public class Payment extends Base {
@@ -27,7 +26,6 @@ public class Payment extends Base {
     @Column(name = "PaymentId")
     private Integer paymentId;
 
-    // PhuongThucThanhToan = PaymentMethod
     @Enumerated(EnumType.STRING)
     @Column(name = "PaymentMethod")
     private PaymentMethodEnum paymentMethod;
@@ -35,23 +33,18 @@ public class Payment extends Base {
     @Column(name = "PaymentForm")
     private String paymentForm;
 
-    // SoTien = Amount
     @Column(name = "Amount")
     private BigDecimal amount;
 
-    // chukyso = CycleNumber
     @Column(name = "NumberCycle")
     private Integer numberCycle;
 
-    // NgayDenHan = DueDate
     @Column(name = "DueDate")
     private LocalDateTime dueDate;
 
-    // NgayThanhToan = PaymentDate
     @Column(name = "PaymentDate")
     private LocalDateTime paymentDate;
 
-    // TienPhat = PenaltyAmount
 
     @Column(name = "PenaltyAmount")
     private BigDecimal penaltyAmount;

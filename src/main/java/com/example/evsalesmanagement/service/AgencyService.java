@@ -23,7 +23,6 @@ public class AgencyService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    // @Cacheable(value = "agency-all", key = "#pageable")
     public List<AgencySummaryDTO> getAllAgencies(Pageable pageable) {
         Page<Agency> agencies = agencyRepository.findAll(pageable);
         List<AgencySummaryDTO> summaryList = agencies.stream().map(agency -> {
@@ -40,7 +39,7 @@ public class AgencyService {
     @Transactional
     public AgencyResponseDTO getByIdAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(agency.getAgencyId());
         agencyResponseDTO.setAgencyName(agency.getAgencyName());
@@ -78,7 +77,7 @@ public class AgencyService {
     @Transactional
     public AgencyResponseDTO updateAgency(Integer agencyId, AgencyRequestDTO agencyRequestDTO) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
         agency.setAgencyName(agencyRequestDTO.getAgencyName());
         agency.setAddress(agencyRequestDTO.getAddress());
         agency.setPhoneNumber(agencyRequestDTO.getPhoneNumber());
@@ -101,7 +100,7 @@ public class AgencyService {
     @Transactional
     public AgencyResponseDTO deleteAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
         agencyRepository.delete(agency);
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(agency.getAgencyId());

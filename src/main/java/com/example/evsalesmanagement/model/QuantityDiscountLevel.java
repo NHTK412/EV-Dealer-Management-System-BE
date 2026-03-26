@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//BacChietKhauSoLuong = QuantityDiscountLevel
 @Entity
 @Table(name = "QuantityDiscountLevel")
 public class QuantityDiscountLevel extends Base {

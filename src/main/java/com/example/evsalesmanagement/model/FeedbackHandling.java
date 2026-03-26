@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-//XuLyPhanHoi = FeedbackHandling
 @Entity
 @Table(name = "FeedbackHandling")
 public class FeedbackHandling extends Base {
@@ -31,8 +30,6 @@ public class FeedbackHandling extends Base {
     @Column(name = "FeedbackHandlingMethod", nullable = false)
     private FeedbackHandlingMethodEnum feedbackHandlingMethod;
 
-    // @Column(name = "ThoiGian")
-    // private LocalDateTime thoiGian;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
@@ -94,12 +91,7 @@ public class FeedbackHandling extends Base {
         this.employee = employee;
     }
 
-    // public LocalDateTime getThoiGian() {
-    // return thoiGian;
-    // }
 
-    // public void setThoiGian(LocalDateTime thoiGian) {
     // this.thoiGian = thoiGian;
-    // }
 
 }

@@ -36,7 +36,6 @@ public class VehicleController {
     @Autowired
     private VehicleTypeService vehicleTypeService;
 
-    // =============== VEHICLE ===============
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF')")
     @PostMapping
     public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(@RequestBody VehicleRequestDTO request) {

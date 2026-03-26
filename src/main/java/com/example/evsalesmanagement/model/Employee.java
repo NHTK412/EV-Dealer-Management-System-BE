@@ -2,8 +2,6 @@ package com.example.evsalesmanagement.model;
 
 import java.time.LocalDate;
 
-// import com.example.evsalesmanagement.enums.AccountRoleEnum;
-// import com.example.evsalesmanagement.enums.EmployeePositionEnum;
 import com.example.evsalesmanagement.enums.EmployeeStatusEnum;
 import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
@@ -19,7 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//NhanVien = Employee
 @Entity
 @Table(name = "Employee")
 public class Employee extends Base {
@@ -165,25 +162,11 @@ public class Employee extends Base {
         this.status = status;
     }
 
-    // @OneToOne(mappedBy = "nhanVien")
-    // private TaiKhoan taiKhoan;
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<DonHang> donHangs = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<GiaoXe> giaoXes = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<PhieuXuatKho> phieuXuatKhos = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<XuLyPhanHoi> xuLyPhanHois = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "nhanVien")
-    // private List<YeuCauNhapHang> yeuCauNhapHangs = new ArrayList<>();
 
 }

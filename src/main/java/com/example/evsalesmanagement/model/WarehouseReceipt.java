@@ -18,7 +18,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//PhieuNhapKho = WarehouseReceipt
 @Entity
 @Table(name = "WarehouseReceipt")
 public class WarehouseReceipt extends Base {
@@ -116,8 +115,6 @@ public class WarehouseReceipt extends Base {
         this.agencyId = agencyId;
     }
 
-    // @OneToMany(mappedBy = "phieuNhapKho")
-    // private List<ChiTietPhieuNhap> chiTietPhieuNhaps = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "WarehouseReceiptDetail", joinColumns = @JoinColumn(name = "WarehouseReceiptId"), inverseJoinColumns = @JoinColumn(name = "VehicleId"))

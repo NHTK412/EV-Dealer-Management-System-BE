@@ -15,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-//KhachHang = Customer
 @Entity
 @Table(name = "Customer")
 public class Customer extends Base {
@@ -111,23 +110,10 @@ public class Customer extends Base {
         this.membershipLevel = membershipLevel;
     }
 
-    // @Column(name = "NgayTao")
-    // private LocalDateTime ngayTao;
 
-    // @OneToMany(mappedBy = "khachHang")
-    // private List<DonHang> donHangs = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "khachHang")
-    // private List<PhanHoi> phanHois = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "khachHang")
-    // private List<LichHenLaiThu> lichHenLaiThus = new ArrayList<>();
 
-    // public LocalDateTime getNgayTao() {
-    // return ngayTao;
-    // }
 
-    // public void setNgayTao(LocalDateTime ngayTao) {
     // this.ngayTao = ngayTao;
-    // }
 }

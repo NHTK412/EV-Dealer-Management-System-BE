@@ -28,7 +28,6 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Service
 public class AgencyWholesalePricesService {
 
-        // private final AgencyWholesalePriceController agencyWholesalePriceController;
 
         @Autowired
         private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
@@ -42,7 +41,6 @@ public class AgencyWholesalePricesService {
         // AgencyWholesalePricesService(AgencyWholesalePriceController
         // agencyWholesalePriceController) {
         // this.agencyWholesalePriceController = agencyWholesalePriceController;
-        // }
 
         @Transactional
         public AgencyWholesalePriceResponseDTO createAgencyWholesalePrice(
@@ -84,7 +82,6 @@ public class AgencyWholesalePricesService {
 
         }
 
-        // @Cacheable(value = "agency-wholesale-price-all", key = "#pageable")
         @Transactional
         public List<AgencyWholesalePriceSummaryDTO> getAllAgencyWholesalePrices(Pageable pageable) {
                 Page<AgencyWholesalePrice> agencyWholesalePrices = agencyWholesalePriceRepository.findAll(pageable);

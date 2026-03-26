@@ -38,8 +38,6 @@ public class ImportRequestController {
         @Autowired
         ImportRequestService importRequestService;
 
-        // Chưa tạo logic gửi thông báo đến đại lý
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @PostMapping()
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> createImportRequest(
                         @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
@@ -51,7 +49,6 @@ public class ImportRequestController {
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
         }
 
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @DeleteMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> deleteImportRequest(
                         @PathVariable Integer importRequestId) {
@@ -61,18 +58,12 @@ public class ImportRequestController {
 
                 return ResponseEntity
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
-                // return ResponseEntity.ok());
         }
 
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @PutMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> updateImportRequest(
                         @PathVariable Integer importRequestId,
                         @RequestBody ImportRequestRequestDTO importRequestRequestDTO) {
-                // return
-                // ResponseEntity.ok(importRequestService.updateImportRequest(importRequestId,
-                // importRequestRequestDTO));
-
                 ImportRequestResponseDTO importRequestResponseDTO = importRequestService.updateImportRequest(
                                 importRequestId,
                                 importRequestRequestDTO);
@@ -81,7 +72,6 @@ public class ImportRequestController {
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
         }
 
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping
         public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getAllImportRequests(
                         @RequestParam Integer page,
@@ -95,12 +85,8 @@ public class ImportRequestController {
 
                 return ResponseEntity.ok(
                                 new ApiResponse<List<ImportRequestSummaryDTO>>(true, null, importRequestSummaryDTOs));
-
-                // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,
-                // employeeId));
         }
 
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping("/{importRequestId}")
         public ResponseEntity<ApiResponse<ImportRequestResponseDTO>> getImportRequestDetail(
                         @PathVariable Integer importRequestId) {
@@ -110,12 +96,8 @@ public class ImportRequestController {
 
                 return ResponseEntity
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
-
-                // return
-                // ResponseEntity.ok(importRequestService.getImportRequestDetail(importRequestId));
         }
 
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER')")
         @GetMapping("/me")
         public ResponseEntity<ApiResponse<List<ImportRequestSummaryDTO>>> getMyImportRequest(
                         @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer page,
@@ -129,17 +111,7 @@ public class ImportRequestController {
 
                 return ResponseEntity.ok(
                                 new ApiResponse<List<ImportRequestSummaryDTO>>(true, null, importRequestSummaryDTOs));
-
-                // return ResponseEntity.ok(importRequestService.getAllImportRequests(pageable,
-                // employeeId));
         }
-
-        // @GetMapping("/nhanVien/{maNhanVien}")
-        // public ResponseEntity<List<>> layTatCaYeuCauNhapHangTheoNhanVien(
-        // @PathVariable Integer maYeuCauNhapHang) {
-        // return
-        // ResponseEntity.ok(yeuCauNhapHangService.layChiTietKhuyenMai(maYeuCauNhapHang));
-        // }
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER','ADMIN')")
         @PatchMapping("/{importRequestId}")
@@ -153,6 +125,5 @@ public class ImportRequestController {
                 return ResponseEntity
                                 .ok(new ApiResponse<ImportRequestResponseDTO>(true, null, importRequestResponseDTO));
         }
-        
 
 }

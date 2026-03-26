@@ -36,55 +36,6 @@ public class VehicleTypeService {
         @Autowired
         private CategoryRepository vehicleCategoryRepository;
 
-        // @Transactional
-        // public VehicleTypeResponseDTO createVehicleType(VehicleTypeRequestDTO request) {
-        //         VehicleType newVehicleType = new VehicleType();
-        //         newVehicleType.setVehicleTypeName(request.getVehicleTypeName());
-        //         newVehicleType.setManufactureYear(request.getManufactureYear());
-        //         newVehicleType.setDescription(request.getDescription());
-        //         vehicleTypeRepository.save(newVehicleType);
-        //         return new VehicleTypeResponseDTO(newVehicleType);
-        // }
-
-        // @Transactional
-        // public Page<VehicleTypeSummaryDTO> getAllVehicleType(Pageable pageable) {
-        //         Page<VehicleType> vehicleTypePage = vehicleTypeRepository.findAll(pageable);
-        //         return vehicleTypePage.map(VehicleTypeSummaryDTO::new);
-        // }
-
-        // @Cacheable(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO getVehicleTypeById(Integer vehicleTypeId) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id :" + vehicleTypeId));
-        //         return new VehicleTypeResponseDTO(vehicleType);
-        // }
-
-        // @CachePut(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeRequestDTO request) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id:" + vehicleTypeId));
-        //         vehicleType.setVehicleTypeName(request.getVehicleTypeName());
-        //         vehicleType.setManufactureYear(request.getManufactureYear());
-        //         vehicleType.setDescription(request.getDescription());
-        //         vehicleTypeRepository.save(vehicleType);
-        //         return new VehicleTypeResponseDTO(vehicleType);
-        // }
-
-        // @CacheEvict(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO deleteVehicleType(Integer vehicleTypeId) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id:" + vehicleTypeId));
-        //         VehicleTypeResponseDTO dto = new VehicleTypeResponseDTO(vehicleType);
-        //         vehicleTypeRepository.deleteById(vehicleTypeId);
-        //         return dto;
-        // }
-
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> createVehicleType_v2(
                         CreateVehicleTypeDTO createVehicleTypeDTO) {

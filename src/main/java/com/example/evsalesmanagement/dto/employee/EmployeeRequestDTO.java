@@ -6,12 +6,9 @@ import com.example.evsalesmanagement.enums.GenderEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.model.Employee;
 
-// <<<<<<< HEAD
-// =======
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-// >>>>>>> 29c2e7207eb5f529d717230bf9417c008d876d44
 
 public class EmployeeRequestDTO {
 

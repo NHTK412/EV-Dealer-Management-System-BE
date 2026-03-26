@@ -103,25 +103,11 @@ public class Agency extends Base {
         this.type = type;
     }
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<NhanVien> nhanViens = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<Xe> xes = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<DonHang> donHangs = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<PhieuNhapKho> phieuNhapKhos = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<GiaSiDaiLy> giaSiDaiLys = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "daiLy")
-    // private List<ChinhSachChietKhau> chinhSachChietKhaus = new ArrayList<>();
 
-    // @ManyToMany(mappedBy = "daiLys")
-    // private List<KhuyenMai> khuyenMais = new ArrayList<>();
 
 }

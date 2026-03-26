@@ -3,10 +3,10 @@ package com.example.evsalesmanagement.controller;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentRequestDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentResponseDTO;
 import com.example.evsalesmanagement.dto.testdriveappointment.TestDriveAppointmentSummaryDTO;
+import com.example.evsalesmanagement.enums.TestDriveAppointmentStatusEnum;
 import com.example.evsalesmanagement.service.TestDriveAppointmentService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
-// import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -36,38 +36,6 @@ public class TestDriveAppointmentController {
                 return ResponseEntity.ok(response);
         }
 
-        // @PutMapping("/{id}")
-        // public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>>
-        // createTestDriveAppointment(
-        // @Valid @RequestBody TestDriveAppointmentSummaryDTO request) {
-
-        // // TestDriveAppointmentSummaryDTO updatedAppointment =
-        // service.modifyAppointment(id, request);
-
-        // TestDriveAppointmentSummaryDTO updatedAppointment =
-        // service.modifyAppointment(request.getTestDriveAppointmentId(), request);
-
-        // return ResponseEntity.ok(updatedAppointment);
-        // }
-
-        // @PatchMapping("/{id}/confirm")
-        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-        // confirmAppointment(@PathVariable("id") Integer id) {
-        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "SCHEDULED"));
-        // }
-
-        // @PatchMapping("/{id}/cancel")
-        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-        // cancelAppointment(@PathVariable("id") Integer id) {
-        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "CANCELLED"));
-        // }
-
-        // @PatchMapping("/{id}/arrive")
-        // public ResponseEntity<TestDriveAppointmentSummaryDTO>
-        // arriveAppointment(@PathVariable("id") Integer id) {
-        // return ResponseEntity.ok(service.updateAppointmentStatus(id, "ARRIVED"));
-        // }
-
         // UPDATE - Cập nhật thông tin lịch hẹn
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
         @PutMapping("/{id}")
@@ -85,7 +53,7 @@ public class TestDriveAppointmentController {
         @PatchMapping("/{id}")
         public ResponseEntity<ApiResponse<TestDriveAppointmentSummaryDTO>> updateAppointmentStatus(
                         @PathVariable("id") Integer id,
-                        @RequestParam String status) {
+                        @RequestParam TestDriveAppointmentStatusEnum status) {
                 TestDriveAppointmentSummaryDTO updatedAppointment = service.updateAppointmentStatus(id, status);
 
                 ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true, null,
@@ -124,7 +92,6 @@ public class TestDriveAppointmentController {
         }
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'DEALER_STAFF')")
-        // @Cacheable(value = "test-drive-appointment", key = "#testDriveAppointmentId")
         @GetMapping("/{testDriveAppointmentId}")
         public ResponseEntity<ApiResponse<TestDriveAppointmentResponseDTO>> getById(
                         @PathVariable Integer testDriveAppointmentId) {
@@ -137,12 +104,4 @@ public class TestDriveAppointmentController {
 
                 return ResponseEntity.ok(response);
         }
-
-        // @GetMapping("/by-status")
-        // public ResponseEntity<List<TestDriveAppointmentSummaryDTO>>
-        // getByStatus(@RequestParam String status) {
-        // List<TestDriveAppointmentSummaryDTO> list =
-        // service.getAppointmentsByStatus(status);
-        // return ResponseEntity.ok(list);
-        // }
 }

@@ -10,28 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.evsalesmanagement.dto.auth.AuthResponseDTO;
-// <<<<<<< HEAD
 import com.example.evsalesmanagement.model.Employee;
-// import com.example.evsalesmanagement.model.Account;
-// import com.example.evsalesmanagement.model.Employee;
-// import com.example.evsalesmanagement.repository.AccountRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
-// =======
-// import com.example.evsalesmanagement.exception.AuthenticationEntryPointException;
 import com.example.evsalesmanagement.exception.InvalidRefreshTokenException;
-// import com.example.evsalesmanagement.exception.ResourceNotFoundException;
-// import com.example.evsalesmanagement.model.Account;
-// import com.example.evsalesmanagement.repository.AccountRepository;
-// >>>>>>> feat/Khang/cauHinhRedis
 import com.example.evsalesmanagement.utils.JwtUtil;
-
-// import ch.qos.logback.core.testUtil.RandomUtil;
 
 @Service
 public class AuthService {
-
-    // @Autowired
-    // AccountRepository accountRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -48,16 +33,12 @@ public class AuthService {
 
     public AuthResponseDTO login(String userName, String password) {
         Employee employee = employeeRepository.findByUsername(userName)
-                .orElseThrow(() -> new RuntimeException("Tên đăng nhập không tồn tại"));
+                .orElseThrow(() -> new InvalidRefreshTokenException("Invalid username or password"));
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // String code = encoder.encode(password);
-        // System.out.println(code);
-
-        // if (!employee.getPassword().equals(password)) {
         if (!encoder.matches(password, employee.getPassword())) {
-            throw new InvalidRefreshTokenException("Mật khẩu không hợp lệ");
+            throw new InvalidRefreshTokenException("Invalid username or password");
         }
 
         String accessToken = jwtUtil.generateToken(employee.getUsername(), employee.getRole().name(),
@@ -85,11 +66,11 @@ public class AuthService {
         String userName = (String) redisTemplate.opsForValue().get("refreshToken::" + refreshToken);
 
         if (userName == null) {
-            throw new InvalidRefreshTokenException("refresh Token không hợp lệ");
+            throw new InvalidRefreshTokenException("Invalid refresh token");
         }
 
         Employee employee = employeeRepository.findByUsername(userName)
-                .orElseThrow(() -> new RuntimeException("Tên đăng nhập không tồn tại"));
+                .orElseThrow(() -> new InvalidRefreshTokenException("Invalid refresh token"));
 
         String accessToken = jwtUtil.generateToken(employee.getUsername(), employee.getRole().name(),
                 expiration);

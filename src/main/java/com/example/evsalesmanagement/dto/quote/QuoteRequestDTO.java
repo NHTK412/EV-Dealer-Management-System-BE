@@ -8,7 +8,6 @@ import com.example.evsalesmanagement.enums.QuoteStatusEnum;
 
 public class QuoteRequestDTO {
 
-    // private Integer employeeId;
     private Integer customerId;
 
     private QuoteStatusEnum status;

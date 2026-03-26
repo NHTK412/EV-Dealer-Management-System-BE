@@ -87,7 +87,6 @@ public class EmployeeService {
         }
 
         Employee savedEmployee = employeeRepository.save(employee);
-        // throw new RuntimeException("Debugging: Check password hashing");
 
         return new EmployeeResponseDTO(savedEmployee);
     }

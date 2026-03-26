@@ -43,7 +43,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponseDTO getCategoryById(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
         return new CategoryResponseDTO(category);
     }
 
@@ -67,7 +67,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDTO updateCategory(Integer categoryId, CategoryRequestDTO requestDTO) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
 
         category.setVehicleCategoryName(requestDTO.getCategoryName());
         category.setDescription(requestDTO.getDescription());
@@ -84,7 +84,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDTO deleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
 
         category.setStatus(CategoryStatusEnum.INACTIVE);
         VehicleCategory deletedCategory = categoryRepository.save(category);
@@ -96,7 +96,7 @@ public class CategoryService {
     @Transactional
     public void permanentDeleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
         categoryRepository.delete(category);
     }
 

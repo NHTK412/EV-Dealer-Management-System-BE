@@ -54,7 +54,8 @@ public class QuoteService {
         @Transactional
         public QuoteResponseDTO getQuoteById(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Quote not found with ID: " + quoteId));
                 return new QuoteResponseDTO(quote);
         }
 
@@ -77,7 +78,8 @@ public class QuoteService {
         @Transactional
         public QuoteResponseDTO deleteQuote(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Quote not found with ID: " + quoteId));
                 quoteRepository.delete(quote);
                 return new QuoteResponseDTO(quote);
         }
@@ -86,10 +88,8 @@ public class QuoteService {
         @Transactional
         public QuoteResponseDTO updateQuote(Integer quoteId, QuoteRequestDTO quoteRequestDTO) {
                 Quote quote = quoteRepository.findById(quoteId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
-                // if (quote.getStatus() != "Padding") {
-                // throw new ConflictException("Trạng thái hiện tại không được sửa");
-                // }
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Quote not found with ID: " + quoteId));
                 quote.getQuotationDetails().clear();
 
                 convertDTOtoEnity(quoteRequestDTO, quote);
@@ -103,7 +103,8 @@ public class QuoteService {
         @Transactional
         public QuoteResponseDTO updateStatusQuote(Integer quoteId, QuoteStatusEnum status) {
                 Quote quote = quoteRepository.findById(quoteId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không tồn tại"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Quote not found with ID: " + quoteId));
 
                 quote.setStatus(status);
 
@@ -244,192 +245,8 @@ public class QuoteService {
                 quote.setTotalAmount(total);
         }
 
-        // private void convertDTOtoEnity(QuoteRequestDTO quoteRequestDTO, Quote quote)
-        // {
-
-        // // quote.setEmployee(employeeRepository
-        // // .findById(quoteRequestDTO.getEmployeeId())
-        // // .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không tồn
-        // // tại")));
-
-        // quote.setCustomer(customerRepository
-        // .findById(quoteRequestDTO.getCustomerId())
-        // .orElseThrow(() -> new ResourceNotFoundException("Customer Not Found")));
-
-        // quote.setStatus(quoteRequestDTO.getStatus());
-
-        // List<Integer> vehicleTypeDetailIds =
-        // quoteRequestDTO.getQuotationDetailRequestDTOs().stream()
-        // .map((quotationDetailRequestDTO) ->
-        // quotationDetailRequestDTO.getVehicleTypeDetailId())
-        // .toList();
-
-        // List<VehicleTypeDetail> vehicleTypeDetails = vehicleTypeDetailRepository
-        // .getAllByIdWithVehicleType(vehicleTypeDetailIds);
-
-        // Map<Integer, VehicleTypeDetail> vehicleTypeDetailMap = vehicleTypeDetails
-        // .stream()
-        // .collect(Collectors.toMap(
-        // vehicleTypeDetail -> vehicleTypeDetail.getVehicleTypeDetailId(),
-        // vehicleTypeDetail -> vehicleTypeDetail));
-        // if (vehicleTypeDetailMap.size() != vehicleTypeDetailIds.size()) {
-        // throw new ResourceNotFoundException("Vehicle Type Detail Not Found");
-        // }
-
-        // for (QuotationDetailRequestDTO quotationDetailRequestDTO : quoteRequestDTO
-        // .getQuotationDetailRequestDTOs()) {
-        // QuotationDetail quotationDetail = new QuotationDetail();
-
-        // quotationDetail.setQuantity(quotationDetailRequestDTO.getQuantity());
-
-        // // quotationDetail.setDiscount(quotationDetailRequestDTO.getDiscount());
-
-        // quotationDetail.setRegistrationTax(quotationDetailRequestDTO.getRegistrationTax());
-
-        // quotationDetail.setLicensePlateFee(quotationDetailRequestDTO.getLicensePlateFee());
-
-        // quotationDetail.setRegistrartionFee(quotationDetailRequestDTO.getRegistrartionFee());
-
-        // quotationDetail.setCompulsoryInsurance(quotationDetailRequestDTO.getCompulsoryInsurance());
-
-        // quotationDetail.setMaterialInsurance(quotationDetailRequestDTO.getMaterialInsurance());
-
-        // quotationDetail.setRoadMaintenanceMees(quotationDetailRequestDTO.getRoadMaintenanceMees());
-
-        // quotationDetail.setVehicleRegistrationServiceFee(
-        // quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
-
-        // // Tính giá gốc
-        // BigDecimal basePrice = vehicleTypeDetailMap
-        // .get(quotationDetailRequestDTO.getVehicleTypeDetailId()).getPrice();
-
-        // //
-        // quotationDetail.setDiscountPercentage(quotationDetailRequestDTO.getDiscountPercentage());
-
-        // // quotationDetail.setWholesalePrice(basePrice);
-
-        // List<Promotion> promotions =
-        // promotionRepository.getPromotionsByAgencyIdAndVehicleDetailsId(
-        // quote.getEmployee().getAgency().getAgencyId(),
-        // quotationDetailRequestDTO.getVehicleTypeDetailId());
-
-        // // BigDecimal discountAmount = promotions.stream()
-        // // .map((promotion) -> {
-        // // if ("PERCENTAGE".equals(promotion.getPromotionType())) {
-        // // return basePrice.multiply(
-        // // BigDecimal.ONE.subtract(
-        // // promotion.getDiscountPercent()
-        // // .divide(BigDecimal
-        // // .valueOf(100))));
-        // // }
-        // // return basePrice.subtract(
-        // // promotion.getDiscountAmount());
-        // // })
-        // // .min(Comparator.naturalOrder())
-        // // .orElse(basePrice); // Nếu rỗng thì trả về basePrice
-
-        // Map<Promotion, BigDecimal> discountAmountMap = promotions.stream()
-        // .collect(Collectors.toMap((promotion) -> promotion,
-        // (promotion) -> {
-        // if ("PERCENTAGE".equals(promotion.getPromotionType())) {
-        // return basePrice.multiply(
-        // BigDecimal.ONE.subtract(
-        // promotion.getDiscountPercent()
-        // .divide(BigDecimal
-        // .valueOf(100))));
-        // }
-        // return basePrice.subtract(
-        // promotion.getDiscountAmount());
-        // }));
-
-        // Map.Entry<Promotion, BigDecimal> maxDiscountPromotion =
-        // discountAmountMap.entrySet().stream()
-        // .min((Map.Entry.comparingByValue())).orElse(null);
-
-        // BigDecimal discountAmount = null;
-
-        // if (maxDiscountPromotion != null) {
-        // discountAmount = maxDiscountPromotion.getValue();
-
-        // if ("PERCENTAGE".equals(maxDiscountPromotion.getKey().getPromotionType())) {
-
-        // quotationDetail.setDiscountPercentage(
-        // maxDiscountPromotion.getKey().getDiscountPercent());
-
-        // } else {
-        // quotationDetail.setDiscount(maxDiscountPromotion.getKey().getDiscountAmount());
-
-        // }
-        // } else {
-        // discountAmount = BigDecimal.valueOf(0);
-
-        // quotationDetail.setDiscount(BigDecimal.valueOf(0));
-
-        // quotationDetail.setDiscountPercentage(BigDecimal.valueOf(0));
-
-        // }
-
-        // quotationDetail.setPrice(vehicleTypeDetailMap.get(quotationDetailRequestDTO.getVehicleTypeDetailId()).getPrice());
-
-        // // BigDecimal discountPercent =
-        // // promotions.stream().findFirst().get().getDiscountPercent();
-
-        // // BigDecimal discountAmount = basePrice.multiply(
-        // // BigDecimal.ONE.subtract(discountPercent.divide(BigDecimal.valueOf(100))));
-
-        // // Tính tổng tiền cuối cùng
-        // BigDecimal totalAmount = discountAmount
-        // .add(quotationDetailRequestDTO.getRegistrationTax())
-        // .add(quotationDetailRequestDTO.getLicensePlateFee())
-        // .add(quotationDetailRequestDTO.getRegistrartionFee())
-        // .add(quotationDetailRequestDTO.getCompulsoryInsurance())
-        // .add(quotationDetailRequestDTO.getMaterialInsurance())
-        // .add(quotationDetailRequestDTO.getRoadMaintenanceMees())
-        // .add(quotationDetailRequestDTO.getVehicleRegistrationServiceFee());
-
-        // totalAmount =
-        // totalAmount.multiply(BigDecimal.valueOf(quotationDetailRequestDTO.getQuantity()));
-
-        // // .subtract(quotationDetailRequestDTO.getDiscount())
-        // // .subtract(quotationDetailRequestDTO.getDiscountValue());
-
-        // quotationDetail.setTotalAmount(totalAmount);
-
-        // // double totalAmount = (quotationDetailRequestDTO.getWholesalePrice()
-        // // * quotationDetailRequestDTO.getQuantity())
-        // // - quotationDetailRequestDTO.getDiscount()
-        // // - (quotationDetailRequestDTO.getWholesalePrice()
-        // // * quotationDetailRequestDTO.getDiscountPercentage() / 100)
-        // // + quotationDetailRequestDTO.getRegistrationTax()
-        // // + quotationDetailRequestDTO.getLicensePlateFee()
-        // // + quotationDetailRequestDTO.getRegistrartionFee()
-        // // + quotationDetailRequestDTO.getCompulsoryInsurance()
-        // // + quotationDetailRequestDTO.getMaterialInsurance()
-        // // + quotationDetailRequestDTO.getRoadMaintenanceMees()
-        // // + quotationDetailRequestDTO.getVehicleRegistrationServiceFee();
-
-        // // Gan quan he
-        // quotationDetail.setQuote(quote);
-
-        // quotationDetail
-        // .setVehicleTypeDetail(vehicleTypeDetailMap
-        // .get(quotationDetailRequestDTO.getVehicleTypeDetailId()));
-
-        // quote.getQuotationDetails().add(quotationDetail);
-        // }
-
-        // BigDecimal total = quote.getQuotationDetails()
-        // .stream()
-        // .map(QuotationDetail::getTotalAmount)
-        // .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // quote.setTotalAmount(total);
-        // }
-
         @Transactional
         public List<QuoteSummaryDTO> getAllQuotes(Pageable pageable) {
-                // return quoteRepository.findAll();
-
                 Page<Quote> quotes = quoteRepository.findAll(pageable);
 
                 return quotes.stream()

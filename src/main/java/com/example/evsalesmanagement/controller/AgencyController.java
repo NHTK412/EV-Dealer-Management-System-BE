@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 
-//daily=agency
 @RestController
 @RequestMapping("/agency")
 public class AgencyController {

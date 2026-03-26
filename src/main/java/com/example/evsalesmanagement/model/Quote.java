@@ -17,11 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-//BaoGia = Quote
 @Entity
 @Table(name = "Quote")
 public class Quote extends Base {
@@ -30,19 +27,13 @@ public class Quote extends Base {
     @Column(name = "QuoteId")
     private Integer quoteId;
 
-    // TongTien = totalAmount
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
-    // @Column(name = "NgayTaoPhieu")
-    // private LocalDateTime ngayTaoPhieu;
     @Enumerated(EnumType.STRING)
     @Column(name = "Status")
     private QuoteStatusEnum status;
 
-    // @OneToOne
-    // @JoinColumn(name = "OrderId", unique = true)
-    // private Order order;
 
     // Mới thêm quan hệ để biết ai tạo báo giá này
     @ManyToOne
@@ -80,24 +71,12 @@ public class Quote extends Base {
         this.status = status;
     }
 
-    // public Order getOrder() {
-    // return order;
-    // }
 
-    // public void setOder(Order order) {
     // this.order = order;
-    // }
 
-    // @OneToMany(mappedBy = "baoGia")
-    // private List<ChiTietBaoGia> chiTietBaoGias = new ArrayList<>();
 
-    // public LocalDateTime getNgayTaoPhieu() {
-    // return ngayTaoPhieu;
-    // }
 
-    // public void setNgayTaoPhieu(LocalDateTime ngayTaoPhieu) {
     // this.ngayTaoPhieu = ngayTaoPhieu;
-    // }
 
     public Employee getEmployee() {
         return employee;

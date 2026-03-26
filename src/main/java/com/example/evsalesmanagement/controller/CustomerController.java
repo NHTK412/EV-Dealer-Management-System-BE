@@ -37,31 +37,15 @@ public class CustomerController {
         @Autowired
         private CustomerService customerService;
 
-        // <<<<<<< HEAD
         // Lấy danh sách tất cả khách hàng - có phân trang - sắp xếp
-        // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF')")
         @GetMapping
         public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>> getAllCustomers(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "10") int size,
                         @RequestParam(required = false) String sortBy,
                         @RequestParam(required = false) String sortDir) {
-                // =======
-                // // Lấy tất cả khách hàng - có phân trang - có sort
-                // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF',
-                // 'DEALER_STAFF','ADMIN')")
-                // @GetMapping
-                // public ResponseEntity<ApiResponse<Page<CustomerResponseDTO>>>
-                // getAllCustomers(
-                // @RequestParam int page,
-                // @RequestParam int size,
-                // @RequestParam(required = false) String sortBy,
-                // @RequestParam(required = false) String sortDir) {
-                // >>>>>>> 29c2e7207eb5f529d717230bf9417c008d876d44
-
                 Pageable pageable;
 
-                // <<<<<<< HEAD
                 // Nếu không truyền sortBy hoặc sortDir → bỏ sorting
                 if (sortBy == null || sortBy.isEmpty() || sortDir == null || sortDir.isEmpty()) {
                         pageable = PageRequest.of(page - 1, size);
@@ -77,24 +61,6 @@ public class CustomerController {
 
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Get list customers successfully", customerPage));
-                // =======
-                // if (sortBy == null || sortDir == null || sortBy.isEmpty() ||
-                // sortDir.isEmpty()) {
-                // pageable = PageRequest.of(page, size);
-                // } else {
-                // Sort sort = sortDir.equalsIgnoreCase("asc")
-                // ? Sort.by(sortBy).ascending()
-                // : Sort.by(sortBy).descending();
-
-                // pageable = PageRequest.of(page, size, sort);
-                // >>>>>>> 29c2e7207eb5f529d717230bf9417c008d876d44
-                // }
-
-                // Page<CustomerResponseDTO> customerPage =
-                // customerService.getAllCustomers(pageable);
-
-                // return ResponseEntity.ok(
-                // new ApiResponse<>(true, "Get list customers successfully", customerPage));
         }
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")

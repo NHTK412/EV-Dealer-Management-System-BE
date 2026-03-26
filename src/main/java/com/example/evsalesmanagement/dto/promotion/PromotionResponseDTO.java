@@ -34,7 +34,6 @@ public class PromotionResponseDTO {
 
     private List<VehicleTypeDetailResponseDTO> vehicleTypeDetails;
 
-    // private List<AgencyResponseDTO> agencies;
     private Integer agencyId;
 
     private String agencyName;
@@ -173,13 +172,8 @@ public class PromotionResponseDTO {
         this.agencyAddress = agencyAddress;
     }
 
-    // public List<AgencyResponseDTO> getAgencies() {
-    //     return agencies;
-    // }
 
-    // public void setAgencies(List<AgencyResponseDTO> agencies) {
     //     this.agencies = agencies;
-    // }
 
     
 

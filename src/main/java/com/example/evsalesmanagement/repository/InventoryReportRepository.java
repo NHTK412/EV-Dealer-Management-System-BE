@@ -14,7 +14,6 @@ import com.example.evsalesmanagement.model.Vehicle;
 @Repository
 public interface InventoryReportRepository extends JpaRepository<Vehicle, Integer> {
 
-// <<<<<<< HEAD
     @Query("SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(" +
             "  vt.vehicleTypeId, vt.vehicleTypeName, vt.manufactureYear, " +
             "  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, " +
@@ -34,8 +33,6 @@ public interface InventoryReportRepository extends JpaRepository<Vehicle, Intege
     List<InventoryReportResponseDTO> getInventoryReportGrouped(@Param("request") InventoryReportRequestDTO request);
 
 
-// =======
-//     @Query("""
 //         SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(
 //             vt.vehicleTypeId,
 //             vt.vehicleTypeName,
@@ -61,7 +58,5 @@ public interface InventoryReportRepository extends JpaRepository<Vehicle, Intege
 //         ORDER BY vt.vehicleTypeName, vtd.version, a.agencyName
 //         """)
 //     List<InventoryReportResponseDTO> getInventoryReportGrouped(
-//             @Param("request") InventoryReportRequestDTO request
 //     );
-// >>>>>>> 29c2e7207eb5f529d717230bf9417c008d876d44
 }

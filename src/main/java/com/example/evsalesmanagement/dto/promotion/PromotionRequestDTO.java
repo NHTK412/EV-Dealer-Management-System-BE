@@ -29,7 +29,6 @@ public class PromotionRequestDTO {
 
     private List<Integer> vehicleTypeDetailsId;
 
-    // private List<Integer> agencysId;
 
     public PromotionRequestDTO() {
     }
@@ -114,12 +113,7 @@ public class PromotionRequestDTO {
         this.vehicleTypeDetailsId = vehicleTypeDetailsId;
     }
 
-    // public List<Integer> getAgencysId() {
-    //     return agencysId;
-    // }
 
-    // public void setAgencysId(List<Integer> agencysId) {
     //     this.agencysId = agencysId;
-    // }
 
 }

@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-// import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
-// import com.example.evsalesmanagement.dto.AgencyDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionRequestDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionResponseDTO;
 import com.example.evsalesmanagement.dto.promotion.PromotionSummaryDTO;
@@ -60,23 +58,6 @@ public class PromotionService {
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
                                                                 vehicleTypeDetail))
                                                 .toList());
-                // promotionResponseDTO.setAgencies(
-                // promotion.getAgencies()
-                // .stream()
-                // .map(agency -> new AgencyResponseDTO(agency))
-                // .toList());
-
-                // KhuyenMaiChiTietDTO khuyenMaiChiTiet = new KhuyenMaiChiTietDTO(khuyenMai);
-                // khuyenMaiChiTiet.setChiTietLoaiXes(
-                // khuyenMai.getChiTietLoaiXes()
-                // .stream()
-                // .map(ctlx -> new ChiTietLoaiXeDTO(ctlx))
-                // .toList());
-                // khuyenMaiChiTiet.setDaiLys(
-                // khuyenMai.getDaiLys()
-                // .stream()
-                // .map(daiLy -> new DaiLyDTO(daiLy))
-                // .toList());
 
                 return promotionResponseDTO;
         }
@@ -113,7 +94,6 @@ public class PromotionService {
 
                 newPromotion.setAgency(agencyRepository.findById(agencyId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found")));
-                // newPromotion.setAgencies(agencyRepository.findAllById(promotionRequestDTO.getAgencysId()));
                 promotionRepository.save(newPromotion);
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(newPromotion);
 
@@ -124,15 +104,7 @@ public class PromotionService {
                                                                 vehicleTypeDetail))
                                                 .toList());
 
-                // promotionResponseDTO.setAgencies(
-                // newPromotion.getAgencies()
-                // .stream()
-                // .map(agency -> new AgencyResponseDTO(agency))
-                // .toList());
-
                 return promotionResponseDTO;
-
-                // return
         }
 
         @CacheEvict(value = "promotion", key = "#promotionId")
@@ -140,7 +112,8 @@ public class PromotionService {
         public PromotionResponseDTO deletePromotion(Integer promotionId) {
 
                 Promotion promotion = promotionRepository.findById(promotionId)
-                                .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Promotion not found with ID: " + promotionId));
 
                 PromotionResponseDTO promotionResponseDTO = new PromotionResponseDTO(promotion);
 
@@ -150,12 +123,6 @@ public class PromotionService {
                                                 .map(vehicleTypeDetail -> new VehicleTypeDetailResponseDTO(
                                                                 vehicleTypeDetail))
                                                 .toList());
-
-                // promotionResponseDTO.setAgencies(
-                // promotion.getAgencies()
-                // .stream()
-                // .map(agency -> new AgencyResponseDTO(agency))
-                // .toList());
 
                 promotionRepository.deleteById(promotionId);
 
@@ -168,7 +135,8 @@ public class PromotionService {
                         PromotionRequestDTO promotion) {
 
                 Promotion updatePromotion = promotionRepository.findById(promotionId)
-                                .orElseThrow(() -> new RuntimeException("Không tìm thấy KhuyenMai"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Promotion not found with ID: " + promotionId));
 
                 updatePromotion.setPromotionName(promotion.getPromotionName());
 
@@ -191,9 +159,6 @@ public class PromotionService {
 
                 updatePromotion.setVehicleDetails(
                                 vehicleTypeDetailRepository.findAllById(promotion.getVehicleTypeDetailsId()));
-                // updatePromotion.setAgencies(agencyRepository.findAllById(promotion.getAgencysId()));
-
-                // updatePromotion.setAgency(agencyRepository.findById(promotion));
                 updatePromotion.setAgency(agencyRepository.findById(agencyId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Agency Not Found")));
 
@@ -205,14 +170,6 @@ public class PromotionService {
                                                 .map(vehicleTypeDetails -> new VehicleTypeDetailResponseDTO(
                                                                 vehicleTypeDetails))
                                                 .toList());
-
-                // promotionResponseDTO.setAgencies(
-                // updatePromotion.getAgencies()
-                // .stream()
-                // .map(agency -> new AgencyResponseDTO(agency))
-                // .toList());
-
-                // return promotionRepository.save(updatePromotion);
                 return promotionResponseDTO;
         }
 

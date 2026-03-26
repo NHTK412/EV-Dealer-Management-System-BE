@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//lichHenlaiThu = TestDriveAppointment
 @Entity
 @Table(name = "TestDriveAppointment")
 public class TestDriveAppointment extends Base {
@@ -44,6 +43,7 @@ public class TestDriveAppointment extends Base {
     @ManyToOne
     @JoinColumn(name = "VehicleId")
     private Vehicle vehicle;
+
 
     public Integer getTestDriveAppointmentId() {
         return testDriveAppointmentId;
