@@ -52,8 +52,8 @@ public class AuthService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String code = encoder.encode(password);
-        System.out.println(code);
+        // String code = encoder.encode(password);
+        // System.out.println(code);
 
         // if (!employee.getPassword().equals(password)) {
         if (!encoder.matches(password, employee.getPassword())) {

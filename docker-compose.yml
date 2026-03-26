@@ -1,0 +1,59 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: evm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: evm-db
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  
+  redis:
+    image: redis:7.4-alpine
+    container_name: evm-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: evm-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_MYSQL_URL: jdbc:mysql://mysql:3306/evm-db?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DATABASE_MYSQL_USER: root
+      DATABASE_MYSQL_PASSWORD: root123
+      # EMAIL_USERNAME: 
+      # EMAIL_PASSWORD:
+      JWT_SECRET_KEY: akslfjalskfjalkfjwofijasfamlkfmalf
+      REDIS_HOST: redis
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  redis_data:
