@@ -167,8 +167,8 @@ public class QuoteService {
                                                         quote.getEmployee().getAgency().getAgencyId(),
                                                         dto.getVehicleTypeDetailId());
 
-                        // Tính giá sau khuyến mãi
-                        Map<Promotion, BigDecimal> discountAmountMap = promotions.stream()
+                        // Tính số tiền giảm giá thực tế
+                        Map<Promotion, BigDecimal> actualDiscountMap = promotions.stream()
                                         .collect(Collectors.toMap(
                                                         promotion -> promotion,
                                                         promotion -> {
@@ -176,25 +176,25 @@ public class QuoteService {
                                                                 if ("PERCENTAGE".equals(promotion.getPromotionType())) {
                                                                         BigDecimal percent = n(
                                                                                         promotion.getDiscountPercent());
-                                                                        return basePrice.multiply(
-                                                                                        BigDecimal.ONE.subtract(percent
-                                                                                                        .divide(BigDecimal
-                                                                                                                        .valueOf(100))));
+                                                                        return basePrice.multiply(percent)
+                                                                                        .divide(BigDecimal
+                                                                                                        .valueOf(100));
                                                                 }
 
-                                                                BigDecimal amount = n(promotion.getDiscountAmount());
-                                                                return basePrice.subtract(amount);
+                                                                return n(promotion.getDiscountAmount());
                                                         }));
 
-                        // Tìm mức giá thấp nhất (best discount)
-                        Map.Entry<Promotion, BigDecimal> maxDiscountPromotion = discountAmountMap.entrySet().stream()
-                                        .min(Map.Entry.comparingByValue())
+                        // Tìm mức giảm giá cao nhất (best discount)
+                        Map.Entry<Promotion, BigDecimal> maxDiscountPromotion = actualDiscountMap.entrySet().stream()
+                                        .max(Map.Entry.comparingByValue())
                                         .orElse(null);
 
                         BigDecimal discountAmount;
+                        BigDecimal priceAfterDiscount;
 
                         if (maxDiscountPromotion != null) {
                                 discountAmount = n(maxDiscountPromotion.getValue());
+                                priceAfterDiscount = basePrice.subtract(discountAmount);
 
                                 Promotion best = maxDiscountPromotion.getKey();
 
@@ -206,14 +206,15 @@ public class QuoteService {
 
                         } else {
                                 discountAmount = BigDecimal.ZERO;
+                                priceAfterDiscount = basePrice;
                                 quotationDetail.setDiscount(BigDecimal.ZERO);
                                 quotationDetail.setDiscountPercentage(BigDecimal.ZERO);
                         }
 
                         quotationDetail.setPrice(basePrice);
 
-                        // Tính tổng
-                        BigDecimal totalAmount = discountAmount
+                        // Tính tổng: (giá sau giảm + các phí) × số lượng
+                        BigDecimal totalAmount = priceAfterDiscount
                                         .add(n(dto.getRegistrationTax()))
                                         .add(n(dto.getLicensePlateFee()))
                                         .add(n(dto.getRegistrartionFee()))

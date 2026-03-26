@@ -4,6 +4,8 @@ import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestD
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryResponseDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliverySummaryDTO;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
+import com.example.evsalesmanagement.model.Customer;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.VehicleDeliveryService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,10 +56,14 @@ public class VehicleDeliveryController {
     public ResponseEntity<ApiResponse<List<VehicleDeliverySummaryDTO>>> getAllByAgency(
             @PathVariable Integer agencyId,
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+            @RequestParam(defaultValue = "10") @Positive Integer size,
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<VehicleDeliverySummaryDTO> deliveries = vehicleDeliveryService.getAllByAgencyId(agencyId, pageable);
+
+        Integer agId = customerUserDetails.getAgencyId();
+
+        List<VehicleDeliverySummaryDTO> deliveries = vehicleDeliveryService.getAllByAgencyId(agId, pageable);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách đơn giao hàng thành công", deliveries));
     }
@@ -66,10 +73,13 @@ public class VehicleDeliveryController {
     @GetMapping("/agency/{agencyId}/{vehicleDeliveryId}")
     public ResponseEntity<ApiResponse<VehicleDeliveryResponseDTO>> getByIdAndAgency(
             @PathVariable Integer agencyId,
-            @PathVariable Integer vehicleDeliveryId) {
+            @PathVariable Integer vehicleDeliveryId,
+            @AuthenticationPrincipal CustomerUserDetails customerUserDetails) {
+
+        Integer agId = customerUserDetails.getAgencyId();
 
         VehicleDeliveryResponseDTO delivery = vehicleDeliveryService
-                .getByIdAndAgencyId(vehicleDeliveryId, agencyId);
+                .getByIdAndAgencyId(vehicleDeliveryId, agId);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết đơn giao hàng thành công", delivery));
     }

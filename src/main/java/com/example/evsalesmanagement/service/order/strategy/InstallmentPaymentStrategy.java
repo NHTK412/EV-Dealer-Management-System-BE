@@ -22,11 +22,11 @@ public class InstallmentPaymentStrategy implements PaymentStrategy {
     @Autowired
     private PaymentPlanRepository paymentPlanRepository;
 
-
     private Integer paymentPlanId;
 
-    // public InstallmentPaymentStrategy(PaymentPlanRepository paymentPlanRepository) {
-    //     this.paymentPlanRepository = paymentPlanRepository;
+    // public InstallmentPaymentStrategy(PaymentPlanRepository
+    // paymentPlanRepository) {
+    // this.paymentPlanRepository = paymentPlanRepository;
     // }
 
     public InstallmentPaymentStrategy withPaymentPlanId(Integer paymentPlanId) {
@@ -37,7 +37,7 @@ public class InstallmentPaymentStrategy implements PaymentStrategy {
     @Override
     public void applyPayment(Order order) {
         PaymentPlan paymentPlan = paymentPlanRepository.findById(paymentPlanId)
-            .orElseThrow(() -> new ResourceNotFoundException("PaymentPlan Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("PaymentPlan Not Found"));
 
         BigDecimal total = order.getTotalAmount();
         BigDecimal interestRate = paymentPlan.getInterestRate();
@@ -62,21 +62,21 @@ public class InstallmentPaymentStrategy implements PaymentStrategy {
         payment.setNumberCycle(0);
         payment.setAmount(downPayment);
         payment.setDueDate(LocalDateTime.now());
-        payment.setPaymentDate(LocalDateTime.now());
-        payment.setStatus(PaymentStatusEnum.PAID);
+        payment.setStatus(PaymentStatusEnum.UNPAID);
         payment.setPenaltyAmount(BigDecimal.ZERO);
         payment.setOrder(order);
-        
+
         order.getPayments().add(payment);
     }
 
-    private BigDecimal calculateInstallmentAmount(BigDecimal loanAmount, BigDecimal interestRate, int numberOfInstallments) {
+    private BigDecimal calculateInstallmentAmount(BigDecimal loanAmount, BigDecimal interestRate,
+            int numberOfInstallments) {
         BigDecimal r = interestRate.divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP);
         BigDecimal onePlusR = r.add(BigDecimal.ONE);
         BigDecimal pow = onePlusR.pow(numberOfInstallments);
         BigDecimal numerator = loanAmount.multiply(r).multiply(pow);
         BigDecimal denominator = pow.subtract(BigDecimal.ONE);
-        
+
         return numerator.divide(denominator, 2, RoundingMode.HALF_UP);
     }
 
@@ -89,7 +89,7 @@ public class InstallmentPaymentStrategy implements PaymentStrategy {
             payment.setStatus(PaymentStatusEnum.UNPAID);
             payment.setPenaltyAmount(BigDecimal.ZERO);
             payment.setOrder(order);
-            
+
             order.getPayments().add(payment);
         }
     }

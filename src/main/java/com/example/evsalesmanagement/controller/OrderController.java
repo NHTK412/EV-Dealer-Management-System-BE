@@ -53,8 +53,7 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
 
-    // @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN',
-    // 'DEALER_STAFF')")
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER','DEALER_STAFF')")
     @PostMapping("/from-quotation")
     // public ResponseEntity<ApiResponse<OrderResponseDTO>>
     // createOrderFromQuotation(
@@ -81,7 +80,7 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
     }
 
-
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEALER_STAFF')")
     @PatchMapping("{orderId}/cancel")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> cancelOrderById(@PathVariable Integer orderId) {
 
@@ -95,7 +94,7 @@ public class OrderController {
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
             @RequestParam int page,
             @RequestParam int size,
-        @RequestParam(required = false) String customerPhone){
+            @RequestParam(required = false) String customerPhone) {
 
         Integer agencyId = customerUserDetails.getAgencyId();
 
@@ -125,14 +124,17 @@ public class OrderController {
     }
 
     // @PatchMapping("/{orderId}/process-payment")
-    // public ResponseEntity<ApiResponse<OrderResponseDTO>> updatePaymentStatus(@PathVariable Integer orderId,
-    //         @RequestBody PaymentRequestDTO paymentRequestDTO) {
+    // public ResponseEntity<ApiResponse<OrderResponseDTO>>
+    // updatePaymentStatus(@PathVariable Integer orderId,
+    // @RequestBody PaymentRequestDTO paymentRequestDTO) {
 
-    //     OrderResponseDTO orderResponseDTO = orderService.updatePaymentStatus(orderId, paymentRequestDTO);
+    // OrderResponseDTO orderResponseDTO = orderService.updatePaymentStatus(orderId,
+    // paymentRequestDTO);
 
-    //     return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
+    // return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
     // }
 
+    @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrder(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
@@ -146,6 +148,7 @@ public class OrderController {
 
     }
 
+    @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEALER_STAFF')")
     @GetMapping("/customer")
     public ResponseEntity<ApiResponse<List<OrderSummaryDTO>>> getOrderByCustomer(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails, @RequestParam Integer customerId,

@@ -32,7 +32,6 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    // Lấy tất cả danh mục với phân trang
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> getAllCategories(
@@ -43,7 +42,6 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách danh mục thành công", response));
     }
 
-    // Lấy danh mục theo trạng thái
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @GetMapping("/status/{status}")
     public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> getCategoriesByStatus(
@@ -53,7 +51,6 @@ public class CategoryController {
                 .ok(new ApiResponse<>(true, "Lấy danh sách danh mục theo trạng thái thành công", response));
     }
 
-    // Lấy danh mục theo ID
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @GetMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> getCategoryById(@PathVariable Integer categoryId) {
@@ -61,7 +58,6 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Lấy thông tin danh mục thành công", response));
     }
 
-    // Tạo mới danh mục
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> createCategory(
@@ -70,7 +66,6 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Tạo danh mục thành công", response));
     }
 
-    // Cập nhật danh mục
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> updateCategory(
@@ -80,7 +75,6 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Cập nhật danh mục thành công", response));
     }
 
-    // Xóa mềm - chuyển sang INACTIVE
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> deleteCategory(@PathVariable Integer categoryId) {
@@ -88,7 +82,6 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Xóa danh mục thành công", response));
     }
 
-    // Xóa vĩnh viễn (nếu cần)
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{categoryId}/permanent")
     public ResponseEntity<ApiResponse<Void>> permanentDeleteCategory(@PathVariable Integer categoryId) {

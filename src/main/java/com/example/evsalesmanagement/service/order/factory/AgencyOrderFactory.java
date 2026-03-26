@@ -127,7 +127,7 @@ public class AgencyOrderFactory implements OrderFactory {
     private Map<Integer, AgencyWholesalePrice> getWholesalePriceWithMinQuantity(
             Integer agencyId,
             java.util.Set<Integer> vehicleTypeDetailIds) {
-        
+
         List<AgencyWholesalePrice> wholesalePrices = agencyWholesalePriceRepository
                 .findByAgency_AgencyIdAndVehicleTypeDetail_VehicleTypeDetailIdIn(agencyId, vehicleTypeDetailIds);
 
@@ -148,7 +148,7 @@ public class AgencyOrderFactory implements OrderFactory {
         for (VehicleTypeDetail vehicleTypeDetail : vehicleTypeDetails) {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setVehicleTypeDetail(vehicleTypeDetail);
-            
+
             Integer quantity = vehicleTypeDetailMap.get(vehicleTypeDetail.getVehicleTypeDetailId());
             orderDetail.setQuantity(quantity);
 
@@ -178,7 +178,7 @@ public class AgencyOrderFactory implements OrderFactory {
 
         if (wholesalePrice != null) {
             Integer minimumQuantity = wholesalePrice.getMinimumQuantity();
-            
+
             // Kiểm tra số lượng đặt hàng có đạt số lượng tối thiểu không
             if (minimumQuantity != null && orderQuantity >= minimumQuantity) {
                 // Đạt số lượng tối thiểu → dùng giá sỉ
