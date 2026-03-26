@@ -14,6 +14,7 @@ import com.example.evsalesmanagement.model.Vehicle;
 @Repository
 public interface InventoryReportRepository extends JpaRepository<Vehicle, Integer> {
 
+// <<<<<<< HEAD
     @Query("SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(" +
             "  vt.vehicleTypeId, vt.vehicleTypeName, vt.manufactureYear, " +
             "  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, " +
@@ -33,4 +34,34 @@ public interface InventoryReportRepository extends JpaRepository<Vehicle, Intege
     List<InventoryReportResponseDTO> getInventoryReportGrouped(@Param("request") InventoryReportRequestDTO request);
 
 
+// =======
+//     @Query("""
+//         SELECT new com.example.evsalesmanagement.dto.inventoryreport.InventoryReportResponseDTO(
+//             vt.vehicleTypeId,
+//             vt.vehicleTypeName,
+//             vt.manufactureYear,
+//             vtd.vehicleTypeDetailId,
+//             vtd.version,
+//             vtd.color,
+//             vtd.price,
+//             a.agencyName,
+//             COUNT(v)
+//         )
+//         FROM Vehicle v
+//         LEFT JOIN v.agency a
+//         LEFT JOIN v.vehicleTypeDetail vtd
+//         LEFT JOIN v.vehicleTypeDetail.vehicleType vt
+//         WHERE (:#{#request.agencyId} IS NULL OR a.agencyId = :#{#request.agencyId})
+//           AND (:#{#request.vehicleTypeId} IS NULL OR vt.vehicleTypeId = :#{#request.vehicleTypeId})
+//           AND (:#{#request.status} IS NULL OR v.status = :#{#request.status})
+//           AND (:#{#request.fromDate} IS NULL OR v.createAt >= :#{#request.fromDate})
+//           AND (:#{#request.toDate} IS NULL OR v.createAt <= :#{#request.toDate})
+//         GROUP BY vt.vehicleTypeId, vt.vehicleTypeName, vt.manufactureYear,
+//                  vtd.vehicleTypeDetailId, vtd.version, vtd.color, vtd.price, a.agencyName
+//         ORDER BY vt.vehicleTypeName, vtd.version, a.agencyName
+//         """)
+//     List<InventoryReportResponseDTO> getInventoryReportGrouped(
+//             @Param("request") InventoryReportRequestDTO request
+//     );
+// >>>>>>> 29c2e7207eb5f529d717230bf9417c008d876d44
 }

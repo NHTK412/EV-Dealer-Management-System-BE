@@ -34,33 +34,37 @@ public class InventoryReportController {
     @Autowired
     private InventoryReportService inventoryReportService;
 
-    // GET - Lấy báo cáo tồn kho JSON
+
+    // Lấy báo cáo tồn kho JSON
     @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportDTO(
-            @Valid @ModelAttribute InventoryReportRequestDTO request) {
+            @ModelAttribute InventoryReportRequestDTO request) {
 
         List<InventoryReportResponseDTO> report = inventoryReportService.getInventoryReport(request);
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
-    // GET - Xuất báo cáo tồn kho Excel
+
+    // Xuất báo cáo tồn kho Excel
     @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @GetMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReport(
-            @Valid @ModelAttribute InventoryReportRequestDTO request) {
+            @ModelAttribute InventoryReportRequestDTO request) {
 
         byte[] excelData = inventoryReportService.exportInventoryReportToExcel(request);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment",
+        headers.setContentDispositionFormData(
+                "attachment",
                 "BaoCaoTonKho_" + System.currentTimeMillis() + ".xlsx");
 
         return ResponseEntity.ok().headers(headers).body(excelData);
     }
 
-    // POST - Lấy báo cáo tồn kho JSON
+
+    // Lấy báo cáo tồn kho JSON
     @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @PostMapping("/inventory")
     public ResponseEntity<ApiResponse<List<InventoryReportResponseDTO>>> getInventoryReportPost(
@@ -70,7 +74,8 @@ public class InventoryReportController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Get inventory report successfully", report));
     }
 
-    // POST - Xuất báo cáo tồn kho Excel
+
+    // Xuất báo cáo tồn kho Excel
     @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'ADMIN', 'DEADLER_STAFF')")
     @PostMapping("/inventory/export")
     public ResponseEntity<byte[]> exportInventoryReportPost(
@@ -80,7 +85,8 @@ public class InventoryReportController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment",
+        headers.setContentDispositionFormData(
+                "attachment",
                 "BaoCaoTonKho_" + System.currentTimeMillis() + ".xlsx");
 
         return ResponseEntity.ok().headers(headers).body(excelData);

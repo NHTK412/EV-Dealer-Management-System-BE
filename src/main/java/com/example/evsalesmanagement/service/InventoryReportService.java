@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -34,6 +35,9 @@ import com.example.evsalesmanagement.model.Vehicle;
 import com.example.evsalesmanagement.repository.InventoryReportRepository;
 import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class InventoryReportService {
 
@@ -62,48 +66,69 @@ public class InventoryReportService {
     }
 
     public List<InventoryReportResponseDTO> getInventoryReport(InventoryReportRequestDTO request) {
-
         if (request.getToDate() != null) {
             request.setToDate(request.getToDate().withHour(23).withMinute(59).withSecond(59));
         }
-
-        return inventoryReportRepository.getInventoryReportGrouped(request);
+        
+        List<InventoryReportResponseDTO> result = inventoryReportRepository.getInventoryReportGrouped(request);
+        log.info("Found {} records for inventory report", result.size());
+        
+        return result;
     }
 
     public byte[] exportInventoryReportToExcel(InventoryReportRequestDTO request) {
         try {
+            // Get data first
             List<InventoryReportResponseDTO> reportData = getInventoryReport(request);
+            log.info("Exporting {} records to Excel", reportData.size());
 
             try (Workbook workbook = new XSSFWorkbook();
                     ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
                 Sheet sheet = workbook.createSheet("Inventory Report");
+                
+                // Tạo các kiểu cell styles
                 CellStyle headerStyle = createHeaderStyle(workbook);
                 CellStyle titleStyle = createTitleStyle(workbook);
                 CellStyle currencyStyle = createCurrencyStyle(workbook);
                 CellStyle numberStyle = createNumberStyle(workbook);
-                CellStyle totalStyle = createTotalStyle(workbook);
+                CellStyle totalLabelStyle = createTotalLabelStyle(workbook);
+                CellStyle totalNumberStyle = createTotalNumberStyle(workbook);
+                CellStyle totalCurrencyStyle = createTotalCurrencyStyle(workbook);
 
                 int rowNum = 0;
 
+                // Tiêu đề báo cáo
                 Row titleRow = sheet.createRow(rowNum++);
                 Cell titleCell = titleRow.createCell(0);
-                titleCell.setCellValue("INVENTORY REPORT");
+                titleCell.setCellValue("BÁO CÁO TỒN KHO");
                 titleCell.setCellStyle(titleStyle);
-                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 8));
+                
+                // Tạo các ô trống
+                for (int i = 1; i <= 8; i++) {
+                    titleRow.createCell(i);
+                }
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
 
+                // Dòng ngày
                 Row dateRow = sheet.createRow(rowNum++);
                 Cell dateCell = dateRow.createCell(0);
-                dateCell.setCellValue("Report date: " +
-                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 8));
+                String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                dateCell.setCellValue("Ngày xuất báo cáo: " + currentDate);
+                
+                // Tạo các ô trống
+                for (int i = 1; i <= 8; i++) {
+                    dateRow.createCell(i);
+                }
+                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 8));
 
                 rowNum++;
 
+                // Dòng tiêu đề
                 Row headerRow = sheet.createRow(rowNum++);
                 String[] headers = {
-                        "STT", "Name car", "Manufacture year", "Version",
-                        "Color", "Price", "Agency", "Quantity", "Total value"
+                    "STT", "Tên xe", "Năm SX", "Phiên bản",
+                    "Màu sắc", "Giá bán", "Đại lý", "Số lượng", "Tổng giá trị"
                 };
 
                 for (int i = 0; i < headers.length; i++) {
@@ -112,66 +137,121 @@ public class InventoryReportService {
                     cell.setCellStyle(headerStyle);
                 }
 
+                // Dòng dữ liệu
                 int stt = 1;
                 BigDecimal grandTotal = BigDecimal.ZERO;
                 long totalQuantity = 0L;
 
-                for (InventoryReportResponseDTO data : reportData) {
-                    Row row = sheet.createRow(rowNum++);
+                if (reportData.isEmpty()) {
+                    log.warn("No data found for export");
+                    Row noDataRow = sheet.createRow(rowNum++);
+                    Cell noDataCell = noDataRow.createCell(0);
+                    noDataCell.setCellValue("Không có dữ liệu");
+                    sheet.addMergedRegion(new CellRangeAddress(rowNum - 1, rowNum - 1, 0, 8));
+                } else {
+                    for (InventoryReportResponseDTO data : reportData) {
+                        Row row = sheet.createRow(rowNum++);
 
-                    row.createCell(0).setCellValue(stt++);
-                    row.createCell(1).setCellValue(data.getVehicleTypeName());
-                    row.createCell(2).setCellValue(data.getManufactureYear() != null ? data.getManufactureYear() : 0);
-                    row.createCell(3).setCellValue(data.getVersion() != null ? data.getVersion() : "");
-                    row.createCell(4).setCellValue(data.getColor() != null ? data.getColor() : "");
+                        // STT
+                        Cell sttCell = row.createCell(0);
+                        sttCell.setCellValue(stt++);
+                        
+                        // Vehicle Type Name
+                        Cell nameCell = row.createCell(1);
+                        nameCell.setCellValue(data.getVehicleTypeName() != null ? data.getVehicleTypeName() : "");
+                        
+                        // Manufacture Year
+                        Cell yearCell = row.createCell(2);
+                        yearCell.setCellValue(data.getManufactureYear() != null ? data.getManufactureYear() : 0);
+                        
+                        // Version
+                        Cell versionCell = row.createCell(3);
+                        versionCell.setCellValue(data.getVersion() != null ? data.getVersion() : "");
+                        
+                        // Color
+                        Cell colorCell = row.createCell(4);
+                        colorCell.setCellValue(data.getColor() != null ? data.getColor() : "");
 
-                    Cell priceCell = row.createCell(5);
-                    if (data.getPrice() != null) {
-                        priceCell.setCellValue(data.getPrice().doubleValue());
-                        priceCell.setCellStyle(currencyStyle);
+                        // Price
+                        Cell priceCell = row.createCell(5);
+                        if (data.getPrice() != null) {
+                            priceCell.setCellValue(data.getPrice().doubleValue());
+                            priceCell.setCellStyle(currencyStyle);
+                        } else {
+                            priceCell.setCellValue(0);
+                            priceCell.setCellStyle(currencyStyle);
+                        }
+
+                        // Agency Name
+                        Cell agencyCell = row.createCell(6);
+                        agencyCell.setCellValue(data.getAgencyName() != null ? data.getAgencyName() : "Chưa phân bổ");
+
+                        // Quantity
+                        Cell qtyCell = row.createCell(7);
+                        if (data.getTotalQuantity() != null) {
+                            qtyCell.setCellValue(data.getTotalQuantity());
+                            qtyCell.setCellStyle(numberStyle);
+                            totalQuantity += data.getTotalQuantity();
+                        } else {
+                            qtyCell.setCellValue(0);
+                            qtyCell.setCellStyle(numberStyle);
+                        }
+
+                        // Total Value
+                        Cell totalCell = row.createCell(8);
+                        if (data.getTotalValue() != null) {
+                            totalCell.setCellValue(data.getTotalValue().doubleValue());
+                            totalCell.setCellStyle(currencyStyle);
+                            grandTotal = grandTotal.add(data.getTotalValue());
+                        } else {
+                            totalCell.setCellValue(0);
+                            totalCell.setCellStyle(currencyStyle);
+                        }
                     }
 
-                    row.createCell(6).setCellValue(data.getAgencyName() != null ? data.getAgencyName() : "Unassigned");
-
-                    Cell qtyCell = row.createCell(7);
-                    if (data.getTotalQuantity() != null) {
-                        qtyCell.setCellValue(data.getTotalQuantity());
-                        qtyCell.setCellStyle(numberStyle);
-                        totalQuantity += data.getTotalQuantity();
+                    // Tổng hợp dòng
+                    Row totalRow = sheet.createRow(rowNum);
+                    
+                    Cell totalLabelCell = totalRow.createCell(0);
+                    totalLabelCell.setCellValue("TỔNG CỘNG");
+                    totalLabelCell.setCellStyle(totalLabelStyle);
+                    
+                    for (int i = 1; i <= 6; i++) {
+                        Cell cell = totalRow.createCell(i);
+                        cell.setCellStyle(totalLabelStyle);
                     }
+                    
+                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 6));
 
-                    Cell totalCell = row.createCell(8);
-                    if (data.getTotalValue() != null) {
-                        totalCell.setCellValue(data.getTotalValue().doubleValue());
-                        totalCell.setCellStyle(currencyStyle);
-                        grandTotal = grandTotal.add(data.getTotalValue());
-                    }
+                    // Tổng số lượng
+                    Cell totalQtyCell = totalRow.createCell(7);
+                    totalQtyCell.setCellValue(totalQuantity);
+                    totalQtyCell.setCellStyle(totalNumberStyle);
+
+                    // Tổng giá trị
+                    Cell grandTotalCell = totalRow.createCell(8);
+                    grandTotalCell.setCellValue(grandTotal.doubleValue());
+                    grandTotalCell.setCellStyle(totalCurrencyStyle);
                 }
 
-                Row totalRow = sheet.createRow(rowNum);
-                Cell totalLabelCell = totalRow.createCell(0);
-                totalLabelCell.setCellValue("SUMMARY");
-                totalLabelCell.setCellStyle(totalStyle);
-                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(rowNum, rowNum, 0, 6));
-
-                Cell totalQtyCell = totalRow.createCell(7);
-                totalQtyCell.setCellValue(totalQuantity);
-                totalQtyCell.setCellStyle(totalStyle);
-
-                Cell grandTotalCell = totalRow.createCell(8);
-                grandTotalCell.setCellValue(grandTotal.doubleValue());
-                grandTotalCell.setCellStyle(totalStyle);
-
+                // Tự động điều chỉnh kích thước cột
                 for (int i = 0; i < headers.length; i++) {
                     sheet.autoSizeColumn(i);
+                    int currentWidth = sheet.getColumnWidth(i);
+                    sheet.setColumnWidth(i, currentWidth + 512);
                 }
 
+                // Ghi dữ liệu ra OutputStream
                 workbook.write(out);
-                return out.toByteArray();
+                byte[] result = out.toByteArray();
+                log.info("Excel file created successfully, size: {} bytes", result.length);
+                
+                return result;
             }
 
         } catch (Exception e) {
-            throw new InternalServerException("Error when exporting inventory report", e);
+            log.error("Error exporting inventory report to Excel", e);
+            throw new InternalServerException("Lỗi khi xuất báo cáo tồn kho: " + e.getMessage(), e);
         }
     }
 
@@ -221,7 +301,43 @@ public class InventoryReportService {
         return style;
     }
 
-    private CellStyle createTotalStyle(Workbook workbook) {
+    private CellStyle createTotalLabelStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 12);
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderTop(BorderStyle.DOUBLE);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        return style;
+    }
+
+    private CellStyle createTotalNumberStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 12);
+        style.setFont(font);
+        DataFormat format = workbook.createDataFormat();
+        style.setDataFormat(format.getFormat("#,##0"));
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderTop(BorderStyle.DOUBLE);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        return style;
+    }
+
+    private CellStyle createTotalCurrencyStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();
         font.setBold(true);
@@ -230,9 +346,13 @@ public class InventoryReportService {
         DataFormat format = workbook.createDataFormat();
         style.setDataFormat(format.getFormat("#,##0 ₫"));
         style.setAlignment(HorizontalAlignment.RIGHT);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
         style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setBorderTop(BorderStyle.DOUBLE);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
         return style;
     }
 }

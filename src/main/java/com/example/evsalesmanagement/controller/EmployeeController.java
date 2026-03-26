@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-// import org.springframework.security.core.context.SecurityContext;
-// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
-
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.EmployeeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -43,7 +39,7 @@ public class EmployeeController {
         private EmployeeService employeeService;
 
         // Lấy danh sách tất cả nhân viên - có phân trang - sắp xếp
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping
         public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getAllEmployees(
                         @RequestParam int page,
@@ -63,7 +59,7 @@ public class EmployeeController {
         }
 
         // Lấy thông tin chi tiết một nhân viên theo ID
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/{employeeId}")
         public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Integer employeeId) {
                 EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
@@ -72,7 +68,7 @@ public class EmployeeController {
         }
 
         // Tạo nhân viên mới
-        @PreAuthorize("hasAnyRole('ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @PostMapping
         public ResponseEntity<ApiResponse<?>> createEmployee(
                         @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO,
@@ -93,7 +89,7 @@ public class EmployeeController {
         }
 
         // Cập nhật thông tin nhân viên
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @PutMapping("/{employeeId}")
         public ResponseEntity<ApiResponse<?>> updateEmployee(
                         @PathVariable Integer employeeId,
@@ -115,7 +111,7 @@ public class EmployeeController {
         }
 
         // Xóa nhân viên theo ID
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @DeleteMapping("/{employeeId}")
         public ResponseEntity<ApiResponse<Void>> deleteEmployee(@PathVariable Integer employeeId) {
                 employeeService.deleteEmployee(employeeId);
@@ -123,61 +119,8 @@ public class EmployeeController {
                                 new ApiResponse<>(true, "Employee deleted successfully", null));
         }
 
-        // // Lấy danh sách nhân viên theo chức vụ - phân trang
-        // @GetMapping("/by-position")
-
-        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>>
-        // getEmployeesByPosition(
-        // @RequestParam String position,
-        // @RequestParam int page,
-        // @RequestParam int size) {
-
-        // Pageable pageable = PageRequest.of(page, size);
-        // Page<EmployeeResponseDTO> employeePage =
-        // employeeService.getEmployeesByPosition(position, pageable);
-
-        // return ResponseEntity.ok(
-        // new ApiResponse<>(true, "Get employees by position successfully",
-        // employeePage));
-        // }
-
-        // // Lấy danh sách nhân viên theo đại lý - phân trang
-        // @GetMapping("/agencies/{agencyId}")
-        // public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>>
-        // getEmployeesByAgency(
-        // @PathVariable Integer agencyId,
-        // @RequestParam int page,
-        // @RequestParam int size) {
-
-        // Pageable pageable = PageRequest.of(page, size);
-        // Page<EmployeeResponseDTO> employeePage =
-        // employeeService.getEmployeesByAgency(agencyId, pageable);
-
-        // return ResponseEntity.ok(
-        // new ApiResponse<>(true, "Get employees by agency successfully",
-        // employeePage));
-        // }
-
-        // // Đếm số lượng nhân viên theo đại lý
-        // @GetMapping("/agencies/{agencyId}/count")
-        // public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable
-        // Integer agencyId) {
-        // long count = employeeService.countByAgency(agencyId);
-        // return ResponseEntity.ok(
-        // new ApiResponse<>(true, "Count employees by agency successfully", count));
-        // }
-
-        // // Đếm số lượng nhân viên theo chức vụ
-        // @GetMapping("/positions/{position}/count")
-        // public ResponseEntity<ApiResponse<Long>>
-        // countEmployeesByPosition(@PathVariable String position) {
-        // long count = employeeService.countByPosition(position);
-        // return ResponseEntity.ok(
-        // new ApiResponse<>(true, "Count employees by position successfully", count));
-        // }=======
-
         // Lấy danh sách nhân viên theo chức vụ - phân trang
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/by-position")
 
         public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByRole(
@@ -194,7 +137,7 @@ public class EmployeeController {
         }
 
         // Lấy danh sách nhân viên theo đại lý - phân trang
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/agencies/{agencyId}")
         public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> getEmployeesByAgency(
                         @PathVariable Integer agencyId,
@@ -209,7 +152,7 @@ public class EmployeeController {
         }
 
         // Đếm số lượng nhân viên theo đại lý
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
+       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/agencies/{agencyId}/count")
         public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable Integer agencyId) {
                 long count = employeeService.countByAgency(agencyId);
@@ -218,13 +161,14 @@ public class EmployeeController {
         }
 
         // Đếm số lượng nhân viên theo chức vụ
-        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'ADMIN')")
-        @GetMapping("/positions/{position}/count")
-        public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
+       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
+        @GetMapping("/positions/{role}/count")
+                public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
                 long count = employeeService.countByRole(role);
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Count employees by position successfully", count));
-        }
+}
+
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/me")
