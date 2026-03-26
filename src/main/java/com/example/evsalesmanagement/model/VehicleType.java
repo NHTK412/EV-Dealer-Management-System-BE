@@ -1,14 +1,29 @@
 package com.example.evsalesmanagement.model;
 
+import java.util.List;
+
+import org.hibernate.annotations.ManyToAny;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "VehicleType")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class VehicleType extends Base {
 
     @Id
@@ -19,50 +34,14 @@ public class VehicleType extends Base {
     @Column(name = "VehicleTypeName", nullable = false)
     private String vehicleTypeName;
 
-    // nam san xuat = manufactureYear
     @Column(name = "ManufactureYear")
     private Integer manufactureYear;
 
-    // mo ta = description
     @Column(name = "Description")
     private String description;
 
-    public Integer getVehicleTypeId() {
-        return vehicleTypeId;
-    }
+    @OneToMany(mappedBy = "vehicleType", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<VehicleTypeDetail> vehicleTypeDetails;
 
-    public void setVehicleTypeId(Integer vehicleTypeId) {
-        this.vehicleTypeId = vehicleTypeId;
-    }
-
-    public String getVehicleTypeName() {
-        return vehicleTypeName;
-    }
-
-    public void setVehicleTypeName(String vehicleTypeName) {
-        this.vehicleTypeName = vehicleTypeName;
-    }
-
-    public Integer getManufactureYear() {
-        return manufactureYear;
-    }
-
-    public void setManufactureYear(Integer manufactureYear) {
-        this.manufactureYear = manufactureYear;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    // @ManyToMany(mappedBy = "loaiXes")
-    // private List<DanhMucXe> danhMucXes = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "loaiXe")
-    // private List<ChiTietLoaiXe> chiTietLoaiXes = new ArrayList<>();
 
 }

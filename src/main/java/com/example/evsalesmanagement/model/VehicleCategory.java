@@ -39,7 +39,6 @@ public class VehicleCategory extends Base {
 
     @ManyToMany
     @JoinTable(name = "VehicleType_VehicleCategory", joinColumns = @JoinColumn(name = "VehicleCategoryId"), inverseJoinColumns = @JoinColumn(name = "VehicleTypeId"))
-
     private List<VehicleType> vehicleTypes = new ArrayList<>();
 
     public Integer getVehicleCategoryId() {
