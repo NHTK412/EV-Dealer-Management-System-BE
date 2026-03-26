@@ -25,8 +25,8 @@ INSERT INTO
     )
 VALUES (
         NOW(6),
-        'Hồ Chí Minh',
-        'Hãng Xe',
+        'Ho Chi Minh',
+        'Hang Xe',
         'hang@gmail.com',
         '0901234567',
         'ACTIVE',
@@ -78,10 +78,10 @@ INSERT INTO
     )
 VALUES (
         NOW(6),
-        'Bình Dương',
+        'Binh Duong',
         '2005-12-04',
         'nguyenhuutuankhang412@gmail.com',
-        'Nguyễn Hữu Tuấn Khang',
+        'Nguyen Huu Tuan Khang',
         'MALE',
         '$2a$10$vflCAziHNB5w6URI2NMlxOj4lHcRkwZRwZa1DQRmLYZCRuJzQs6HG', -- Mật khẩu: Evm123@
         '0366408260',
@@ -92,6 +92,6 @@ VALUES (
             SELECT agency_id
             FROM agency
             WHERE
-                agencyname = 'Hãng Xe'
+                agencyname = 'Hang Xe'
         )
     );
