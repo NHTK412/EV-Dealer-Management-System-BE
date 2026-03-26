@@ -30,7 +30,7 @@ public class EmployeeService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    // Lấy tất cả nhân viên - có phân trang 
+    // Lấy tất cả nhân viên - có phân trang
     public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
         return employeeRepository.findByStatus(EmployeeStatusEnum.ACTIVE, pageable)
                 .map(EmployeeResponseDTO::new);
@@ -72,6 +72,9 @@ public class EmployeeService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "Evm123@";
         String hashedPassword = encoder.encode(rawPassword);
+
+        // System.out.println("Raw password: " + hashedPassword);
+
         employee.setPassword(hashedPassword);
 
         employee.setStatus(EmployeeStatusEnum.ACTIVE);
@@ -84,6 +87,8 @@ public class EmployeeService {
         }
 
         Employee savedEmployee = employeeRepository.save(employee);
+        // throw new RuntimeException("Debugging: Check password hashing");
+
         return new EmployeeResponseDTO(savedEmployee);
     }
 
@@ -130,7 +135,7 @@ public class EmployeeService {
     public void deleteEmployee(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
-        
+
         employee.setStatus(EmployeeStatusEnum.INACTIVE);
         employeeRepository.save(employee);
     }
