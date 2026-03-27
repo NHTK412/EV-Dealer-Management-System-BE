@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // private static final Logger log =
     // LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -42,11 +41,11 @@ public class GlobalExceptionHandler {
         if (ex.getCause() instanceof InvalidFormatException) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Giá trị enum không hợp lệ", null));
+                    .body(new ApiResponse<>(false, "Invalid enum value", null));
         }
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse<>(false, "Dữ liệu không hợp lệ", null));
+                .body(new ApiResponse<>(false, "Invalid request payload", null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -113,7 +112,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleAuthorizationDenied(AuthorizationDeniedException ex) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN) // 403
-                .body(new ApiResponse<>(false, "Bạn không có quyền truy cập!", null));
+                .body(new ApiResponse<>(false, "You do not have permission to access this resource", null));
     }
 
 }

@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-// import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.order.OrderFromQuoteRequestDTO;
@@ -18,14 +17,10 @@ import com.example.evsalesmanagement.dto.order.OrderRequestDTO;
 import com.example.evsalesmanagement.dto.order.OrderResponseDTO;
 import com.example.evsalesmanagement.dto.order.OrderSummaryDTO;
 import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
-// import com.example.evsalesmanagement.dto.payment.PaymentRequestDTO;
 import com.example.evsalesmanagement.dto.vehicledelivery.VehicleDeliveryRequestDTO;
 import com.example.evsalesmanagement.enums.OrderStatusEnum;
-// import com.example.evsalesmanagement.enums.PaymentStatusEnum;
-// import com.example.evsalesmanagement.enums.PaymentTypeEnum;
 import com.example.evsalesmanagement.enums.VehicleDeliveryStatusEnum;
 import com.example.evsalesmanagement.repository.WarehouseReleaseNoteRepository;
-// import com.example.evsalesmanagement.model.Order;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.OrderService;
 import com.example.evsalesmanagement.utils.ApiResponse;
@@ -55,26 +50,11 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('DEALER_MANAGER','DEALER_STAFF')")
     @PostMapping("/from-quotation")
-    // public ResponseEntity<ApiResponse<OrderResponseDTO>>
-    // createOrderFromQuotation(
-    // @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
-    // @PathVariable Integer quoteId, @RequestParam(value = "", required = false)
-    // String note) {
     public ResponseEntity<ApiResponse<OrderResponseDTO>> createOrderFromQuotation(
             @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
             @RequestBody OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
-        // public ResponseEntity<ApiResponse<OrderResponseDTO>>
-        // createOrderFromQuotation(
-
-        // @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
-        // @RequestBody OrderFromQuoteRequestDTO orderFromQuoteRequestDTO) {
-        // OrderResponseDTO orderResponseDTO =
-        // orderService.createOrderFromQuotation(orderFromQuoteRequestDTO);
-
         Integer employeeId = customerUserDetails.getEmployeeId();
 
-        // OrderResponseDTO orderResponseDTO =
-        // orderService.createOrderFromQuotation(employeeId, quoteId, note);
         OrderResponseDTO orderResponseDTO = orderService.createOrderFromQuotation(employeeId, orderFromQuoteRequestDTO);
 
         return ResponseEntity.ok(new ApiResponse<OrderResponseDTO>(true, null, orderResponseDTO));
@@ -98,8 +78,6 @@ public class OrderController {
 
         Integer agencyId = customerUserDetails.getAgencyId();
 
-        // System.out.println("Agency ID in OrderController: " + agencyId);
-
         Pageable pageable = PageRequest.of(page - 1, size);
 
         List<OrderSummaryDTO> orderResponseDTOs = orderService.getOrdersByAgencyId(agencyId, pageable);
@@ -122,17 +100,6 @@ public class OrderController {
 
         return ResponseEntity.ok(new ApiResponse<List<OrderSummaryDTO>>(true, null, orderResponseDTOs));
     }
-
-    // @PatchMapping("/{orderId}/process-payment")
-    // public ResponseEntity<ApiResponse<OrderResponseDTO>>
-    // updatePaymentStatus(@PathVariable Integer orderId,
-    // @RequestBody PaymentRequestDTO paymentRequestDTO) {
-
-    // OrderResponseDTO orderResponseDTO = orderService.updatePaymentStatus(orderId,
-    // paymentRequestDTO);
-
-    // return ResponseEntity.ok(new ApiResponse<>(true, null, orderResponseDTO));
-    // }
 
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @PostMapping

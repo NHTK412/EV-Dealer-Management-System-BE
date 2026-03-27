@@ -7,7 +7,6 @@ public class ImportRequestSummaryDTO {
 
     private Integer importRequestId;
 
-    // private EmployeeDTO employeeDTO;
 
     private Integer employeeId;
 

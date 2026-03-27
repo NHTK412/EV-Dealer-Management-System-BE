@@ -54,7 +54,7 @@ public class SalesReportService {
         EmployeeSalesDTO sales = orderRepository.findEmployeeSalesByEmployeeAndMonth(employeeId, year, month);
         if (sales == null) {
             throw new ResourceNotFoundException(
-                    "Không tìm thấy dữ liệu doanh số cho nhân viên ID: " + employeeId + " trong tháng " + month + "/"
+                    "Sales data not found for employee ID: " + employeeId + " in " + month + "/"
                             + year);
         }
         sales.setYear(year);
@@ -70,7 +70,7 @@ public class SalesReportService {
         EmployeeSalesDTO sales = orderRepository.findEmployeeSalesByEmployeeAndYear(employeeId, year);
         if (sales == null) {
             throw new ResourceNotFoundException(
-                    "Không tìm thấy dữ liệu doanh số cho nhân viên ID: " + employeeId + " trong năm " + year);
+                    "Sales data not found for employee ID: " + employeeId + " in year " + year);
         }
         sales.setYear(year);
         return sales;
@@ -94,7 +94,7 @@ public class SalesReportService {
     public AgencySalesDTO getAgencySalesByAgencyAndMonth(Integer agencyId, Integer year, Integer month) {
         MonthlySales monthlySales = monthlySalesRepository.findByAgencyAndMonthAndYear(agencyId, month, year)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy dữ liệu doanh số cho đại lý ID: " + agencyId + " trong tháng " + month + "/"
+                        "Sales data not found for agency ID: " + agencyId + " in " + month + "/"
                                 + year));
         return new AgencySalesDTO(monthlySales);
     }
@@ -107,7 +107,7 @@ public class SalesReportService {
         List<MonthlySales> monthlySalesList = monthlySalesRepository.findByAgencyAndYear(agencyId, year);
         if (monthlySalesList.isEmpty()) {
             throw new ResourceNotFoundException(
-                    "Không tìm thấy dữ liệu doanh số cho đại lý ID: " + agencyId + " trong năm " + year);
+                    "Sales data not found for agency ID: " + agencyId + " in year " + year);
         }
         return monthlySalesList.stream()
                 .map(AgencySalesDTO::new)

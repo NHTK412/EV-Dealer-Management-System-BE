@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.evsalesmanagement.dto.agency.AgencyRequestDTO;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.agency.AgencySummaryDTO;
+import com.example.evsalesmanagement.enums.AgencyStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service
@@ -23,7 +24,6 @@ public class AgencyService {
     @Autowired
     private AgencyRepository agencyRepository;
 
-    // @Cacheable(value = "agency-all", key = "#pageable")
     public List<AgencySummaryDTO> getAllAgencies(Pageable pageable) {
         Page<Agency> agencies = agencyRepository.findAll(pageable);
         List<AgencySummaryDTO> summaryList = agencies.stream().map(agency -> {
@@ -36,11 +36,11 @@ public class AgencyService {
         return summaryList;
     }
 
-    @Cacheable(value = "agency", key = "#agencyId")
+    // @Cacheable(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO getByIdAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(agency.getAgencyId());
         agencyResponseDTO.setAgencyName(agency.getAgencyName());
@@ -74,11 +74,11 @@ public class AgencyService {
         return agencyResponseDTO;
     }
 
-    @CachePut(value = "agency", key = "#agencyId")
+    // @CachePut(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO updateAgency(Integer agencyId, AgencyRequestDTO agencyRequestDTO) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
         agency.setAgencyName(agencyRequestDTO.getAgencyName());
         agency.setAddress(agencyRequestDTO.getAddress());
         agency.setPhoneNumber(agencyRequestDTO.getPhoneNumber());
@@ -97,12 +97,17 @@ public class AgencyService {
         return agencyResponseDTO;
     }
 
-    @CacheEvict(value = "agency", key = "#agencyId")
+    // @CacheEvict(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO deleteAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Agency"));
-        agencyRepository.delete(agency);
+                .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
+
+        if (agency.getStatus() != AgencyStatusEnum.INACTIVE) {
+            agency.setStatus(AgencyStatusEnum.INACTIVE);
+            agencyRepository.save(agency);
+        }
+
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(agency.getAgencyId());
         agencyResponseDTO.setAgencyName(agency.getAgencyName());

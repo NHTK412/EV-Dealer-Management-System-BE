@@ -9,10 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//ChiTietYeuCau = ImportRequestDetail
 @Entity
 @Table(name = "ImportRequestDetail")
-// @IdClass(ImportRequestDetail.ImportRequestDetailId.class)
 public class ImportRequestDetail extends Base {
 
     @Id

@@ -44,11 +44,11 @@ public class WarehouseReceiptService {
         return receipts.map(WarehouseReceiptSummaryDTO::new);
     }
 
-    @Cacheable(value = "warehouse-receipt", key = "#id")
+    // @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
     public WarehouseReceiptResponseDTO getWarehouseReceiptById(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất nhập với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse receipt not found with ID: " + id));
         return new WarehouseReceiptResponseDTO(receipt);
     }
 
@@ -62,9 +62,9 @@ public class WarehouseReceiptService {
         receipt.setStatus(request.getStatus());
         Optional<Agency> agencyOpt = agencyRepository.findById(request.getAgencyId());
         if (agencyOpt.isEmpty()) {
-            return new ApiResponse<>(false, "Không tìm thấy đại lý", null);
+            return new ApiResponse<>(false, "Agency not found", null);
         }
-        receipt.setAgencyId(agencyOpt.get());  
+        receipt.setAgencyId(agencyOpt.get());
         if (request.getEmployeeId() != null) {
             Optional<Employee> employeeOpt = employeeRepository.findById(request.getEmployeeId());
             if (employeeOpt.isPresent()) {
@@ -83,31 +83,31 @@ public class WarehouseReceiptService {
                 vehicles.stream()
                         .map(VehicleResponseDTO::new)
                         .collect(java.util.stream.Collectors.toList()));
-        return new ApiResponse<>(true, "Nhập kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse receipt created successfully", responseDTO);
     }
 
-    @CachePut(value = "warehouse-receipt", key = "#id")
+    // @CachePut(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<WarehouseReceiptResponseDTO> updateWarehouseReceiptStatus(
-        Integer id,
-        WarehouseReceiptStatusUpdateDTO request) {
-    WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu nhập với id:" + id));
-    receipt.setStatus(request.getStatus());
-    warehouseReceiptRepository.save(receipt);
-    WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
-    return new ApiResponse<>(true, "Cập nhật trạng thái thành công", responseDTO);
+            Integer id,
+            WarehouseReceiptStatusUpdateDTO request) {
+        WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse receipt not found with ID: " + id));
+        receipt.setStatus(request.getStatus());
+        warehouseReceiptRepository.save(receipt);
+        WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
+        return new ApiResponse<>(true, "Warehouse receipt status updated successfully", responseDTO);
     }
 
-    @CacheEvict(value = "warehouse-receipt", key = "#id")
+    // @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<Void> deleteWarehouseReceipt(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất nhập với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse receipt not found with ID: " + id));
         if (receipt.getStatus() != WarehouseReceiptStatusEnum.PENDING_APPROVAL) {
-            return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ phê duyệt'", null);
+            return new ApiResponse<>(false, "Deletion is only allowed when status is PENDING_APPROVAL", null);
         }
         warehouseReceiptRepository.delete(receipt);
-        return new ApiResponse<>(true, "Xóa phiếu nhập kho thành công", null);
+        return new ApiResponse<>(true, "Warehouse receipt deleted successfully", null);
     }
 }

@@ -8,7 +8,6 @@ public class QuotationDetailRequestDTO {
 
     private Integer quantity;
 
-    // private BigDecimal discount;
 
     private BigDecimal registrationTax;
 
@@ -24,9 +23,7 @@ public class QuotationDetailRequestDTO {
 
     private BigDecimal vehicleRegistrationServiceFee;
 
-    // private BigDecimal discountPercentage;
 
-    // private BigDecimal wholesalePrice;
 
     public Integer getVehicleTypeDetailId() {
         return vehicleTypeDetailId;
@@ -44,13 +41,8 @@ public class QuotationDetailRequestDTO {
         this.quantity = quantity;
     }
 
-    // public BigDecimal getDiscount() {
-    //     return discount;
-    // }
 
-    // public void setDiscount(BigDecimal discount) {
     //     this.discount = discount;
-    // }
 
     public BigDecimal getRegistrationTax() {
         return registrationTax;
@@ -108,20 +100,10 @@ public class QuotationDetailRequestDTO {
         this.vehicleRegistrationServiceFee = vehicleRegistrationServiceFee;
     }
 
-    // public BigDecimal getDiscountPercentage() {
-    //     return discountPercentage;
-    // }
 
-    // public void setDiscountPercentage(BigDecimal discountPercentage) {
     //     this.discountPercentage = discountPercentage;
-    // }
 
-    // public BigDecimal getWholesalePrice() {
-    //     return wholesalePrice;
-    // }
 
-    // public void setWholesalePrice(BigDecimal wholesalePrice) {
     //     this.wholesalePrice = wholesalePrice;
-    // }
 
 }

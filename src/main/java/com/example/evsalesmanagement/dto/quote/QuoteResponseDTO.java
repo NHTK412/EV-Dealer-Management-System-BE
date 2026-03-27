@@ -152,13 +152,8 @@ public class QuoteResponseDTO {
         this.customerEmail = customerEmail;
     }
 
-    // public List<QuotationDetailResponseDTO> getQuotationDetailResponseDTOs() {
-    // return quotationDetailResponseDTOs;
-    // }
 
-    // public void setQuotationDetailResponseDTOs(List<QuotationDetailResponseDTO>
     // quotationDetailResponseDTOs) {
     // this.quotationDetailResponseDTOs = quotationDetailResponseDTOs;
-    // }
 
 }

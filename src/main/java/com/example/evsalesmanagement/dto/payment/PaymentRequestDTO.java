@@ -13,8 +13,6 @@ public class PaymentRequestDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String vnpayCode;
 
-    // @JsonInclude(JsonInclude.Include.NON_NULL)
-    // private Integer paymentPlanId;
 
     public PaymentMethodEnum getPaymentMethod() {
         return paymentMethod;
@@ -42,12 +40,7 @@ public class PaymentRequestDTO {
 
     
 
-    // public Integer getPaymentId() {
-    //     return paymentId;
-    // }
 
-    // public void setPaymentId(Integer paymentId) {
     //     this.paymentId = paymentId;
-    // }
 
 }

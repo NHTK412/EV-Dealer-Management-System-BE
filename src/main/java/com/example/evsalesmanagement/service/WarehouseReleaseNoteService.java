@@ -45,11 +45,11 @@ public class WarehouseReleaseNoteService {
         return release.map(WarehouseReleaseNoteSummaryDTO::new);
     }
 
-    @Cacheable(value = "warehouse-receipt", key = "#id")
+    // @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
     public WarehouseReleaseNoteResponseDTO getByIdWarehouseExport(Integer id) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
         return new WarehouseReleaseNoteResponseDTO(release);
     }
 
@@ -63,7 +63,7 @@ public class WarehouseReleaseNoteService {
         release.setStatus(request.getStatus());
         Optional<Agency> agencyOpt = agencyRepository.findById(1);
         if (agencyOpt.isEmpty()) {
-            return new ApiResponse<>(false, "Không tìm thấy đại lý mặc định (id=1)", null);
+            return new ApiResponse<>(false, "Default agency not found (id=1)", null);
         }
         release.setAgencyId(agencyOpt.get());
         if (request.getEmployeeId() != null) {
@@ -85,34 +85,34 @@ public class WarehouseReleaseNoteService {
                 vehicles.stream()
                         .map(VehicleResponseDTO::new)
                         .collect(java.util.stream.Collectors.toList()));
-        return new ApiResponse<>(true, "Xuất kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse release note created successfully", responseDTO);
     }
 
-    @CachePut(value = "warehouse-release-note", key = "#id")
+    // @CachePut(value = "warehouse-release-note", key = "#id")
     @Transactional
     public ApiResponse<WarehouseReleaseNoteResponseDTO> updateWarehouseExport(Integer id,
             WarehouseReleaseNoteStatusUpdateDTO request) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
-        if (release.getStatus() != null){
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
+        if (release.getStatus() != null) {
             release.setStatus(request.getStatus());
         }
         warehouseReleaseNoteRepository.save(release);
         WarehouseReleaseNoteResponseDTO responseDTO = new WarehouseReleaseNoteResponseDTO(release);
-        return new ApiResponse<>(true, "Cập nhật trạng thái phiếu xuất kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse release note status updated successfully", responseDTO);
     }
 
     // phiếu"
-    @CacheEvict(value = "warehouse-receipt", key = "#id")
+    // @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<Void> deleteWarehouseExport(Integer id) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu xuất kho với id:" + id));
-         if (release.getStatus() != WarehouseReleaseNoteStatusEnum.PENDING_APPROVAL) {
-            return new ApiResponse<>(false, "Chỉ được xóa khi trạng thái là 'chờ phê duyệt'", null);
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
+        if (release.getStatus() != WarehouseReleaseNoteStatusEnum.PENDING_APPROVAL) {
+            return new ApiResponse<>(false, "Deletion is only allowed when status is PENDING_APPROVAL", null);
         }
         warehouseReleaseNoteRepository.delete(release);
-        return new ApiResponse<>(true, "Xóa phiếu xuất kho thành công", null);
+        return new ApiResponse<>(true, "Warehouse release note deleted successfully", null);
     }
 
 }

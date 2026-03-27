@@ -27,20 +27,7 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.Tr;
 
-// import java.io.ByteArrayOutputStream;
-// import java.io.FileInputStream;
-// import java.time.LocalDate;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.Map;
 
-// import org.docx4j.Docx4J;
-// import org.docx4j.XmlUtils;
-// import org.docx4j.model.datastorage.migration.VariablePrepare;
-// import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-// import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-// import org.docx4j.wml.Tbl;
-// import org.docx4j.wml.Tr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponseDTO;
-// import com.example.evsalesmanagement.dto.quotationdetail.QuotationDetailResponseDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteRequestDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteResponseDTO;
 import com.example.evsalesmanagement.dto.quote.QuoteSummaryDTO;
@@ -126,20 +112,16 @@ public class QuoteController {
     @GetMapping("/{quoteId}/down")
     public void downloadQuotationPdf(@PathVariable Integer quoteId, HttpServletResponse response) throws Exception {
 
-        // ========== 1. Lấy dữ liệu ==========
         QuoteResponseDTO quote = quoteService.getQuoteById(quoteId);
 
-        // ========== 2. Load template ==========
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(
                 new FileInputStream("src/main/resources/templates/TemplateMau.docx"));
         MainDocumentPart mainPart = wordMLPackage.getMainDocumentPart();
 
-        // ========== 3. FIX lỗi placeholder bị split run ==========
         String xml = mainPart.getXML().replaceAll("</w:t>\\s*<w:t>", "");
         Object newDoc = XmlUtils.unmarshalString(xml);
         mainPart.setJaxbElement((org.docx4j.wml.Document) newDoc);
 
-        // ========== 4. Replace dữ liệu tĩnh ==========
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("customerName", quote.getCustomerName());
         placeholders.put("customerPhone", quote.getCustomerPhone());
@@ -157,7 +139,6 @@ public class QuoteController {
         }
         mainPart.setJaxbElement((org.docx4j.wml.Document) XmlUtils.unmarshalString(xml));
 
-        // ========== 5. Merge bảng chi tiết ==========
         List<Object> tables = mainPart.getJAXBNodesViaXPath("//w:tbl", true);
         if (!tables.isEmpty()) {
 
@@ -224,7 +205,6 @@ public class QuoteController {
             }
         }
 
-        // ========== 6. To PDF ==========
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
         Docx4J.toPDF(wordMLPackage, pdfOutputStream);
         byte[] pdfBytes = pdfOutputStream.toByteArray();
@@ -245,7 +225,6 @@ public class QuoteController {
             fos.write(pdfBytes);
         }
 
-        // ========== 7. Trả file ==========
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "inline; filename=quotation_" + quote.getQuoteId() + ".pdf");
         response.getOutputStream().write(pdfBytes);
@@ -255,7 +234,6 @@ public class QuoteController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<QuoteSummaryDTO>>> getAllQuote(@RequestParam Integer page,
             @RequestParam Integer size) {
-        // return new String();
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
@@ -264,7 +242,5 @@ public class QuoteController {
 
     }
 
-    // @GetMapping("/employee")
-    // public ResponseEntity<ApiResponse<
 
 }

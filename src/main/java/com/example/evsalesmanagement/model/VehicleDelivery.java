@@ -25,14 +25,8 @@ public class VehicleDelivery extends Base {
     @Column(name = "VehicleDeliveryId")
     private Integer vehicleDeliveryId;
 
-    // @Column(name = "NgayTaoDon")
-    // private LocalDateTime ngayTaoDon;
 
-    // ngayDuKienGiaoXe = ExpectedDeliveryDate
-    // @Column(name = "ExpectedDeliveryDate")
-    // private LocalDateTime ExpectedDeliveryDate;
 
-    // ngayGiaoXe = DeliveryDate
     @Column(name = "DeliveryDate")
     private LocalDateTime deliveryDate;
 
@@ -65,13 +59,7 @@ public class VehicleDelivery extends Base {
         this.vehicleDeliveryId = vehicleDeliveryId;
     }
 
-    // public LocalDateTime getExpectedDeliveryDate() {
-    //     return ExpectedDeliveryDate;
-    // }
 
-    // public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
-    //     ExpectedDeliveryDate = expectedDeliveryDate;
-    // }
 
     public LocalDateTime getDeliveryDate() {
         return deliveryDate;
@@ -141,13 +129,8 @@ public class VehicleDelivery extends Base {
 
     
 
-    // public LocalDateTime getNgayTaoDon() {
-    // return ngayTaoDon;
-    // }
 
-    // public void setNgayTaoDon(LocalDateTime ngayTaoDon) {
     // this.ngayTaoDon = ngayTaoDon;
-    // }
 
 
 

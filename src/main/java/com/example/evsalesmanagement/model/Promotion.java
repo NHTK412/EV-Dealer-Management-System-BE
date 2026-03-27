@@ -21,7 +21,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//Promotion = khuyen mai
 @Entity
 @Table(name = "Promotion")
 public class Promotion extends Base {
@@ -42,7 +41,6 @@ public class Promotion extends Base {
     @Column(name = "PromotionValue")
     private BigDecimal promotionValue;
 
-    // criteria = tieu chi
     @Column(name = "Criteria")
     private String criteria;
 
@@ -69,10 +67,7 @@ public class Promotion extends Base {
     @JoinTable(name = "Promotion_VehicleDetail", joinColumns = @JoinColumn(name = "PromotionId"), inverseJoinColumns = @JoinColumn(name = "VehicleDetailId"))
     private List<VehicleTypeDetail> vehicleDetails = new ArrayList<>();
 
-    // @ManyToMany
-    // @JoinTable(name = "Promotion_Agency", joinColumns = @JoinColumn(name =
     // "PromotionId"), inverseJoinColumns = @JoinColumn(name = "AgencyId"))
-    // private List<Agency> agencies = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "AgencyId")
@@ -174,17 +169,9 @@ public class Promotion extends Base {
         this.agency = agency;
     }
 
-    // public List<Agency> getAgencies() {
-    // return agencies;
-    // }
 
-    // public void setAgencies(List<Agency> agencies) {
     // this.agencies = agencies;
-    // }
 
-    // @Override
-    // public String toString() {
-    // return "Promotion [promotionId=" + promotionId +
     // ", promotionName=" + promotionName +
     // ", promotionType=" + promotionType +
     // ", promotionValue=" + promotionValue +
@@ -196,6 +183,5 @@ public class Promotion extends Base {
     // ", status=" + status +
     // ", vehicleDetails=" + vehicleDetails +
     // ", agencies=" + agencies + "]";
-    // }
 
 }

@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,55 +36,6 @@ public class VehicleTypeService {
 
         @Autowired
         private CategoryRepository vehicleCategoryRepository;
-
-        // @Transactional
-        // public VehicleTypeResponseDTO createVehicleType(VehicleTypeRequestDTO request) {
-        //         VehicleType newVehicleType = new VehicleType();
-        //         newVehicleType.setVehicleTypeName(request.getVehicleTypeName());
-        //         newVehicleType.setManufactureYear(request.getManufactureYear());
-        //         newVehicleType.setDescription(request.getDescription());
-        //         vehicleTypeRepository.save(newVehicleType);
-        //         return new VehicleTypeResponseDTO(newVehicleType);
-        // }
-
-        // @Transactional
-        // public Page<VehicleTypeSummaryDTO> getAllVehicleType(Pageable pageable) {
-        //         Page<VehicleType> vehicleTypePage = vehicleTypeRepository.findAll(pageable);
-        //         return vehicleTypePage.map(VehicleTypeSummaryDTO::new);
-        // }
-
-        // @Cacheable(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO getVehicleTypeById(Integer vehicleTypeId) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id :" + vehicleTypeId));
-        //         return new VehicleTypeResponseDTO(vehicleType);
-        // }
-
-        // @CachePut(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO updateVehicleType(Integer vehicleTypeId, VehicleTypeRequestDTO request) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id:" + vehicleTypeId));
-        //         vehicleType.setVehicleTypeName(request.getVehicleTypeName());
-        //         vehicleType.setManufactureYear(request.getManufactureYear());
-        //         vehicleType.setDescription(request.getDescription());
-        //         vehicleTypeRepository.save(vehicleType);
-        //         return new VehicleTypeResponseDTO(vehicleType);
-        // }
-
-        // @CacheEvict(value = "vehicle-type", key = "#vehicleTypeId")
-        // @Transactional
-        // public VehicleTypeResponseDTO deleteVehicleType(Integer vehicleTypeId) {
-        //         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
-        //                         .orElseThrow(() -> new ResourceNotFoundException(
-        //                                         "Không tìm thấy loại xe với id:" + vehicleTypeId));
-        //         VehicleTypeResponseDTO dto = new VehicleTypeResponseDTO(vehicleType);
-        //         vehicleTypeRepository.deleteById(vehicleTypeId);
-        //         return dto;
-        // }
 
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> createVehicleType_v2(
@@ -113,6 +65,7 @@ public class VehicleTypeService {
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(savedVehicleType));
         }
 
+        @Cacheable(value = "vehicle-type-list", key = "#pageable")
         @Transactional
         public ApiResponse<Page<VehicleTypeSummaryDTO>> getAllVehicleType_v2(Pageable pageable) {
                 Page<VehicleTypeSummaryDTO> vehicleTypeSummaryPage = vehicleTypeRepository.findAll(pageable)
@@ -120,11 +73,12 @@ public class VehicleTypeService {
                 return new ApiResponse<>(true, null, vehicleTypeSummaryPage);
         }
 
+        @Cacheable(value = "vehicle-type", key = "#vehicleTypeId")
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> getVehicleTypeById_v2(Integer vehicleTypeId) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy loại xe với id :" + vehicleTypeId));
+                                                "Vehicle type not found with id: " + vehicleTypeId));
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(vehicleType));
         }
 
@@ -180,13 +134,15 @@ public class VehicleTypeService {
                 return responseDTO;
         }
 
+        @CachePut(value = "vehicle-type", key = "#vehicleTypeId")
+        @CacheEvict(value = "vehicle-type-list", allEntries = true)
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> updateVehicleType_v2(
                         Integer vehicleTypeId,
                         UpdateVehicleTypeDTO updateVehicleTypeDTO) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy loại xe với id:" + vehicleTypeId));
+                                                "Vehicle type not found with id: " + vehicleTypeId));
 
                 vehicleType.setVehicleTypeName(updateVehicleTypeDTO.getVehicleTypeName());
                 vehicleType.setManufactureYear(updateVehicleTypeDTO.getManufactureYear());
@@ -263,5 +219,17 @@ public class VehicleTypeService {
                 VehicleType updatedVehicleType = vehicleTypeRepository.save(vehicleType);
 
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(updatedVehicleType));
+        }
+
+        @Caching(evict = {
+                        @CacheEvict(value = "vehicle-type", key = "#vehicleTypeId"),
+                        @CacheEvict(value = "vehicle-type-list", allEntries = true)
+        })
+        @Transactional
+        public void deleteVehicleType_v2(Integer vehicleTypeId) {
+                VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Vehicle type not found with id: " + vehicleTypeId));
+                vehicleTypeRepository.delete(vehicleType);
         }
 }

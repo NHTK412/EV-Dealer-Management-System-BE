@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Cacheable(value = "category-list", key = "#pageable")
+    @Transactional
     public List<CategoryResponseDTO> getAllCategories(Pageable pageable) {
         Page<VehicleCategory> categories = categoryRepository.findAll(pageable);
         return categories.stream()
@@ -32,6 +35,8 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "category-by-status", key = "#status")
+    @Transactional
     public List<CategoryResponseDTO> getCategoriesByStatus(CategoryStatusEnum status) {
         List<VehicleCategory> categories = categoryRepository.findByStatus(status);
         return categories.stream()
@@ -40,10 +45,11 @@ public class CategoryService {
     }
 
     @Cacheable(value = "category", key = "#categoryId")
-    @Transactional(readOnly = true)
+    @Transactional
     public CategoryResponseDTO getCategoryById(Integer categoryId) {
+        // VehicleCategory category = categoryRepository.findById(categoryId)
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
         return new CategoryResponseDTO(category);
     }
 
@@ -63,11 +69,14 @@ public class CategoryService {
         return new CategoryResponseDTO(savedCategory);
     }
 
-    @CachePut(value = "category", key = "#categoryId")
+    @Caching(evict = {
+            @CacheEvict(value = "category-list", allEntries = true),
+            @CacheEvict(value = "category-by-status", allEntries = true)
+    }, put = @CachePut(value = "category", key = "#categoryId"))
     @Transactional
     public CategoryResponseDTO updateCategory(Integer categoryId, CategoryRequestDTO requestDTO) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
 
         category.setVehicleCategoryName(requestDTO.getCategoryName());
         category.setDescription(requestDTO.getDescription());
@@ -80,11 +89,15 @@ public class CategoryService {
         return new CategoryResponseDTO(updatedCategory);
     }
 
-    @CacheEvict(value = "category", key = "#categoryId")
+    @Caching(evict = {
+            @CacheEvict(value = "category-list", allEntries = true),
+            @CacheEvict(value = "category-by-status", allEntries = true),
+            @CacheEvict(value = "category", key = "#categoryId")
+    })
     @Transactional
     public CategoryResponseDTO deleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
 
         category.setStatus(CategoryStatusEnum.INACTIVE);
         VehicleCategory deletedCategory = categoryRepository.save(category);
@@ -92,11 +105,15 @@ public class CategoryService {
         return new CategoryResponseDTO(deletedCategory);
     }
 
-    @CacheEvict(value = "category", key = "#categoryId")
+    @Caching(evict = {
+            @CacheEvict(value = "category-list", allEntries = true),
+            @CacheEvict(value = "category-by-status", allEntries = true),
+            @CacheEvict(value = "category", key = "#categoryId")
+    })
     @Transactional
     public void permanentDeleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
         categoryRepository.delete(category);
     }
 

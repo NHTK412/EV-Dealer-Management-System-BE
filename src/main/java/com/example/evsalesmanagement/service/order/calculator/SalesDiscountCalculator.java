@@ -14,12 +14,8 @@ import com.example.evsalesmanagement.repository.MonthlySalesRepository;
 @Component
 public class SalesDiscountCalculator implements DiscountCalculator {
 
-    // private final MonthlySalesRepository monthlySalesRepository;
 
-    // public SalesDiscountCalculator(MonthlySalesRepository monthlySalesRepository)
-    // {
     // this.monthlySalesRepository = monthlySalesRepository;
-    // }
 
     @Autowired
     private MonthlySalesRepository monthlySalesRepository;

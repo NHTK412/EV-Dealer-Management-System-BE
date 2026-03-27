@@ -26,7 +26,6 @@ public class AuthResponseDTO {
         this.expiresIn = expiresIn;
     }
 
-// <<<<<<< HEAD
     public String getUsername() {
         return username;
     }
@@ -42,14 +41,12 @@ public class AuthResponseDTO {
     public void setRole(String role) {
         this.role = role;
     }
-// =======
     public String getRefreshToken() {
         return refreshToken;
     }
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-// >>>>>>> feat/Khang/cauHinhRedis
     }
 
 }

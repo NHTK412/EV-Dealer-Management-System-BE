@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//ChiTietBaoGia = QuotationDetail
 @Entity
 @Table(name = "QuotationDetail")
 public class QuotationDetail extends Base {
@@ -40,29 +39,21 @@ public class QuotationDetail extends Base {
     @Column(name = "Registration Fee")
     private BigDecimal registrartionFee;
 
-    // CompulsoryInsurance = bao hiem bat buoc
     @Column(name = "CompulsoryInsurance")
     private BigDecimal compulsoryInsurance;
 
-    // MaterialInsurance = bao hiem vat chat
     @Column(name = "MaterialInsurance")
     private BigDecimal materialInsurance;
 
-    // RoadMaintenanceMees = phi bao tri duong bo
     @Column(name = "RoadMaintenanceMees")
     private BigDecimal roadMaintenanceMees;
 
-    // VehicleRegistrationServiceFee = phi dich vu dang ky xe
     @Column(name = "VehicleRegistrationServiceFee")
     private BigDecimal vehicleRegistrationServiceFee;
 
-    // DiscountPercentage = phan tram chiet khau
     @Column(name = "DiscountPercentage")
     private BigDecimal discountPercentage;
 
-    // WhoblesalePrice = gia si
-    // @Column(name = "WholesalePrice")
-    // private BigDecimal wholesalePrice;
     @Column(name = "Price")
     private BigDecimal price;
 
@@ -70,7 +61,6 @@ public class QuotationDetail extends Base {
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
-    // quote = bao gia
     @ManyToOne
     @JoinColumn(name = "QuoteId")
     private Quote quote;

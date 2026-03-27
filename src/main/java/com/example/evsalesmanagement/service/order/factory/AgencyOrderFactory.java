@@ -26,10 +26,6 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Component
 public class AgencyOrderFactory implements OrderFactory {
 
-    // private final AgencyRepository agencyRepository;
-    // private final EmployeeRepository employeeRepository;
-    // private final VehicleTypeDetailRepository vehicleTypeDetailRepository;
-    // private final AgencyWholesalePriceRepository agencyWholesalePriceRepository;
 
     @Autowired
     private AgencyRepository agencyRepository;
@@ -48,7 +44,6 @@ public class AgencyOrderFactory implements OrderFactory {
     private String notes;
     private List<OrderDetailRequestDTO> orderDetailRequests;
 
-    // public AgencyOrderFactory(
     // AgencyRepository agencyRepository,
     // EmployeeRepository employeeRepository,
     // VehicleTypeDetailRepository vehicleTypeDetailRepository,
@@ -57,7 +52,6 @@ public class AgencyOrderFactory implements OrderFactory {
     // this.employeeRepository = employeeRepository;
     // this.vehicleTypeDetailRepository = vehicleTypeDetailRepository;
     // this.agencyWholesalePriceRepository = agencyWholesalePriceRepository;
-    // }
 
     public AgencyOrderFactory withAgencyId(Integer agencyId) {
         this.agencyId = agencyId;

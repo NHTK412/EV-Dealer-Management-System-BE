@@ -58,7 +58,7 @@ public class ImportRequestService {
                 importRequest.setNote(importRequestRequestDTO.getNote());
 
                 Employee employee = employeeRepository.findById(importRequestRequestDTO.getEmployeeId())
-                                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
                 // Gắn nhân viên tạo đơn
                 importRequest.setEmployee(employee);
@@ -79,7 +79,7 @@ public class ImportRequestService {
                                 .getAllByIdWithVehicleType(vehicleTypeDetailIds);
 
                 if (vehicleTypeDetails.size() != vehicleTypeDetailIds.size()) {
-                        throw new ResourceNotFoundException("Danh sách loại xe không hợp lệ ");
+                        throw new ResourceNotFoundException("One or more vehicle type details were not found");
                 }
 
                 Map<Integer, VehicleTypeDetail> vehicleTypeDetailMap = vehicleTypeDetails
@@ -109,8 +109,6 @@ public class ImportRequestService {
                                         .add(new ImportRequestDetailResponseDTO(importRequestDetail));
                 }
 
-                // importRequest = importRequestRepository.save(importRequest);
-
                 // importRequest.getImportRequestDetails().forEach(
                 // detail -> importRequestDTO.getImportRequestDetails()
                 // .add(new ImportRequestDetailResponseDTO(detail)));
@@ -119,13 +117,14 @@ public class ImportRequestService {
 
         }
 
-        @CacheEvict(value = "import-request-response", key = "#importRequestId")
+        // @CacheEvict(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO deleteImportRequest(Integer importRequestId) {
 
                 ImportRequestResponseDTO importRequestResponseDTO = new ImportRequestResponseDTO(
                                 importRequestRepository.findById(importRequestId)
-                                                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên")));
+                                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                                "Import request not found")));
 
                 importRequestResponseDTO.setImportRequestDetails(
                                 importRequestDetailRepository.findByImportRequest_ImportRequestId(importRequestId)
@@ -142,17 +141,16 @@ public class ImportRequestService {
 
         }
 
-        @CachePut(value = "import-request-response", key = "#importRequestId")
+        // @CachePut(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO updateImportRequest(Integer importRequestId,
                         ImportRequestRequestDTO importRequestRequestDTO) {
 
                 ImportRequest importRequest = importRequestRepository.findById(importRequestId)
-                                .orElseThrow(() -> new RuntimeException("Không tìm thấy yêu cầu"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Import request not found"));
 
-                // if (!importRequest.getStatus().equals("Chờ duyệt")) {
                 if (importRequest.getStatus() != ImportRequestStatusEnum.REQUESTED) {
-                        throw new ConflictException("Yêu cầu hiện tại không thể chỉnh sửa");
+                        throw new ConflictException("This import request cannot be updated in its current status");
                 }
 
                 ImportRequestResponseDTO importRequestResponseDTO = new ImportRequestResponseDTO(importRequest);
@@ -173,7 +171,7 @@ public class ImportRequestService {
                                 .getAllByIdWithVehicleType(vehicleTypeDetailIds);
 
                 if (vehicleTypeDetails.size() != vehicleTypeDetailIds.size()) {
-                        throw new ResourceNotFoundException("Danh sách loại xe không hợp lệ ");
+                        throw new ResourceNotFoundException("One or more vehicle type details were not found");
                 }
 
                 Map<Integer, VehicleTypeDetail> vehicleTypeDetailMap = vehicleTypeDetails
@@ -220,7 +218,7 @@ public class ImportRequestService {
         @Transactional
         public ImportRequestResponseDTO getImportRequestDetail(Integer importRequestId) {
                 ImportRequest importRequest = importRequestRepository.findById(importRequestId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Import request not found"));
 
                 ImportRequestResponseDTO importRequestDTO = new ImportRequestResponseDTO(importRequest);
 
@@ -243,13 +241,13 @@ public class ImportRequestService {
                         ImportRequestStatusEnum status) {
 
                 ImportRequest importRequest = importRequestRepository.findById(importRequestId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Mã yêu cầu không hợp lệ"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Import request not found"));
 
                 if (importRequest.getStatus() == ImportRequestStatusEnum.APPROVED
                                 || importRequest.getStatus() == ImportRequestStatusEnum.REJECTED) {
-                        throw new ConflictException("Trạng thái yêu cầu không thay đổi");
+                        throw new ConflictException("Import request status cannot be changed from the current state");
                 }
-                
+
                 importRequest.setStatus(status);
 
                 ImportRequestResponseDTO importRequestDTO = new ImportRequestResponseDTO(importRequest);

@@ -21,7 +21,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-//PhieuXuatKho = WarehouseReleaseNote
 @Entity
 @Table(name = "WarehouseReleaseNote")
 public class WarehouseReleaseNote extends Base {
@@ -58,8 +57,6 @@ public class WarehouseReleaseNote extends Base {
     @JoinColumn(name = "AgencyId")
     private Agency agencyId;
 
-    // @ManyToMany
-    // @JoinTable(name = "warehouseReleaseNote")
 
 
     public Integer getWarehouseReleaseNoteId() {
@@ -110,8 +107,6 @@ public class WarehouseReleaseNote extends Base {
         this.order = order;
     }
 
-    // @OneToMany(mappedBy = "phieuXuatKho")
-    // private List<ChiTietPhieuXuat> chiTietPhieuXuats = new ArrayList<>();
 
     public String getReason() {
         return reason;

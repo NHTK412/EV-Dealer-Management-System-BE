@@ -18,7 +18,6 @@ public class CustomerRequestDTO {
     @Size(min = 2, max = 100, message = "Customer name must be between 2 and 100 characters")
     private String customerName;
 
-    // @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male',
     // 'Female' or 'Other'")
     private GenderEnum gender;
 
@@ -37,7 +36,6 @@ public class CustomerRequestDTO {
     @Size(max = 200, message = "Address cannot exceed 200 characters")
     private String address;
 
-    // @Pattern(regexp = "^(VIP|Regular)?$", message = "Membership level must be
     // 'VIP' or 'Regular'")
 
     private CustomerMembershipLevelEnum membershipLevel;

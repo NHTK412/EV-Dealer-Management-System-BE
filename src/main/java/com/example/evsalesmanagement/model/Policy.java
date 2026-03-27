@@ -20,7 +20,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-//ChinhSachChietKhau = Policy
 @Entity
 @Table(name = "DiscountPolicy")
 public class Policy extends Base {
@@ -36,7 +35,6 @@ public class Policy extends Base {
     @Column(name = "PolicyValue")
     private BigDecimal policyValue;
 
-    // condition = dieu kien ap dung
     @Column(name = "PolicyCondition")
     private String policyCondition;
 
@@ -141,11 +139,7 @@ public class Policy extends Base {
         this.saleDiscountLevel = saleDiscountLevel;
     }
 
-    // @OneToMany(mappedBy = "chinhSachChietKhau")
-    // private List<BacChietKhauSoLuong> bacChietKhauSoLuongs = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "chinhSachChietKhau")
-    // private List<BacChietKhauDoanhSo> bacChietKhauDoanhSos = new ArrayList<>();
 
     
 

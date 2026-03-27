@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+import com.example.evsalesmanagement.dto.employee.ResetPasswordDTO;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.security.CustomerUserDetails;
 import com.example.evsalesmanagement.service.EmployeeService;
 import com.example.evsalesmanagement.utils.ApiResponse;
 
 import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -59,7 +61,7 @@ public class EmployeeController {
         }
 
         // Lấy thông tin chi tiết một nhân viên theo ID
-       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/{employeeId}")
         public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Integer employeeId) {
                 EmployeeResponseDTO employeeDTO = employeeService.getEmployeeById(employeeId);
@@ -89,7 +91,7 @@ public class EmployeeController {
         }
 
         // Cập nhật thông tin nhân viên
-       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @PutMapping("/{employeeId}")
         public ResponseEntity<ApiResponse<?>> updateEmployee(
                         @PathVariable Integer employeeId,
@@ -152,7 +154,7 @@ public class EmployeeController {
         }
 
         // Đếm số lượng nhân viên theo đại lý
-       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/agencies/{agencyId}/count")
         public ResponseEntity<ApiResponse<Long>> countEmployeesByAgency(@PathVariable Integer agencyId) {
                 long count = employeeService.countByAgency(agencyId);
@@ -161,14 +163,13 @@ public class EmployeeController {
         }
 
         // Đếm số lượng nhân viên theo chức vụ
-       @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
+        @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/positions/{role}/count")
-                public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
+        public ResponseEntity<ApiResponse<Long>> countEmployeesByRole(@PathVariable RoleEnum role) {
                 long count = employeeService.countByRole(role);
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, "Count employees by position successfully", count));
-}
-
+        }
 
         @PreAuthorize("hasAnyRole('DEALER_MANAGER', 'EVM_STAFF', 'DEALER_STAFF','ADMIN')")
         @GetMapping("/me")
@@ -180,6 +181,16 @@ public class EmployeeController {
                 EmployeeResponseDTO employeeResponseDTO = employeeService.getEmployeeById(employeeId);
                 return ResponseEntity.ok(
                                 new ApiResponse<>(true, null, employeeResponseDTO));
+        }
+
+        @PutMapping("/me/reset-password")
+        public ResponseEntity<ApiResponse<Void>> resetPassword(
+                        @AuthenticationPrincipal CustomerUserDetails customerUserDetails,
+                        @RequestBody ResetPasswordDTO resetPasswordDTO) {
+                Integer employeeId = customerUserDetails.getEmployeeId();
+                employeeService.resetPassword(employeeId, resetPasswordDTO);
+                return ResponseEntity.ok(new ApiResponse<>(true, "Password reset successfully", null));
+
         }
 
 }

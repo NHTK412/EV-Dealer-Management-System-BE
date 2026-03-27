@@ -17,7 +17,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-//DanhMucXe = VehicleCategory
 @Entity
 @Table(name = "VehicleCategory")
 public class VehicleCategory extends Base {

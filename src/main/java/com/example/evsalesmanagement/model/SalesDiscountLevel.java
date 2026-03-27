@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-//BacChietKhauDoanhSo = SalesDiscountLevel
 @Entity
 @Table(name = "SaleDiscountLevel")
 public class SalesDiscountLevel extends Base {

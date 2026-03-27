@@ -13,7 +13,6 @@ public class PaymentResponseDTO {
 
     private PaymentMethodEnum paymentMethod;
 
-    // private String paymentForm;
 
     private BigDecimal amount;
 
@@ -29,7 +28,6 @@ public class PaymentResponseDTO {
 
     private String vnpayCode;
 
-    // private Integer orderId;
 
     public PaymentResponseDTO() {
     }
@@ -66,13 +64,8 @@ public class PaymentResponseDTO {
         this.paymentMethod = paymentMethod;
     }
 
-    // public String getPaymentForm() {
-    // return paymentForm;
-    // }
 
-    // public void setPaymentForm(String paymentForm) {
     // this.paymentForm = paymentForm;
-    // }
 
     public BigDecimal getAmount() {
         return amount;
@@ -130,11 +123,6 @@ public class PaymentResponseDTO {
         this.vnpayCode = vnpayCode;
     }
 
-    // public Integer getOrderId() {
-    // return orderId;
-    // }
 
-    // public void setOrderId(Integer orderId) {
     // this.orderId = orderId;
-    // }
 }

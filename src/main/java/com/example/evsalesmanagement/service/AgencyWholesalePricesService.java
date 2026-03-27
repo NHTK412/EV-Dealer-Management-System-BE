@@ -28,8 +28,6 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Service
 public class AgencyWholesalePricesService {
 
-        // private final AgencyWholesalePriceController agencyWholesalePriceController;
-
         @Autowired
         private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
 
@@ -42,7 +40,6 @@ public class AgencyWholesalePricesService {
         // AgencyWholesalePricesService(AgencyWholesalePriceController
         // agencyWholesalePriceController) {
         // this.agencyWholesalePriceController = agencyWholesalePriceController;
-        // }
 
         @Transactional
         public AgencyWholesalePriceResponseDTO createAgencyWholesalePrice(
@@ -66,13 +63,13 @@ public class AgencyWholesalePricesService {
 
                 Agency agency = agencyRepository.findById(agencyWholesalePriceDTO.getAgencyId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy Agency với ID: "
+                                                "Agency not found with ID: "
                                                                 + agencyWholesalePriceDTO.getAgencyId()));
                 newPrice.setAgency(agency);
                 VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository
                                 .findById(agencyWholesalePriceDTO.getVehicleTypeDetailId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy VehicleTypeDetail với ID: "
+                                                "Vehicle type detail not found with ID: "
                                                                 + agencyWholesalePriceDTO.getVehicleTypeDetailId()));
                 newPrice.setVehicleTypeDetail(vehicleTypeDetail);
 
@@ -84,18 +81,17 @@ public class AgencyWholesalePricesService {
 
         }
 
-        // @Cacheable(value = "agency-wholesale-price-all", key = "#pageable")
         @Transactional
         public List<AgencyWholesalePriceSummaryDTO> getAllAgencyWholesalePrices(Pageable pageable) {
                 Page<AgencyWholesalePrice> agencyWholesalePrices = agencyWholesalePriceRepository.findAll(pageable);
                 return agencyWholesalePrices.stream().map(gs -> new AgencyWholesalePriceSummaryDTO(gs)).toList();
         }
 
-        @Cacheable(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @Cacheable(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         public AgencyWholesalePriceResponseDTO getByIdAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy AgencyWholesalePrice với ID: "
+                                                "Agency wholesale price not found with ID: "
                                                                 + agencyWholesalePriceId));
                 AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = new AgencyWholesalePriceResponseDTO(
                                 price);
@@ -105,13 +101,13 @@ public class AgencyWholesalePricesService {
                 return agencyWholesalePriceResponseDTO;
         }
 
-        @CachePut(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @CachePut(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO updateAgencyWholesalePrice(Integer agencyWholesalePriceId,
                         AgencyWholesalePriceRequestDTO agencyWholesalePrice) {
                 AgencyWholesalePrice updatePrice = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy AgencyWholesalePrice với ID: "
+                                                "Agency wholesale price not found with ID: "
                                                                 + agencyWholesalePriceId));
                 updatePrice.setWholesalePrice(agencyWholesalePrice.getWholesalePrice());
                 updatePrice.setMinimumQuantity(agencyWholesalePrice.getMinimumQuantity());
@@ -121,12 +117,12 @@ public class AgencyWholesalePricesService {
 
                 Agency agency = agencyRepository.findById(agencyWholesalePrice.getAgencyId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy Agency với ID: " + agencyWholesalePrice.getAgencyId()));
+                                                "Agency not found with ID: " + agencyWholesalePrice.getAgencyId()));
                 updatePrice.setAgency(agency);
                 VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository
                                 .findById(agencyWholesalePrice.getVehicleTypeDetailId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy VehicleTypeDetail với ID: "
+                                                "Vehicle type detail not found with ID: "
                                                                 + agencyWholesalePrice.getVehicleTypeDetailId()));
                 updatePrice.setVehicleTypeDetail(vehicleTypeDetail);
 
@@ -140,12 +136,13 @@ public class AgencyWholesalePricesService {
 
         }
 
-        @CacheEvict(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @CacheEvict(value = "agency-wholesale-price", key =
+        // "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO deleteAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy AgencyWholesalePrice với ID: "
+                                                "Agency wholesale price not found with ID: "
                                                                 + agencyWholesalePriceId));
 
                 AgencyWholesalePriceResponseDTO agencyWholesalePriceResponseDTO = new AgencyWholesalePriceResponseDTO(
@@ -153,7 +150,12 @@ public class AgencyWholesalePricesService {
                 agencyWholesalePriceResponseDTO.setAgency(new AgencyResponseDTO(price.getAgency()));
                 agencyWholesalePriceResponseDTO
                                 .setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(price.getVehicleTypeDetail()));
-                agencyWholesalePriceRepository.deleteById(agencyWholesalePriceId);
+
+                if (price.getStatus() != AgencyWholesalePriceStatusEnum.INACTIVE) {
+                        price.setStatus(AgencyWholesalePriceStatusEnum.INACTIVE);
+                        agencyWholesalePriceRepository.save(price);
+                }
+
                 return agencyWholesalePriceResponseDTO;
         }
 }

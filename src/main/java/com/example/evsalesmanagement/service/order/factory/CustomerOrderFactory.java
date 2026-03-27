@@ -1,6 +1,5 @@
 package com.example.evsalesmanagement.service.order.factory;
 
-// import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ import com.example.evsalesmanagement.repository.QuoteRepository;
 @Component
 public class CustomerOrderFactory implements OrderFactory {
 
-    // private final QuoteRepository quoteRepository;
-    // private final EmployeeRepository employeeRepository;
 
     @Autowired
     private QuoteRepository quoteRepository;
@@ -34,11 +31,9 @@ public class CustomerOrderFactory implements OrderFactory {
     private Integer employeeId;
     private String notes;
 
-    // public CustomerOrderFactory(QuoteRepository quoteRepository,
     // EmployeeRepository employeeRepository) {
     // this.quoteRepository = quoteRepository;
     // this.employeeRepository = employeeRepository;
-    // }
 
     public CustomerOrderFactory withQuoteId(Integer quoteId) {
         this.quoteId = quoteId;
@@ -58,10 +53,10 @@ public class CustomerOrderFactory implements OrderFactory {
     @Override
     public Order createOrder() {
         Quote quote = quoteRepository.findById(quoteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Mã báo giá không hợp lệ"));
+            .orElseThrow(() -> new ResourceNotFoundException("Quote not found with ID: " + quoteId));
 
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Mã nhân viên không hợp lệ"));
+            .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
 
         Customer customer = quote.getCustomer();
 

@@ -21,7 +21,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-//DonHang = Oder
 @Entity
 @Table(name = "Orders")
 public class Order extends Base {
@@ -36,7 +35,6 @@ public class Order extends Base {
     @Enumerated(EnumType.STRING)
     @Column(name = "Statuss")
     private OrderStatusEnum status;
-    // private String status;
 
     @Column(name = "Notes")
     private String notes;
@@ -209,47 +207,19 @@ public class Order extends Base {
         this.agency = agency;
     }
 
-    // @OneToOne(mappedBy = "donHang")
-    // private BaoGia baoGia;
 
-    // @OneToMany(mappedBy = "donHang")
-    // private List<ThanhToan> thanhToans = new ArrayList<>();
 
-    // @OneToOne(mappedBy = "donHang")
-    // private GiaoXe giaoXe;
 
-    // @OneToOne(mappedBy = "donHang")
-    // private PhieuXuatKho phieuXuatKho;
 
-    // public BaoGia getBaoGia() {
-    // return baoGia;
-    // }
 
-    // public void setBaoGia(BaoGia baoGia) {
     // this.baoGia = baoGia;
-    // }
 
-    // public List<ThanhToan> getThanhToans() {
-    // return thanhToans;
-    // }
 
-    // public void setThanhToans(List<ThanhToan> thanhToans) {
     // this.thanhToans = thanhToans;
-    // }
 
-    // public GiaoXe getGiaoXe() {
-    // return giaoXe;
-    // }
 
-    // public void setGiaoXe(GiaoXe giaoXe) {
     // this.giaoXe = giaoXe;
-    // }
 
-    // public PhieuXuatKho getPhieuXuatKho() {
-    // return phieuXuatKho;
-    // }
 
-    // public void setPhieuXuatKho(PhieuXuatKho phieuXuatKho) {
     // this.phieuXuatKho = phieuXuatKho;
-    // }
 }

@@ -14,7 +14,6 @@ public class ImportRequestResponseDTO {
 
     private String note;
 
-    // private EmployeeDTO employeeDTO;
 
     private Integer employeeId;
 
@@ -87,13 +86,8 @@ public class ImportRequestResponseDTO {
         this.note = note;
     }
 
-    // public EmployeeDTO getEmployeeDTO() {
-    // return employeeDTO;
-    // }
 
-    // public void setEmployeeDTO(EmployeeDTO employeeDTO) {
     // this.employeeDTO = employeeDTO;
-    // }
 
     public List<ImportRequestDetailResponseDTO> getImportRequestDetails() {
         return importRequestDetails;

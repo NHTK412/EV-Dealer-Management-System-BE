@@ -38,36 +38,27 @@ public class OrderDetail extends Base {
     @Column(name = "Registration Fee")
     private BigDecimal registrartionFee;
 
-    // CompulsoryInsurance = bao hiem bat buoc
     @Column(name = "CompulsoryInsurance")
     private BigDecimal compulsoryInsurance;
 
-    // MaterialInsurance = bao hiem vat chat
     @Column(name = "MaterialInsurance")
     private BigDecimal materialInsurance;
 
-    // RoadMaintenanceMees = phi bao tri duong bo
     @Column(name = "RoadMaintenanceMees")
     private BigDecimal roadMaintenanceMees;
 
-    // VehicleRegistrationServiceFee = phi dich vu dang ky xe
     @Column(name = "VehicleRegistrationServiceFee")
     private BigDecimal vehicleRegistrationServiceFee;
 
-    // DiscountPercentage = phan tram chiet khau
     @Column(name = "DiscountPercentage")
     private BigDecimal discountPercentage;
 
-    // WhoblesalePrice = gia si
-    // @Column(name = "WholesalePrice")
-    // private BigDecimal wholesalePrice;
     private BigDecimal price;
 
     // total amount = tong tien
     @Column(name = "TotalAmount")
     private BigDecimal totalAmount;
 
-    // order = don hang
     @ManyToOne
     @JoinColumn(name = "OrderId")
     private Order order;
@@ -164,13 +155,8 @@ public class OrderDetail extends Base {
         this.discountPercentage = discountPercentage;
     }
 
-    // public BigDecimal getWholesalePrice() {
-    // return wholesalePrice;
-    // }
 
-    // public void setWholesalePrice(BigDecimal wholesalePrice) {
     // this.wholesalePrice = wholesalePrice;
-    // }
 
     public BigDecimal getTotalAmount() {
         return totalAmount;

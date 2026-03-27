@@ -7,23 +7,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// import com.example.evsalesmanagement.model.Account;
 import com.example.evsalesmanagement.model.Employee;
 
 public class CustomerUserDetails implements UserDetails {
 
     private Employee employee;
 
-// <<<<<<< HEAD
     public CustomerUserDetails(Employee employee) {
         this.employee = employee;
-// =======
-//     public CustomerUserDetails() {
-//     }
 
-//     public CustomerUserDetails(Account account) {
 //         this.account = account;
-// >>>>>>> feat/Khang/cauHinhRedis
     }
 
     @Override

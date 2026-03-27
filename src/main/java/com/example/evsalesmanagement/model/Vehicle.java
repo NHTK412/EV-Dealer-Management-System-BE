@@ -105,13 +105,7 @@ public class Vehicle extends Base {
         this.agency = agency;
     }
 
-    // @OneToMany(mappedBy = "xe")
-    // private List<LichHenLaiThu> lichHenLaiThus = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "xe")
-    // private List<ChiTietPhieuXuat> chiTietPhieuXuats = new ArrayList<>();
 
-    // @OneToMany(mappedBy = "xe")
-    // private List<ChiTietPhieuNhap> chiTietPhieuNhaps = new ArrayList<>();
 
 }

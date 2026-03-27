@@ -251,7 +251,7 @@ public class InventoryReportService {
 
         } catch (Exception e) {
             log.error("Error exporting inventory report to Excel", e);
-            throw new InternalServerException("Lỗi khi xuất báo cáo tồn kho: " + e.getMessage(), e);
+            throw new InternalServerException("Failed to export inventory report to Excel", e);
         }
     }
 

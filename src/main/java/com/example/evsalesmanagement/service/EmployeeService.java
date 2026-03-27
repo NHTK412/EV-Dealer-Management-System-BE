@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.evsalesmanagement.dto.employee.EmployeeRequestDTO;
 import com.example.evsalesmanagement.dto.employee.EmployeeResponseDTO;
+import com.example.evsalesmanagement.dto.employee.ResetPasswordDTO;
 import com.example.evsalesmanagement.enums.EmployeeStatusEnum;
 import com.example.evsalesmanagement.enums.RoleEnum;
 import com.example.evsalesmanagement.exception.ConflictException;
@@ -20,6 +21,7 @@ import com.example.evsalesmanagement.model.Agency;
 import com.example.evsalesmanagement.model.Employee;
 import com.example.evsalesmanagement.repository.AgencyRepository;
 import com.example.evsalesmanagement.repository.EmployeeRepository;
+import com.example.evsalesmanagement.security.CustomerUserDetails;
 
 @Service
 public class EmployeeService {
@@ -37,7 +39,7 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo ID
-    @Cacheable(value = "employee", key = "#employeeId")
+    // @Cacheable(value = "employee", key = "#employeeId")
     public EmployeeResponseDTO getEmployeeById(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
@@ -87,13 +89,12 @@ public class EmployeeService {
         }
 
         Employee savedEmployee = employeeRepository.save(employee);
-        // throw new RuntimeException("Debugging: Check password hashing");
 
         return new EmployeeResponseDTO(savedEmployee);
     }
 
     // Cập nhật nhân viên
-    @CachePut(value = "employee", key = "#employeeId")
+    // @CachePut(value = "employee", key = "#employeeId")
     @Transactional
     public EmployeeResponseDTO updateEmployee(Integer employeeId, EmployeeRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -130,7 +131,7 @@ public class EmployeeService {
         return new EmployeeResponseDTO(updatedEmployee);
     }
 
-    @CacheEvict(value = "employee", key = "#employeeId")
+    // @CacheEvict(value = "employee", key = "#employeeId")
     @Transactional
     public void deleteEmployee(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -156,5 +157,25 @@ public class EmployeeService {
 
     public long countByRole(RoleEnum role) {
         return employeeRepository.countByRoleAndStatus(role, EmployeeStatusEnum.ACTIVE);
+    }
+
+    @Transactional
+    public void resetPassword(
+            Integer employeeId,
+            ResetPasswordDTO resetPasswordDTO) {
+            
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (encoder.matches(resetPasswordDTO.getOldPassword(), employee.getPassword())) {
+            String hashedPassword = encoder.encode(resetPasswordDTO.getNewPassword());
+            employee.setPassword(hashedPassword);
+            employeeRepository.save(employee);
+        } else {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
     }
 }

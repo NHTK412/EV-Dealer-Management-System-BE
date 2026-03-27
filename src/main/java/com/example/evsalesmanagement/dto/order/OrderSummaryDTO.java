@@ -13,19 +13,15 @@ public class OrderSummaryDTO {
 
     private String contractNumber;
 
-    // private Integer employeeId;
 
     private String employeeName;
 
-    // private String employeePhoneNumber;
 
-    // private String employeeEmail;
 
     private BigDecimal totalAmount;
 
     private OrderStatusEnum status;
 
-    // private Integer customerId;
 
     private String customerName;
 
@@ -101,17 +97,11 @@ public class OrderSummaryDTO {
         this.customerName = customerName;
     }
 
-    // private String customerEmail;
 
-    // private String customerPhoneNumber;
 
-    // private String customerAddress;
 
-    // private Integer agencyId;
 
-    // private String agencyName;
 
-    // private List<OrderDetailResponseDTO> orderDetailResponseDTOs = new
     // ArrayList<>();
 
 }

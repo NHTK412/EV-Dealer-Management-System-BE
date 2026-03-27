@@ -36,7 +36,6 @@ public class VehicleController {
     @Autowired
     private VehicleTypeService vehicleTypeService;
 
-    // =============== VEHICLE ===============
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF')")
     @PostMapping
     public ResponseEntity<ApiResponse<VehicleResponseDTO>> createVehicle(@RequestBody VehicleRequestDTO request) {
@@ -108,4 +107,11 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleTypeService.updateVehicleType_v2(vehicleTypeId, updateVehicleTypeDTO));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF')")
+    @DeleteMapping("/type_v2/{vehicleTypeId}")
+    public ResponseEntity<ApiResponse<?>> deleteVehicleTypeV2(
+            @PathVariable Integer vehicleTypeId) {
+        vehicleTypeService.deleteVehicleType_v2(vehicleTypeId);
+        return ResponseEntity.ok(new ApiResponse<>(true, "The vehicle type has been successfully deleted", null));
+    }
 }
