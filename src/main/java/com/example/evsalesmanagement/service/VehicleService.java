@@ -46,14 +46,14 @@ public class VehicleService {
                 VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository
                                 .findById(request.getVehicleTypeDetailId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy chi tiết loại xe với ID: "
+                                                "Vehicle type detail not found with ID: "
                                                                 + request.getVehicleTypeDetailId()));
                 newVehicle.setVehicleTypeDetail(vehicleTypeDetail);
 
                 // Lấy đối tượng DaiLy theo ID
                 Agency agency = agencyRepository.findById(request.getAgencyId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy đại lý với ID: " + request.getAgencyId()));
+                                                "Agency not found with ID: " + request.getAgencyId()));
                 newVehicle.setAgency(agency);
                 vehicleRepository.save(newVehicle);
                 VehicleResponseDTO response = new VehicleResponseDTO(newVehicle);
@@ -62,19 +62,18 @@ public class VehicleService {
 
         }
 
-       @Transactional
+        @Transactional
         public Page<VehicleSummaryDTO> getAllVehicle(Pageable pageable) {
-        Page<Vehicle> vehicles = vehicleRepository.findAll(pageable);
-        return vehicles.map(vehicle -> new VehicleSummaryDTO(vehicle));
+                Page<Vehicle> vehicles = vehicleRepository.findAll(pageable);
+                return vehicles.map(vehicle -> new VehicleSummaryDTO(vehicle));
         }
-
 
         // @Cacheable(value = "vehicle", key = "#vehicleId")
         @Transactional
         public VehicleResponseDTO getByIdVehicle(Integer vehicleId) {
                 Vehicle vehicle = vehicleRepository.findById(vehicleId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy xe với ID: " + vehicleId));
+                                                "Vehicle not found with ID: " + vehicleId));
                 VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
                 response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail()));
                 response.setAgency(new AgencyResponseDTO(vehicle.getAgency()));
@@ -86,7 +85,7 @@ public class VehicleService {
         public VehicleResponseDTO updateVehicle(Integer vehicleId, VehicleRequestDTO request) {
                 Vehicle updateVehicle = vehicleRepository.findById(vehicleId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy xe với ID: " + vehicleId));
+                                                "Vehicle not found with ID: " + vehicleId));
                 updateVehicle.setChassicNumber(request.getChassisNumber());
                 updateVehicle.setMachineNumber(request.getMachineNumber());
                 updateVehicle.setStatus(request.getStatus());
@@ -96,13 +95,13 @@ public class VehicleService {
                 VehicleTypeDetail vehicleTypeDetail = vehicleTypeDetailRepository
                                 .findById(request.getVehicleTypeDetailId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy chi tiết loại xe với ID: "
+                                                "Vehicle type detail not found with ID: "
                                                                 + request.getVehicleTypeDetailId()));
                 updateVehicle.setVehicleTypeDetail(vehicleTypeDetail);
                 // Lấy đối tượng DaiLy theo ID
                 Agency agency = agencyRepository.findById(request.getAgencyId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy đại lý với ID: " + request.getAgencyId()));
+                                                "Agency not found with ID: " + request.getAgencyId()));
                 updateVehicle.setAgency(agency);
                 vehicleRepository.save(updateVehicle);
                 VehicleResponseDTO response = new VehicleResponseDTO(updateVehicle);
@@ -115,7 +114,7 @@ public class VehicleService {
         public VehicleResponseDTO deleteVehicle(Integer vehicleId) {
                 Vehicle vehicle = vehicleRepository.findById(vehicleId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy xe với ID: " + vehicleId));
+                                                "Vehicle not found with ID: " + vehicleId));
                 VehicleResponseDTO response = new VehicleResponseDTO(vehicle);
                 response.setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(vehicle.getVehicleTypeDetail()));
                 vehicleRepository.deleteById(vehicleId);

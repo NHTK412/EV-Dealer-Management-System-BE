@@ -85,7 +85,7 @@ public class WarehouseReleaseNoteService {
                 vehicles.stream()
                         .map(VehicleResponseDTO::new)
                         .collect(java.util.stream.Collectors.toList()));
-        return new ApiResponse<>(true, "Xuất kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse release note created successfully", responseDTO);
     }
 
     // @CachePut(value = "warehouse-release-note", key = "#id")
@@ -99,7 +99,7 @@ public class WarehouseReleaseNoteService {
         }
         warehouseReleaseNoteRepository.save(release);
         WarehouseReleaseNoteResponseDTO responseDTO = new WarehouseReleaseNoteResponseDTO(release);
-        return new ApiResponse<>(true, "Cập nhật trạng thái phiếu xuất kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse release note status updated successfully", responseDTO);
     }
 
     // phiếu"
@@ -112,7 +112,7 @@ public class WarehouseReleaseNoteService {
             return new ApiResponse<>(false, "Deletion is only allowed when status is PENDING_APPROVAL", null);
         }
         warehouseReleaseNoteRepository.delete(release);
-        return new ApiResponse<>(true, "Xóa phiếu xuất kho thành công", null);
+        return new ApiResponse<>(true, "Warehouse release note deleted successfully", null);
     }
 
 }

@@ -83,7 +83,7 @@ public class WarehouseReceiptService {
                 vehicles.stream()
                         .map(VehicleResponseDTO::new)
                         .collect(java.util.stream.Collectors.toList()));
-        return new ApiResponse<>(true, "Nhập kho thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse receipt created successfully", responseDTO);
     }
 
     // @CachePut(value = "warehouse-receipt", key = "#id")
@@ -96,7 +96,7 @@ public class WarehouseReceiptService {
         receipt.setStatus(request.getStatus());
         warehouseReceiptRepository.save(receipt);
         WarehouseReceiptResponseDTO responseDTO = new WarehouseReceiptResponseDTO(receipt);
-        return new ApiResponse<>(true, "Cập nhật trạng thái thành công", responseDTO);
+        return new ApiResponse<>(true, "Warehouse receipt status updated successfully", responseDTO);
     }
 
     // @CacheEvict(value = "warehouse-receipt", key = "#id")
@@ -108,6 +108,6 @@ public class WarehouseReceiptService {
             return new ApiResponse<>(false, "Deletion is only allowed when status is PENDING_APPROVAL", null);
         }
         warehouseReceiptRepository.delete(receipt);
-        return new ApiResponse<>(true, "Xóa phiếu nhập kho thành công", null);
+        return new ApiResponse<>(true, "Warehouse receipt deleted successfully", null);
     }
 }

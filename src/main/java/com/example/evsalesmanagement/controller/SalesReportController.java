@@ -23,7 +23,6 @@ public class SalesReportController {
     @Autowired
     private SalesReportService salesReportService;
 
-
     /**
      * Lấy doanh số tất cả nhân viên bán hàng theo tháng
      * GET /sales-report/employee/month?year=2024&month=11
@@ -34,7 +33,7 @@ public class SalesReportController {
             @RequestParam Integer year,
             @RequestParam Integer month) {
         List<EmployeeSalesDTO> response = salesReportService.getEmployeeSalesByMonth(year, month);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số nhân viên theo tháng thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Employee monthly sales retrieved successfully", response));
     }
 
     /**
@@ -46,7 +45,7 @@ public class SalesReportController {
     public ResponseEntity<ApiResponse<List<EmployeeSalesDTO>>> getEmployeeSalesByYear(
             @RequestParam Integer year) {
         List<EmployeeSalesDTO> response = salesReportService.getEmployeeSalesByYear(year);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số nhân viên theo năm thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Employee yearly sales retrieved successfully", response));
     }
 
     /**
@@ -61,7 +60,7 @@ public class SalesReportController {
             @RequestParam Integer month) {
         EmployeeSalesDTO response = salesReportService.getEmployeeSalesByEmployeeAndMonth(employeeId, year, month);
         return ResponseEntity
-                .ok(new ApiResponse<>(true, "Lấy doanh số nhân viên theo tháng thành công", response));
+                .ok(new ApiResponse<>(true, "Employee monthly sales retrieved successfully", response));
     }
 
     /**
@@ -74,9 +73,8 @@ public class SalesReportController {
             @PathVariable Integer employeeId,
             @RequestParam Integer year) {
         EmployeeSalesDTO response = salesReportService.getEmployeeSalesByEmployeeAndYear(employeeId, year);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số nhân viên theo năm thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Employee yearly sales retrieved successfully", response));
     }
-
 
     /**
      * Lấy doanh số tất cả đại lý theo tháng
@@ -88,7 +86,7 @@ public class SalesReportController {
             @RequestParam Integer year,
             @RequestParam Integer month) {
         List<AgencySalesDTO> response = salesReportService.getAgencySalesByMonth(year, month);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số đại lý theo tháng thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Agency monthly sales retrieved successfully", response));
     }
 
     /**
@@ -100,7 +98,7 @@ public class SalesReportController {
     public ResponseEntity<ApiResponse<List<AgencySalesDTO>>> getAgencySalesByYear(
             @RequestParam Integer year) {
         List<AgencySalesDTO> response = salesReportService.getAgencySalesByYear(year);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số đại lý theo năm thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Agency yearly sales retrieved successfully", response));
     }
 
     /**
@@ -114,7 +112,7 @@ public class SalesReportController {
             @RequestParam Integer year,
             @RequestParam Integer month) {
         AgencySalesDTO response = salesReportService.getAgencySalesByAgencyAndMonth(agencyId, year, month);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số đại lý theo tháng thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Agency monthly sales retrieved successfully", response));
     }
 
     /**
@@ -127,7 +125,7 @@ public class SalesReportController {
             @PathVariable Integer agencyId,
             @RequestParam Integer year) {
         List<AgencySalesDTO> response = salesReportService.getAgencySalesByAgencyAndYear(agencyId, year);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy doanh số đại lý theo năm thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Agency yearly sales retrieved successfully", response));
     }
 
 }

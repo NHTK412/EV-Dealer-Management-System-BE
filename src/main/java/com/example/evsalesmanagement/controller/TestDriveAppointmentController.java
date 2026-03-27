@@ -32,7 +32,7 @@ public class TestDriveAppointmentController {
                         @Valid @RequestBody TestDriveAppointmentRequestDTO request) {
                 TestDriveAppointmentSummaryDTO createdAppointment = service.createAppointment(request);
                 ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true,
-                                "Tạo lịch hẹn lái thử thành công", createdAppointment);
+                                "Test-drive appointment created successfully", createdAppointment);
                 return ResponseEntity.ok(response);
         }
 
@@ -44,7 +44,7 @@ public class TestDriveAppointmentController {
                         @Valid @RequestBody TestDriveAppointmentRequestDTO request) {
                 TestDriveAppointmentSummaryDTO updatedAppointment = service.updateAppointment(id, request);
                 ApiResponse<TestDriveAppointmentSummaryDTO> response = new ApiResponse<>(true,
-                                "Cập nhật lịch hẹn lái thử thành công", updatedAppointment);
+                                "Test-drive appointment updated successfully", updatedAppointment);
                 return ResponseEntity.ok(response);
         }
 
@@ -67,7 +67,8 @@ public class TestDriveAppointmentController {
         @DeleteMapping("/{id}")
         public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable("id") Integer id) {
                 service.deleteAppointment(id);
-                ApiResponse<Void> response = new ApiResponse<>(true, "Xóa lịch hẹn lái thử thành công", null);
+                ApiResponse<Void> response = new ApiResponse<>(true, "Test-drive appointment deleted successfully",
+                                null);
                 return ResponseEntity.ok(response);
         }
 
@@ -86,7 +87,8 @@ public class TestDriveAppointmentController {
                                 status);
 
                 ApiResponse<List<TestDriveAppointmentSummaryDTO>> response = new ApiResponse<>(
-                                true, "Lấy danh sách lịch hẹn lái thử thành công", testDriveAppointmentSummaryDTOs);
+                                true, "Test-drive appointment list retrieved successfully",
+                                testDriveAppointmentSummaryDTOs);
 
                 return ResponseEntity.ok(response);
         }
@@ -100,7 +102,7 @@ public class TestDriveAppointmentController {
 
                 ApiResponse<TestDriveAppointmentResponseDTO> response = new ApiResponse<>(
                                 true,
-                                "Lấy thông tin lịch hẹn lái thử thành công", dto);
+                                "Test-drive appointment details retrieved successfully", dto);
 
                 return ResponseEntity.ok(response);
         }

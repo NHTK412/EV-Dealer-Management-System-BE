@@ -100,7 +100,7 @@ public class VehicleDeliveryService {
         VehicleDelivery vehicleDelivery = vehicleDeliveryRepository
                 .findByIdAndAgencyId(vehicleDeliveryId, agencyId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy đơn giao hàng với id: " + vehicleDeliveryId + " thuộc đại lý: " + agencyId));
+                        "Vehicle delivery not found with id: " + vehicleDeliveryId + " for agency: " + agencyId));
         return new VehicleDeliveryResponseDTO(vehicleDelivery);
     }
 
@@ -109,7 +109,7 @@ public class VehicleDeliveryService {
         VehicleDelivery vehicleDelivery = vehicleDeliveryRepository
                 .findByIdWithDetails(vehicleDeliveryId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy đơn giao hàng với id: " + vehicleDeliveryId));
+                        "Vehicle delivery not found with id: " + vehicleDeliveryId));
         return new VehicleDeliveryResponseDTO(vehicleDelivery);
     }
 

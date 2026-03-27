@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-
 @RestController
 @RequestMapping("/warehouse")
 public class WarehouseController {
@@ -58,8 +57,8 @@ public class WarehouseController {
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PatchMapping("/import/{warehouseReceiptId}")
     public ResponseEntity<ApiResponse<WarehouseReceiptResponseDTO>> updateWarehouseReceiptStatus(
-        @PathVariable Integer warehouseReceiptId,
-        @RequestBody WarehouseReceiptStatusUpdateDTO request) {
+            @PathVariable Integer warehouseReceiptId,
+            @RequestBody WarehouseReceiptStatusUpdateDTO request) {
         WarehouseReceiptResponseDTO dto = warehouseReceiptService
                 .updateWarehouseReceiptStatus(warehouseReceiptId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
@@ -71,7 +70,7 @@ public class WarehouseController {
             @PathVariable Integer warehouseReceiptId) {
         WarehouseReceiptResponseDTO dto = warehouseReceiptService.getWarehouseReceiptById(warehouseReceiptId);
         warehouseReceiptService.deleteWarehouseReceipt(warehouseReceiptId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "xoá thành công", dto));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Deleted successfully", dto));
     }
 
     // --- Phiếu xuất kho ---
@@ -104,8 +103,8 @@ public class WarehouseController {
     @PreAuthorize("hasAnyRole('ADMIN','EVM_STAFF','DEADLER_STAFF','DEADLER_MANAGER')")
     @PatchMapping("/export/{warehouseReleaseNoteId}")
     public ResponseEntity<ApiResponse<WarehouseReleaseNoteResponseDTO>> updateWarehouseExportStatus(
-        @PathVariable Integer warehouseReleaseNoteId,
-        @RequestBody WarehouseReleaseNoteStatusUpdateDTO request) {
+            @PathVariable Integer warehouseReleaseNoteId,
+            @RequestBody WarehouseReleaseNoteStatusUpdateDTO request) {
         WarehouseReleaseNoteResponseDTO dto = warehouseExportService
                 .updateWarehouseExport(warehouseReleaseNoteId, request).getData();
         return ResponseEntity.ok(new ApiResponse<>(true, null, dto));
@@ -117,6 +116,6 @@ public class WarehouseController {
             @PathVariable Integer warehouseReleaseNoteId) {
         WarehouseReleaseNoteResponseDTO dto = warehouseExportService.getByIdWarehouseExport(warehouseReleaseNoteId);
         warehouseExportService.deleteWarehouseExport(warehouseReleaseNoteId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "xoá thành công ", dto));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Deleted successfully", dto));
     }
 }

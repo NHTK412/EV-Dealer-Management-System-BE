@@ -65,7 +65,7 @@ public class VehicleDeliveryController {
 
         List<VehicleDeliverySummaryDTO> deliveries = vehicleDeliveryService.getAllByAgencyId(agId, pageable);
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách đơn giao hàng thành công", deliveries));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Vehicle delivery list retrieved successfully", deliveries));
     }
 
     // Lấy chi tiết đơn giao hàng của đại lý
@@ -81,7 +81,7 @@ public class VehicleDeliveryController {
         VehicleDeliveryResponseDTO delivery = vehicleDeliveryService
                 .getByIdAndAgencyId(vehicleDeliveryId, agId);
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết đơn giao hàng thành công", delivery));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Vehicle delivery details retrieved successfully", delivery));
     }
 
     // Lấy chi tiết đơn giao hàng (admin/staff)
@@ -92,7 +92,7 @@ public class VehicleDeliveryController {
 
         VehicleDeliveryResponseDTO delivery = vehicleDeliveryService.getById(vehicleDeliveryId);
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết đơn giao hàng thành công", delivery));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Vehicle delivery details retrieved successfully", delivery));
     }
 
 }

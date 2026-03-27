@@ -78,7 +78,7 @@ public class VehicleTypeService {
         public ApiResponse<VehicleTypeResponseDTO_v2> getVehicleTypeById_v2(Integer vehicleTypeId) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy loại xe với id :" + vehicleTypeId));
+                                                "Vehicle type not found with id: " + vehicleTypeId));
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(vehicleType));
         }
 
@@ -142,7 +142,7 @@ public class VehicleTypeService {
                         UpdateVehicleTypeDTO updateVehicleTypeDTO) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy loại xe với id:" + vehicleTypeId));
+                                                "Vehicle type not found with id: " + vehicleTypeId));
 
                 vehicleType.setVehicleTypeName(updateVehicleTypeDTO.getVehicleTypeName());
                 vehicleType.setManufactureYear(updateVehicleTypeDTO.getManufactureYear());
@@ -229,7 +229,7 @@ public class VehicleTypeService {
         public void deleteVehicleType_v2(Integer vehicleTypeId) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Không tìm thấy loại xe với id:" + vehicleTypeId));
+                                                "Vehicle type not found with id: " + vehicleTypeId));
                 vehicleTypeRepository.delete(vehicleType);
         }
 }

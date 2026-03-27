@@ -39,7 +39,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         List<CategoryResponseDTO> response = categoryService.getAllCategories(pageable);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách danh mục thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category list retrieved successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
@@ -48,14 +48,14 @@ public class CategoryController {
             @PathVariable CategoryStatusEnum status) {
         List<CategoryResponseDTO> response = categoryService.getCategoriesByStatus(status);
         return ResponseEntity
-                .ok(new ApiResponse<>(true, "Lấy danh sách danh mục theo trạng thái thành công", response));
+                .ok(new ApiResponse<>(true, "Categories by status retrieved successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('EVM_STAFF', 'ADMIN')")
     @GetMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> getCategoryById(@PathVariable Integer categoryId) {
         CategoryResponseDTO response = categoryService.getCategoryById(categoryId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Lấy thông tin danh mục thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category details retrieved successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -63,7 +63,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> createCategory(
             @RequestBody CategoryRequestDTO requestDTO) {
         CategoryResponseDTO response = categoryService.createCategory(requestDTO);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Tạo danh mục thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category created successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -72,21 +72,21 @@ public class CategoryController {
             @PathVariable Integer categoryId,
             @RequestBody CategoryRequestDTO requestDTO) {
         CategoryResponseDTO response = categoryService.updateCategory(categoryId, requestDTO);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Cập nhật danh mục thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category updated successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> deleteCategory(@PathVariable Integer categoryId) {
         CategoryResponseDTO response = categoryService.deleteCategory(categoryId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Xóa danh mục thành công", response));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category deleted successfully", response));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{categoryId}/permanent")
     public ResponseEntity<ApiResponse<Void>> permanentDeleteCategory(@PathVariable Integer categoryId) {
         categoryService.permanentDeleteCategory(categoryId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Xóa vĩnh viễn danh mục thành công", null));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Category permanently deleted successfully", null));
     }
 
 }
