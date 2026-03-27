@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,13 @@ public class AuthService {
     @Autowired
     JwtUtil jwtUtil;
 
-    private static long expiration = 1000 * 60 * 60 * 4; // 4h
+    // private static long expiration = 1000 * 60 * 60 * 4; // 4h
+
+    @Value("${jwt.expiration-time}")
+    private long expiration;
+
+    @Value("${refresh-token.expiration-time}")
+    private long refreshTokenExpiration;
 
     final private SecureRandom secureRandom = new SecureRandom();
 
@@ -50,7 +57,8 @@ public class AuthService {
 
         String refreshToken = Hex.encodeHexString(bytes);
 
-        redisTemplate.opsForValue().set("refreshToken::" + refreshToken, employee.getUsername(), 7, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("refreshToken::" + refreshToken, employee.getUsername(), refreshTokenExpiration,
+                TimeUnit.MILLISECONDS);
 
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
         authResponseDTO.setUsername(employee.getUsername());
