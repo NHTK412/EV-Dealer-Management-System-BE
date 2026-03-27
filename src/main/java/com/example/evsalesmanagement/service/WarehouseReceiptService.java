@@ -44,7 +44,7 @@ public class WarehouseReceiptService {
         return receipts.map(WarehouseReceiptSummaryDTO::new);
     }
 
-    @Cacheable(value = "warehouse-receipt", key = "#id")
+    // @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
     public WarehouseReceiptResponseDTO getWarehouseReceiptById(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)
@@ -86,7 +86,7 @@ public class WarehouseReceiptService {
         return new ApiResponse<>(true, "Nhập kho thành công", responseDTO);
     }
 
-    @CachePut(value = "warehouse-receipt", key = "#id")
+    // @CachePut(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<WarehouseReceiptResponseDTO> updateWarehouseReceiptStatus(
             Integer id,
@@ -99,7 +99,7 @@ public class WarehouseReceiptService {
         return new ApiResponse<>(true, "Cập nhật trạng thái thành công", responseDTO);
     }
 
-    @CacheEvict(value = "warehouse-receipt", key = "#id")
+    // @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<Void> deleteWarehouseReceipt(Integer id) {
         WarehouseReceipt receipt = warehouseReceiptRepository.findById(id)

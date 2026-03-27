@@ -3,6 +3,8 @@ package com.example.evsalesmanagement.model;
 import java.util.List;
 
 import org.hibernate.annotations.ManyToAny;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +26,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE vehicle_type SET deleted = true WHERE vehicle_type_id = ?")
+@SQLRestriction("deleted = false")
 public class VehicleType extends Base {
 
     @Id
@@ -43,5 +47,7 @@ public class VehicleType extends Base {
     @OneToMany(mappedBy = "vehicleType", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<VehicleTypeDetail> vehicleTypeDetails;
 
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

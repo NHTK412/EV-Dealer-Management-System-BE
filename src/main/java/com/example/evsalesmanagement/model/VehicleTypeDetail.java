@@ -2,6 +2,9 @@ package com.example.evsalesmanagement.model;
 
 import java.math.BigDecimal;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +24,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE vehicle_type_detail SET deleted = true WHERE vehicle_type_detail_id = ?")
+@SQLRestriction("deleted = false")
 public class VehicleTypeDetail extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +55,8 @@ public class VehicleTypeDetail extends Base {
     @ManyToOne
     @JoinColumn(name = "VehicleTypeId")
     private VehicleType vehicleType;
+
+    @Column(name = "deleted")
+    private Boolean deleted = false;
 
 }

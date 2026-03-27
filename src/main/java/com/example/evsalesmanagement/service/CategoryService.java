@@ -39,8 +39,8 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "category", key = "#categoryId")
-    @Transactional(readOnly = true)
+    
+    @Transactional()
     public CategoryResponseDTO getCategoryById(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
@@ -63,7 +63,7 @@ public class CategoryService {
         return new CategoryResponseDTO(savedCategory);
     }
 
-    @CachePut(value = "category", key = "#categoryId")
+   
     @Transactional
     public CategoryResponseDTO updateCategory(Integer categoryId, CategoryRequestDTO requestDTO) {
         VehicleCategory category = categoryRepository.findById(categoryId)
@@ -80,7 +80,7 @@ public class CategoryService {
         return new CategoryResponseDTO(updatedCategory);
     }
 
-    @CacheEvict(value = "category", key = "#categoryId")
+    
     @Transactional
     public CategoryResponseDTO deleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)
@@ -92,7 +92,7 @@ public class CategoryService {
         return new CategoryResponseDTO(deletedCategory);
     }
 
-    @CacheEvict(value = "category", key = "#categoryId")
+    
     @Transactional
     public void permanentDeleteCategory(Integer categoryId) {
         VehicleCategory category = categoryRepository.findById(categoryId)

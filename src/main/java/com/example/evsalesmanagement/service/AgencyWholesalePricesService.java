@@ -28,7 +28,6 @@ import com.example.evsalesmanagement.repository.VehicleTypeDetailRepository;
 @Service
 public class AgencyWholesalePricesService {
 
-
         @Autowired
         private AgencyWholesalePriceRepository agencyWholesalePriceRepository;
 
@@ -88,7 +87,7 @@ public class AgencyWholesalePricesService {
                 return agencyWholesalePrices.stream().map(gs -> new AgencyWholesalePriceSummaryDTO(gs)).toList();
         }
 
-        @Cacheable(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @Cacheable(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         public AgencyWholesalePriceResponseDTO getByIdAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
                                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -102,7 +101,7 @@ public class AgencyWholesalePricesService {
                 return agencyWholesalePriceResponseDTO;
         }
 
-        @CachePut(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @CachePut(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO updateAgencyWholesalePrice(Integer agencyWholesalePriceId,
                         AgencyWholesalePriceRequestDTO agencyWholesalePrice) {
@@ -137,7 +136,7 @@ public class AgencyWholesalePricesService {
 
         }
 
-        @CacheEvict(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
+        // @CacheEvict(value = "agency-wholesale-price", key = "#agencyWholesalePriceId")
         @Transactional
         public AgencyWholesalePriceResponseDTO deleteAgencyWholesalePrice(Integer agencyWholesalePriceId) {
                 AgencyWholesalePrice price = agencyWholesalePriceRepository.findById(agencyWholesalePriceId)
@@ -150,7 +149,12 @@ public class AgencyWholesalePricesService {
                 agencyWholesalePriceResponseDTO.setAgency(new AgencyResponseDTO(price.getAgency()));
                 agencyWholesalePriceResponseDTO
                                 .setVehicleTypeDetail(new VehicleTypeDetailResponseDTO(price.getVehicleTypeDetail()));
-                agencyWholesalePriceRepository.deleteById(agencyWholesalePriceId);
+
+                if (price.getStatus() != AgencyWholesalePriceStatusEnum.INACTIVE) {
+                        price.setStatus(AgencyWholesalePriceStatusEnum.INACTIVE);
+                        agencyWholesalePriceRepository.save(price);
+                }
+
                 return agencyWholesalePriceResponseDTO;
         }
 }

@@ -69,7 +69,7 @@ public class VehicleService {
         }
 
 
-        @Cacheable(value = "vehicle", key = "#vehicleId")
+        // @Cacheable(value = "vehicle", key = "#vehicleId")
         @Transactional
         public VehicleResponseDTO getByIdVehicle(Integer vehicleId) {
                 Vehicle vehicle = vehicleRepository.findById(vehicleId)
@@ -81,7 +81,7 @@ public class VehicleService {
                 return response;
         }
 
-        @CachePut(value = "vehicle", key = "#vehicleId")
+        // @CachePut(value = "vehicle", key = "#vehicleId")
         @Transactional
         public VehicleResponseDTO updateVehicle(Integer vehicleId, VehicleRequestDTO request) {
                 Vehicle updateVehicle = vehicleRepository.findById(vehicleId)
@@ -110,7 +110,7 @@ public class VehicleService {
                 return response;
         }
 
-        @CacheEvict(value = "vehicle", key = "#vehicleId")
+        // @CacheEvict(value = "vehicle", key = "#vehicleId")
         @Transactional
         public VehicleResponseDTO deleteVehicle(Integer vehicleId) {
                 Vehicle vehicle = vehicleRepository.findById(vehicleId)

@@ -117,7 +117,7 @@ public class ImportRequestService {
 
         }
 
-        @CacheEvict(value = "import-request-response", key = "#importRequestId")
+        // @CacheEvict(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO deleteImportRequest(Integer importRequestId) {
 
@@ -141,7 +141,7 @@ public class ImportRequestService {
 
         }
 
-        @CachePut(value = "import-request-response", key = "#importRequestId")
+        // @CachePut(value = "import-request-response", key = "#importRequestId")
         @Transactional
         public ImportRequestResponseDTO updateImportRequest(Integer importRequestId,
                         ImportRequestRequestDTO importRequestRequestDTO) {

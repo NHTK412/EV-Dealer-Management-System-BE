@@ -94,7 +94,7 @@ public class PolicyService {
         }).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "policy", key = "#policyId")
+    // @Cacheable(value = "policy", key = "#policyId")
     @Transactional()
     public PolicyResponseDTO getByIdPolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)
@@ -133,7 +133,7 @@ public class PolicyService {
         return policyResponseDTO;
     }
 
-    @CachePut(value = "policy", key = "#policyId")
+    // @CachePut(value = "policy", key = "#policyId")
     @Transactional
     public PolicyResponseDTO updatePolicy(Integer policyId, PolicyRequestDTO policyRequestDTO) {
         Policy policy = policyRepository.findById(policyId)
@@ -148,7 +148,7 @@ public class PolicyService {
         return getByIdPolicy(savedPolicy.getPolicyId());
     }
 
-    @CacheEvict(value = "policy", key = "#policyId")
+    // @CacheEvict(value = "policy", key = "#policyId")
     @Transactional
     public PolicyResponseDTO deletePolicy(Integer policyId) {
         Policy policy = policyRepository.findById(policyId)

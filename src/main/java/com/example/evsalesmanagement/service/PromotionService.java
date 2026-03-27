@@ -43,7 +43,7 @@ public class PromotionService {
         }
 
         // sử dụng trasactional để duy trình session đến hết hàm
-        @Cacheable(value = "promotion", key = "#promotionId")
+        // @Cacheable(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO getByIdPromotion(Integer promotionId) {
 
@@ -107,7 +107,7 @@ public class PromotionService {
                 return promotionResponseDTO;
         }
 
-        @CacheEvict(value = "promotion", key = "#promotionId")
+        // @CacheEvict(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO deletePromotion(Integer promotionId) {
 
@@ -124,12 +124,15 @@ public class PromotionService {
                                                                 vehicleTypeDetail))
                                                 .toList());
 
-                promotionRepository.deleteById(promotionId);
+                if (promotion.getStatus() != PromotionStatusEnum.INACTIVE) {
+                        promotion.setStatus(PromotionStatusEnum.INACTIVE);
+                        promotionRepository.save(promotion);
+                }
 
                 return promotionResponseDTO;
         }
 
-        @CachePut(value = "promotion", key = "#promotionId")
+        // @CachePut(value = "promotion", key = "#promotionId")
         @Transactional
         public PromotionResponseDTO updatePromotion(Integer agencyId, Integer promotionId,
                         PromotionRequestDTO promotion) {

@@ -215,4 +215,12 @@ public class VehicleTypeService {
 
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(updatedVehicleType));
         }
+
+        @Transactional
+        public void deleteVehicleType_v2(Integer vehicleTypeId) {
+                VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Không tìm thấy loại xe với id:" + vehicleTypeId));
+                vehicleTypeRepository.delete(vehicleType);
+        }
 }

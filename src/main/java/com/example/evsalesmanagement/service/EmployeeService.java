@@ -39,7 +39,7 @@ public class EmployeeService {
     }
 
     // Lấy nhân viên theo ID
-    @Cacheable(value = "employee", key = "#employeeId")
+    // @Cacheable(value = "employee", key = "#employeeId")
     public EmployeeResponseDTO getEmployeeById(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
@@ -94,7 +94,7 @@ public class EmployeeService {
     }
 
     // Cập nhật nhân viên
-    @CachePut(value = "employee", key = "#employeeId")
+    // @CachePut(value = "employee", key = "#employeeId")
     @Transactional
     public EmployeeResponseDTO updateEmployee(Integer employeeId, EmployeeRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -131,7 +131,7 @@ public class EmployeeService {
         return new EmployeeResponseDTO(updatedEmployee);
     }
 
-    @CacheEvict(value = "employee", key = "#employeeId")
+    // @CacheEvict(value = "employee", key = "#employeeId")
     @Transactional
     public void deleteEmployee(Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)

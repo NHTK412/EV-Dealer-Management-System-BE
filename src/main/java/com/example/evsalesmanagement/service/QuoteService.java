@@ -50,7 +50,7 @@ public class QuoteService {
         @Autowired
         CustomerRepository customerRepository;
 
-        @Cacheable(value = "quote", key = "#quoteId")
+        // @Cacheable(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO getQuoteById(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -74,7 +74,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        @CacheEvict(value = "quote", key = "#quoteId")
+        // @CacheEvict(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO deleteQuote(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -84,7 +84,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        @CachePut(value = "quote", key = "#quoteId")
+        // @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateQuote(Integer quoteId, QuoteRequestDTO quoteRequestDTO) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -99,7 +99,7 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        @CachePut(value = "quote", key = "#quoteId")
+        // @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateStatusQuote(Integer quoteId, QuoteStatusEnum status) {
                 Quote quote = quoteRepository.findById(quoteId)

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.evsalesmanagement.dto.agency.AgencyRequestDTO;
 import com.example.evsalesmanagement.dto.agency.AgencyResponseDTO;
 import com.example.evsalesmanagement.dto.agency.AgencySummaryDTO;
+import com.example.evsalesmanagement.enums.AgencyStatusEnum;
 import com.example.evsalesmanagement.exception.ResourceNotFoundException;
 
 @Service
@@ -35,7 +36,7 @@ public class AgencyService {
         return summaryList;
     }
 
-    @Cacheable(value = "agency", key = "#agencyId")
+    // @Cacheable(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO getByIdAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
@@ -73,7 +74,7 @@ public class AgencyService {
         return agencyResponseDTO;
     }
 
-    @CachePut(value = "agency", key = "#agencyId")
+    // @CachePut(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO updateAgency(Integer agencyId, AgencyRequestDTO agencyRequestDTO) {
         Agency agency = agencyRepository.findById(agencyId)
@@ -96,12 +97,17 @@ public class AgencyService {
         return agencyResponseDTO;
     }
 
-    @CacheEvict(value = "agency", key = "#agencyId")
+    // @CacheEvict(value = "agency", key = "#agencyId")
     @Transactional
     public AgencyResponseDTO deleteAgency(Integer agencyId) {
         Agency agency = agencyRepository.findById(agencyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Agency not found with ID: " + agencyId));
-        agencyRepository.delete(agency);
+
+        if (agency.getStatus() != AgencyStatusEnum.INACTIVE) {
+            agency.setStatus(AgencyStatusEnum.INACTIVE);
+            agencyRepository.save(agency);
+        }
+
         AgencyResponseDTO agencyResponseDTO = new AgencyResponseDTO();
         agencyResponseDTO.setAgencyId(agency.getAgencyId());
         agencyResponseDTO.setAgencyName(agency.getAgencyName());

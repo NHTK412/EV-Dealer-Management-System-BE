@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     // Lấy khách hàng theo ID
-    @Cacheable(value = "customer", key = "#customerId")
+    // @Cacheable(value = "customer", key = "#customerId")
     public CustomerResponseDTO getCustomerById(Integer customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
@@ -62,7 +62,7 @@ public class CustomerService {
     }
 
     // Cập nhật khách hàng
-    @CachePut(value = "customer", key = "#customerId")
+    // @CachePut(value = "customer", key = "#customerId")
     @Transactional
     public CustomerResponseDTO updateCustomer(Integer customerId, CustomerRequestDTO requestDTO) {
         Customer customer = customerRepository.findById(customerId)
@@ -89,7 +89,7 @@ public class CustomerService {
     }
 
     // Xóa khách hàng
-    @CacheEvict(value = "customer", key = "#customerId")
+    // @CacheEvict(value = "customer", key = "#customerId")
     @Transactional
     public void deleteCustomer(Integer customerId) {
         if (!customerRepository.existsById(customerId)) {

@@ -45,7 +45,7 @@ public class WarehouseReleaseNoteService {
         return release.map(WarehouseReleaseNoteSummaryDTO::new);
     }
 
-    @Cacheable(value = "warehouse-receipt", key = "#id")
+    // @Cacheable(value = "warehouse-receipt", key = "#id")
     @Transactional
     public WarehouseReleaseNoteResponseDTO getByIdWarehouseExport(Integer id) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
@@ -88,13 +88,13 @@ public class WarehouseReleaseNoteService {
         return new ApiResponse<>(true, "Xuất kho thành công", responseDTO);
     }
 
-    @CachePut(value = "warehouse-release-note", key = "#id")
+    // @CachePut(value = "warehouse-release-note", key = "#id")
     @Transactional
     public ApiResponse<WarehouseReleaseNoteResponseDTO> updateWarehouseExport(Integer id,
             WarehouseReleaseNoteStatusUpdateDTO request) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
-        if (release.getStatus() != null){
+                .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
+        if (release.getStatus() != null) {
             release.setStatus(request.getStatus());
         }
         warehouseReleaseNoteRepository.save(release);
@@ -103,12 +103,12 @@ public class WarehouseReleaseNoteService {
     }
 
     // phiếu"
-    @CacheEvict(value = "warehouse-receipt", key = "#id")
+    // @CacheEvict(value = "warehouse-receipt", key = "#id")
     @Transactional
     public ApiResponse<Void> deleteWarehouseExport(Integer id) {
         WarehouseReleaseNote release = warehouseReleaseNoteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse release note not found with ID: " + id));
-         if (release.getStatus() != WarehouseReleaseNoteStatusEnum.PENDING_APPROVAL) {
+        if (release.getStatus() != WarehouseReleaseNoteStatusEnum.PENDING_APPROVAL) {
             return new ApiResponse<>(false, "Deletion is only allowed when status is PENDING_APPROVAL", null);
         }
         warehouseReleaseNoteRepository.delete(release);
