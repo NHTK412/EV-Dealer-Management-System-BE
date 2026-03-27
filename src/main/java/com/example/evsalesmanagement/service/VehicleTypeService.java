@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,7 @@ public class VehicleTypeService {
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(savedVehicleType));
         }
 
+        @Cacheable(value = "vehicle-type-list", key = "#pageable")
         @Transactional
         public ApiResponse<Page<VehicleTypeSummaryDTO>> getAllVehicleType_v2(Pageable pageable) {
                 Page<VehicleTypeSummaryDTO> vehicleTypeSummaryPage = vehicleTypeRepository.findAll(pageable)
@@ -71,6 +73,7 @@ public class VehicleTypeService {
                 return new ApiResponse<>(true, null, vehicleTypeSummaryPage);
         }
 
+        @Cacheable(value = "vehicle-type", key = "#vehicleTypeId")
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> getVehicleTypeById_v2(Integer vehicleTypeId) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)
@@ -131,6 +134,8 @@ public class VehicleTypeService {
                 return responseDTO;
         }
 
+        @CachePut(value = "vehicle-type", key = "#vehicleTypeId")
+        @CacheEvict(value = "vehicle-type-list", allEntries = true)
         @Transactional
         public ApiResponse<VehicleTypeResponseDTO_v2> updateVehicleType_v2(
                         Integer vehicleTypeId,
@@ -216,6 +221,10 @@ public class VehicleTypeService {
                 return new ApiResponse<>(true, null, mapToVehicleTypeResponseV2(updatedVehicleType));
         }
 
+        @Caching(evict = {
+                        @CacheEvict(value = "vehicle-type", key = "#vehicleTypeId"),
+                        @CacheEvict(value = "vehicle-type-list", allEntries = true)
+        })
         @Transactional
         public void deleteVehicleType_v2(Integer vehicleTypeId) {
                 VehicleType vehicleType = vehicleTypeRepository.findById(vehicleTypeId)

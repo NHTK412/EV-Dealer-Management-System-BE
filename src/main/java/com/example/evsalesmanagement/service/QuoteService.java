@@ -6,10 +6,12 @@ import java.util.Map;
 
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,7 @@ public class QuoteService {
         @Autowired
         CustomerRepository customerRepository;
 
-        // @Cacheable(value = "quote", key = "#quoteId")
+        @Cacheable(value = "quote", key = "#quoteId") // Nếu sau này thêm cache cho customer hoặc employee thì phải xóa các cache này đi vì có liên quan đến nhau 
         @Transactional
         public QuoteResponseDTO getQuoteById(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -74,7 +76,10 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        // @CacheEvict(value = "quote", key = "#quoteId")
+        @Caching(evict = {
+                        @CacheEvict(value = "quote", key = "#quoteId"),
+                        @CacheEvict(value = "quote-list", allEntries = true)
+        })
         @Transactional
         public QuoteResponseDTO deleteQuote(Integer quoteId) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -84,7 +89,8 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        // @CachePut(value = "quote", key = "#quoteId")
+        @CacheEvict(value = "quote-list", key = "#pageable")
+        @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateQuote(Integer quoteId, QuoteRequestDTO quoteRequestDTO) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -99,7 +105,8 @@ public class QuoteService {
                 return new QuoteResponseDTO(quote);
         }
 
-        // @CachePut(value = "quote", key = "#quoteId")
+        @CacheEvict(value = "quote-list", key = "#pageable")
+        @CachePut(value = "quote", key = "#quoteId")
         @Transactional
         public QuoteResponseDTO updateStatusQuote(Integer quoteId, QuoteStatusEnum status) {
                 Quote quote = quoteRepository.findById(quoteId)
@@ -245,6 +252,7 @@ public class QuoteService {
                 quote.setTotalAmount(total);
         }
 
+        @Cacheable(value = "quote-list", key = "#pageable")
         @Transactional
         public List<QuoteSummaryDTO> getAllQuotes(Pageable pageable) {
                 Page<Quote> quotes = quoteRepository.findAll(pageable);
