@@ -209,11 +209,14 @@ src/main/resources
 - Đã cài Docker Desktop
 - Docker Engine đang chạy
 - Cổng `8080`, `3309`, `6379` chưa bị chiếm
+- Khuyến nghị tạo file `.env` ở thư mục root để chủ động cấu hình bí mật 
 
 ### 7.2 Lệnh chạy Docker Compose
 
+Build và chạy toàn bộ service:
+
 ```bash
-docker compose up -d --build
+docker compose --env-file .env up -d --build
 ```
 
 Kiểm tra container:
@@ -242,12 +245,22 @@ docker compose down -v
 
 Ghi chú cấu hình Docker hiện tại:
 
-- MySQL container: `evm-mysql`
-- DB: `evm-db`
+- App container: `evm-app` (Spring Boot, port host `8080`)
+- MySQL container: `evm-mysql` (port host `3309` -> container `3306`)
+- Redis container: `evm-redis` (port `6379`)
+- Database trong MySQL: `evm-db`
 - MySQL user: `root`
 - MySQL password: `root123`
-- Redis host nội bộ: `redis`
+- Redis host nội bộ cho app: `redis`
 - JWT secret lấy từ env `JWT_SECRET_KEY`
+
+Kiểm tra nhanh health status:
+
+```bash
+docker compose ps
+```
+
+Kỳ vọng `mysql` và `redis` ở trạng thái `healthy` trước khi `app` ổn định hoàn toàn.
 
 ### 7.3 Luồng khởi tạo ứng dụng sau khi Docker chạy
 
@@ -258,6 +271,12 @@ Base URL:
 Swagger UI:
 
 - `http://localhost:8080/api/swagger-ui/index.html`
+
+Lưu ý quan trọng về seed data:
+
+- File `init.sql` chỉ chạy khi MySQL tạo volume dữ liệu lần đầu.
+- Nếu đã từng chạy trước đó, script seed có thể không chạy lại do dữ liệu đã tồn tại trong volume `mysql_data`.
+- Muốn seed lại từ đầu, dùng `docker compose down -v` rồi chạy lại `docker compose up -d --build`.
 
 #### Bước 1: Đăng nhập tài khoản admin seed sẵn
 
@@ -305,6 +324,8 @@ Sau khi có token admin, có thể tạo lần lượt:
   - Kiểm tra kết nối mạng để Maven tải dependency.
 - App chưa kết nối được MySQL ngay khi start:
   - Chờ thêm vài giây, sau đó xem `docker compose logs -f app`.
+- Thay đổi `init.sql` nhưng không thấy dữ liệu cập nhật:
+  - Xóa volume (`docker compose down -v`) để MySQL khởi tạo lại từ đầu.
 
 ## 8. Hướng dẫn chạy local (không dùng Docker)
 
