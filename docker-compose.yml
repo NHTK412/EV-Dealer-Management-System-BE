@@ -45,13 +45,20 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_MYSQL_URL: jdbc:mysql://mysql:3306/evm-db?createDatabaseIfNotExist=true&serverTimezone=UTC
-      DATABASE_MYSQL_USER: root
-      DATABASE_MYSQL_PASSWORD: root123
-      # EMAIL_USERNAME: 
-      # EMAIL_PASSWORD:
-      JWT_SECRET_KEY: akslfjalskfjalkfjwofijasfamlkfmalf
-      REDIS_HOST: redis
+      # DATABASE_MYSQL_URL: jdbc:mysql://mysql:3306/evm-db?createDatabaseIfNotExist=true&serverTimezone=UTC
+      # DATABASE_MYSQL_USER: root
+      # DATABASE_MYSQL_PASSWORD: root123
+      # # EMAIL_USERNAME: 
+      # # EMAIL_PASSWORD:
+      # JWT_SECRET_KEY: akslfjalskfjalkfjwofijasfamlkfmalf
+      # REDIS_HOST: redis
+      DATABASE_MYSQL_URL: ${DATABASE_MYSQL_URL}
+      DATABASE_MYSQL_USERNAME: ${DATABASE_MYSQL_USERNAME}
+      DATABASE_MYSQL_PASSWORD: ${DATABASE_MYSQL_PASSWORD}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      REDIS_HOST: ${REDIS_HOST}
     restart: unless-stopped
 
 volumes:
